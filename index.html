@@ -95,30 +95,33 @@
         header h1 { font-size: 1.8rem; font-weight: 800; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         header p { color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px; }
         
-        .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-        .toolbar-left, .toolbar-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-        .month-selector { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 6px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 4px; }
-        .month-selector button { background: var(--gradient-primary); color: white; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        /* ===== TOOLBAR REORGANIZADA ===== */
+        .toolbar { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .toolbar-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .month-selector { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 6px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 4px; flex: 1; min-width: 200px; }
+        .month-selector button { background: var(--gradient-primary); color: white; border: none; width: 40px; height: 40px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; flex-shrink: 0; }
         .month-selector button:hover { transform: scale(1.05); box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
-        .current-month { font-size: 1rem; font-weight: 600; min-width: 160px; text-align: center; padding: 0 8px; }
+        .current-month { font-size: 1rem; font-weight: 600; text-align: center; padding: 0 8px; flex: 1; }
         
-        .icon-btn { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); color: var(--text-primary); width: 48px; height: 48px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); transition: all 0.3s ease; }
+        .toolbar-actions { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+        
+        .icon-btn { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); color: var(--text-primary); width: 48px; height: 48px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); transition: all 0.3s ease; flex-shrink: 0; }
         .icon-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--primary-color); }
         .icon-btn.active { background: var(--gradient-primary); color: white; border-color: transparent; }
-        .dollar-btn { background: var(--gradient-primary); color: white; font-weight: bold; border: none; }
-        .dollar-btn:hover { transform: scale(1.05); box-shadow: 0 4px 20px rgba(99, 102, 241, 0.5); }
+        .dollar-btn { background: var(--gradient-primary); color: white; font-weight: bold; border: none; width: 48px; height: 48px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); transition: all 0.3s ease; flex-shrink: 0; }
+        .dollar-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--primary-color); }
         
-        .menu-btn { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); color: var(--text-primary); width: 48px; height: 48px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); transition: all 0.3s ease; position: relative; }
+        .menu-btn { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); color: var(--text-primary); width: 48px; height: 48px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); transition: all 0.3s ease; position: relative; flex-shrink: 0; }
         .menu-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--primary-color); }
         
-        .dropdown-menu { position: absolute; top: calc(100% + 8px); right: 0; background: var(--glass-bg); backdrop-filter: blur(30px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 8px; min-width: 260px; box-shadow: var(--shadow-lg); z-index: 100; display: none; animation: slideDown 0.2s ease; max-height: 70vh; overflow-y: auto; }
+        .dropdown-menu { position: absolute; top: calc(100% + 8px); right: 0; background: var(--glass-bg); backdrop-filter: blur(30px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 8px; min-width: 280px; box-shadow: var(--shadow-lg); z-index: 100; display: none; animation: slideDown 0.2s ease; max-height: 70vh; overflow-y: auto; }
         .dropdown-menu.active { display: block; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         .dropdown-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; color: var(--text-primary); font-size: 0.95rem; font-weight: 500; border: none; background: none; width: 100%; text-align: left; font-family: inherit; }
         .dropdown-item:hover { background: rgba(99, 102, 241, 0.15); }
         .dropdown-item.danger { color: var(--danger-color); }
         .dropdown-item.danger:hover { background: rgba(239, 68, 68, 0.15); }
-        .dropdown-item .icon { width: 18px; height: 18px; }
+        .dropdown-item .icon { width: 18px; height: 18px; flex-shrink: 0; }
         .dropdown-divider { height: 1px; background: var(--border-color); margin: 6px 0; }
         
         .dashboard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
@@ -291,9 +294,6 @@
             .card { padding: 16px; }
             .card-value { font-size: 1.1rem; }
             .card-title { font-size: 0.7rem; }
-            .toolbar { flex-direction: column; gap: 12px; align-items: stretch; }
-            .toolbar-left, .toolbar-right { justify-content: center; width: 100%; }
-            .month-selector { width: 100%; justify-content: center; }
             .chart-container { height: 260px; }
             .transactions-section { padding: 16px; }
             .form-row, .form-row-3 { grid-template-columns: 1fr; gap: 0; }
@@ -316,10 +316,24 @@
             .splash-title { font-size: 2rem; }
             .quote-text { font-size: 1.1rem; }
             .quote-content { padding: 28px; }
-            .dropdown-menu { right: -8px; min-width: 240px; }
             .credit-cards-grid { grid-template-columns: 1fr; }
+            
+            /* Mobile: toolbar compacta */
+            .toolbar { gap: 10px; margin-bottom: 16px; }
+            .month-selector { width: 100%; padding: 4px; }
+            .current-month { font-size: 0.95rem; padding: 0 4px; }
+            .month-selector button { width: 36px; height: 36px; }
+            .toolbar-actions { justify-content: space-between; width: 100%; }
+            .icon-btn, .dollar-btn, .menu-btn { width: 44px; height: 44px; border-radius: 12px; }
+            .icon-btn .icon, .menu-btn .icon { width: 18px; height: 18px; }
+            .dollar-btn .icon { width: 20px; height: 20px; }
+            .dropdown-menu { right: 0; min-width: 260px; max-width: calc(100vw - 24px); }
         }
-        @media (max-width: 380px) { .dashboard { grid-template-columns: 1fr 1fr; } .card-value { font-size: 1rem; } }
+        @media (max-width: 380px) { 
+            .dashboard { grid-template-columns: 1fr 1fr; } 
+            .card-value { font-size: 1rem; }
+            .icon-btn, .dollar-btn, .menu-btn { width: 40px; height: 40px; }
+        }
     </style>
 </head>
 <body>
@@ -353,8 +367,10 @@
             <p>Controle financeiro pessoal inteligente</p>
         </header>
 
+        <!-- ===== TOOLBAR REORGANIZADA ===== -->
         <div class="toolbar">
-            <div class="toolbar-left">
+            <!-- Linha 1: Seletor de Mês -->
+            <div class="toolbar-row">
                 <div class="month-selector">
                     <button onclick="smartwallet.changeMonth(-1)" aria-label="Mês anterior">
                         <svg class="icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
@@ -364,48 +380,59 @@
                         <svg class="icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
                     </button>
                 </div>
+            </div>
+            
+            <!-- Linha 2: Ações (em linha no mobile também) -->
+            <div class="toolbar-actions">
                 <button class="icon-btn" id="privacyBtn" onclick="togglePrivacy()" aria-label="Ocultar valores" title="Ocultar/mostrar valores">
                     <svg class="icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 </button>
                 <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Alternar tema" title="Modo claro/escuro">
                     <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                 </button>
-            </div>
-            <div class="toolbar-right">
-                <button class="btn btn-secondary" onclick="openExportModal()">
-                    <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                    Extrato
-                </button>
-                <button class="btn btn-primary dollar-btn" onclick="openGoalModal()" aria-label="Meta de Reserva">
+                <button class="dollar-btn" onclick="openGoalModal()" aria-label="Meta de Reserva" title="Meta de Reserva">
                     <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                 </button>
                 <div style="position: relative;">
-                    <button class="menu-btn" onclick="toggleMenu(event)" aria-label="Menu" title="Mais opções">
-                        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                    <button class="menu-btn" onclick="toggleMenu(event)" aria-label="Menu" title="Menu">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
                     </button>
                     <div class="dropdown-menu" id="mainMenu">
+                        <button class="dropdown-item" onclick="openExportModal()">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            <span>📄 Extrato do Mês</span>
+                        </button>
+                        <div class="dropdown-divider"></div>
                         <button class="dropdown-item" onclick="openCreditCardsModal()">
                             <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                            <span>💳 Cartões de Crédito</span>
+                            <span>💳 Meus Cartões</span>
+                        </button>
+                        <button class="dropdown-item" onclick="openNewCardModal()">
+                            <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
+                            <span>➕ Cadastrar Novo Cartão</span>
                         </button>
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-item" onclick="openImportCsvModal()">
                             <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                            <span>Importar Extrato CSV</span>
+                            <span>📥 Importar Extrato CSV</span>
                         </button>
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-item" onclick="smartwallet.exportBackup()">
-                            <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                            <span>Backup Geral (JSON)</span>
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            <span>💾 Backup Geral (JSON)</span>
                         </button>
                         <button class="dropdown-item" onclick="openImportBackupModal()">
                             <svg class="icon" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                            <span>Restaurar Backup</span>
+                            <span>📂 Restaurar Backup</span>
                         </button>
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-item" onclick="smartwallet.loadTestData()">
                             <svg class="icon" viewBox="0 0 24 24"><path d="M10 2v7.31M14 2v7.31M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>
-                            <span>Carregar Dados de Teste</span>
+                            <span>🧪 Carregar Dados de Teste</span>
                         </button>
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-item danger" onclick="openClearDataModal()">
