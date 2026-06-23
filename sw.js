@@ -1,5 +1,5 @@
 // IMPORTANTE: Mude a versão para forçar atualização
-const CACHE_NAME = 'smart-wallet-v1.3.2';  // ← Aumente o número
+const CACHE_NAME = 'smart-wallet-v1.3.3';  // ← Aumente o número
 
 const ASSETS_TO_CACHE = [
     './',
