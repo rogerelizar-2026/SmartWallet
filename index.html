@@ -716,121 +716,6 @@
     </style>
 </head>
 <body>
-    <!-- Status de conexão -->
-    <div class="connection-status" id="connectionStatus">⚠️ Você está offline. Dados salvos localmente.</div>
-    
-    <div class="splash-screen" id="splashScreen">
-        <div class="splash-content">
-            <h1 class="splash-title">Smart Wallet</h1>
-            <p class="splash-subtitle">Idealizado por RogerElizar™</p>
-            <p class="splash-email">rogerelizar@gmail.com</p>
-            <div class="splash-icons">
-                <svg class="splash-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20"/></svg>
-                <svg class="splash-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></svg>
-                <svg class="splash-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-                <svg class="splash-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V7l8-4 8 4v14M8 21v-9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v9"/></svg>
-                <svg class="splash-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </div>
-        </div>
-    </div>
-    
-    <div class="quote-modal" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
-        <div class="quote-content">
-            <svg class="quote-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3M3.343 18.657l.707-.707M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"/></svg>
-            <p class="quote-text" id="quoteText"></p>
-            <p class="quote-author" id="quoteAuthor"></p>
-            <button class="quote-btn" onclick="startApp()" aria-label="Iniciar aplicativo">Gerenciar Minhas Finanças</button>
-        </div>
-    </div>
-
-    <div class="container" id="mainApp" style="display: none;">
-        <header>
-            <h1>Smart Wallet</h1>
-            <p>Controle financeiro pessoal inteligente</p>
-        </header>
-
-        <div class="toolbar">
-            <div class="toolbar-row">
-                <div class="month-selector">
-                    <button onclick="smartwallet.changeMonth(-1)" aria-label="Mês anterior">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-                    </button>
-                    <div class="current-month" id="currentMonth">Janeiro 2026</div>
-                    <button onclick="smartwallet.changeMonth(1)" aria-label="Próximo mês">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
-                    </button>
-                </div>
-            </div>
-            
-            <div class="toolbar-actions">
-                <button class="icon-btn" id="privacyBtn" onclick="togglePrivacy()" aria-label="Ocultar valores" title="Ocultar/mostrar valores">
-                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                </button>
-                <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Alternar tema" title="Modo claro/escuro">
-                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                </button>
-                <button class="dollar-btn" onclick="openGoalModal()" aria-label="Meta de Reserva" title="Meta de Reserva">
-                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                </button>
-                <button class="alert-btn" id="alertBtn" onclick="openBillsModal()" aria-label="Contas a vencer" title="Contas a vencer">
-                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                    </svg>
-                    <span class="alert-badge" id="alertBadge" aria-live="polite">0</span>
-                </button>
-                <div style="position: relative;">
-                    <button class="menu-btn" onclick="toggleMenu(event)" aria-label="Menu" title="Menu" aria-expanded="false" aria-controls="mainMenu">
-                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
-                            <line x1="3" y1="6" x2="21" y2="6"/>
-                            <line x1="3" y1="12" x2="21" y2="12"/>
-                            <line x1="3" y1="18" x2="21" y2="18"/>
-                        </svg>
-                    </button>
-                    <div class="dropdown-menu" id="mainMenu" role="menu">
-                        <button class="dropdown-item" onclick="openExportModal()" role="menuitem">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                            <span>📄 Extrato do Mês</span>
-                        </button>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item" onclick="openCreditCardsModal()" role="menuitem">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                            <span>💳 Meus Cartões</span>
-                        </button>
-                        <button class="dropdown-item" onclick="openNewCardModal()" role="menuitem">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
-                            <span>➕ Cadastrar Novo Cartão</span>
-                        </button>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item" onclick="openImportCsvModal()" role="menuitem">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                            <span>📥 Importar Extrato CSV</span>
-                        </button>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item" onclick="smartwallet.exportBackup()" role="menuitem">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                            <span>💾 Backup Geral (JSON)</span>
-                        </button>
-                        <button class="dropdown-item" onclick="openImportBackupModal()" role="menuitem">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                            <span>📂 Restaurar Backup</span>
-                        </button>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item" onclick="smartwallet.loadTestData()" role="menuitem">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2v7.31M14 2v7.31M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>
-                            <span>🧪 Carregar Dados de Teste</span>
-                        </button>
-                        <div class="dropdown-divider"></div>
-                        <button class="dropdown-item danger" onclick="openClearDataModal()" role="menuitem">
-                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                            <span>Limpar Todos os Dados</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
 <!-- Timbre de Impressão -->
 <div class="print-header">
     <h1>Smart Wallet</h1>
@@ -958,6 +843,121 @@
         </div>
     </div>
 </div>
+    
+    
+    <!-- Status de conexão -->
+    <div class="connection-status" id="connectionStatus">⚠️ Você está offline. Dados salvos localmente.</div>
+    
+    <div class="splash-screen" id="splashScreen">
+        <div class="splash-content">
+            <h1 class="splash-title">Smart Wallet</h1>
+            <p class="splash-subtitle">Idealizado por RogerElizar™</p>
+            <p class="splash-email">rogerelizar@gmail.com</p>
+            <div class="splash-icons">
+                <svg class="splash-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20"/></svg>
+                <svg class="splash-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></svg>
+                <svg class="splash-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                <svg class="splash-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V7l8-4 8 4v14M8 21v-9a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v9"/></svg>
+                <svg class="splash-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+        </div>
+    </div>
+    
+    <div class="quote-modal" id="quoteModal" role="dialog" aria-modal="true" aria-labelledby="quoteTitle">
+        <div class="quote-content">
+            <svg class="quote-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3M3.343 18.657l.707-.707M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"/></svg>
+            <p class="quote-text" id="quoteText"></p>
+            <p class="quote-author" id="quoteAuthor"></p>
+            <button class="quote-btn" onclick="startApp()" aria-label="Iniciar aplicativo">Gerenciar Minhas Finanças</button>
+        </div>
+    </div>
+
+    <div class="container" id="mainApp" style="display: none;">
+        <header>
+            <h1>Smart Wallet</h1>
+            <p>Controle financeiro pessoal inteligente</p>
+        </header>
+
+        <div class="toolbar">
+            <div class="toolbar-row">
+                <div class="month-selector">
+                    <button onclick="smartwallet.changeMonth(-1)" aria-label="Mês anterior">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                    </button>
+                    <div class="current-month" id="currentMonth">Janeiro 2026</div>
+                    <button onclick="smartwallet.changeMonth(1)" aria-label="Próximo mês">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="toolbar-actions">
+                <button class="icon-btn" id="privacyBtn" onclick="togglePrivacy()" aria-label="Ocultar valores" title="Ocultar/mostrar valores">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+                <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Alternar tema" title="Modo claro/escuro">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+                <button class="dollar-btn" onclick="openGoalModal()" aria-label="Meta de Reserva" title="Meta de Reserva">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </button>
+                <button class="alert-btn" id="alertBtn" onclick="openBillsModal()" aria-label="Contas a vencer" title="Contas a vencer">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span class="alert-badge" id="alertBadge" aria-live="polite">0</span>
+                </button>
+                <div style="position: relative;">
+                    <button class="menu-btn" onclick="toggleMenu(event)" aria-label="Menu" title="Menu" aria-expanded="false" aria-controls="mainMenu">
+                        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                    <div class="dropdown-menu" id="mainMenu" role="menu">
+                        <button class="dropdown-item" onclick="openExportModal()" role="menuitem">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                            <span>📄 Extrato do Mês</span>
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" onclick="openCreditCardsModal()" role="menuitem">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                            <span>💳 Meus Cartões</span>
+                        </button>
+                        <button class="dropdown-item" onclick="openNewCardModal()" role="menuitem">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg>
+                            <span>➕ Cadastrar Novo Cartão</span>
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" onclick="openImportCsvModal()" role="menuitem">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <span>📥 Importar Extrato CSV</span>
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" onclick="smartwallet.exportBackup()" role="menuitem">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                            <span>💾 Backup Geral (JSON)</span>
+                        </button>
+                        <button class="dropdown-item" onclick="openImportBackupModal()" role="menuitem">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                            <span>📂 Restaurar Backup</span>
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" onclick="smartwallet.loadTestData()" role="menuitem">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2v7.31M14 2v7.31M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>
+                            <span>🧪 Carregar Dados de Teste</span>
+                        </button>
+                        <div class="dropdown-divider"></div>
+                        <button class="dropdown-item danger" onclick="openClearDataModal()" role="menuitem">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            <span>Limpar Todos os Dados</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="dashboard">
             <div class="card"><div class="card-title">Saldo do Mês</div><div class="card-value privacy-value" id="totalBalance">R$ 0,00</div></div>
