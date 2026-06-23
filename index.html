@@ -371,6 +371,63 @@
         .quote-author { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 32px; font-weight: 600; }
         .quote-btn { background: var(--gradient-primary); color: white; border: none; padding: 16px 32px; border-radius: 16px; font-size: 1.1rem; font-weight: 600; cursor: pointer; font-family: inherit; }
         
+        /* Modal de Confirmação de Recorrência */
+        .recurrence-confirm-modal .modal-content {
+            max-width: 500px;
+            border: 2px solid var(--primary-color);
+        }
+        .recurrence-info {
+            background: var(--input-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            border-left: 4px solid var(--primary-color);
+        }
+        .recurrence-info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .recurrence-info-item:last-child {
+            border-bottom: none;
+        }
+        .recurrence-info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .recurrence-info-value {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .recurrence-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .recurrence-option {
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .recurrence-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.1);
+        }
+        .recurrence-option-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+        .recurrence-option-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
         @media print {
             @page { size: A4; margin: 2cm; }
             body { background: white !important; color: black !important; }
@@ -723,6 +780,39 @@
                     <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancelar</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Recorrência -->
+    <div class="modal recurrence-confirm-modal" id="recurrenceConfirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🔄 Atualizar Recorrência</h2>
+                <button class="modal-close" onclick="closeRecurrenceConfirmModal()">
+                    <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 16px;">
+                Esta transação faz parte de uma recorrência. Como deseja aplicar as alterações?
+            </p>
+            <div class="recurrence-info" id="recurrenceInfo"></div>
+            <div class="recurrence-options">
+                <div class="recurrence-option" onclick="applyRecurrenceUpdate('current')">
+                    <div class="recurrence-option-title">📝 Apenas esta transação</div>
+                    <div class="recurrence-option-desc">Alterar apenas esta ocorrência específica</div>
+                </div>
+                <div class="recurrence-option" onclick="applyRecurrenceUpdate('future')">
+                    <div class="recurrence-option-title">🔮 Esta e as futuras</div>
+                    <div class="recurrence-option-desc">Alterar esta e todas as ocorrências futuras da recorrência</div>
+                </div>
+                <div class="recurrence-option" onclick="applyRecurrenceUpdate('all')">
+                    <div class="recurrence-option-title">🔄 Todas as ocorrências</div>
+                    <div class="recurrence-option-desc">Alterar todas as ocorrências (passadas e futuras)</div>
+                </div>
+            </div>
+            <div class="action-buttons" style="margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="closeRecurrenceConfirmModal()" style="width: 100%;">Cancelar</button>
+            </div>
         </div>
     </div>
 
@@ -1246,6 +1336,7 @@
                 this.pendingCsvData = null;
                 this.pendingBackupData = null;
                 this.searchTimeout = null;
+                this.pendingRecurrenceUpdate = null;
                 this.init();
             }
 
@@ -1368,12 +1459,12 @@
 
             updateMonthDisplay() {
                 const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-                document.getElementById('currentMonth').textContent = \`${months[this.currentMonth.getMonth()]} \${this.currentMonth.getFullYear()}\`;
+                document.getElementById('currentMonth').textContent = `${months[this.currentMonth.getMonth()]} ${this.currentMonth.getFullYear()}`;
             }
 
             formatMonthYear(date) {
                 const m = String(date.getMonth() + 1).padStart(2, '0');
-                return \`\${m}-\${date.getFullYear()}\`;
+                return `${m}-${date.getFullYear()}`;
             }
 
             getMonthTransactions(date = this.currentMonth) {
@@ -1412,7 +1503,7 @@
                     PAYMENT_METHODS.forEach(pm => {
                         const opt = document.createElement('option');
                         opt.value = pm.id;
-                        opt.textContent = \`\${pm.icon} \${pm.name}\`;
+                        opt.textContent = `${pm.icon} ${pm.name}`;
                         optgroupStandard.appendChild(opt);
                     });
                     sel.appendChild(optgroupStandard);
@@ -1422,8 +1513,8 @@
                         optgroupCards.label = '💳 Cartões de Crédito';
                         this.cards.forEach(card => {
                             const opt = document.createElement('option');
-                            opt.value = \`card:\${card.id}\`;
-                            opt.textContent = \`\${card.name} •••• \${card.last4 || '****'}\`;
+                            opt.value = `card:${card.id}`;
+                            opt.textContent = `${card.name} •••• ${card.last4 || '****'}`;
                             optgroupCards.appendChild(opt);
                         });
                         sel.appendChild(optgroupCards);
@@ -1443,7 +1534,7 @@
                 });
                 const currentVal = sel.value;
                 if (currentVal) {
-                    const currentOpt = sel.querySelector(\`option[value="\${currentVal}"]\`);
+                    const currentOpt = sel.querySelector(`option[value="${currentVal}"]`);
                     if (currentOpt && currentOpt.style.display === 'none') sel.value = '';
                 }
             }
@@ -1457,10 +1548,10 @@
                 if (method.startsWith('card:')) {
                     const cardId = method.replace('card:', '');
                     const card = this.getCardById(cardId);
-                    return card ? \`💳 \${card.name}\` : 'Cartão removido';
+                    return card ? `💳 ${card.name}` : 'Cartão removido';
                 }
                 const pm = PAYMENT_METHODS.find(p => p.id === method);
-                return pm ? \`\${pm.icon} \${pm.name}\` : method;
+                return pm ? `${pm.icon} ${pm.name}` : method;
             }
 
             addCategory() {
@@ -1488,18 +1579,18 @@
             renderCategoryList() {
                 const c = document.getElementById('categoryList');
                 if (!this.categories.length) return c.innerHTML = '<p style="text-align:center; padding:20px; color:var(--text-secondary);">Nenhuma categoria</p>';
-                c.innerHTML = this.categories.map(cat => \`
+                c.innerHTML = this.categories.map(cat => `
                     <div style="display:flex; align-items:center; justify-content:space-between; padding:10px; background:var(--input-bg); border-radius:12px;">
                         <div style="display:flex; align-items:center; gap:10px;">
-                            <span style="width:20px; height:20px; border-radius:50%; background:\${cat.color}; display:inline-block;"></span>
+                            <span style="width:20px; height:20px; border-radius:50%; background:${cat.color}; display:inline-block;"></span>
                             <div>
-                                <div style="font-weight:500;">\${this.escapeHtml(cat.name)}</div>
-                                <div style="font-size:0.75rem; color:var(--text-secondary);">\${cat.type === 'income' ? '💰 Receita' : '💸 Despesa'}</div>
+                                <div style="font-weight:500;">${this.escapeHtml(cat.name)}</div>
+                                <div style="font-size:0.75rem; color:var(--text-secondary);">${cat.type === 'income' ? '💰 Receita' : '💸 Despesa'}</div>
                             </div>
                         </div>
-                        <button class="btn btn-danger btn-small" onclick="smartwallet.deleteCategory('\${cat.id}')"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                        <button class="btn btn-danger btn-small" onclick="smartwallet.deleteCategory('${cat.id}')"><svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                     </div>
-                \`).join('');
+                `).join('');
             }
 
             addTransaction() {
@@ -1527,7 +1618,7 @@
                     const rType = document.getElementById('recurrenceType').value;
                     const rCount = parseInt(document.getElementById('recurrenceCount').value);
                     this.createRecurring(base, rType, rCount);
-                    this.showToast(\`\${rCount} transações criadas!\`);
+                    this.showToast(`${rCount} transações criadas!`);
                 } else {
                     base.id = Date.now(); this.transactions.push(base);
                     this.showToast('Transação adicionada!');
@@ -1550,8 +1641,10 @@
 
             createRecurring(base, type, count) {
                 const start = new Date(base.date + 'T00:00:00');
+                const recurrenceGroupId = 'rec_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                
                 for (let i = 0; i < count; i++) {
-                    const t = { ...base, id: Date.now() + i };
+                    const t = { ...base, id: Date.now() + i, recurrenceGroupId };
                     const d = new Date(start);
                     
                     if (type === 'yearly') {
@@ -1565,7 +1658,7 @@
                     if (type === 'installment') {
                         t.recurrence.total = count;
                         t.recurrence.current = i + 1;
-                        t.description = \`\${base.description || ''} \${i + 1}/\${count}\`.trim();
+                        t.description = `${base.description || ''} ${i + 1}/${count}`.trim();
                     }
                     this.transactions.push(t);
                 }
@@ -1641,10 +1734,99 @@
                     delete updated.recurrence;
                 }
                 
-                this.transactions[idx] = updated;
-                this.saveTransactions(); this.render(); this.updateCharts();
+                // Verifica se é transação recorrente e mostra modal de confirmação
+                if (this.transactions[idx].recurrenceGroupId) {
+                    this.pendingRecurrenceUpdate = {
+                        transaction: updated,
+                        originalIndex: idx,
+                        recurrenceGroupId: this.transactions[idx].recurrenceGroupId
+                    };
+                    this.showRecurrenceConfirmModal();
+                } else {
+                    this.transactions[idx] = updated;
+                    this.saveTransactions(); this.render(); this.updateCharts();
+                    this.updateAlertBadge();
+                    closeEditModal(); this.showToast('Atualizada!');
+                }
+            }
+
+            showRecurrenceConfirmModal() {
+                const pending = this.pendingRecurrenceUpdate;
+                if (!pending) return;
+                
+                const transaction = pending.transaction;
+                const category = this.getCategoryById(transaction.category);
+                const recurrenceCount = this.transactions.filter(t => t.recurrenceGroupId === pending.recurrenceGroupId).length;
+                
+                document.getElementById('recurrenceInfo').innerHTML = `
+                    <div class="recurrence-info-item">
+                        <span class="recurrence-info-label">Descrição:</span>
+                        <span class="recurrence-info-value">${this.escapeHtml(transaction.description)}</span>
+                    </div>
+                    <div class="recurrence-info-item">
+                        <span class="recurrence-info-label">Categoria:</span>
+                        <span class="recurrence-info-value">${this.escapeHtml(category.name)}</span>
+                    </div>
+                    <div class="recurrence-info-item">
+                        <span class="recurrence-info-label">Valor:</span>
+                        <span class="recurrence-info-value">${this.formatCurrency(Math.abs(transaction.amount))}</span>
+                    </div>
+                    <div class="recurrence-info-item">
+                        <span class="recurrence-info-label">Ocorrências:</span>
+                        <span class="recurrence-info-value">${recurrenceCount} transações</span>
+                    </div>
+                `;
+                
+                document.getElementById('recurrenceConfirmModal').classList.add('active');
+            }
+
+            applyRecurrenceUpdate(scope) {
+                const pending = this.pendingRecurrenceUpdate;
+                if (!pending) return;
+                
+                const { transaction, originalIndex, recurrenceGroupId } = pending;
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                const relatedTransactions = this.transactions.filter(t => t.recurrenceGroupId === recurrenceGroupId);
+                
+                if (scope === 'current') {
+                    // Apenas a transação atual
+                    this.transactions[originalIndex] = transaction;
+                } else if (scope === 'future') {
+                    // Esta e as futuras
+                    relatedTransactions.forEach(t => {
+                        const tDate = new Date(t.date + 'T00:00:00');
+                        if (tDate >= today) {
+                            const idx = this.transactions.findIndex(tr => tr.id === t.id);
+                            if (idx !== -1) {
+                                this.transactions[idx] = { ...t, ...transaction };
+                            }
+                        }
+                    });
+                } else if (scope === 'all') {
+                    // Todas as ocorrências
+                    relatedTransactions.forEach(t => {
+                        const idx = this.transactions.findIndex(tr => tr.id === t.id);
+                        if (idx !== -1) {
+                            this.transactions[idx] = { ...t, ...transaction };
+                        }
+                    });
+                }
+                
+                this.saveTransactions();
+                this.render();
+                this.updateCharts();
                 this.updateAlertBadge();
-                closeEditModal(); this.showToast('Atualizada!');
+                closeEditModal();
+                closeRecurrenceConfirmModal();
+                
+                const scopeText = scope === 'current' ? 'apenas esta transação' : 
+                                 scope === 'future' ? 'esta e as futuras ocorrências' : 
+                                 'todas as ocorrências';
+                this.showToast(`Atualizada! (${scopeText})`);
+                
+                this.pendingRecurrenceUpdate = null;
             }
 
             clearForm() {
@@ -1683,10 +1865,10 @@
                 const months = Math.ceil(rem / contrib);
                 const years = Math.floor(months / 12);
                 const remM = months % 12;
-                let timeStr = years > 0 ? \`\${years} ano\${years > 1 ? 's' : ''} \` : '';
-                timeStr += remM > 0 ? \`\${remM} mês\${remM > 1 ? 'es' : ''}\` : '1 mês';
+                let timeStr = years > 0 ? `${years} ano${years > 1 ? 's' : ''} ` : '';
+                timeStr += remM > 0 ? `${remM} mês${remM > 1 ? 'es' : ''}` : '1 mês';
                 el.style.display = 'block';
-                el.innerHTML = \`<div style="font-weight:500; margin-bottom:6px;">⏱️ Tempo estimado:</div><div style="font-size:1.2rem; font-weight:700; color:var(--primary-color);">\${timeStr}</div><div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">Faltam: \${this.formatCurrency(rem)} com aporte de \${this.formatCurrency(contrib)}/mês</div>\`;
+                el.innerHTML = `<div style="font-weight:500; margin-bottom:6px;">⏱️ Tempo estimado:</div><div style="font-size:1.2rem; font-weight:700; color:var(--primary-color);">${timeStr}</div><div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px;">Faltam: ${this.formatCurrency(rem)} com aporte de ${this.formatCurrency(contrib)}/mês</div>`;
             }
 
             getFilteredTransactions() {
@@ -1711,7 +1893,7 @@
             getRecurrenceDisplay(t) {
                 if (!t.recurrence) return '';
                 if (t.recurrence.type === 'installment') {
-                    return \`<span class="recurrence-badge">📅 \${t.recurrence.current}/\${t.recurrence.total}</span>\`;
+                    return `<span class="recurrence-badge">📅 ${t.recurrence.current}/${t.recurrence.total}</span>`;
                 } else if (t.recurrence.type === 'monthly') {
                     return '<span class="recurrence-badge">📅 Mensal</span>';
                 } else if (t.recurrence.type === 'yearly') {
@@ -1737,11 +1919,11 @@
                 if (this.goal > 0) {
                     const totalBal = this.transactions.reduce((s, t) => s + t.amount, 0);
                     let pct = Math.min(Math.max((totalBal / this.goal) * 100, 0), 100);
-                    goalEl.textContent = \`\${pct.toFixed(1)}%\`;
-                    goalEl.className = \`card-value privacy-value \${pct >= 100 ? 'positive' : ''}\`;
+                    goalEl.textContent = `${pct.toFixed(1)}%`;
+                    goalEl.className = `card-value privacy-value ${pct >= 100 ? 'positive' : ''}`;
                     goalEl.style.cursor = 'default';
                     goalEl.onclick = null;
-                    bar.style.display = 'block'; fill.style.width = \`\${pct}%\`;
+                    bar.style.display = 'block'; fill.style.width = `${pct}%`;
                 } else {
                     goalEl.textContent = 'Definir meta →'; goalEl.className = 'card-value privacy-value';
                     goalEl.style.cursor = 'pointer'; goalEl.onclick = () => openGoalModal();
@@ -1828,7 +2010,7 @@
 
             updateCharts() {
                 const lLabels=[], lInc=[], lExp=[];
-                for(let i=5;i>=0;i--){ const d=new Date(this.currentMonth); d.setMonth(d.getMonth()-i); const mt=this.getMonthTransactions(d); lLabels.push(\`\${d.getMonth()+1}/\${d.getFullYear()}\`); lInc.push(mt.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0)); lExp.push(Math.abs(mt.filter(t=>t.amount<0).reduce((s,t)=>s+t.amount,0))); }
+                for(let i=5;i>=0;i--){ const d=new Date(this.currentMonth); d.setMonth(d.getMonth()-i); const mt=this.getMonthTransactions(d); lLabels.push(`${d.getMonth()+1}/${d.getFullYear()}`); lInc.push(mt.filter(t=>t.amount>0).reduce((s,t)=>s+t.amount,0)); lExp.push(Math.abs(mt.filter(t=>t.amount<0).reduce((s,t)=>s+t.amount,0))); }
                 if (this.charts.line) {
                     this.charts.line.data.labels = lLabels;
                     this.charts.line.data.datasets[0].data = lInc;
@@ -1853,7 +2035,7 @@
                         const d = new Date(this.currentMonth);
                         d.setMonth(d.getMonth() + i);
                         const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-                        cardLabels.push(\`\${months[d.getMonth()]}/\${d.getFullYear()}\`);
+                        cardLabels.push(`${months[d.getMonth()]}/${d.getFullYear()}`);
                     }
                     
                     this.cards.forEach(card => {
@@ -1900,14 +2082,14 @@
                     const payment = this.getPaymentMethodName(t.paymentMethod).replace(/[💳⚡💰🔄📅↔️]/g, '').trim();
                     let recurrence = '';
                     if (t.recurrence) {
-                        if (t.recurrence.type === 'installment') recurrence = \`\${t.recurrence.current}/\${t.recurrence.total}\`;
+                        if (t.recurrence.type === 'installment') recurrence = `${t.recurrence.current}/${t.recurrence.total}`;
                         else if (t.recurrence.type === 'monthly') recurrence = 'Mensal';
                         else if (t.recurrence.type === 'yearly') recurrence = 'Anual';
                     }
-                    csv += \`\${t.date};"\${(t.description||'').replace(/"/g,'""')}";"\${c.name}";\${t.amount>0?'Receita':'Despesa'};"\${payment}";\${status};\${recurrence};\${Math.abs(t.amount).toFixed(2)}\n\`;
+                    csv += `${t.date};"${(t.description||'').replace(/"/g,'""')}";"${c.name}";${t.amount>0?'Receita':'Despesa'};"${payment}";${status};${recurrence};${Math.abs(t.amount).toFixed(2)}\n`;
                 });
                 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' }); const a=document.createElement('a');
-                a.href=URL.createObjectURL(blob); a.download=\`extrato_\${this.formatMonthYear(this.currentMonth)}.csv\`; a.click();
+                a.href=URL.createObjectURL(blob); a.download=`extrato_${this.formatMonthYear(this.currentMonth)}.csv`; a.click();
                 this.showToast('CSV exportado!'); closeExportModal();
             }
 
@@ -1969,7 +2151,7 @@
                 this.updateCharts();
                 this.updateAlertBadge();
                 closeImportCsvModal();
-                this.showToast(\`\${imported} transações importadas!\${skipped > 0 ? \` (\${skipped} ignoradas)\` : ''}\`);
+                this.showToast(`${imported} transações importadas!${skipped > 0 ? ` (${skipped} ignoradas)` : ''}`);
                 this.pendingCsvData = null;
             }
 
@@ -2016,7 +2198,7 @@
                     a.href = URL.createObjectURL(blob);
                     const dateStr = new Date().toISOString().split('T')[0];
                     const timeStr = new Date().toTimeString().split(' ')[0].replace(/:/g, '-');
-                    a.download = \`smart_wallet_backup_\${dateStr}_\${timeStr}.json\`;
+                    a.download = `smart_wallet_backup_${dateStr}_${timeStr}.json`;
                     
                     document.body.appendChild(a);
                     a.click();
@@ -2076,11 +2258,12 @@
                                     description: t.description || '',
                                     statusOk: t.statusOk === true,
                                     paymentMethod: t.paymentMethod || 'pix',
-                                    recurrence: t.recurrence || null
+                                    recurrence: t.recurrence || null,
+                                    recurrenceGroupId: t.recurrenceGroupId || null
                                 });
                             }
                         } catch (e) {
-                            console.warn(\`Transação \${index} inválida, ignorada:\`, e);
+                            console.warn(`Transação ${index} inválida, ignorada:`, e);
                         }
                     });
                     
@@ -2101,7 +2284,7 @@
                                 });
                             }
                         } catch (e) {
-                            console.warn(\`Categoria \${index} inválida, ignorada:\`, e);
+                            console.warn(`Categoria ${index} inválida, ignorada:`, e);
                         }
                     });
                     
@@ -2117,12 +2300,12 @@
                     const cardCount = cards.length;
                     
                     if (!confirm(
-                        \`⚠️ ATENÇÃO: Esta ação irá substituir TODOS os dados atuais!\n\n\` +
-                        \`📊 Dados do backup:\n\` +
-                        \`• \${transCount} transações\n\` +
-                        \`• \${catCount} categorias\n\` +
-                        \`• \${cardCount} cartões\n\n\` +
-                        \`Deseja continuar?\`
+                        `⚠️ ATENÇÃO: Esta ação irá substituir TODOS os dados atuais!\n\n` +
+                        `📊 Dados do backup:\n` +
+                        `• ${transCount} transações\n` +
+                        `• ${catCount} categorias\n` +
+                        `• ${cardCount} cartões\n\n` +
+                        `Deseja continuar?`
                     )) {
                         return this.showToast('Importação cancelada');
                     }
@@ -2162,10 +2345,10 @@
                     closeImportBackupModal();
                     
                     this.showToast(
-                        \`✅ Backup restaurado com sucesso!\n\` +
-                        \`📊 \${transCount} transações\n\` +
-                        \`📁 \${catCount} categorias\n\` +
-                        \`💳 \${cardCount} cartões\`
+                        `✅ Backup restaurado com sucesso!\n` +
+                        `📊 ${transCount} transações\n` +
+                        `📁 ${catCount} categorias\n` +
+                        `💳 ${cardCount} cartões`
                     );
                     
                     this.pendingBackupData = null;
@@ -2234,13 +2417,13 @@
                 const container = document.getElementById('billsList');
                 
                 if (bills.length === 0) {
-                    container.innerHTML = \`
+                    container.innerHTML = `
                         <div style="text-align:center; padding:40px 20px; color:var(--text-secondary);">
                             <div style="font-size:3rem; margin-bottom:12px;">✅</div>
                             <h3 style="margin-bottom:8px;">Nenhuma conta pendente!</h3>
                             <p>Todas as contas estão em dia.</p>
                         </div>
-                    \`;
+                    `;
                     return;
                 }
                 
@@ -2249,18 +2432,18 @@
                 
                 const total = bills.reduce((s, b) => s + Math.abs(b.amount), 0);
                 
-                container.innerHTML = \`
+                container.innerHTML = `
                     <div style="background: var(--input-bg); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                             <span style="color: var(--text-secondary); font-size: 0.9rem;">Total de contas</span>
-                            <span style="font-weight: 600;">\${bills.length}</span>
+                            <span style="font-weight: 600;">${bills.length}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0 0 0; margin-top: 4px; border-top: 2px solid var(--border-color); font-weight: 700; font-size: 1.1rem; color: var(--primary-color);">
                             <span>Total a pagar</span>
-                            <span style="color:var(--danger-color);">\${this.formatCurrency(total)}</span>
+                            <span style="color:var(--danger-color);">${this.formatCurrency(total)}</span>
                         </div>
                     </div>
-                    \${bills.map(bill => {
+                    ${bills.map(bill => {
                         const cat = this.getCategoryById(bill.category);
                         const billDate = new Date(bill.date + 'T00:00:00');
                         const diffTime = billDate.getTime() - today.getTime();
@@ -2272,7 +2455,7 @@
                         
                         if (diffDays < 0) {
                             daysClass = 'overdue';
-                            daysText = \`\${Math.abs(diffDays)}d atrasada\`;
+                            daysText = `${Math.abs(diffDays)}d atrasada`;
                             itemClass = 'overdue';
                         } else if (diffDays === 0) {
                             daysClass = 'urgent';
@@ -2284,35 +2467,35 @@
                             itemClass = 'urgent';
                         } else {
                             daysClass = 'warning';
-                            daysText = \`Em \${diffDays} dias\`;
+                            daysText = `Em ${diffDays} dias`;
                         }
                         
-                        return \`
-                            <div class="bill-item \${itemClass}">
+                        return `
+                            <div class="bill-item ${itemClass}">
                                 <div class="bill-info">
                                     <div class="bill-desc">
-                                        \${this.escapeHtml(bill.description)}
-                                        <span class="bill-days \${daysClass}">\${daysText}</span>
+                                        ${this.escapeHtml(bill.description)}
+                                        <span class="bill-days ${daysClass}">${daysText}</span>
                                     </div>
                                     <div class="bill-meta">
-                                        <span>📅 \${this.formatDate(bill.date)}</span>
-                                        <span style="color:\${cat.color};">● \${this.escapeHtml(cat.name)}</span>
-                                        \${bill.paymentMethod ? \`<span>\${this.getPaymentMethodName(bill.paymentMethod)}</span>\` : ''}
+                                        <span>📅 ${this.formatDate(bill.date)}</span>
+                                        <span style="color:${cat.color};">● ${this.escapeHtml(cat.name)}</span>
+                                        ${bill.paymentMethod ? `<span>${this.getPaymentMethodName(bill.paymentMethod)}</span>` : ''}
                                     </div>
                                 </div>
-                                <div class="bill-amount">\${this.formatCurrency(Math.abs(bill.amount))}</div>
+                                <div class="bill-amount">${this.formatCurrency(Math.abs(bill.amount))}</div>
                                 <div style="display: flex; gap: 4px;">
-                                    <button class="btn btn-success btn-small" onclick="smartwallet.markBillAsPaid(\${bill.id})" title="Marcar como paga">
+                                    <button class="btn btn-success btn-small" onclick="smartwallet.markBillAsPaid(${bill.id})" title="Marcar como paga">
                                         <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
                                     </button>
-                                    <button class="btn btn-secondary btn-small" onclick="smartwallet.editTransaction(\${bill.id}); closeBillsModal();" title="Editar">
+                                    <button class="btn btn-secondary btn-small" onclick="smartwallet.editTransaction(${bill.id}); closeBillsModal();" title="Editar">
                                         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                     </button>
                                 </div>
                             </div>
-                        \`;
+                        `;
                     }).join('')}
-                \`;
+                `;
             }
 
             markBillAsPaid(id) {
@@ -2357,7 +2540,7 @@
             deleteCard(id) {
                 const purchases = this.cardPurchases.filter(p => p.cardId === id);
                 if (purchases.length > 0) {
-                    if (!confirm(\`Este cartão tem \${purchases.length} compra(s). Deseja remover mesmo assim?\`)) return;
+                    if (!confirm(`Este cartão tem ${purchases.length} compra(s). Deseja remover mesmo assim?`)) return;
                     this.cardPurchases = this.cardPurchases.filter(p => p.cardId !== id);
                     this.saveCardPurchases();
                 }
@@ -2440,13 +2623,13 @@
             renderCreditCardsList() {
                 const container = document.getElementById('creditCardsList');
                 if (!this.cards.length) {
-                    container.innerHTML = \`
+                    container.innerHTML = `
                         <div style="text-align:center; padding:40px 20px; color:var(--text-secondary);">
                             <div style="font-size:3rem; margin-bottom:12px; opacity:0.5;">💳</div>
                             <h3 style="margin-bottom:8px;">Nenhum cartão cadastrado</h3>
                             <p>Clique em "Novo Cartão" para começar</p>
                         </div>
-                    \`;
+                    `;
                     return;
                 }
                 
@@ -2457,37 +2640,37 @@
                     const available = card.limit - total;
                     const usedPct = Math.min(100, (total / card.limit) * 100);
                     
-                    return \`
-                        <div class="credit-card-visual" style="background: linear-gradient(135deg, \${card.color} 0%, \${this.adjustColor(card.color, -30)} 100%);" onclick="openInvoiceModal('\${card.id}')">
+                    return `
+                        <div class="credit-card-visual" style="background: linear-gradient(135deg, ${card.color} 0%, ${this.adjustColor(card.color, -30)} 100%);" onclick="openInvoiceModal('${card.id}')">
                             <div class="cc-actions">
-                                <button class="cc-action-btn" onclick="event.stopPropagation(); smartwallet.editCard('\${card.id}')" title="Editar">
+                                <button class="cc-action-btn" onclick="event.stopPropagation(); smartwallet.editCard('${card.id}')" title="Editar">
                                     <svg class="icon" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                 </button>
-                                <button class="cc-action-btn" onclick="event.stopPropagation(); smartwallet.deleteCard('\${card.id}')" title="Excluir">
+                                <button class="cc-action-btn" onclick="event.stopPropagation(); smartwallet.deleteCard('${card.id}')" title="Excluir">
                                     <svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                                 </button>
                             </div>
                             <div class="cc-header">
-                                <div class="cc-brand">\${this.escapeHtml(card.brand)}</div>
+                                <div class="cc-brand">${this.escapeHtml(card.brand)}</div>
                                 <div class="cc-chip"></div>
                             </div>
-                            <div class="cc-name">\${this.escapeHtml(card.name)}</div>
-                            <div class="cc-number">•••• •••• •••• \${this.escapeHtml(card.last4 || '****')}</div>
+                            <div class="cc-name">${this.escapeHtml(card.name)}</div>
+                            <div class="cc-number">•••• •••• •••• ${this.escapeHtml(card.last4 || '****')}</div>
                             <div class="cc-footer">
                                 <div>
                                     <div class="cc-label">Fatura Atual</div>
-                                    <div class="cc-value">\${this.formatCurrency(total)}</div>
+                                    <div class="cc-value">${this.formatCurrency(total)}</div>
                                 </div>
                                 <div style="text-align:right;">
                                     <div class="cc-label">Disponível</div>
-                                    <div class="cc-value">\${this.formatCurrency(available)}</div>
+                                    <div class="cc-value">${this.formatCurrency(available)}</div>
                                 </div>
                             </div>
                             <div style="position:absolute; bottom:0; left:0; right:0; height:4px; background:rgba(0,0,0,0.3);">
-                                <div style="height:100%; width:\${usedPct}%; background:\${usedPct > 80 ? '#ef4444' : usedPct > 50 ? '#f59e0b' : '#10b981'}; transition:width 0.4s ease;"></div>
+                                <div style="height:100%; width:${usedPct}%; background:${usedPct > 80 ? '#ef4444' : usedPct > 50 ? '#f59e0b' : '#10b981'}; transition:width 0.4s ease;"></div>
                             </div>
                         </div>
-                    \`;
+                    `;
                 }).join('') + '</div>';
             }
 
@@ -2496,7 +2679,7 @@
                 const r = Math.max(0, Math.min(255, parseInt(hex.substr(0, 2), 16) + amount));
                 const g = Math.max(0, Math.min(255, parseInt(hex.substr(2, 2), 16) + amount));
                 const b = Math.max(0, Math.min(255, parseInt(hex.substr(4, 2), 16) + amount));
-                return \`#\${r.toString(16).padStart(2,'0')}\${g.toString(16).padStart(2,'0')}\${b.toString(16).padStart(2,'0')}\`;
+                return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
             }
 
             openInvoice(cardId) {
@@ -2509,48 +2692,48 @@
                 const minimum = total * 0.15;
                 const available = card.limit - total;
                 
-                document.getElementById('invoiceTitle').textContent = \`Fatura - \${card.name}\`;
+                document.getElementById('invoiceTitle').textContent = `Fatura - ${card.name}`;
                 
                 const content = document.getElementById('invoiceContent');
-                content.innerHTML = \`
+                content.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
                         <div>
                             <div style="font-size:0.85rem; color:var(--text-secondary);">Período da Fatura</div>
-                            <div style="font-weight:600;">\${this.formatDate(period.startDate.toISOString().split('T')[0])} - \${this.formatDate(period.closingDate.toISOString().split('T')[0])}</div>
+                            <div style="font-weight:600;">${this.formatDate(period.startDate.toISOString().split('T')[0])} - ${this.formatDate(period.closingDate.toISOString().split('T')[0])}</div>
                         </div>
                         <div style="text-align:right;">
                             <div style="font-size:0.85rem; color:var(--text-secondary);">Vencimento</div>
-                            <div style="font-weight:600; color:var(--warning-color);">\${this.formatDate(period.dueDate.toISOString().split('T')[0])}</div>
+                            <div style="font-weight:600; color:var(--warning-color);">${this.formatDate(period.dueDate.toISOString().split('T')[0])}</div>
                         </div>
                     </div>
                     
                     <div style="background: var(--input-bg); border-radius: 14px; padding: 16px; margin-bottom: 16px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                             <span style="color: var(--text-secondary); font-size: 0.9rem;">Limite Total</span>
-                            <span style="font-weight: 600;">\${this.formatCurrency(card.limit)}</span>
+                            <span style="font-weight: 600;">${this.formatCurrency(card.limit)}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                             <span style="color: var(--text-secondary); font-size: 0.9rem;">Total da Fatura</span>
-                            <span style="font-weight: 600; color:var(--danger-color);">\${this.formatCurrency(total)}</span>
+                            <span style="font-weight: 600; color:var(--danger-color);">${this.formatCurrency(total)}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border-color);">
                             <span style="color: var(--text-secondary); font-size: 0.9rem;">Pagamento Mínimo (15%)</span>
-                            <span style="font-weight: 600;">\${this.formatCurrency(minimum)}</span>
+                            <span style="font-weight: 600;">${this.formatCurrency(minimum)}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0 0 0; margin-top: 4px; border-top: 2px solid var(--border-color); font-weight: 700; font-size: 1.1rem; color: var(--primary-color);">
                             <span>Limite Disponível</span>
-                            <span style="color:var(--success-color);">\${this.formatCurrency(available)}</span>
+                            <span style="color:var(--success-color);">${this.formatCurrency(available)}</span>
                         </div>
                     </div>
                     
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
-                        <h3 style="font-size:1.1rem;">Compras no Período (\${purchases.length})</h3>
+                        <h3 style="font-size:1.1rem;">Compras no Período (${purchases.length})</h3>
                         <div style="display:flex; gap:8px;">
-                            <button class="btn btn-secondary btn-small" onclick="smartwallet.exportInvoiceCSV('\${cardId}')">
+                            <button class="btn btn-secondary btn-small" onclick="smartwallet.exportInvoiceCSV('${cardId}')">
                                 <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                                 CSV
                             </button>
-                            <button class="btn btn-secondary btn-small" onclick="smartwallet.printInvoicePDF('\${cardId}')">
+                            <button class="btn btn-secondary btn-small" onclick="smartwallet.printInvoicePDF('${cardId}')">
                                 <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
                                 PDF
                             </button>
@@ -2558,44 +2741,44 @@
                     </div>
                     
                     <div id="invoicePurchasesList">
-                        \${purchases.length === 0 ? '<p style="text-align:center; padding:20px; color:var(--text-secondary);">Nenhuma compra neste período</p>' : 
+                        ${purchases.length === 0 ? '<p style="text-align:center; padding:20px; color:var(--text-secondary);">Nenhuma compra neste período</p>' : 
                         purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).map(p => {
                             const cat = this.getCategoryById(p.category);
                             const installmentAmount = this.getInstallmentAmount(p);
-                            const installmentInfo = p.installments > 1 ? \` • \${p.installments}x de \${this.formatCurrency(installmentAmount)}\` : '';
-                            return \`
+                            const installmentInfo = p.installments > 1 ? ` • ${p.installments}x de ${this.formatCurrency(installmentAmount)}` : '';
+                            return `
                                 <div style="background: var(--input-bg); border-radius: 12px; padding: 12px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 12px;">
                                     <div style="flex: 1; min-width: 0;">
-                                        <div style="font-weight: 600; margin-bottom: 2px;">\${this.escapeHtml(p.description)}</div>
+                                        <div style="font-weight: 600; margin-bottom: 2px;">${this.escapeHtml(p.description)}</div>
                                         <div style="font-size: 0.8rem; color: var(--text-secondary); display: flex; gap: 10px; flex-wrap: wrap;">
-                                            <span>\${this.formatDate(p.date)}</span>
-                                            <span style="color:\${cat.color};">● \${this.escapeHtml(cat.name)}</span>
-                                            \${installmentInfo}
+                                            <span>${this.formatDate(p.date)}</span>
+                                            <span style="color:${cat.color};">● ${this.escapeHtml(cat.name)}</span>
+                                            ${installmentInfo}
                                         </div>
                                     </div>
-                                    <div style="font-weight: 700; font-size: 1rem; white-space: nowrap;">\${this.formatCurrency(p.amount)}</div>
+                                    <div style="font-weight: 700; font-size: 1rem; white-space: nowrap;">${this.formatCurrency(p.amount)}</div>
                                     <div style="display: flex; gap: 4px;">
-                                        <button class="btn btn-danger btn-small" onclick="smartwallet.deletePurchase(\${p.id}, '\${cardId}')" title="Excluir">
+                                        <button class="btn btn-danger btn-small" onclick="smartwallet.deletePurchase(${p.id}, '${cardId}')" title="Excluir">
                                             <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                                         </button>
                                     </div>
                                 </div>
-                            \`;
+                            `;
                         }).join('')}
                     </div>
                     
                     <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top:20px;">
-                        <button class="btn btn-primary" onclick="openNewPurchaseModal('\${cardId}')">
+                        <button class="btn btn-primary" onclick="openNewPurchaseModal('${cardId}')">
                             <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                             Nova Compra
                         </button>
-                        <button class="btn btn-success" onclick="smartwallet.payInvoice('\${cardId}')">
+                        <button class="btn btn-success" onclick="smartwallet.payInvoice('${cardId}')">
                             <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
                             Pagar Fatura
                         </button>
                         <button class="btn btn-secondary" onclick="closeInvoiceModal()">Fechar</button>
                     </div>
-                \`;
+                `;
                 
                 document.getElementById('invoiceModal').classList.add('active');
             }
@@ -2649,14 +2832,14 @@
                 
                 if (total <= 0) return this.showToast('Fatura sem valor a pagar');
                 
-                if (!confirm(\`Criar transação de pagamento da fatura no valor de \${this.formatCurrency(total)}?\`)) return;
+                if (!confirm(`Criar transação de pagamento da fatura no valor de ${this.formatCurrency(total)}?`)) return;
                 
                 this.transactions.push({
                     id: Date.now(),
                     date: new Date().toISOString().split('T')[0],
                     amount: -total,
                     category: 'inst_financeira',
-                    description: \`Pagamento Fatura \${card.name} - \${period.dueDate.toLocaleDateString('pt-BR')}\`,
+                    description: `Pagamento Fatura ${card.name} - ${period.dueDate.toLocaleDateString('pt-BR')}`,
                     statusOk: false,
                     paymentMethod: 'pix'
                 });
@@ -2675,25 +2858,25 @@
                 const period = this.getInvoicePeriod(card);
                 const purchases = this.getCardPurchasesForInvoice(card.id, period.startDate, period.closingDate);
                 
-                let csv = \`\ufeffFATURA - \${card.name}\n\`;
-                csv += \`Período:;\${this.formatDate(period.startDate.toISOString().split('T')[0])} a \${this.formatDate(period.closingDate.toISOString().split('T')[0])}\n\`;
-                csv += \`Vencimento:;\${this.formatDate(period.dueDate.toISOString().split('T')[0])}\n\n\`;
+                let csv = `\ufeffFATURA - ${card.name}\n`;
+                csv += `Período:;${this.formatDate(period.startDate.toISOString().split('T')[0])} a ${this.formatDate(period.closingDate.toISOString().split('T')[0])}\n`;
+                csv += `Vencimento:;${this.formatDate(period.dueDate.toISOString().split('T')[0])}\n\n`;
                 csv += 'Data;Descrição;Categoria;Parcelas;Valor Total;Valor Parcela\n';
                 
                 purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(p => {
                     const cat = this.getCategoryById(p.category);
                     const installmentAmount = this.getInstallmentAmount(p);
-                    csv += \`\${p.date};"\${(p.description||'').replace(/"/g,'""')}";"\${cat.name}";\${p.installments || 1}x;\${p.amount.toFixed(2)};\${installmentAmount.toFixed(2)}\n\`;
+                    csv += `${p.date};"${(p.description||'').replace(/"/g,'""')}";"${cat.name}";${p.installments || 1}x;${p.amount.toFixed(2)};${installmentAmount.toFixed(2)}\n`;
                 });
                 
                 const total = this.calculateInvoiceTotal(card, purchases, period.startDate, period.closingDate);
-                csv += \`\nTOTAL DA FATURA;;;\${this.formatCurrency(total)}\n\`;
-                csv += \`PAGAMENTO MÍNIMO;;;\${this.formatCurrency(total * 0.15)}\n\`;
+                csv += `\nTOTAL DA FATURA;;;${this.formatCurrency(total)}\n`;
+                csv += `PAGAMENTO MÍNIMO;;;${this.formatCurrency(total * 0.15)}\n`;
                 
                 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
                 const a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
-                a.download = \`fatura_\${card.name.replace(/\s+/g,'_')}_\${this.formatMonthYear(new Date())}.csv\`;
+                a.download = `fatura_${card.name.replace(/\s+/g,'_')}_${this.formatMonthYear(new Date())}.csv`;
                 a.click();
                 this.showToast('Fatura exportada!');
             }
@@ -2707,12 +2890,12 @@
                 const total = this.calculateInvoiceTotal(card, purchases, period.startDate, period.closingDate);
                 
                 const printWindow = window.open('', '_blank');
-                printWindow.document.write(\`
+                printWindow.document.write(`
                     <!DOCTYPE html>
-                    <html><head><title>Fatura \${card.name}</title>
+                    <html><head><title>Fatura ${card.name}</title>
                     <style>
                         body { font-family: Arial, sans-serif; padding: 20px; color: #1e293b; }
-                        h1 { color: \${card.color}; margin-bottom: 4px; }
+                        h1 { color: ${card.color}; margin-bottom: 4px; }
                         .subtitle { color: #64748b; margin-bottom: 20px; }
                         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 8px; }
                         .info-label { font-size: 0.85rem; color: #64748b; }
@@ -2725,35 +2908,35 @@
                         .footer { margin-top: 30px; font-size: 0.85rem; color: #64748b; text-align: center; }
                         @media print { body { padding: 0; } }
                     </style></head><body>
-                    <h1>\${this.escapeHtml(card.name)}</h1>
-                    <div class="subtitle">\${this.escapeHtml(card.brand)} •••• \${this.escapeHtml(card.last4 || '****')}</div>
+                    <h1>${this.escapeHtml(card.name)}</h1>
+                    <div class="subtitle">${this.escapeHtml(card.brand)} •••• ${this.escapeHtml(card.last4 || '****')}</div>
                     
                     <div class="info-grid">
-                        <div><div class="info-label">Período</div><div class="info-value">\${this.formatDate(period.startDate.toISOString().split('T')[0])} a \${this.formatDate(period.closingDate.toISOString().split('T')[0])}</div></div>
-                        <div><div class="info-label">Vencimento</div><div class="info-value" style="color:#f59e0b;">\${this.formatDate(period.dueDate.toISOString().split('T')[0])}</div></div>
-                        <div><div class="info-label">Limite Total</div><div class="info-value">\${this.formatCurrency(card.limit)}</div></div>
-                        <div><div class="info-label">Disponível</div><div class="info-value" style="color:#10b981;">\${this.formatCurrency(card.limit - total)}</div></div>
+                        <div><div class="info-label">Período</div><div class="info-value">${this.formatDate(period.startDate.toISOString().split('T')[0])} a ${this.formatDate(period.closingDate.toISOString().split('T')[0])}</div></div>
+                        <div><div class="info-label">Vencimento</div><div class="info-value" style="color:#f59e0b;">${this.formatDate(period.dueDate.toISOString().split('T')[0])}</div></div>
+                        <div><div class="info-label">Limite Total</div><div class="info-value">${this.formatCurrency(card.limit)}</div></div>
+                        <div><div class="info-label">Disponível</div><div class="info-value" style="color:#10b981;">${this.formatCurrency(card.limit - total)}</div></div>
                     </div>
                     
                     <table>
                         <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Parcelas</th><th style="text-align:right;">Valor</th></tr></thead>
                         <tbody>
-                            \${purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).map(p => {
+                            ${purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).map(p => {
                                 const cat = this.getCategoryById(p.category);
-                                const installmentInfo = p.installments > 1 ? \`\${p.installments}x de \${this.formatCurrency(this.getInstallmentAmount(p))}\` : 'À vista';
-                                return \`<tr><td>\${this.formatDate(p.date)}</td><td>\${this.escapeHtml(p.description)}</td><td>\${this.escapeHtml(cat.name)}</td><td>\${installmentInfo}</td><td style="text-align:right;">\${this.formatCurrency(p.amount)}</td></tr>\`;
+                                const installmentInfo = p.installments > 1 ? `${p.installments}x de ${this.formatCurrency(this.getInstallmentAmount(p))}` : 'À vista';
+                                return `<tr><td>${this.formatDate(p.date)}</td><td>${this.escapeHtml(p.description)}</td><td>${this.escapeHtml(cat.name)}</td><td>${installmentInfo}</td><td style="text-align:right;">${this.formatCurrency(p.amount)}</td></tr>`;
                             }).join('')}
-                            <tr class="total-row"><td colspan="4">TOTAL DA FATURA</td><td style="text-align:right;">\${this.formatCurrency(total)}</td></tr>
-                            <tr><td colspan="4" style="text-align:right; font-weight:600;">Pagamento Mínimo (15%)</td><td style="text-align:right;">\${this.formatCurrency(total * 0.15)}</td></tr>
+                            <tr class="total-row"><td colspan="4">TOTAL DA FATURA</td><td style="text-align:right;">${this.formatCurrency(total)}</td></tr>
+                            <tr><td colspan="4" style="text-align:right; font-weight:600;">Pagamento Mínimo (15%)</td><td style="text-align:right;">${this.formatCurrency(total * 0.15)}</td></tr>
                         </tbody>
                     </table>
                     
                     <div class="footer">
-                        Smart Wallet • Fatura gerada em \${new Date().toLocaleString('pt-BR')}<br>
+                        Smart Wallet • Fatura gerada em ${new Date().toLocaleString('pt-BR')}<br>
                         Idealizado por RogerElizar™
                     </div>
                     </body></html>
-                \`);
+                `);
                 printWindow.document.close();
                 setTimeout(() => { printWindow.print(); }, 250);
             }
@@ -2776,16 +2959,16 @@
                     const statusText = t.statusOk ? 'Concluído' : 'Pendente';
                     const recurrenceHtml = this.getRecurrenceDisplay(t);
                     const paymentName = this.getPaymentMethodName(t.paymentMethod);
-                    return \`<tr class="transaction-row" onclick="smartwallet.editTransaction(\${t.id})">
-                        <td data-label="Data">\${this.formatDate(t.date)}</td>
-                        <td data-label="Descrição" style="flex-direction: column; align-items: flex-start;">\${this.escapeHtml(t.description)||'-'}</td>
-                        <td data-label="Categoria"><span class="category-badge" style="background:\${c.color}">\${this.escapeHtml(c.name)}</span></td>
-                        <td data-label="Pagamento"><span class="payment-badge">\${paymentName}</span></td>
-                        <td data-label="Status"><span class="status-badge \${statusClass}">\${statusText}</span></td>
-                        <td data-label="Recorrência">\${recurrenceHtml || '<span style="color:var(--text-secondary); font-size:0.85rem;">-</span>'}</td>
-                        <td data-label="Valor" class="amount \${cls} privacy-value">\${this.formatCurrency(t.amount)}</td>
-                        <td data-label="Saldo" class="balance privacy-value">\${this.formatCurrency(balMap.get(t.id))}</td>
-                    </tr>\`;
+                    return `<tr class="transaction-row" onclick="smartwallet.editTransaction(${t.id})">
+                        <td data-label="Data">${this.formatDate(t.date)}</td>
+                        <td data-label="Descrição" style="flex-direction: column; align-items: flex-start;">${this.escapeHtml(t.description)||'-'}</td>
+                        <td data-label="Categoria"><span class="category-badge" style="background:${c.color}">${this.escapeHtml(c.name)}</span></td>
+                        <td data-label="Pagamento"><span class="payment-badge">${paymentName}</span></td>
+                        <td data-label="Status"><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td data-label="Recorrência">${recurrenceHtml || '<span style="color:var(--text-secondary); font-size:0.85rem;">-</span>'}</td>
+                        <td data-label="Valor" class="amount ${cls} privacy-value">${this.formatCurrency(t.amount)}</td>
+                        <td data-label="Saldo" class="balance privacy-value">${this.formatCurrency(balMap.get(t.id))}</td>
+                    </tr>`;
                 }).join('');
             }
 
@@ -2931,7 +3114,7 @@
                 return;
             }
             
-            document.getElementById('csvFileName').textContent = \`📄 \${file.name} (\${(file.size / 1024).toFixed(1)} KB)\`;
+            document.getElementById('csvFileName').textContent = `📄 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
             const reader = new FileReader();
             reader.onload = (e) => { smartwallet.pendingCsvData = e.target.result; };
             reader.readAsText(file, 'UTF-8');
@@ -2964,7 +3147,7 @@
                 return;
             }
             
-            document.getElementById('backupFileName').textContent = \`💾 \${file.name} (\${(file.size / 1024).toFixed(1)} KB)\`;
+            document.getElementById('backupFileName').textContent = `💾 ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
             
             const reader = new FileReader();
             
@@ -3133,7 +3316,7 @@
             
             disclaimerCountdown = 15;
             btnEl.classList.remove('enabled');
-            timerEl.innerHTML = \`⏱️ Por favor, leia atentamente. O botão será habilitado em <span id="countdown">\${disclaimerCountdown}</span> segundos\`;
+            timerEl.innerHTML = `⏱️ Por favor, leia atentamente. O botão será habilitado em <span id="countdown">${disclaimerCountdown}</span> segundos`;
             
             clearInterval(disclaimerTimerInterval);
             disclaimerTimerInterval = setInterval(() => {
@@ -3159,8 +3342,8 @@
 
         function showQuoteModal() {
             const quote = financialQuotes[Math.floor(Math.random() * financialQuotes.length)];
-            document.getElementById('quoteText').textContent = \`"\${quote.text}"\`;
-            document.getElementById('quoteAuthor').textContent = \`— \${quote.author}\`;
+            document.getElementById('quoteText').textContent = `"${quote.text}"`;
+            document.getElementById('quoteAuthor').textContent = `— ${quote.author}`;
             document.getElementById('quoteModal').classList.add('active');
         }
 
@@ -3204,6 +3387,16 @@
             if (!menuBtn && menu.classList.contains('active')) menu.classList.remove('active');
             if (!infoBtn && infoMenu.classList.contains('active')) infoMenu.classList.remove('active');
         });
+
+        // Funções para o modal de confirmação de recorrência
+        window.closeRecurrenceConfirmModal = function() {
+            document.getElementById('recurrenceConfirmModal').classList.remove('active');
+            smartwallet.pendingRecurrenceUpdate = null;
+        };
+
+        window.applyRecurrenceUpdate = function(scope) {
+            smartwallet.applyRecurrenceUpdate(scope);
+        };
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
