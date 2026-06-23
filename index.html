@@ -80,6 +80,309 @@
                 radial-gradient(circle at 40% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
             pointer-events: none; z-index: 0;
         }
+
+/* ===== DISCLAIMER MODAL ===== */
+.disclaimer-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    padding: 20px;
+}
+
+.disclaimer-content {
+    background: var(--glass-bg);
+    backdrop-filter: blur(30px);
+    border: 2px solid var(--warning-color);
+    border-radius: 24px;
+    padding: 40px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 0 50px rgba(245, 158, 11, 0.3);
+}
+
+.disclaimer-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--warning-color);
+}
+
+.disclaimer-icon {
+    font-size: 4rem;
+    margin-bottom: 16px;
+    animation: pulse-warning 2s ease-in-out infinite;
+}
+
+@keyframes pulse-warning {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.disclaimer-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--warning-color);
+    margin-bottom: 8px;
+}
+
+.disclaimer-body {
+    color: var(--text-primary);
+    line-height: 1.8;
+    font-size: 0.95rem;
+}
+
+.disclaimer-body h3 {
+    color: var(--primary-color);
+    margin: 20px 0 10px 0;
+    font-size: 1.1rem;
+}
+
+.disclaimer-body ul {
+    margin-left: 20px;
+    margin-bottom: 16px;
+}
+
+.disclaimer-footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.disclaimer-timer {
+    background: var(--input-bg);
+    border: 2px solid var(--warning-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--warning-color);
+}
+
+.disclaimer-accept-btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.disclaimer-accept-btn.enabled {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ===== MANUAL MODAL ===== */
+.manual-modal .modal-content {
+    max-width: 900px;
+}
+
+.manual-content {
+    color: var(--text-primary);
+    line-height: 1.8;
+}
+
+.manual-content h2 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin: 30px 0 15px 0;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.manual-content h3 {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    margin: 20px 0 10px 0;
+}
+
+.manual-tip {
+    background: rgba(99, 102, 241, 0.1);
+    border-left: 4px solid var(--primary-color);
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 8px;
+}
+
+.manual-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-left: 4px solid var(--warning-color);
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 8px;
+}
+
+.manual-success {
+    background: rgba(16, 185, 129, 0.1);
+    border-left: 4px solid var(--success-color);
+    padding: 16px;
+    margin: 16px 0;
+    border-radius: 8px;
+}
+
+/* ===== THANKS MODAL ===== */
+.thanks-modal .modal-content {
+    text-align: center;
+}
+
+.thanks-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.thanks-title {
+    font-size: 2rem;
+    font-weight: 800;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+}
+
+.pix-section {
+    background: var(--input-bg);
+    border: 2px solid var(--success-color);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 24px 0;
+}
+
+.pix-key {
+    background: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    margin: 12px 0;
+    word-break: break-all;
+}
+
+/* ===== TIMBRE DE IMPRESSÃO ===== */
+@media print {
+    @page {
+        size: A4;
+        margin: 2cm;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+        font-size: 11pt;
+    }
+    
+    body::before {
+        display: none !important;
+    }
+    
+    header, .toolbar, .fab, .charts-section, .filters, 
+    .modal, .toast, .splash-screen, .quote-modal, 
+    .connection-status, .disclaimer-modal {
+        display: none !important;
+    }
+    
+    .print-header {
+        display: block !important;
+        text-align: center;
+        border-bottom: 3px solid #6366f1;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        page-break-inside: avoid;
+    }
+    
+    .print-header h1 {
+        color: #6366f1 !important;
+        font-size: 24pt;
+        margin: 0 0 5px 0;
+        -webkit-text-fill-color: #6366f1 !important;
+    }
+    
+    .print-footer {
+        display: block !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        border-top: 2px solid #6366f1;
+        padding-top: 10px;
+        font-size: 8pt;
+        color: #64748b !important;
+        page-break-inside: avoid;
+    }
+    
+    .dashboard {
+        grid-template-columns: repeat(4, 1fr) !important;
+        gap: 10px !important;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+        padding: 10px !important;
+        background: white !important;
+        color: black !important;
+    }
+    
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+    }
+    
+    th, td {
+        border: 1px solid #ccc !important;
+        padding: 6px !important;
+        font-size: 9pt !important;
+        color: black !important;
+    }
+    
+    thead {
+        background: #f1f5f9 !important;
+        display: table-header-group !important;
+    }
+    
+    body.privacy-on .privacy-value {
+        filter: none !important;
+    }
+    
+    .manual-content {
+        color: black !important;
+    }
+    
+    .manual-content h2 {
+        color: #6366f1 !important;
+        page-break-after: avoid;
+    }
+    
+    .manual-tip, .manual-warning, .manual-success {
+        border: 1px solid #ccc !important;
+        background: #f8fafc !important;
+        page-break-inside: avoid;
+    }
+}
+
+.print-header, .print-footer {
+    display: none;
+}
         
         /* ♿ Acessibilidade: Reduz movimento */
         @media (prefers-reduced-motion: reduce) {
@@ -526,6 +829,135 @@
                 </div>
             </div>
         </div>
+
+
+<!-- Timbre de Impressão -->
+<div class="print-header">
+    <h1>Smart Wallet Brasil</h1>
+    <div style="color: #64748b; font-size: 10pt;">Controle Financeiro Pessoal Inteligente</div>
+    <div style="color: #94a3b8; font-size: 9pt; margin-top: 5px;" id="printDate"></div>
+</div>
+
+<div class="print-footer">
+    <div style="font-weight: 600; color: #6366f1;">Idealizado por RogerElizar™</div>
+    <div>Smart Wallet Brasil © 2026 - rogerelizar@gmail.com</div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer-modal" id="disclaimerModal">
+    <div class="disclaimer-content">
+        <div class="disclaimer-header">
+            <div class="disclaimer-icon">⚠️</div>
+            <h2 class="disclaimer-title">Termos de Uso e Aviso Legal</h2>
+            <p style="color: var(--text-secondary);">Por favor, leia atentamente antes de continuar</p>
+        </div>
+        
+        <div class="disclaimer-body">
+            <h3>📋 Sobre o Smart Wallet Brasil</h3>
+            <p>O Smart Wallet Brasil é uma ferramenta de <strong>controle financeiro pessoal</strong> desenvolvida para ajudar você a organizar suas finanças, acompanhar gastos, planejar metas e tomar decisões financeiras mais conscientes.</p>
+            
+            <h3>🔒 Privacidade e Segurança</h3>
+            <ul>
+                <li><strong>100% Offline:</strong> Todos os seus dados são armazenados <strong>localmente</strong> no seu navegador. Nenhum dado é enviado para servidores externos.</li>
+                <li><strong>Sem Cadastro:</strong> Não exigimos criação de conta ou informações pessoais.</li>
+                <li><strong>Sem Rastreamento:</strong> Não utilizamos cookies de rastreamento ou analytics.</li>
+                <li><strong>Controle Total:</strong> Você pode exportar e apagar seus dados a qualquer momento.</li>
+            </ul>
+            
+            <h3>⚠️ Limitações e Responsabilidades</h3>
+            <ul>
+                <li><strong>Ferramenta de Apoio:</strong> Este aplicativo <strong>não substitui</strong> consultoria financeira profissional.</li>
+                <li><strong>Decisões Financeiras:</strong> As decisões são de <strong>total responsabilidade do usuário</strong>.</li>
+                <li><strong>Backup:</strong> Faça backups regulares. Não nos responsabilizamos por perda de dados.</li>
+            </ul>
+            
+            <h3>🛡️ Isenção de Responsabilidade</h3>
+            <p>O desenvolvedor <strong>não se responsabiliza</strong> por quaisquer perdas financeiras decorrentes do uso do aplicativo. Você é o único responsável pelas informações inseridas e decisões tomadas.</p>
+            
+            <h3>✅ Seu Compromisso</h3>
+            <p>Ao continuar, você declara que leu e concorda com estes termos.</p>
+        </div>
+        
+        <div class="disclaimer-footer">
+            <div class="disclaimer-timer" id="disclaimerTimer">
+                ⏱️ Por favor, leia atentamente. O botão será habilitado em <span id="countdown">15</span> segundos
+            </div>
+            <button class="disclaimer-accept-btn" id="acceptDisclaimerBtn" onclick="acceptDisclaimer()">
+                ✓ Li e Concordo com os Termos
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Botões no Menu (adicionar ao dropdown-menu antes de "Limpar Dados") -->
+<div class="dropdown-divider"></div>
+<button class="dropdown-item" onclick="openManualModal()" role="menuitem">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    <span>📘 Manual do Usuário</span>
+</button>
+<button class="dropdown-item" onclick="openTermsModal()" role="menuitem">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+    <span>📜 Termos de Uso</span>
+</button>
+<button class="dropdown-item" onclick="openThanksModal()" role="menuitem">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <span>☕ Apoie o Projeto</span>
+</button>
+
+<!-- Modal do Manual -->
+<div class="modal manual-modal" id="manualModal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📘 Manual do Usuário</h2>
+            <div style="display: flex; gap: 8px;">
+                <button class="btn btn-secondary btn-small" onclick="printManual()">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                    Imprimir
+                </button>
+                <button class="modal-close" onclick="closeManualModal()">
+                    <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+        <div class="manual-content" id="manualContent"></div>
+    </div>
+</div>
+
+<!-- Modal de Agradecimento -->
+<div class="modal thanks-modal" id="thanksModal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>☕ Apoie o Projeto</h2>
+            <button class="modal-close" onclick="closeThanksModal()">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="thanks-icon">☕</div>
+        <h3 class="thanks-title">Obrigado por Usar o Smart Wallet!</h3>
+        <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 30px;">
+            Este projeto foi desenvolvido com dedicação para ajudar pessoas como você a conquistarem sua liberdade financeira. Se o Smart Wallet tem sido útil na sua jornada, que tal me pagar um cafezinho?
+        </p>
+        
+        <div class="pix-section">
+            <div style="font-size: 1.3rem; font-weight: 700; color: var(--success-color); margin-bottom: 12px;">
+                💚 Faça uma Doação via PIX
+            </div>
+            <p style="margin-bottom: 12px;">Qualquer valor é bem-vindo!</p>
+            <div class="pix-key" id="pixKey">rogerelizar@gmail.com</div>
+            <button class="btn btn-success" onclick="copyPixKey()">
+                📋 Copiar Chave PIX
+            </button>
+        </div>
+        
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+            <h3 style="margin-bottom: 12px;">💬 Envie seu Feedback</h3>
+            <p style="margin-bottom: 16px;">Sua opinião é muito importante!</p>
+            <a href="mailto:rogerelizar@gmail.com?subject=Feedback%20Smart%20Wallet" class="btn btn-primary">
+                ✉️ Enviar Feedback por E-mail
+            </a>
+        </div>
+    </div>
+</div>
 
         <div class="dashboard">
             <div class="card"><div class="card-title">Saldo do Mês</div><div class="card-value privacy-value" id="totalBalance">R$ 0,00</div></div>
@@ -1007,6 +1439,317 @@
     <div class="toast" id="toast" role="alert" aria-live="polite" aria-atomic="true"></div>
 
     <script>
+
+// ===== DISCLAIMER =====
+let disclaimerTimerInterval;
+let disclaimerCountdown = 15;
+
+function initDisclaimer() {
+    const timerEl = document.getElementById('countdown');
+    const btnEl = document.getElementById('acceptDisclaimerBtn');
+    
+    disclaimerTimerInterval = setInterval(() => {
+        disclaimerCountdown--;
+        timerEl.textContent = disclaimerCountdown;
+        
+        if (disclaimerCountdown <= 0) {
+            clearInterval(disclaimerTimerInterval);
+            btnEl.classList.add('enabled');
+            document.getElementById('disclaimerTimer').innerHTML = '✅ Você já pode aceitar os termos';
+        }
+    }, 1000);
+}
+
+window.acceptDisclaimer = function() {
+    const btnEl = document.getElementById('acceptDisclaimerBtn');
+    if (!btnEl.classList.contains('enabled')) return;
+    
+    document.getElementById('disclaimerModal').style.display = 'none';
+    document.getElementById('splashScreen').style.display = 'flex';
+    
+    setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        splash.classList.add('fade-out');
+        setTimeout(() => {
+            splash.style.display = 'none';
+            showQuoteModal();
+        }, 600);
+    }, 3000);
+};
+
+// ===== CONTEÚDO DO MANUAL =====
+const manualHTML = `
+    <div style="text-align: center; margin-bottom: 40px; padding: 30px; background: var(--gradient-card); border-radius: 16px;">
+        <h1 style="font-size: 2rem; margin-bottom: 16px;">🙏 Gratidão e Dedicatória</h1>
+        <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px;">
+            <em>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes." - Tiago 1:17</em>
+        </p>
+        <p style="font-size: 1rem; line-height: 1.8;">
+            Agradeço a Deus por toda sabedoria, saúde e recursos que me permitiram desenvolver este projeto. 
+            Cada linha de código, cada ideia, cada oportunidade são frutos da Sua graça em minha vida.
+        </p>
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid var(--primary-color);">
+            <h3 style="color: var(--accent-color); margin-bottom: 12px;">💝 Aos meus filhos</h3>
+            <p style="font-size: 1rem; line-height: 1.8; font-style: italic;">
+                Dedico este trabalho a vocês, meus amados filhos. Que este seja um legado de ensino, 
+                organização e sabedoria financeira. Que através dele, vocês aprendam o valor do planejamento, 
+                da responsabilidade e da generosidade. Que cada real economizado hoje seja uma semente 
+                de prosperidade para o amanhã. Amo vocês infinitamente!
+            </p>
+        </div>
+    </div>
+    
+    <h2>🎯 Bem-vindo ao Smart Wallet Brasil!</h2>
+    <p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>! O Smart Wallet Brasil não é apenas mais um aplicativo de controle de gastos — é seu parceiro na jornada para transformar sua relação com o dinheiro.</p>
+    
+    <div class="manual-tip">
+        <strong>💡 Você sabia?</strong> Estudos mostram que pessoas que acompanham suas finanças regularmente economizam em média <strong>20% a mais</strong> do que aquelas que não controlam seus gastos.
+    </div>
+    
+    <h2>📱 Instalação como WebApp</h2>
+    <p>O Smart Wallet funciona como um aplicativo instalado no seu dispositivo, mesmo sendo uma aplicação web.</p>
+    
+    <h3>💻 No Computador (Chrome, Edge, Brave)</h3>
+    <ol>
+        <li>Acesse o site pelo navegador</li>
+        <li>Procure o ícone de instalação na barra de endereços (monitor com seta para baixo)</li>
+        <li>Ou clique no menu do navegador (⋮) → "Instalar Smart Wallet..."</li>
+        <li>Confirme a instalação</li>
+        <li>Pronto! O app aparecerá na sua área de trabalho</li>
+    </ol>
+    
+    <h3>📱 No Celular Android (Chrome)</h3>
+    <ol>
+        <li>Abra o site no Chrome</li>
+        <li>Toque nos três pontos (⋮) no canto superior direito</li>
+        <li>Selecione "Instalar aplicativo" ou "Adicionar à tela inicial"</li>
+        <li>Confirme tocando em "Instalar"</li>
+        <li>O ícone aparecerá na sua tela inicial</li>
+    </ol>
+    
+    <h3>🍎 No iPhone (Safari)</h3>
+    <ol>
+        <li>Abra o site no Safari</li>
+        <li>Toque no botão Compartilhar (quadrado com seta)</li>
+        <li>Role para baixo e toque em "Adicionar à Tela de Início"</li>
+        <li>Toque em "Adicionar"</li>
+        <li>O app aparecerá na sua tela inicial</li>
+    </ol>
+    
+    <div class="manual-tip">
+        <strong>🔒 Privacidade Total:</strong> Após a instalação, o app funciona mesmo offline! Todos os dados ficam apenas no seu dispositivo.
+    </div>
+    
+    <h2>💰 Funcionalidades Principais</h2>
+    
+    <h3>📊 Dashboard Financeiro</h3>
+    <p>A tela inicial mostra um resumo completo da sua situação financeira:</p>
+    <ul>
+        <li><strong>Saldo do Mês:</strong> Quanto você ganhou menos quanto gastou</li>
+        <li><strong>Receitas:</strong> Total de entradas (salário, freelas, etc)</li>
+        <li><strong>Despesas:</strong> Total de saídas</li>
+        <li><strong>Meta de Reserva:</strong> Progresso em direção à sua meta</li>
+    </ul>
+    
+    <div class="manual-success">
+        <strong>🎯 Dica de Coach:</strong> Uma boa regra é ter uma reserva de emergência equivalente a <strong>6 meses</strong> das suas despesas mensais. Isso te protege contra imprevistos sem precisar recorrer a empréstimos.
+    </div>
+    
+    <h3>💳 Gestão de Cartões de Crédito</h3>
+    <p>Controle todos os seus cartões em um só lugar:</p>
+    <ul>
+        <li>Cadastre cartões com limite, dia de fechamento e vencimento</li>
+        <li>Acompanhe faturas e compras parceladas</li>
+        <li>Veja quanto do limite já foi utilizado</li>
+        <li>Exporte faturas em CSV ou PDF</li>
+    </ul>
+    
+    <div class="manual-warning">
+        <strong>⚠️ Atenção:</strong> Cartões de crédito podem ser grandes vilões financeiros se mal utilizados. A regra de ouro: <strong>só compre no crédito se puder pagar a fatura integralmente</strong>. Parcelar a fatura gera juros que podem multiplicar sua dívida em até 15x!
+    </div>
+    
+    <h3>🔔 Alertas de Contas</h3>
+    <p>Nunca mais esqueça uma conta! O sistema avisa automaticamente quando há contas vencendo nos próximos 3 dias.</p>
+    
+    <h3>📈 Gráficos e Análises</h3>
+    <p>Visualize seus dados de forma clara:</p>
+    <ul>
+        <li><strong>Entradas e Saídas:</strong> Evolução mensal</li>
+        <li><strong>Despesas por Categoria:</strong> Onde seu dinheiro está indo</li>
+        <li><strong>Projeção:</strong> Estimativa para o próximo mês</li>
+    </ul>
+    
+    <h2>🚀 Guia do Sucesso Financeiro</h2>
+    
+    <h3>💡 A Mentalidade da Prosperidade</h3>
+    <p>Muitas pessoas acham que riqueza é apenas para "ricos". Mas a verdade é que <strong>prosperidade financeira</strong> é acessível a todos que seguem princípios básicos:</p>
+    
+    <div class="manual-success">
+        <strong>Caso Real - João e Maria:</strong><br>
+        João e Maria ganhavam R$ 5.000/mês. Sem controle, viviam no limite. Começaram a usar o Smart Wallet e aplicaram a regra 50-30-20:<br><br>
+        • <strong>R$ 2.500</strong> (50%) - Necessidades (aluguel, comida, transporte)<br>
+        • <strong>R$ 1.500</strong> (30%) - Desejos (lazer, restaurantes)<br>
+        • <strong>R$ 1.000</strong> (20%) - Objetivos financeiros<br><br>
+        Em 3 anos, construíram uma reserva de R$ 36.000 e começaram a investir. Hoje, 5 anos depois, têm R$ 120.000 investidos e uma vida financeira tranquila. Não são milionários, mas são <strong>financeiramente livres</strong>.
+    </div>
+    
+    <h3>🎯 A Regra 50-30-20</h3>
+    <p>Uma boa divisão do seu salário é:</p>
+    <ul>
+        <li><strong>50%</strong> para necessidades (aluguel, comida, transporte)</li>
+        <li><strong>30%</strong> para desejos (lazer, restaurantes, hobbies)</li>
+        <li><strong>20%</strong> para objetivos financeiros (reserva, investimentos, quitar dívidas)</li>
+    </ul>
+    
+    <h3>💎 Poupar NÃO é Suficiente - Invista!</h3>
+    <p>Muitas pessoas cometem o erro de apenas guardar dinheiro na poupança. Mas com a inflação, seu dinheiro <strong>perde valor</strong> com o tempo!</p>
+    
+    <div class="manual-warning">
+        <strong>Caso Real - Carlos:</strong><br>
+        Carlos guardava R$ 500/mês na poupança. Em 10 anos, tinha R$ 60.000. Mas com inflação média de 5% ao ano, esses R$ 60.000 compravam apenas o equivalente a R$ 37.000 de 10 anos atrás. Ele <strong>perdeu R$ 23.000 em poder de compra</strong>!
+    </div>
+    
+    <div class="manual-success">
+        <strong>Caso Real - Ana:</strong><br>
+        Ana investia R$ 500/mês em um CDB que rendia 10% ao ano. Em 10 anos, tinha R$ 102.000. Mesmo com a mesma inflação, seu dinheiro <strong>rendeu acima da inflação</strong> e ela ganhou poder de compra real!
+    </div>
+    
+    <h3>📊 Onde Investir (Básico)</h3>
+    <p>Para iniciantes, algumas opções seguras:</p>
+    <ul>
+        <li><strong>Tesouro Direto:</strong> Emprestar dinheiro para o governo (muito seguro)</li>
+        <li><strong>CDB:</strong> Emprestar dinheiro para bancos (rendimento melhor que poupança)</li>
+        <li><strong>LCI/LCA:</strong> Isentos de imposto de renda</li>
+        <li><strong>Fundos de Investimento:</strong> Pool de investimentos gerenciados por profissionais</li>
+    </ul>
+    
+    <div class="manual-tip">
+        <strong>💡 Dica de Ouro:</strong> Antes de investir, quite todas as dívidas com juros altos (cartão de crédito, cheque especial). Os juros que você paga são quase sempre maiores que qualquer investimento!
+    </div>
+    
+    <h3>⚠️ Os Riscos da Estagnação Financeira</h3>
+    <p>Não cuidar das finanças pode levar a situações graves:</p>
+    
+    <div class="manual-warning">
+        <strong>Caso Hipotético - Pedro:</strong><br>
+        Pedro ganhava bem, mas não controlava gastos. Acumulou R$ 30.000 em dívidas no cartão. Os juros de 12% ao mês fizeram a dívida crescer para R$ 100.000 em 2 anos. Perdeu o emprego, não conseguiu pagar, teve o nome negativado e não conseguia mais nem alugar um apartamento. Levou 5 anos para se recuperar.<br><br>
+        <strong>Lição:</strong> Dívidas não resolvidas crescem exponencialmente e podem destruir sua vida financeira por anos.
+    </div>
+    
+    <h3>🎓 Educação Financeira Contínua</h3>
+    <p>O mundo financeiro está sempre mudando. Mantenha-se informado:</p>
+    <ul>
+        <li>Leia livros sobre finanças (sugestões: "Pai Rico, Pai Pobre", "O Homem Mais Rico da Babilônia")</li>
+        <li>Acompanhe canais educativos no YouTube</li>
+        <li>Faça cursos gratuitos online</li>
+        <li>Converse com pessoas financeiramente organizadas</li>
+    </ul>
+    
+    <h2>🎯 Seu Plano de Ação</h2>
+    
+    <h3>Semana 1: Diagnóstico</h3>
+    <ol>
+        <li>Cadastre todas as suas fontes de renda</li>
+        <li>Registre todos os gastos do mês atual</li>
+        <li>Identifique onde seu dinheiro está indo</li>
+    </ol>
+    
+    <h3>Semana 2: Organização</h3>
+    <ol>
+        <li>Crie categorias personalizadas para seus gastos</li>
+        <li>Defina sua meta de reserva de emergência</li>
+        <li>Configure alertas para contas importantes</li>
+    </ol>
+    
+    <h3>Semana 3: Planejamento</h3>
+    <ol>
+        <li>Aplique a regra 50-30-20 ao seu orçamento</li>
+        <li>Identifique gastos que podem ser cortados</li>
+        <li>Defina metas financeiras de curto, médio e longo prazo</li>
+    </ol>
+    
+    <h3>Semana 4: Execução</h3>
+    <ol>
+        <li>Comece a registrar TODOS os gastos diariamente</li>
+        <li>Revise seus gastos semanalmente</li>
+        <li>Ajuste seu orçamento conforme necessário</li>
+    </ol>
+    
+    <div class="manual-success">
+        <strong>🌟 Lembre-se:</strong> A jornada de mil milhas começa com um único passo. Você já deu o primeiro passo ao baixar este aplicativo. Continue firme e consistente. Em 6 meses, você não vai se reconhecer!
+    </div>
+    
+    <h2>📞 Suporte e Comunidade</h2>
+    <p>Se tiver dúvidas ou sugestões, entre em contato:</p>
+    <ul>
+        <li><strong>E-mail:</strong> rogerelizar@gmail.com</li>
+        <li><strong>Feedback:</strong> Use o botão "Apoie o Projeto" no menu</li>
+    </ul>
+    
+    <div style="text-align: center; margin-top: 40px; padding: 30px; background: var(--gradient-card); border-radius: 16px;">
+        <h3 style="margin-bottom: 16px;">🙏 Bênção Final</h3>
+        <p style="font-size: 1.1rem; line-height: 1.8; font-style: italic;">
+            "Que Deus abençoe sua jornada financeira. Que você tenha sabedoria para administrar, 
+            generosidade para compartilhar e disciplina para perseverar. Que cada decisão financeira 
+            seja um passo em direção à prosperidade que Deus preparou para você."
+        </p>
+        <p style="margin-top: 20px; font-weight: 600;">
+            Com amor e orações,<br>
+            RogerElizar™
+        </p>
+    </div>
+`;
+
+// ===== FUNÇÕES DOS MODAIS =====
+window.openManualModal = function() {
+    document.getElementById('manualContent').innerHTML = manualHTML;
+    document.getElementById('manualModal').classList.add('active');
+};
+
+window.closeManualModal = function() {
+    document.getElementById('manualModal').classList.remove('active');
+};
+
+window.printManual = function() {
+    window.print();
+};
+
+window.openTermsModal = function() {
+    document.getElementById('disclaimerModal').style.display = 'flex';
+    initDisclaimer();
+};
+
+window.openThanksModal = function() {
+    document.getElementById('thanksModal').classList.add('active');
+};
+
+window.closeThanksModal = function() {
+    document.getElementById('thanksModal').classList.remove('active');
+};
+
+window.copyPixKey = function() {
+    const pixKey = document.getElementById('pixKey').textContent;
+    navigator.clipboard.writeText(pixKey).then(() => {
+        smartwallet.showToast('✅ Chave PIX copiada!');
+    }).catch(() => {
+        smartwallet.showToast('❌ Erro ao copiar. Copie manualmente: ' + pixKey);
+    });
+};
+
+// Atualizar data de impressão
+function updatePrintDate() {
+    const dateEl = document.getElementById('printDate');
+    if (dateEl) {
+        dateEl.textContent = 'Gerado em: ' + new Date().toLocaleString('pt-BR');
+    }
+}
+
+// Inicializar disclaimer ao carregar
+window.addEventListener('load', () => {
+    updatePrintDate();
+    initDisclaimer();
+});
+
     (function() {
         'use strict';
         
