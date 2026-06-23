@@ -1375,112 +1375,160 @@
                 }
             }
 
-            // 📥 IMPORT BACKUP CORRIGIDO
-            importBackup() {
-                if (!this.pendingBackupData) {
-                    return this.showToast('⚠️ Selecione um arquivo de backup primeiro');
-                }
-                
-                try {
-                    let cleanData = this.pendingBackupData;
-                    if (cleanData.charCodeAt(0) === 0xFEFF) {
-                        cleanData = cleanData.substring(1);
-                    }
-                    cleanData = cleanData.trim();
-                    
-                    let data;
-                    try {
-                        data = JSON.parse(cleanData);
-                    } catch (parseError) {
-                        console.error('Erro ao parsear JSON:', parseError);
-                        return this.showToast('❌ Arquivo JSON inválido ou corrompido');
-                    }
-                    
-                    if (!data || typeof data !== 'object') {
-                        return this.showToast('❌ Estrutura do backup inválida');
-                    }
-                    
-                    if (!Array.isArray(data.transactions)) {
-                        return this.showToast('❌ Campo "transactions" inválido');
-                    }
-                    
-                    if (!Array.isArray(data.categories)) {
-                        data.categories = this.getDefaultCategories();
-                    }
-                    
-                    const transactions = data.transactions;
-                    const categories = data.categories;
-                    const cards = Array.isArray(data.cards) ? data.cards : [];
-                    const cardPurchases = Array.isArray(data.cardPurchases) ? data.cardPurchases : [];
-                    const goal = typeof data.goal === 'number' ? data.goal : 0;
-                    const monthlyContribution = typeof data.monthlyContribution === 'number' ? data.monthlyContribution : 0;
-                    const privacyOn = data.privacyOn === true;
-                    const darkMode = data.darkMode !== false;
-                    
-                    const transCount = transactions.length;
-                    const catCount = categories.length;
-                    const cardCount = cards.length;
-                    
-                    if (!confirm(
-                        `⚠️ ATENÇÃO: Esta ação irá substituir TODOS os dados atuais!\n\n` +
-                        `📊 Dados do backup:\n` +
-                        `• ${transCount} transações\n` +
-                        `• ${catCount} categorias\n` +
-                        `• ${cardCount} cartões\n\n` +
-                        `Deseja continuar?`
-                    )) {
-                        return this.showToast('Importação cancelada');
-                    }
-                    
-                    this.transactions = transactions;
-                    this.categories = categories;
-                    this.cards = cards;
-                    this.cardPurchases = cardPurchases;
-                    this.goal = goal;
-                    this.monthlyContribution = monthlyContribution;
-                    this.privacyOn = privacyOn;
-                    this.darkMode = darkMode;
-                    
-                    this.saveTransactions();
-                    this.saveCategories();
-                    this.saveCards();
-                    this.saveCardPurchases();
-                    localStorage.setItem('smartwallet_goal', this.goal);
-                    localStorage.setItem('smartwallet_monthly_contribution', this.monthlyContribution);
-                    localStorage.setItem('smartwallet_privacy', this.privacyOn);
-                    localStorage.setItem('smartwallet_dark', this.darkMode);
-                    
-                    this.populateCategorySelects();
-                    this.populatePaymentMethodSelects();
-                    this.applyTheme();
-                    this.applyPrivacy();
-                    
-                    const goalInput = document.getElementById('goalAmount');
-                    const contribInput = document.getElementById('monthlyContribution');
-                    if (goalInput) goalInput.value = this.goal || '';
-                    if (contribInput) contribInput.value = this.monthlyContribution || '';
-                    
-                    this.render();
-                    this.updateCharts();
-                    this.updateAlertBadge();
-                    
-                    closeImportBackupModal();
-                    
-                    this.showToast(
-                        `✅ Backup restaurado com sucesso!\n` +
-                        `📊 ${transCount} transações\n` +
-                        `📁 ${catCount} categorias\n` +
-                        `💳 ${cardCount} cartões`
-                    );
-                    
-                    this.pendingBackupData = null;
-                    
-                } catch (e) {
-                    console.error('Erro ao importar backup:', e);
-                    this.showToast('❌ Erro ao importar: ' + e.message);
-                }
+// 📥 IMPORT BACKUP CORRIGIDO E MAIS ROBUSTO
+importBackup() {
+    if (!this.pendingBackupData) {
+        return this.showToast('⚠️ Selecione um arquivo de backup primeiro');
+    }
+    
+    try {
+        let cleanData = this.pendingBackupData;
+        
+        // Remove BOM se existir
+        if (cleanData.charCodeAt(0) === 0xFEFF) {
+            cleanData = cleanData.substring(1);
+        }
+        cleanData = cleanData.trim();
+        
+        // Parse do JSON com tratamento de erro
+        let data;
+        try {
+            data = JSON.parse(cleanData);
+        } catch (parseError) {
+            console.error('Erro ao parsear JSON:', parseError);
+            return this.showToast('❌ Arquivo JSON inválido ou corrompido');
+        }
+        
+        // Validação básica da estrutura
+        if (!data || typeof data !== 'object') {
+            return this.showToast('❌ Estrutura do backup inválida');
+        }
+        
+        // Valida e normaliza transações
+        if (!Array.isArray(data.transactions)) {
+            return this.showToast('❌ Campo "transactions" inválido ou ausente');
+        }
+        
+        // Normaliza categorias (usa padrão se não existir)
+        if (!Array.isArray(data.categories)) {
+            data.categories = this.getDefaultCategories();
+        }
+        
+        // Normaliza arrays opcionais
+        const transactions = Array.isArray(data.transactions) ? data.transactions : [];
+        const categories = Array.isArray(data.categories) ? data.categories : this.getDefaultCategories();
+        const cards = Array.isArray(data.cards) ? data.cards : [];
+        const cardPurchases = Array.isArray(data.cardPurchases) ? data.cardPurchases : [];
+        
+        // Normaliza valores numéricos com fallback
+        const goal = typeof data.goal === 'number' ? data.goal : 0;
+        const monthlyContribution = typeof data.monthlyContribution === 'number' ? data.monthlyContribution : 0;
+        
+        // Normaliza booleanos com fallback
+        const privacyOn = data.privacyOn === true;
+        const darkMode = data.darkMode !== false; // Default true
+        
+        // ✅ CORREÇÃO: Valida cada transação individualmente
+        const validTransactions = transactions.filter(t => {
+            // Verifica se é um objeto válido
+            if (!t || typeof t !== 'object') return false;
+            
+            // Verifica campos obrigatórios
+            if (!t.id || !t.date || typeof t.amount !== 'number') return false;
+            
+            // Normaliza campos opcionais
+            if (!t.category) t.category = '';
+            if (!t.description) t.description = '';
+            if (typeof t.statusOk !== 'boolean') t.statusOk = false;
+            if (!t.paymentMethod) t.paymentMethod = 'pix';
+            
+            // ✅ CORREÇÃO: Verifica se recurrence existe antes de acessar
+            if (t.recurrence && typeof t.recurrence === 'object') {
+                if (!t.recurrence.type) t.recurrence.type = 'monthly';
+                if (typeof t.recurrence.current !== 'number') t.recurrence.current = 1;
+                if (typeof t.recurrence.total !== 'number') t.recurrence.total = 1;
+            } else {
+                // Se não tem recurrence ou é inválido, remove
+                delete t.recurrence;
             }
-
+            
+            return true;
+        });
+        
+        // Mostra warning se algumas transações foram filtradas
+        if (validTransactions.length < transactions.length) {
+            const removed = transactions.length - validTransactions.length;
+            console.warn(`${removed} transações inválidas foram removidas do backup`);
+        }
+        
+        const transCount = validTransactions.length;
+        const catCount = categories.length;
+        const cardCount = cards.length;
+        
+        // Confirmação antes de sobrescrever
+        if (!confirm(
+            `⚠️ ATENÇÃO: Esta ação irá substituir TODOS os dados atuais!\n\n` +
+            `📊 Dados do backup:\n` +
+            `• ${transCount} transações\n` +
+            `• ${catCount} categorias\n` +
+            `• ${cardCount} cartões\n\n` +
+            `Deseja continuar?`
+        )) {
+            return this.showToast('Importação cancelada');
+        }
+        
+        // Aplica os dados validados
+        this.transactions = validTransactions;
+        this.categories = categories;
+        this.cards = cards;
+        this.cardPurchases = cardPurchases;
+        this.goal = goal;
+        this.monthlyContribution = monthlyContribution;
+        this.privacyOn = privacyOn;
+        this.darkMode = darkMode;
+        
+        // Salva tudo
+        this.saveTransactions();
+        this.saveCategories();
+        this.saveCards();
+        this.saveCardPurchases();
+        localStorage.setItem('smartwallet_goal', this.goal);
+        localStorage.setItem('smartwallet_monthly_contribution', this.monthlyContribution);
+        localStorage.setItem('smartwallet_privacy', this.privacyOn);
+        localStorage.setItem('smartwallet_dark', this.darkMode);
+        
+        // Atualiza a interface
+        this.populateCategorySelects();
+        this.populatePaymentMethodSelects();
+        this.applyTheme();
+        this.applyPrivacy();
+        
+        // Atualiza campos do modal de meta
+        const goalInput = document.getElementById('goalAmount');
+        const contribInput = document.getElementById('monthlyContribution');
+        if (goalInput) goalInput.value = this.goal || '';
+        if (contribInput) contribInput.value = this.monthlyContribution || '';
+        
+        this.render();
+        this.updateCharts();
+        this.updateAlertBadge();
+        
+        closeImportBackupModal();
+        
+        this.showToast(
+            `✅ Backup restaurado com sucesso!\n` +
+            `📊 ${transCount} transações\n` +
+            `📁 ${catCount} categorias\n` +
+            `💳 ${cardCount} cartões`
+        );
+        
+        this.pendingBackupData = null;
+        
+    } catch (e) {
+        console.error('Erro ao importar backup:', e);
+        this.showToast('❌ Erro ao importar: ' + e.message);
+    }
+}
             loadTestData() {
                 if (this.transactions.length > 0 || this.cards.length > 0) {
                     if (!confirm('Você já possui dados. Deseja SUBSTITUIR todos pelos dados de teste?')) return;
