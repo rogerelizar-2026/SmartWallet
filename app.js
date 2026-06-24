@@ -1846,73 +1846,99 @@
         smartwallet.applyTheme();
     };
 
-    let disclaimerTimerInterval;
-    let disclaimerCountdown = 15;
+// ===== CONTROLE DO DISCLAIMER =====
+let disclaimerTimerInterval;
+let disclaimerCountdown = 15;
 
-    function initDisclaimer() {
-        const timerEl = document.getElementById('countdown');
-        const btnEl = document.getElementById('acceptDisclaimerBtn');
-        disclaimerCountdown = 15;
-        btnEl.classList.remove('enabled');
-        timerEl.innerHTML = `⏱️ Por favor, leia atentamente. O botão será habilitado em <span id="countdown">${disclaimerCountdown}</span> segundos`;
+function initDisclaimer() {
+    const timerEl = document.getElementById('countdown');
+    const btnEl = document.getElementById('acceptDisclaimerBtn');
+    const timerDisplay = document.getElementById('disclaimerTimer');
+    
+    // Reset
+    disclaimerCountdown = 15;
+    btnEl.classList.remove('enabled');
+    btnEl.disabled = true;
+    
+    if (timerDisplay) {
+        timerDisplay.innerHTML = `⏱️ Por favor, leia atentamente. O botão será habilitado em <span id="countdown">15</span> segundos`;
+    }
+    
+    // Limpa timer anterior se existir
+    if (disclaimerTimerInterval) {
         clearInterval(disclaimerTimerInterval);
-        disclaimerTimerInterval = setInterval(() => {
-            disclaimerCountdown--;
-            const countdownSpan = document.getElementById('countdown');
-            if (countdownSpan) countdownSpan.textContent = disclaimerCountdown;
-            if (disclaimerCountdown <= 0) {
-                clearInterval(disclaimerTimerInterval);
-                btnEl.classList.add('enabled');
-                timerEl.innerHTML = '✅ Você já pode aceitar os termos';
+    }
+    
+    // Inicia contador
+    disclaimerTimerInterval = setInterval(() => {
+        disclaimerCountdown--;
+        const countdownSpan = document.getElementById('countdown');
+        if (countdownSpan) {
+            countdownSpan.textContent = disclaimerCountdown;
+        }
+        
+        if (disclaimerCountdown <= 0) {
+            clearInterval(disclaimerTimerInterval);
+            btnEl.classList.add('enabled');
+            btnEl.disabled = false;
+            if (timerDisplay) {
+                timerDisplay.innerHTML = '✅ Você já pode aceitar os termos';
             }
-        }, 1000);
+        }
+    }, 1000);
+}
+
+window.acceptDisclaimer = function() {
+    const btnEl = document.getElementById('acceptDisclaimerBtn');
+    if (!btnEl.classList.contains('enabled')) {
+        return; // Botão ainda não habilitado
     }
-
-    window.acceptDisclaimer = function() {
-        const btnEl = document.getElementById('acceptDisclaimerBtn');
-        if (!btnEl.classList.contains('enabled')) return;
-        document.getElementById('disclaimerModal').style.display = 'none';
-        localStorage.setItem('smartwallet_disclaimer_accepted', 'true');
-        showQuoteModal();
-    };
-
-    function showQuoteModal() {
-        const quote = financialQuotes[Math.floor(Math.random() * financialQuotes.length)];
-        document.getElementById('quoteText').textContent = `"${quote.text}"`;
-        document.getElementById('quoteAuthor').textContent = `— ${quote.author}`;
-        document.getElementById('quoteModal').classList.add('active');
-    }
-
-    window.startApp = function() {
-        document.getElementById('quoteModal').classList.remove('active');
-        document.getElementById('mainApp').style.display = 'block';
-        document.getElementById('fabBtn').style.display = 'flex';
-    };
-
-    window.printManual = function() { window.print(); };
-
-    function updatePrintDate() {
-        const dateEl = document.getElementById('printDate');
-        if (dateEl) dateEl.textContent = 'Gerado em: ' + new Date().toLocaleString('pt-BR');
-    }
-
-    window.addEventListener('load', () => {
-        updatePrintDate();
-        const disclaimerAccepted = localStorage.getItem('smartwallet_disclaimer_accepted') === 'true';
+    
+    // Salva que o usuário aceitou
+    localStorage.setItem('smartwallet_disclaimer_accepted', 'true');
+    
+    // Esconde disclaimer
+    document.getElementById('disclaimerModal').style.display = 'none';
+    
+    // Mostra splash screen
+    document.getElementById('splashScreen').style.display = 'flex';
+    
+    // Aguarda e mostra quote
+    setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        splash.classList.add('fade-out');
         setTimeout(() => {
-            const splash = document.getElementById('splashScreen');
-            splash.classList.add('fade-out');
-            setTimeout(() => {
-                splash.style.display = 'none';
-                if (!disclaimerAccepted) {
-                    document.getElementById('disclaimerModal').style.display = 'flex';
-                    initDisclaimer();
-                } else {
-                    showQuoteModal();
-                }
-            }, 600);
-        }, 3000);
-    });
+            splash.style.display = 'none';
+            showQuoteModal();
+        }, 600);
+    }, 3000);
+};
+
+// ===== INICIALIZAÇÃO =====
+window.addEventListener('load', () => {
+    updatePrintDate();
+    
+    // Verifica se já aceitou o disclaimer
+    const disclaimerAccepted = localStorage.getItem('smartwallet_disclaimer_accepted') === 'true';
+    
+    // Mostra splash screen primeiro
+    setTimeout(() => {
+        const splash = document.getElementById('splashScreen');
+        splash.classList.add('fade-out');
+        setTimeout(() => {
+            splash.style.display = 'none';
+            
+            if (!disclaimerAccepted) {
+                // Primeiro acesso: mostra disclaimer
+                document.getElementById('disclaimerModal').style.display = 'flex';
+                initDisclaimer();
+            } else {
+                // Já aceitou: vai direto para quote
+                showQuoteModal();
+            }
+        }, 600);
+    }, 3000);
+});
 
     document.addEventListener('click', (e) => {
         const menu = document.getElementById('mainMenu');
