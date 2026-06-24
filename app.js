@@ -458,31 +458,7 @@
         document.getElementById('fabBtn').style.display = 'flex';
     };
 
-    window.addEventListener('load', function() {
-        const accepted = localStorage.getItem('smartwallet_disclaimer_accepted') === 'true';
-        const splash = document.getElementById('splashScreen');
-        const disclaimer = document.getElementById('disclaimerModal');
-
-        if (splash) {
-            splash.style.display = 'flex';
-            splash.classList.remove('fade-out');
-        }
-
-        setTimeout(function() {
-            if (!accepted && disclaimer) {
-                disclaimer.style.display = 'flex';
-                initDisclaimer();
-            } else {
-                setTimeout(function() {
-                    splash.classList.add('fade-out');
-                    setTimeout(function() {
-                        splash.style.display = 'none';
-                        document.getElementById('quoteModal').classList.add('active');
-                    }, 800);
-                }, 3000);
-            }
-        }, 3500);
-    });
+window.addEventListener('load', function()
 
     document.addEventListener('click', function(e) {
         const menu = document.getElementById('mainMenu');
