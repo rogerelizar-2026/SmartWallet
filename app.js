@@ -8,12 +8,22 @@
             { text: "O hábito de poupar é em si mesmo uma educação.", author: "T.T. Munger" },
             { text: "Riqueza é a capacidade de viver completamente a vida.", author: "Henry David Thoreau" },
             { text: "Um orçamento está dizendo a seu dinheiro para onde ir, em vez de se perguntar para onde ele foi.", author: "Dave Ramsey" },
+            { text: "Amar dinheiro demais é a raiz de todos os problemas. Muita gente se afastou da fé por causa disso e se encheu de angústia.", author: "1 Timóteo 6:10 (Linguagem Atual)" },
+            { text: "É melhor ter pouco e temer a Deus do que ter um tesouro enorme e viver preocupado.", author: "Provérbios 15:16 (Linguagem Atual)" },
+            { text: "Quem deve fica escravo de quem empresta. O rico manda no pobre.", author: "Provérbios 22:7 (Linguagem Atual)" },
+            { text: "Quando Deus abençoa com prosperidade, isso não vem junto com dor de cabeça.", author: "Provérbios 10:22 (Linguagem Atual)" },
+            { text: "É melhor trabalhar com dedicação do que ser preguiçoso e só ficar sonhando.", author: "Provérbios 13:4 (Linguagem Atual)" },
             { text: "Não economize o que resta depois de gastar; gaste o que resta depois de poupar.", author: "Warren Buffett" },
             { text: "Se você não encontrar uma maneira de ganhar dinheiro enquanto dorme, você trabalhará até morrer.", author: "Warren Buffett" },
             { text: "O melhor investimento que você pode fazer é em si mesmo.", author: "Warren Buffett" },
             { text: "Dinheiro é um péssimo mestre, mas um excelente servo.", author: "P.T. Barnum" },
             { text: "A riqueza não consiste em ter grandes posses, mas em ter poucas necessidades.", author: "Epicteto" },
             { text: "Cuidado com pequenos gastos; um pequeno vazamento afundará um grande navio.", author: "Benjamin Franklin" },
+            { text: "Dê um décimo para que você se torne rico.", author: "Talmude - Deuteronômio 14:22" },
+            { text: "O dinheiro não é sagrado, não é um objeto santo inatingível. É como roupa: uma ferramenta para viver.", author: "Talmude" },
+            { text: "Uma pessoa deve sempre dividir seu dinheiro em três partes: um terço em terra, um terço em negócios e um terço em dinheiro vivo.", author: "Talmude - Diversificação de Investimentos" },
+            { text: "Com dinheiro você não pode fazer tudo; sem dinheiro você não pode fazer nada!", author: "Provérbio Judaico" },
+            { text: "Todos reclamam da falta de dinheiro, mas ninguém reclama da falta de inteligência.", author: "Provérbio Judaico" },
             { text: "Quem compra o que não precisa, rouba a si mesmo.", author: "Provérbio Popular" },
             { text: "A independência financeira não é sobre ficar rico, é sobre ter opções.", author: "Chris Reining" },
             { text: "Não é o quanto você ganha, é o quanto você faz o dinheiro trabalhar para você.", author: "Robert Kiyosaki" },
@@ -84,7 +94,7 @@
         '<h3>💝 Aos meus filhos</h3>' +
         '<div class="manual-quote">' +
         '<p>Dedico este trabalho a vocês, meus amados filhos. Que este seja um legado de ensino, organização e sabedoria financeira.</p>' +
-        '<div class="quote-author">— Com todo amor, pai</div>' +
+        '<div class="quote-author">— Com todo amor: Rogério</div>' +
         '</div>' +
         '</div>' +
         '<h2>🎯 Bem-vindo ao Smart Wallet Brasil!</h2>' +
