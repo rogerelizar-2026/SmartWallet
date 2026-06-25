@@ -28,7 +28,7 @@
         <div class="print-date" id="printDate"></div>
     </div>
     <div class="print-footer">
-        <div class="print-author">Idealizado por RogerElizar®</div>
+        <div class="print-author">Idealizado por RogerElizar™</div>
         <div>Smart Wallet © 2026 - rogerelizar@gmail.com</div>
     </div>
 
@@ -36,7 +36,7 @@
     <div class="splash-screen" id="splashScreen">
         <div class="splash-content">
             <h1 class="splash-title">Smart Wallet</h1>
-            <p class="splash-subtitle">Idealizado por RogerElizar®</p>
+            <p class="splash-subtitle">Idealizado por RogerElizar™</p>
             <p class="splash-email">rogerelizar@gmail.com</p>
             <div class="splash-icons">
                 <svg class="splash-icon" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
@@ -106,7 +106,6 @@
                         <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                     </button>
                     <div class="info-dropdown" id="infoMenu">
-                        <button class="info-item" onclick="openManualModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>📘 Manual do Usuário</span></button>
                         <button class="info-item" onclick="openInvestmentsModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg><span>📈 Acompanhamento de Aplicações</span></button>
                         <button class="info-item" onclick="openTermsModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>📜 Termos de Uso</span></button>
                         <button class="info-item" onclick="openThanksModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span>☕ Apoie o Projeto</span></button>
@@ -133,6 +132,8 @@
                     <div class="dropdown-menu" id="mainMenu">
                         <button class="dropdown-item" onclick="openExportModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>📄 Extrato do Mês</span></button>
                         <div class="dropdown-divider"></div>
+                        <button class="dropdown-item" onclick="openManualModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span>📘 Manual do Usuário</span></button>
+                        <div class="dropdown-divider"></div>
                         <button class="dropdown-item" onclick="openAccountsModal()"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span>🏦 Minhas Contas</span></button>
                         <button class="dropdown-item" onclick="openCreditCardsModal()"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span>💳 Meus Cartões</span></button>
                         <button class="dropdown-item" onclick="openNewCardModal()"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg><span>➕ Novo Cartão</span></button>
@@ -141,7 +142,7 @@
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-item" onclick="smartwallet.exportBackup()"><svg class="icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span>💾 Backup (JSON)</span></button>
                         <button class="dropdown-item" onclick="openImportBackupModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span>📂 Restaurar Backup</span></button>
-                       <div class="dropdown-divider"></div>
+                        <div class="dropdown-divider"></div>
                         <button class="dropdown-item danger" onclick="openClearDataModal()"><svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span>Limpar Dados</span></button>
                     </div>
                 </div>
