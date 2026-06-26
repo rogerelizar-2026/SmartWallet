@@ -74,7 +74,7 @@
                 <p>Ao continuar, você declara que leu e concorda com estes termos.</p>
             </div>
             <div class="disclaimer-footer">
-                <div class="disclaimer-timer" id="disclaimerTimer">⏱️ Aguarde <span id="countdown">12</span> segundos para continuar</div>
+                <div class="disclaimer-timer" id="disclaimerTimer">️ Aguarde <span id="countdown">12</span> segundos para continuar</div>
                 <button class="disclaimer-accept-btn" id="acceptDisclaimerBtn" onclick="acceptDisclaimer()">✓ Li e Concordo com os Termos</button>
             </div>
         </div>
@@ -136,7 +136,7 @@
                         <button class="dropdown-item" onclick="openImportCsvModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span>📥 Importar CSV</span></button>
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-item" onclick="smartwallet.exportBackup()"><svg class="icon" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span>💾 Backup (JSON)</span></button>
-                        <button class="dropdown-item" onclick="openImportBackupModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span>📂 Restaurar Backup</span></button>
+                        <button class="dropdown-item" onclick="openImportBackupModal()"><svg class="icon" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span> Restaurar Backup</span></button>
                         <div class="dropdown-divider"></div>
                         <button class="dropdown-item danger" onclick="openClearDataModal()"><svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span>Limpar Dados</span></button>
                     </div>
@@ -156,7 +156,7 @@
 
         <div class="charts-section">
             <div class="chart-card"><h3>📈 Entradas e Saídas por Mês</h3><div class="chart-container"><canvas id="lineChart"></canvas></div></div>
-            <div class="chart-card"><h3>💳 Cartões de Crédito (6 meses)</h3><div class="chart-container"><canvas id="cardsChart"></canvas></div></div>
+            <div class="chart-card"><h3> Cartões de Crédito (6 meses)</h3><div class="chart-container"><canvas id="cardsChart"></canvas></div></div>
             <div class="chart-card"><h3>🥧 Despesas por Categoria</h3><div class="chart-container"><canvas id="pieChart"></canvas></div></div>
         </div>
 
@@ -211,15 +211,15 @@
                 <div class="form-group"><label for="paymentMethod">💳 Efetuado com</label><select id="paymentMethod" required><option value="">Selecione...</option></select></div>
                 <div class="form-group"><label for="transactionAccount">🏦 Conta</label><select id="transactionAccount" required><option value="">Selecione a conta...</option></select></div>
                 <div class="form-group"><label for="description">Descrição</label><textarea id="description" rows="2"></textarea></div>
-<div class="form-group"><div class="checkbox-group"><input type="checkbox" id="statusOk"><label for="statusOk">✓ Status OK (Concluído)</label></div></div>
-<div class="form-group"><div class="checkbox-group"><input type="checkbox" id="recurring"><label for="recurring">↻ Recorrente/Parcelada</label></div></div>
-<div class="form-group" id="recurringOptions" style="display:none;">
-    <div class="form-row">
-        <div><label for="recurrenceType">Tipo</label><select id="recurrenceType"><option value="monthly">Mensal</option><option value="yearly">Anual</option><option value="installment">Parcelado</option></select></div>
-        <div><label for="recurrenceCount">Parcelas</label><input type="number" id="recurrenceCount" min="2" max="360" value="2"></div>
-    </div>
-</div>
-<div class="action-buttons">    
+                <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="statusOk"><label for="statusOk">✓ Status OK (Concluído)</label></div></div>
+                <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="recurring"><label for="recurring">↻ Recorrente/Parcelada</label></div></div>
+                <div class="form-group" id="recurringOptions" style="display:none;">
+                    <div class="form-row">
+                        <div><label for="recurrenceType">Tipo</label><select id="recurrenceType"><option value="monthly">Mensal</option><option value="yearly">Anual</option><option value="installment">Parcelado</option></select></div>
+                        <div><label for="recurrenceCount">Parcelas</label><input type="number" id="recurrenceCount" min="2" max="360" value="2"></div>
+                    </div>
+                </div>
+                <div class="action-buttons">
                     <button type="submit" class="btn btn-primary">➕ Adicionar</button>
                     <button type="button" class="btn btn-secondary" onclick="closeNewTransactionModal()">Cancelar</button>
                 </div>
@@ -234,7 +234,7 @@
                 <input type="hidden" id="editId">
                 <div class="form-group"><label>Tipo</label><div class="type-selector">
                     <button type="button" class="type-btn active" data-type="expense" onclick="selectEditType('expense')">💸 Despesa</button>
-                    <button type="button" class="type-btn" data-type="income" onclick="selectEditType('income')">💰 Receita</button>
+                    <button type="button" class="type-btn" data-type="income" onclick="selectEditType('income')"> Receita</button>
                 </div></div>
                 <div class="form-row">
                     <div class="form-group"><label for="editDate">Data</label><input type="date" id="editDate" required></div>
@@ -245,14 +245,14 @@
                 <div class="form-group"><label for="editTransactionAccount">🏦 Conta</label><select id="editTransactionAccount" required><option value="">Selecione a conta...</option></select></div>
                 <div class="form-group"><label for="editDescription">Descrição</label><textarea id="editDescription" rows="2"></textarea></div>
                 <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="editStatusOk"><label for="editStatusOk">✓ Status OK</label></div></div>
-                <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="editRecurring"><label for="editRecurring"> Recorrente/Parcelada</label></div></div>
+                <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="editRecurring"><label for="editRecurring">↻ Recorrente/Parcelada</label></div></div>
                 <div class="form-group" id="editRecurringOptions" style="display:none;">
-                <div class="form-row">
-                <div><label for="editRecurrenceType">Tipo</label><select id="editRecurrenceType"><option value="monthly">Mensal</option><option value="yearly">Anual</option><option value="installment">Parcelado</option></select></div>
-                <div><label for="editRecurrenceCount">Parcelas</label><input type="number" id="editRecurrenceCount" min="2" max="360" value="2"></div>
-         </div>
-     </div>
-<div class="action-buttons">                <div class="action-buttons">
+                    <div class="form-row">
+                        <div><label for="editRecurrenceType">Tipo</label><select id="editRecurrenceType"><option value="monthly">Mensal</option><option value="yearly">Anual</option><option value="installment">Parcelado</option></select></div>
+                        <div><label for="editRecurrenceCount">Parcelas</label><input type="number" id="editRecurrenceCount" min="2" max="360" value="2"></div>
+                    </div>
+                </div>
+                <div class="action-buttons">
                     <button type="submit" class="btn btn-primary">💾 Salvar</button>
                     <button type="button" class="btn btn-danger" onclick="smartwallet.deleteFromEdit()">🗑️ Excluir</button>
                     <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancelar</button>
@@ -280,7 +280,7 @@
         <div class="modal-content">
             <div class="modal-header"><h2>Exportar Extrato</h2><button class="modal-close" onclick="closeExportModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
             <div class="action-buttons" style="flex-direction:column;gap:12px;">
-                <button class="btn btn-primary" onclick="smartwallet.exportCSV()">📥 Baixar CSV</button>
+                <button class="btn btn-primary" onclick="smartwallet.exportCSV()"> Baixar CSV</button>
                 <button class="btn btn-secondary" onclick="smartwallet.printPDF()">🖨️ Imprimir / PDF</button>
             </div>
         </div>
@@ -468,7 +468,7 @@
     <div class="modal" id="updateInvestmentModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>💰 Atualizar Valor</h2>
+                <h2> Atualizar Valor</h2>
                 <button class="modal-close" onclick="closeUpdateInvestmentModal()">
                     <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
