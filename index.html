@@ -21,7 +21,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Timbre de Impressão -->
     <div class="print-header">
         <h1>Smart Wallet</h1>
         <div class="print-subtitle">Controle Financeiro Pessoal Inteligente</div>
@@ -32,7 +31,6 @@
         <div>Smart Wallet © 2026 - rogerelizar@gmail.com</div>
     </div>
 
-    <!-- SPLASH SCREEN -->
     <div class="splash-screen" id="splashScreen">
         <div class="splash-content">
             <h1 class="splash-title">Smart Wallet</h1>
@@ -49,7 +47,6 @@
         </div>
     </div>
 
-    <!-- DISCLAIMER MODAL -->
     <div class="disclaimer-modal" id="disclaimerModal">
         <div class="disclaimer-content">
             <div class="disclaimer-header">
@@ -83,7 +80,6 @@
         </div>
     </div>
 
-    <!-- QUOTE MODAL -->
     <div class="quote-modal" id="quoteModal" role="dialog" aria-modal="true">
         <div class="quote-content">
             <svg class="quote-icon" viewBox="0 0 24 24"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3M3.343 18.657l.707-.707M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18z"/></svg>
@@ -93,7 +89,6 @@
         </div>
     </div>
 
-    <!-- APP PRINCIPAL -->
     <div class="container" id="mainApp" style="display: none;">
         <header>
             <div class="header-content">
@@ -156,7 +151,6 @@
             <div class="card">
                 <div class="card-title">Acumulado C.Crédito</div>
                 <div class="card-value privacy-value" id="goalProgress">R$ 0,00</div>
-                <div class="goal-bar" style="display:none;"><div class="goal-bar-fill" id="goalBarFill"></div></div>
             </div>
         </div>
 
@@ -188,7 +182,6 @@
             </div>
         </div>
 
-        <!-- Gráfico de Investimentos -->
         <div class="charts-section" id="investmentsChartSection" style="display: none;">
             <div class="chart-card" style="grid-column: 1 / -1;">
                 <h3>📊 Acompanhamento de Aplicações</h3>
@@ -202,7 +195,6 @@
         <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
     </button>
 
-    <!-- MODAL NOVA TRANSAÇÃO -->
     <div class="modal" id="newTransactionModal">
         <div class="modal-content">
             <div class="modal-header"><h2>Nova Transação</h2><button class="modal-close" onclick="closeNewTransactionModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -220,13 +212,6 @@
                 <div class="form-group"><label for="transactionAccount">🏦 Conta</label><select id="transactionAccount" required><option value="">Selecione a conta...</option></select></div>
                 <div class="form-group"><label for="description">Descrição</label><textarea id="description" rows="2"></textarea></div>
                 <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="statusOk"><label for="statusOk">✓ Status OK (Concluído)</label></div></div>
-                <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="recurring"><label for="recurring">↻ Recorrente/Parcelada</label></div></div>
-                <div class="form-group" id="recurringOptions" style="display:none;">
-                    <div class="form-row">
-                        <div><label for="recurrenceType">Tipo</label><select id="recurrenceType"><option value="monthly">Mensal</option><option value="yearly">Anual</option><option value="installment">Parcelado</option></select></div>
-                        <div><label for="recurrenceCount">Parcelas</label><input type="number" id="recurrenceCount" min="2" max="360" value="2"></div>
-                    </div>
-                </div>
                 <div class="action-buttons">
                     <button type="submit" class="btn btn-primary">➕ Adicionar</button>
                     <button type="button" class="btn btn-secondary" onclick="closeNewTransactionModal()">Cancelar</button>
@@ -235,7 +220,6 @@
         </div>
     </div>
 
-    <!-- MODAL EDIÇÃO -->
     <div class="modal" id="editModal">
         <div class="modal-content">
             <div class="modal-header"><h2>Editar Transação</h2><button class="modal-close" onclick="closeEditModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -254,13 +238,6 @@
                 <div class="form-group"><label for="editTransactionAccount">🏦 Conta</label><select id="editTransactionAccount" required><option value="">Selecione a conta...</option></select></div>
                 <div class="form-group"><label for="editDescription">Descrição</label><textarea id="editDescription" rows="2"></textarea></div>
                 <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="editStatusOk"><label for="editStatusOk">✓ Status OK</label></div></div>
-                <div class="form-group"><div class="checkbox-group"><input type="checkbox" id="editRecurring"><label for="editRecurring">↻ Recorrente/Parcelada</label></div></div>
-                <div class="form-group" id="editRecurringOptions" style="display:none;">
-                    <div class="form-row">
-                        <div><label for="editRecurrenceType">Tipo</label><select id="editRecurrenceType"><option value="monthly">Mensal</option><option value="yearly">Anual</option><option value="installment">Parcelado</option></select></div>
-                        <div><label for="editRecurrenceCount">Parcelas</label><input type="number" id="editRecurrenceCount" min="2" max="360" value="2"></div>
-                    </div>
-                </div>
                 <div class="action-buttons">
                     <button type="submit" class="btn btn-primary">💾 Salvar</button>
                     <button type="button" class="btn btn-danger" onclick="smartwallet.deleteFromEdit()">🗑️ Excluir</button>
@@ -270,7 +247,6 @@
         </div>
     </div>
 
-    <!-- MODAL CATEGORIAS -->
     <div class="modal" id="categoryModal">
         <div class="modal-content">
             <div class="modal-header"><h2>Gerenciar Categorias</h2><button class="modal-close" onclick="closeCategoryManager()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -286,7 +262,6 @@
         </div>
     </div>
 
-    <!-- MODAL EXPORTAR -->
     <div class="modal" id="exportModal">
         <div class="modal-content">
             <div class="modal-header"><h2>Exportar Extrato</h2><button class="modal-close" onclick="closeExportModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -297,7 +272,6 @@
         </div>
     </div>
 
-    <!-- MODAL META -->
     <div class="modal" id="goalModal">
         <div class="modal-content">
             <div class="modal-header"><h2>Meta de Reserva</h2><button class="modal-close" onclick="closeGoalModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -310,7 +284,6 @@
         </div>
     </div>
 
-    <!-- MODAL IMPORTAR CSV -->
     <div class="modal" id="importCsvModal">
         <div class="modal-content">
             <div class="modal-header"><h2>Importar CSV</h2><button class="modal-close" onclick="closeImportCsvModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -320,7 +293,6 @@
         </div>
     </div>
 
-    <!-- MODAL IMPORTAR BACKUP -->
     <div class="modal" id="importBackupModal">
         <div class="modal-content">
             <div class="modal-header"><h2>Restaurar Backup</h2><button class="modal-close" onclick="closeImportBackupModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -330,7 +302,6 @@
         </div>
     </div>
 
-    <!-- MODAL LIMPAR DADOS -->
     <div class="modal danger-modal" id="clearDataModal">
         <div class="modal-content">
             <div class="modal-header"><h2 style="color:var(--danger-color);">Limpar Dados</h2><button class="modal-close" onclick="closeClearDataModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -345,7 +316,6 @@
         </div>
     </div>
 
-    <!-- MODAL CONTAS -->
     <div class="modal" id="accountsModal">
         <div class="modal-content wide">
             <div class="modal-header"><h2>🏦 Minhas Contas</h2><button class="modal-close" onclick="closeAccountsModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -357,7 +327,6 @@
         </div>
     </div>
 
-    <!-- MODAL NOVA CONTA -->
     <div class="modal" id="newAccountModal">
         <div class="modal-content">
             <div class="modal-header"><h2 id="newAccountTitle">Nova Conta</h2><button class="modal-close" onclick="closeNewAccountModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -380,7 +349,6 @@
         </div>
     </div>
 
-    <!-- MODAL CARTÕES -->
     <div class="modal" id="creditCardsModal">
         <div class="modal-content wide">
             <div class="modal-header"><h2>💳 Meus Cartões</h2><button class="modal-close" onclick="closeCreditCardsModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -392,7 +360,6 @@
         </div>
     </div>
 
-    <!-- MODAL NOVO CARTÃO -->
     <div class="modal" id="newCardModal">
         <div class="modal-content">
             <div class="modal-header"><h2 id="newCardTitle">Novo Cartão</h2><button class="modal-close" onclick="closeNewCardModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -417,7 +384,6 @@
         </div>
     </div>
 
-    <!-- MODAL FATURA -->
     <div class="modal" id="invoiceModal">
         <div class="modal-content wide">
             <div class="modal-header"><h2 id="invoiceTitle">Fatura</h2><button class="modal-close" onclick="closeInvoiceModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -425,7 +391,6 @@
         </div>
     </div>
 
-    <!-- MODAL CONTAS A VENCER -->
     <div class="modal" id="billsModal">
         <div class="modal-content wide">
             <div class="modal-header"><h2>🔔 Contas a Vencer</h2><button class="modal-close" onclick="closeBillsModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
@@ -434,7 +399,6 @@
         </div>
     </div>
 
-    <!-- MODAL INVESTIMENTOS -->
     <div class="modal" id="investmentsModal">
         <div class="modal-content wide">
             <div class="modal-header">
@@ -450,7 +414,6 @@
         </div>
     </div>
 
-    <!-- MODAL NOVA APLICAÇÃO -->
     <div class="modal" id="newInvestmentModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -488,7 +451,6 @@
         </div>
     </div>
 
-    <!-- MODAL ATUALIZAR VALOR -->
     <div class="modal" id="updateInvestmentModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -513,7 +475,6 @@
         </div>
     </div>
 
-    <!-- MODAL MANUAL -->
     <div class="modal" id="manualModal">
         <div class="modal-content wide">
             <div class="modal-header"><h2>📘 Manual do Usuário</h2><div class="flex-gap-8"><button class="btn btn-secondary btn-small" onclick="printManual()">🖨️ Imprimir</button><button class="modal-close" onclick="closeManualModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div></div>
@@ -521,7 +482,6 @@
         </div>
     </div>
 
-    <!-- MODAL AGRADECIMENTO -->
     <div class="modal" id="thanksModal">
         <div class="modal-content">
             <div class="modal-header"><h2>☕ Apoie o Projeto</h2><button class="modal-close" onclick="closeThanksModal()"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
