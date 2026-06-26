@@ -2634,6 +2634,9 @@ SmartWallet.prototype.printExtratoPDF = function() {
             info.classList.remove('active');
         }
     });
+        window.printExtratoPDF = function() {
+        smartwallet.printExtratoPDF();
+    };
 
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
@@ -2643,5 +2646,5 @@ SmartWallet.prototype.printExtratoPDF = function() {
         });
     }
 
-    console.log(' Smart Wallet v2.0.5 carregado com sucesso!');
+    console.log(' Smart Wallet v2.0.3 carregado com sucesso!');
 })();
