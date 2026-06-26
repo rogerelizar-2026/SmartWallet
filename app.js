@@ -385,6 +385,16 @@
                 }
             });
         }
+            // ✅ Toggle de opções de recorrência no edit
+    var editRecurringCheckbox = document.getElementById('editRecurring');
+    if (editRecurringCheckbox) {
+        editRecurringCheckbox.addEventListener('change', function() {
+            var options = document.getElementById('editRecurringOptions');
+            if (options) {
+                options.style.display = this.checked ? 'block' : 'none';
+            }
+        });
+    }
     };
 
     SmartWallet.prototype.setDefaultDate = function() {
@@ -723,32 +733,46 @@ SmartWallet.prototype.clearForm = function() {
         document.getElementById('editModal').classList.add('active');
     };
 
-    SmartWallet.prototype.updateTransaction = function() {
-        var id = parseInt(document.getElementById('editId').value);
-        var idx = -1;
-        for (var i = 0; i < this.transactions.length; i++) {
-            if (this.transactions[i].id === id) { idx = i; break; }
-        }
-        if (idx === -1) return;
+SmartWallet.prototype.updateTransaction = function() {
+    var id = parseInt(document.getElementById('editId').value);
+    var idx = -1;
+    for (var i = 0; i < this.transactions.length; i++) {
+        if (this.transactions[i].id === id) { idx = i; break; }
+    }
+    if (idx === -1) return;
 
-        this.transactions[idx] = {
-            id: id,
-            date: document.getElementById('editDate').value,
-            amount: this.currentEditType === 'expense' ? -Math.abs(parseFloat(document.getElementById('editAmount').value)) : Math.abs(parseFloat(document.getElementById('editAmount').value)),
-            category: document.getElementById('editCategory').value,
-            description: document.getElementById('editDescription').value,
-            statusOk: document.getElementById('editStatusOk').checked,
-            paymentMethod: document.getElementById('editPaymentMethod').value,
-            accountId: document.getElementById('editTransactionAccount').value
+    var isRecurring = document.getElementById('editRecurring').checked;
+    var recurrenceData = null;
+    
+    if (isRecurring) {
+        var recurrenceType = document.getElementById('editRecurrenceType').value;
+        var recurrenceCount = parseInt(document.getElementById('editRecurrenceCount').value);
+        recurrenceData = {
+            type: recurrenceType,
+            total: recurrenceCount,
+            current: this.transactions[idx].recurrence ? this.transactions[idx].recurrence.current : 1
         };
+    }
 
-        this.saveTransactions();
-        this.render();
-        this.updateCharts();
-        this.updateAlertBadge();
-        closeEditModal();
-        this.showToast('Atualizada!');
+    this.transactions[idx] = {
+        id: id,
+        date: document.getElementById('editDate').value,
+        amount: this.currentEditType === 'expense' ? -Math.abs(parseFloat(document.getElementById('editAmount').value)) : Math.abs(parseFloat(document.getElementById('editAmount').value)),
+        category: document.getElementById('editCategory').value,
+        description: document.getElementById('editDescription').value,
+        statusOk: document.getElementById('editStatusOk').checked,
+        paymentMethod: document.getElementById('editPaymentMethod').value,
+        accountId: document.getElementById('editTransactionAccount').value,
+        recurrence: recurrenceData
     };
+
+    this.saveTransactions();
+    this.render();
+    this.updateCharts();
+    this.updateAlertBadge();
+    closeEditModal();
+    this.showToast('Atualizada!');
+};
 
     SmartWallet.prototype.deleteFromEdit = function() {
         if (!this.currentEditId) return;
