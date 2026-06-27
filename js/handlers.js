@@ -1,6 +1,4 @@
 // js/handlers.js
-// Fase 3: Handlers com Lazy Loading + Validação Forte
-
 import './delegation.js';
 import { lazyLoader } from './lazy-loader.js';
 import { validators, ValidationError } from './validators.js';
@@ -117,12 +115,9 @@ Object.entries(modalMap).forEach(([action, modalId]) => {
         const modal = document.getElementById(modalId);
         if (modal) {
             if (action.startsWith('close-')) {
-                modal.classList.remove('active');
+                a11yManager.closeModal(modalId);
             } else {
-                modal.classList.add('active');
-                
-                // Lazy load: dispara evento para carregar conteúdo
-                window.dispatchEvent(new CustomEvent(`modal:opened:${modalId}`));
+                a11yManager.openModal(modalId);
             }
         }
     });
