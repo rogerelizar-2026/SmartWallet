@@ -74,18 +74,36 @@
         { id: 'transfer', name: 'Transferência', icon: '↔️' }
     ];
 
-    var DEFAULT_CATEGORIES = [
-        { id: 'moradia', name: 'Moradia', color: '#ffff00', type: 'expense' },
-        { id: 'alimentacao', name: 'Alimentação', color: '#e37171', type: 'expense' },
-        { id: 'transporte', name: 'Transporte', color: '#21fffb', type: 'expense' },
-        { id: 'saude', name: 'Saúde', color: '#ff9c38', type: 'expense' },
-        { id: 'educacao', name: 'Educação', color: '#0000ff', type: 'expense' },
-        { id: 'lazer', name: 'Lazer', color: '#ff00ff', type: 'expense' },
-        { id: 'servicos', name: 'Serviços', color: '#5117a3', type: 'expense' },
-        { id: 'investimento', name: 'Investimento', color: '#e6dcb1', type: 'expense' },
-        { id: 'salario', name: 'Salário', color: '#475569', type: 'income' },
-        { id: 'freelancer', name: 'Freelancer', color: '#b3e6e0', type: 'income' }
-    ];
+var DEFAULT_CATEGORIES = [
+    // ===== DESPESAS (13 categorias) =====
+    { id: 'moradia', name: 'Moradia', color: '#f59e0b', type: 'expense' },
+    { id: 'despensa', name: 'Despensa', color: '#10b981', type: 'expense' },
+    { id: 'transporte', name: 'Transporte', color: '#f97316', type: 'expense' },
+    { id: 'saude', name: 'Saúde', color: '#ef4444', type: 'expense' },
+    { id: 'educacao', name: 'Educação', color: '#3b82f6', type: 'expense' },
+    { id: 'cuidados_pessoais', name: 'Cuidados Pessoais', color: '#ec4899', type: 'expense' },
+    { id: 'servicos', name: 'Serviços', color: '#8b5cf6', type: 'expense' },
+    { id: 'lazer', name: 'Lazer', color: '#f43f5e', type: 'expense' },
+    { id: 'pets', name: 'Pets', color: '#a855f7', type: 'expense' },
+    { id: 'inst_financeira', name: 'Instituição Financeira', color: '#6366f1', type: 'expense' },
+    { id: 'docs_juridico', name: 'Documento/Jurídico', color: '#64748b', type: 'expense' },
+    { id: 'doacao_generosidade', name: 'Doação/Generosidade', color: '#84cc16', type: 'expense' },
+    { id: 'reserva_aplicacao', name: 'Reserva/Aplicação', color: '#06b6d4', type: 'expense' },
+    
+    // ===== RECEITAS (8 categorias) =====
+    { id: 'salario', name: 'Salário', color: '#22c55e', type: 'income' },
+    { id: 'vale_alimentacao', name: 'Vale Alimentação', color: '#eab308', type: 'income' },
+    { id: 'auxilios', name: 'Auxílios', color: '#14b8a6', type: 'income' },
+    { id: 'beneficios', name: 'Benefícios', color: '#0ea5e9', type: 'income' },
+    { id: 'restituicao', name: 'Restituição', color: '#d946ef', type: 'income' },
+    { id: 'freelance', name: 'Freelance', color: '#f59e0b', type: 'income' },
+    { id: 'rendimentos', name: 'Rendimentos', color: '#8b5cf6', type: 'income' },
+    { id: 'resgate', name: 'Resgate (invest/reserva)', color: '#6366f1', type: 'income' },
+    
+    // ===== INVESTIMENTO E RESERVA (2 categorias especiais) =====
+    { id: 'aporte_investimento', name: 'Aporte (Investimento)', color: '#3b82f6', type: 'expense' },
+    { id: 'aporte_reserva', name: 'Aporte (Reserva)', color: '#10b981', type: 'expense' }
+];
 
   // ===== CONTEÚDO DO MANUAL =====
     var manualHTML = '<div class="manual-cover">' +
