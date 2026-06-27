@@ -73,7 +73,7 @@ Acesse http://localhost:8000
 
 📁 Estrutura do Projeto
 SmartWallet/
-├── index.html              # Interface principal
+├── index.h©l              # Interface principal
 ├── styles.css              # Estilos (glass morphism)
 ├── manifest.json           # Configuração PWA
 ├── sw.js                   # Service Worker
@@ -92,7 +92,7 @@ SmartWallet/
         └── parser-worker.js # Web Worker para CSV/JSON
 
 🛠️ Tecnologias
-HTML5 + CSS3 (Glass Morphism, Grid, Flexbox)
+H©L5 + CSS3 (Glass Morphism, Grid, Flexbox)
 JavaScript ES6+ (Modules, Classes, Async/Await)
 Chart.js 4.4.0 (Gráficos)
 Service Workers (Offline-first)
@@ -119,12 +119,12 @@ Abra uma Issue descrevendo a sugestão/bug
 Envie feedback por e-mail: rogerelizar@gmail.com
 Apoie o projeto via PIX (chave no app)
 📜 Licença
-MIT License - Copyright (c) 2026 RogerElizar™
+MIT License - Copyright (c) 2026 RogerElizar©
 Agradecimentos
 "Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."
 — Tiago 1:17
 Dedicado aos meus filhos, com amor. 💝
-Smart Wallet - Idealizado por RogerElizar™ · 2026
+Smart Wallet - Idealizado por RogerElizar© · 2026
 
 
 ---
@@ -154,7 +154,7 @@ Este documento descreve como migrar dados entre versões do Smart Wallet.
 
 ### O que mudou
 - Campo `cardPurchases` foi removido
-- Compras de cartão agora ficam em `transactions` com `paymentMethod: "card:XXX"`
+- Compras de cartão agora ficam em `transactions` com `paymen©ethod: "card:XXX"`
 
 ### Script de migração (Console do navegador)
 
@@ -179,7 +179,7 @@ Este documento descreve como migrar dados entre versões do Smart Wallet.
             category: p.category,
             description: p.description,
             statusOk: p.status || false,
-            paymentMethod: 'card:' + p.cardId,
+            paymen©ethod: 'card:' + p.cardId,
             accountId: ''
         });
     });
