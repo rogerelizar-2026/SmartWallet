@@ -2565,4 +2565,61 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+// ===== 🆕 ADICIONE ESTE BLOCO AQUI (ANTES DO CONSOLE.LOG FINAL) =====
+window.addEventListener('action:accept-disclaimer', () => {
+    const btn = document.getElementById('acceptDisclaimerBtn');
+    if (!btn || !btn.classList.contains('enabled')) return;
+    
+    localStorage.setItem('smartwallet_disclaimer_accepted', 'true');
+    
+    const disclaimer = document.getElementById('disclaimerModal');
+    const splash = document.getElementById('splashScreen');
+    
+    if (disclaimer) {
+        disclaimer.classList.add('disintegrating');
+        
+        setTimeout(() => {
+            disclaimer.style.display = 'none';
+            disclaimer.classList.remove('active', 'disintegrating');
+            
+            if (splash) {
+                splash.classList.add('fade-out');
+                
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                    setTimeout(() => {
+                        showQuoteModal();
+                    }, 300);
+                }, 800);
+            } else {
+                setTimeout(() => {
+                    showQuoteModal();
+                }, 300);
+            }
+        }, 600);
+    }
+});
+
+window.addEventListener('action:start-app', () => {
+    const quote = document.getElementById('quoteModal');
+    const main = document.getElementById('mainApp');
+    const fab = document.getElementById('fabBtn');
+    
+    if (quote) {
+        quote.classList.remove('active');
+        quote.style.display = 'none';
+    }
+    if (main) main.style.display = 'block';
+    if (fab) fab.style.display = 'flex';
+});
+
+function acceptDisclaimer() {
+    window.dispatchEvent(new CustomEvent('action:accept-disclaimer'));
+}
+
+function startApp() {
+    window.dispatchEvent(new CustomEvent('action:start-app'));
+}
+// ===== FIM DO BLOCO NOVO =====
+
 console.log('🎉 Smart Wallet v3.0.0 carregado com sucesso!');
