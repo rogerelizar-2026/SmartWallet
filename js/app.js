@@ -298,10 +298,39 @@ class SmartWallet {
         this.privacyOn = false;
         this.charts = {};
         this.searchTimeout = null;
-
         this.loadData();
         this.init();
     }
+    processFileWithWorker(file, type) {
+    return new Promise((resolve, reject) => {
+        const worker = new Worker('js/workers/parser-worker.js');
+        
+        worker.onmessage = (e) => {
+            const { type: msgType, result, error } = e.data;
+            if (msgType.endsWith('-success')) {
+                worker.terminate();
+                resolve(result);
+            } else {
+                worker.terminate();
+                reject(new Error(error));
+            }
+        };
+        
+        worker.onerror = (err) => {
+            worker.terminate();
+            reject(err);
+        };
+
+        // Lê o arquivo e envia para o worker
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            worker.postMessage({ type, data: e.target.result });
+        };
+        reader.onerror = () => reject(new Error('Erro ao ler arquivo'));
+        reader.readAsText(file);
+    });
+}
+
 
 loadData() {
     try {
