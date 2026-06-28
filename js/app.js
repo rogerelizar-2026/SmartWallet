@@ -377,19 +377,40 @@ populateCategorySelects() {
             });
         }
 
-        filterCategoriesByType(selectId, type) {
-            const sel = document.getElementById(selectId);
-            if (!sel) return;
-            sel.querySelectorAll('option').forEach(opt => {
-                if (opt.value === '') opt.style.display = 'block';
-                else opt.style.display = (!type || opt.dataset.type === type) ? 'block' : 'none';
-            });
-            const currentVal = sel.value;
-            if (currentVal) {
-                const currentOpt = sel.querySelector('option[value="' + currentVal + '"]');
-                if (currentOpt && currentOpt.style.display === 'none') sel.value = '';
-            }
+filterCategoriesByType(selectId, type) {
+    const sel = document.getElementById(selectId);
+    if (!sel) {
+        console.warn('Select não encontrado para filtro:', selectId);
+        return;
+    }
+    
+    const options = sel.querySelectorAll('option');
+    let visibleCount = 0;
+    
+    options.forEach(opt => {
+        if (opt.value === '') {
+            // Sempre mostra "Selecione..." e "Todas"
+            opt.style.display = 'block';
+        } else {
+            // Mostra apenas categorias do tipo selecionado
+            const catType = opt.dataset.type;
+            const shouldShow = !type || catType === type;
+            opt.style.display = shouldShow ? 'block' : 'none';
+            if (shouldShow) visibleCount++;
         }
+    });
+    
+    // Limpa seleção atual se estiver oculta
+    const currentVal = sel.value;
+    if (currentVal) {
+        const currentOpt = sel.querySelector('option[value="' + currentVal + '"]');
+        if (currentOpt && currentOpt.style.display === 'none') {
+            sel.value = '';
+        }
+    }
+    
+    console.log(`Filtro ${selectId}: tipo=${type}, visíveis=${visibleCount}`);
+}
 
         getCategoryById(id) {
             for (let i = 0; i < this.categories.length; i++) {
@@ -1677,7 +1698,21 @@ renderCreditCardsList() {
         document.querySelectorAll('#categoryModal .type-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-type') === t));
     };
 
-    window.openNewTransactionModal = function() { smartwallet.setDefaultDate(); smartwallet.filterCategoriesByType('category', smartwallet.currentTransactionType); document.getElementById('newTransactionModal').classList.add('active'); };
+window.openNewTransactionModal = function() { 
+    smartwallet.setDefaultDate(); 
+    smartwallet.currentTransactionType = 'expense'; 
+    document.querySelectorAll('#transactionForm .type-btn').forEach(btn => { 
+        const isExpense = btn.getAttribute('data-type') === 'expense'; 
+        btn.classList.toggle('active', isExpense); 
+        btn.setAttribute('aria-checked', isExpense);
+    });
+    smartwallet.populateCategorySelects();
+    smartwallet.populatePaymentMethodSelects();
+    smartwallet.populateAccountSelects();
+    document.getElementById('newTransactionModal').classList.add('active');
+    console.log('✅ Modal aberto - Tipo:', smartwallet.currentTransactionType);
+    console.log('✅ Categorias carregadas:', smartwallet.categories.length);
+};    
     window.closeNewTransactionModal = function() { document.getElementById('newTransactionModal').classList.remove('active'); smartwallet.clearForm(); };
     window.closeEditModal = function() { document.getElementById('editModal').classList.remove('active'); smartwallet.currentEditId = null; };
     window.openCategoryManager = function() { smartwallet.renderCategoryList(); document.getElementById('categoryModal').classList.add('active'); };
