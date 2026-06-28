@@ -222,6 +222,10 @@ setupEventListeners() {
         } catch(e){}
     }
 
+clearDashboardHighlight() {
+    document.querySelectorAll('.card.clickable').forEach(c => c.classList.remove('active-filter'));
+}
+        
         setDefaultDate() {
             const el = document.getElementById('date');
             if (el) el.value = new Date().toISOString().split('T')[0];
