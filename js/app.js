@@ -1911,5 +1911,12 @@ function scrollToTransactions() {
         section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 }
+    // Acessibilidade: Enter/Espaço nos cards do dashboard
+document.addEventListener('keydown', (e) => {
+    if (e.target.classList.contains('clickable') && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        e.target.click();
+    }
+});
     console.log('🎉 Smart Wallet v4.1.0 carregado com sucesso!');
 })();
