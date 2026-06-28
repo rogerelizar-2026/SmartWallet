@@ -2208,3 +2208,45 @@ body.privacy-on .investment-summary-label {
         font-size: 0.8rem;
     }
 }
+/* ===== DASHBOARD CARDS CLICÁVEIS ===== */
+.card.clickable {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.card.clickable:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-color);
+}
+
+.card.clickable:active {
+    transform: translateY(-2px) scale(1.01);
+}
+
+.card.clickable::after {
+    content: '→';
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card.clickable:hover::after {
+    opacity: 1;
+}
+
+/* Destaque visual para o card ativo (quando filtro está aplicado) */
+.card.clickable.active-filter {
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.card.clickable.active-filter::after {
+    content: '✓';
+    opacity: 1;
+}
