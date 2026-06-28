@@ -668,22 +668,37 @@
         </div>
     </div>
 
-    <!-- MODAL CARTÕES -->
-    <div class="modal" id="creditCardsModal" role="dialog" aria-modal="true" aria-labelledby="creditCardsTitle" aria-hidden="true">
-        <div class="modal-content wide">
-            <div class="modal-header">
-                <h2 id="creditCardsTitle">💳 Meus Cartões</h2>
-                <button class="modal-close" onclick="closeCreditCardsModal()" aria-label="Fechar modal">
-                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-            </div>
-            <div class="flex-gap-10 mb-20" style="justify-content:space-between;align-items:center;flex-wrap:wrap;">
-                <p class="text-secondary">Gerencie seus cartões</p>
-                <button class="btn btn-primary btn-small" onclick="openNewCardModal()">➕ Novo Cartão</button>
-            </div>
-            <div id="creditCardsList"></div>
+<!-- MODAL CARTÕES -->
+<div class="modal" id="creditCardsModal" role="dialog" aria-modal="true" aria-labelledby="creditCardsTitle" aria-hidden="true">
+    <div class="modal-content wide">
+        <div class="modal-header">
+            <h2 id="creditCardsTitle">💳 Meus Cartões</h2>
+            <button class="modal-close" onclick="closeCreditCardsModal()" aria-label="Fechar modal">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
         </div>
+        
+        <!-- 🆕 SELETOR DE MÊS -->
+        <div class="card-month-selector">
+            <button class="card-month-btn" onclick="changeCardMonth(-1)" aria-label="Mês anterior">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <div class="card-month-label" id="cardMonthLabel">Julho 2026</div>
+            <button class="card-month-btn" onclick="changeCardMonth(1)" aria-label="Próximo mês">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <button class="card-month-today" onclick="changeCardMonthToToday()" title="Ir para mês atual">
+                📅 Hoje
+            </button>
+        </div>
+        
+        <div class="flex-gap-10 mb-20" style="justify-content:space-between;align-items:center;flex-wrap:wrap;">
+            <p class="text-secondary">Gerencie seus cartões</p>
+            <button class="btn btn-primary btn-small" onclick="openNewCardModal()">➕ Novo Cartão</button>
+        </div>
+        <div id="creditCardsList"></div>
     </div>
+</div>
 
     <!-- MODAL NOVO CARTÃO -->
     <div class="modal" id="newCardModal" role="dialog" aria-modal="true" aria-labelledby="newCardTitle" aria-hidden="true">
