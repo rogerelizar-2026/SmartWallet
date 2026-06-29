@@ -664,7 +664,6 @@ getMonthTransactions(date) {
             this.toastT = setTimeout(() => t.classList.remove('active'), 3000);
         }
 
-        updateDashboard() {
 updateDashboard() {
     // ✅ CORREÇÃO: Garantir que currentMonth existe antes de usar
     if (!this.currentMonth || !(this.currentMonth instanceof Date) || isNaN(this.currentMonth.getTime())) {
