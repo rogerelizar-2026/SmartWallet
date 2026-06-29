@@ -618,17 +618,86 @@
             document.getElementById('editModal').classList.add('active');
         }
 
-        updateTransaction() {
-            const id = document.getElementById('editId').value; let idx = -1;
-            for (let i = 0; i < this.transactions.length; i++) { if (this.transactions[i].id === id) { idx = i; break; } }
-            if (idx === -1) return;
-            const isRecurring = document.getElementById('editRecurring').checked; let recurrenceData = null;
-            if (isRecurring) { const recurrenceType = document.getElementById('editRecurrenceType').value; const recurrenceCount = parseInt(document.getElementById('editRecurrenceCount').value); recurrenceData = { type: recurrenceType, total: recurrenceCount, current: this.transactions[idx].recurrence ? this.transactions[idx].recurrence.current : 1 }; }
-            this.transactions[idx] = { id: id, date: document.getElementById('editDate').value, amount: this.currentEditType === 'expense' ? -Math.abs(parseFloat(document.getElementById('editAmount').value)) : Math.abs(parseFloat(document.getElementById('editAmount').value)), category: document.getElementById('editCategory').value, description: document.getElementById('editDescription').value, statusOk: document.getElementById('editStatusOk').checked, paymentMethod: document.getElementById('editPaymentMethod').value, accountId: document.getElementById('editTransactionAccount').value, recurrence: recurrenceData };
-            this.clearCache(); // ✅ CORREÇÃO: Limpar cache
-            this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge(); closeEditModal(); this.showToast('Atualizada!');
+updateTransaction() {
+    // ✅ CORREÇÃO: Validação completa dos campos
+    const id = document.getElementById('editId').value;
+    const date = document.getElementById('editDate').value;
+    const amount = parseFloat(document.getElementById('editAmount').value);
+    const category = document.getElementById('editCategory').value;
+    const paymentMethod = document.getElementById('editPaymentMethod').value;
+    
+    if (!id) {
+        this.showToast('❌ Erro: ID da transação não encontrado');
+        return;
+    }
+    
+    if (!date) {
+        this.showToast('⚠️ Selecione uma data');
+        return;
+    }
+    
+    if (isNaN(amount) || amount <= 0) {
+        this.showToast('⚠️ Valor inválido');
+        return;
+    }
+    
+    if (!category) {
+        this.showToast('⚠️ Selecione uma categoria');
+        return;
+    }
+    
+    if (!paymentMethod) {
+        this.showToast('⚠️ Selecione a forma de pagamento');
+        return;
+    }
+    
+    // ✅ CORREÇÃO: Encontrar transação comparando como string
+    let idx = -1;
+    for (let i = 0; i < this.transactions.length; i++) {
+        if (String(this.transactions[i].id) === String(id)) {
+            idx = i;
+            break;
         }
-
+    }
+    
+    if (idx === -1) {
+        this.showToast('❌ Transação não encontrada');
+        return;
+    }
+    
+    const isRecurring = document.getElementById('editRecurring').checked;
+    let recurrenceData = null;
+    if (isRecurring) {
+        const recurrenceType = document.getElementById('editRecurrenceType').value;
+        const recurrenceCount = parseInt(document.getElementById('editRecurrenceCount').value);
+        recurrenceData = {
+            type: recurrenceType,
+            total: recurrenceCount,
+            current: this.transactions[idx].recurrence ? this.transactions[idx].recurrence.current : 1
+        };
+    }
+    
+    // ✅ CORREÇÃO: Atualizar transação com todos os campos validados
+    this.transactions[idx] = {
+        id: this.transactions[idx].id, // Mantém o ID original
+        date: date,
+        amount: this.currentEditType === 'expense' ? -Math.abs(amount) : Math.abs(amount),
+        category: category,
+        description: document.getElementById('editDescription').value,
+        statusOk: document.getElementById('editStatusOk').checked,
+        paymentMethod: paymentMethod,
+        accountId: document.getElementById('editTransactionAccount').value,
+        recurrence: recurrenceData
+    };
+    
+    this.clearCache();
+    this.saveTransactions();
+    this.render();
+    this.updateCharts();
+    this.updateAlertBadge();
+    closeEditModal();
+    this.showToast('✅ Transação atualizada!');
+}
         deleteFromEdit() { if (!this.currentEditId) return; if (!confirm('Excluir esta transação?')) return; this.transactions = this.transactions.filter(t => t.id !== this.currentEditId); this.clearCache(); this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge(); closeEditModal(); this.showToast('Excluída!'); }
         deleteTransaction(id) { if (!confirm('Excluir esta transação?')) return; this.transactions = this.transactions.filter(t => t.id !== id); this.clearCache(); this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge(); this.showToast('Transação excluída!'); }
 
