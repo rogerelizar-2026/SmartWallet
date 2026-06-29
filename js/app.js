@@ -1228,10 +1228,10 @@ saveInvestment() {
     this.updateDashboard();
     closeNewInvestmentModal(); 
     this.showToast(id ? 'Aplicação atualizada!' : 'Aplicação cadastrada!'); 
-   // ===== FUNÇÃO DE IMPRESSÃO DO MANUAL =====
-    function printManual() {
-        try {
-            const printWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
+// ===== FUNÇÃO DE IMPRESSÃO DO MANUAL =====
+function printManual() {
+    try {
+        const printWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
         
         if (!printWindow || printWindow.closed || typeof printWindow.closed === 'undefined') { 
             alert('⚠️ O navegador bloqueou a janela de impressão.\n\nPor favor, permita popups para este site e tente novamente.'); 
@@ -1250,22 +1250,22 @@ saveInvestment() {
             }, 500);
         };
         
-            setTimeout(() => {
-                try {
-                     if (!printWindow.closed) {
-                        printWindow.focus();
-                        printWindow.print();
-                    }
-                } catch (e) {
-                    console.warn('[SmartWallet] Erro ao imprimir:', e);
+        setTimeout(() => {
+            try {
+                if (!printWindow.closed) {
+                    printWindow.focus();
+                    printWindow.print();
                 }
-            }, 1000);
-            
-                catch (e) {
-                    console.error('[SmartWallet] Erro em printManual:', e);
-                    alert('❌ Erro ao abrir janela de impressão: ' + e.message);
-                }
+            } catch (e) {
+                console.warn('[SmartWallet] Erro ao imprimir:', e);
             }
+        }, 1000);
+        
+    } catch (e) {
+        console.error('[SmartWallet] Erro em printManual:', e);
+        alert('❌ Erro ao abrir janela de impressão: ' + e.message);
+    }
+}
 }
     // FIM DA CLASSE
 
