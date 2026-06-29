@@ -462,23 +462,26 @@ generateTimestamp() {
     return 'SmartWallet-' + year + month + day + hours + minutes + seconds;
 }
         // ✅ CORREÇÃO: Padronizado para T12:00:00 e com cache
-        getmonthTransactions(date) {
-            if (!date) date = this.currentmonth;
-            const key = date.getFullYear() + '-' + String(date.getmonth() + 1).padStart(2, '0');
-            
-            if (!this._cache.monthTransactions) this._cache.monthTransactions = {};
-            if (this._cache.monthTransactions[key]) return this._cache.monthTransactions[key];
-            
-            const m = date.getmonth(), y = date.getFullYear();
-            const result = this.transactions.filter(t => {
-                const d = new Date(t.date + 'T12:00:00'); // ✅ CORREÇÃO: Padronizado
-                return d.getmonth() === m && d.getFullYear() === y;
-            });
-            
-            this._cache.monthTransactions[key] = result;
-            return result;
-        }
-
+getMonthTransactions(date) {
+    // ✅ CORREÇÃO: Validar se é um objeto Date válido
+    if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+        date = this.currentMonth;
+    }
+    
+    const key = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
+    
+    if (!this._cache.monthTransactions) this._cache.monthTransactions = {};
+    if (this._cache.monthTransactions[key]) return this._cache.monthTransactions[key];
+    
+    const m = date.getMonth(), y = date.getFullYear();
+    const result = this.transactions.filter(t => {
+        const d = new Date(t.date + 'T12:00:00');
+        return d.getMonth() === m && d.getFullYear() === y;
+    });
+    
+    this._cache.monthTransactions[key] = result;
+    return result;
+}
         getCardTransactions(cardId, date) {
             if (!date) date = this.currentmonth;
             const m = date.getmonth(), y = date.getFullYear();
