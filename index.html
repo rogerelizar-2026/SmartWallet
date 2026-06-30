@@ -31,7 +31,7 @@
         <div class="print-date" id="printDate"></div>
     </div>
     <div class="print-footer">
-        <div class="print-author">Idealizado por RogerElizar™</div>
+        <div class="print-author">Idealizado por RogerElizar</div>
         <div>Smart Wallet © 2026 - rogerelizar@gmail.com</div>
     </div>
 
@@ -39,7 +39,7 @@
     <div class="splash-screen" id="splashScreen" role="banner" aria-label="Tela de carregamento">
         <div class="splash-content">
             <h1 class="splash-title">Smart Wallet</h1>
-            <p class="splash-subtitle">Idealizado por RogerElizar™</p>
+            <p class="splash-subtitle">Idealizado por RogerElizar</p>
             <p class="splash-email">rogerelizar@gmail.com</p>
             <div class="splash-icons" aria-hidden="true">
                 <svg class="splash-icon" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
@@ -55,17 +55,17 @@
     </div>
 
     <!-- DISCLAIMER MODAL -->
-    <div class="disclaimer-modal" id="disclaimerModal" role="dialog" aria-modal="true" aria-labelledby="disclaimerTitle">
+    <div class="disclaimer-modal" id="disclaimerModal">
         <div class="disclaimer-content">
             <div class="disclaimer-header">
-                <div class="disclaimer-icon" aria-hidden="true">⚠️</div>
-                <h2 class="disclaimer-title" id="disclaimerTitle">Termos de Uso e Aviso Legal</h2>
+                <div class="disclaimer-icon">⚠️</div>
+                <h2 class="disclaimer-title">Termos de Uso e Aviso Legal</h2>
                 <p class="text-secondary">Por favor, leia atentamente antes de continuar</p>
             </div>
             <div class="disclaimer-body">
                 <h3>📋 Sobre o Smart Wallet</h3>
                 <p>O Smart Wallet é uma ferramenta de <strong>controle financeiro pessoal</strong> desenvolvida para ajudar você a organizar suas finanças.</p>
-                <h3> Privacidade e Segurança</h3>
+                <h3>🔒 Privacidade e Segurança</h3>
                 <ul>
                     <li><strong>100% Offline:</strong> Dados armazenados localmente.</li>
                     <li><strong>Sem Cadastro:</strong> Sem criação de conta.</li>
@@ -82,8 +82,8 @@
                 <p>Ao continuar, você declara que leu e concorda com estes termos.</p>
             </div>
             <div class="disclaimer-footer">
-                <div class="disclaimer-timer" id="disclaimerTimer" aria-live="polite">⏱️ Aguarde <span id="countdown">12</span> segundos para continuar</div>
-                <button class="disclaimer-accept-btn" id="acceptDisclaimerBtn" onclick="acceptDisclaimer()" disabled aria-label="Aceitar termos de uso">✓ Li e Concordo com os Termos</button>
+                <div class="disclaimer-timer" id="disclaimerTimer">⏱️ Aguarde <span id="countdown">12</span> segundos para continuar</div>
+                <button class="disclaimer-accept-btn" id="acceptDisclaimerBtn" onclick="acceptDisclaimer()">✓ Li e Concordo com os Termos</button>
             </div>
         </div>
     </div>
@@ -113,15 +113,15 @@
                     <div class="info-dropdown" id="infoMenu" role="menu" aria-label="Menu de informações">
                         <button class="info-item" role="menuitem" onclick="openInvestmentsModal()">
                             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
-                            <span>📈 Acompanhamento de Aplicações</span>
+                            <span>Aplicações</span>
                         </button>
                         <button class="info-item" role="menuitem" onclick="openTermsModal()">
                             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                            <span>📜 Termos de Uso</span>
+                            <span>Termos de Uso</span>
                         </button>
                         <button class="info-item" role="menuitem" onclick="openThanksModal()">
                             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                            <span>☕ Apoie o Projeto</span>
+                            <span>Apoie o Projeto</span>
                         </button>
                     </div>
                 </div>
@@ -283,7 +283,7 @@
 
         <div class="charts-section" id="investmentsChartSection" role="region" aria-label="Gráfico de investimentos">
             <div class="chart-card" style="grid-column: 1 / -1;">
-                <h3>📊 Acompanhamento de Aplicações</h3>
+                <h3>📊Aplicações</h3>
                 <div class="chart-container" style="height: 400px;"><canvas id="investChart" aria-label="Gráfico de evolução dos investimentos"></canvas></div>
                 <div id="investSummary" style="margin-top: 20px;" aria-live="polite"></div>
             </div>
@@ -756,7 +756,7 @@
     <div class="modal" id="investmentsModal" role="dialog" aria-modal="true" aria-labelledby="investmentsTitle" aria-hidden="true">
         <div class="modal-content wide">
             <div class="modal-header">
-                <h2 id="investmentsTitle">📈 Acompanhamento de Aplicações</h2>
+                <h2 id="investmentsTitle">Aplicações</h2>
                 <div class="flex-gap-8">
                     <button class="btn btn-primary btn-small" onclick="openNewInvestmentModal()">➕ Nova Aplicação</button>
                     <button class="modal-close" onclick="closeInvestmentsModal()" aria-label="Fechar modal">
