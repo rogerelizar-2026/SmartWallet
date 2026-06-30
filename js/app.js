@@ -1,8 +1,8 @@
-// Smart Wallet v4.0.1 - Versão Corrigida e Auditada
+// My Wallet v4.0.1 - Versão Corrigida e Auditada
 (function() {
     'use strict';
     
-    console.log('🚀 Smart Wallet v4.0.1 iniciando...');
+    console.log('🚀 My Wallet v4.0.1 iniciando...');
     
     // ===== CONSTANTES =====
     const PAYMENT_METHODS = [
@@ -102,7 +102,7 @@
 
     const manualHTML = '<div class="manual-cover">' +
         '<h1>📘 Manual do Usuário</h1>' +
-        '<h2>Smart Wallet Brasil</h2>' +
+        '<h2>My Wallet Brasil</h2>' +
         '<p>Controle Financeiro Pessoal Inteligente</p>' +
         '<p class="version">Versão 2.0.2 - 2026</p>' +
         '<p class="author">Idealizado por RogerElizar™</p>' +
@@ -119,13 +119,13 @@
         '<div class="quote-author">— Com todo amor: Rogério</div>' +
         '</div>' +
         '</div>' +
-        '<h2>🎯 Bem-vindo ao Smart Wallet Brasil!</h2>' +
-        '<p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>! O Smart Wallet Brasil não é apenas mais um aplicativo de controle de gastos — é seu parceiro na jornada para transformar sua relação com o dinheiro.</p>' +
+        '<h2>🎯 Bem-vindo ao My Wallet Brasil!</h2>' +
+        '<p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>! O My Wallet Brasil não é apenas mais um aplicativo de controle de gastos — é seu parceiro na jornada para transformar sua relação com o dinheiro.</p>' +
         '<div class="manual-tip">' +
         '<strong>💡 Você sabia?</strong> Estudos mostram que pessoas que acompanham suas finanças regularmente economizam em média <strong>20% a mais</strong> do que aquelas que não controlam seus gastos.' +
         '</div>' +
         '<h2>📱 Instalação como WebApp</h2>' +
-        '<p>O Smart Wallet funciona como um aplicativo instalado no seu dispositivo, mesmo sendo uma aplicação web.</p>' +
+        '<p>O My Wallet funciona como um aplicativo instalado no seu dispositivo, mesmo sendo uma aplicação web.</p>' +
         '<h3>💻 No Computador (Chrome, Edge, Brave)</h3>' +
         '<ol>' +
         '<li>Acesse o site pelo navegador</li>' +
@@ -281,7 +281,7 @@
         '</div>' +
         '</div>';
 
-    class SmartWallet {
+    class MyWallet {
         constructor() {
             this.currentMonth = new Date();
             this.currentMonth.setDate(1);
@@ -336,7 +336,7 @@
         clearCache() { this._cache = {}; }
 
         init() {
-            console.log('✅ Smart Wallet inicializado');
+            console.log('✅ My Wallet inicializado');
             this.applyTheme();
             this.applyPrivacy();
             this.setupEventListeners();
