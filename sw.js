@@ -1,7 +1,7 @@
 // sw.js
-// Smart Wallet Service Worker - Fase 4 (Otimizado)
+// My Wallet Service Worker - Fase 4 (Otimizado)
 
-const CACHE_NAME = 'smart-wallet-v4.0.1';
+const CACHE_NAME = 'my-wallet-v4.0.1';
 const SHELL_ASSETS = [
     './',
     './index.html',
@@ -119,4 +119,4 @@ self.addEventListener('message', function(event) {
     }
 });
 
-console.log('[SW] Smart Wallet Service Worker v4.0.1 carregado');
+console.log('[SW] My Wallet Service Worker v4.0.1 carregado');
