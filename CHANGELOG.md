@@ -1,4 +1,4 @@
-# 📋 Changelog - Smart Wallet
+# 📋 Changelog - My Wallet
 
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 
