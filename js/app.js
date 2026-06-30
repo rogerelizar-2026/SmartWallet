@@ -629,41 +629,48 @@
             this.toastT = setTimeout(() => t.classList.remove('active'), 3000);
         }
 
-        updateDashboard() {
-            if (!this.currentMonth || !(this.currentMonth instanceof Date) || isNaN(this.currentMonth.getTime())) {
-                this.currentMonth = new Date();
-                this.currentMonth.setDate(1);
-                this.currentMonth.setHours(0, 0, 0, 0);
-            }
-            const mt = this.getMonthTransactions();
-            let inc = 0, exp = 0;
-            mt.forEach(t => { if (t.amount > 0) inc += t.amount; else exp += t.amount; });
-            let unifiedBalance = 0;
-            this.accounts.forEach(a => { 
-                if (a.type === 'checking') {
-                    unifiedBalance += (parseFloat(a.balance) || 0);
-                }
-            });
-            this.investments.forEach(inv => {
-                if (!inv.accountId) {
-                    unifiedBalance += inv.current;
-                }
-            });
-            let creditCardTotal = 0;
-            const self = this;
-            this.cards.forEach(card => {
-                const cardTrans = self.getCardTransactions(card.id);
-                cardTrans.forEach(t => { creditCardTotal += Math.abs(t.amount); });
-            });
-            const balEl = document.getElementById('totalBalance');
-            if (balEl) { balEl.textContent = this.formatCurrency(unifiedBalance); balEl.className = 'card-value privacy-value ' + (unifiedBalance >= 0 ? 'positive' : 'negative'); }
-            const incEl = document.getElementById('totalIncome');
-            if (incEl) incEl.textContent = this.formatCurrency(inc);
-            const expEl = document.getElementById('totalExpenses');
-            if (expEl) expEl.textContent = this.formatCurrency(Math.abs(exp));
-            const goalEl = document.getElementById('goalProgress');
-            if (goalEl) { goalEl.textContent = this.formatCurrency(creditCardTotal); goalEl.className = 'card-value privacy-value negative'; }
+updateDashboard() {
+    if (!this.currentMonth || !(this.currentMonth instanceof Date) || isNaN(this.currentMonth.getTime())) {
+        this.currentMonth = new Date();
+        this.currentMonth.setDate(1);
+        this.currentMonth.setHours(0, 0, 0, 0);
+    }
+    
+    const mt = this.getMonthTransactions();
+    let inc = 0, exp = 0;
+    mt.forEach(t => { if (t.amount > 0) inc += t.amount; else exp += t.amount; });
+    
+    // 🆕 Saldo unificado: contas correntes + valor atual das aplicações vinculadas
+    let unifiedBalance = 0;
+    this.accounts.forEach(a => { 
+        if (a.type === 'checking') {
+            unifiedBalance += (parseFloat(a.balance) || 0);
         }
+    });
+    
+    // Somar aplicações que NÃO têm conta vinculada (para evitar dupla contagem)
+    this.investments.forEach(inv => {
+        if (!inv.accountId) {
+            unifiedBalance += inv.current;
+        }
+    });
+    
+    let creditCardTotal = 0;
+    const self = this;
+    this.cards.forEach(card => {
+        const cardTrans = self.getCardTransactions(card.id);
+        cardTrans.forEach(t => { creditCardTotal += Math.abs(t.amount); });
+    });
+    
+    const balEl = document.getElementById('totalBalance');
+    if (balEl) { balEl.textContent = this.formatCurrency(unifiedBalance); balEl.className = 'card-value privacy-value ' + (unifiedBalance >= 0 ? 'positive' : 'negative'); }
+    const incEl = document.getElementById('totalIncome');
+    if (incEl) incEl.textContent = this.formatCurrency(inc);
+    const expEl = document.getElementById('totalExpenses');
+    if (expEl) expEl.textContent = this.formatCurrency(Math.abs(exp));
+    const goalEl = document.getElementById('goalProgress');
+    if (goalEl) { goalEl.textContent = this.formatCurrency(creditCardTotal); goalEl.className = 'card-value privacy-value negative'; }
+}
 
         render() {
             this.updateDashboard();
@@ -1024,8 +1031,42 @@
         saveAccount() { const id = document.getElementById('accountEditId').value; const name = document.getElementById('accountName').value.trim(); const type = document.getElementById('accountType').value; const balance = parseFloat(document.getElementById('accountBalance').value) || 0; const color = document.getElementById('accountColor').value; if (!name) { this.showToast('Informe o nome'); return; } if (id) { for (let i = 0; i < this.accounts.length; i++) { if (this.accounts[i].id === id) { this.accounts[i] = { id, name, type, balance, color }; break; } } } else { this.accounts.push({ id: this.generateUniqueId(), name, type, balance, color }); } this.clearCache(); this.saveAccounts(); this.populateAccountSelects(); this.renderAccountsList(); this.render(); closeNewAccountModal(); this.showToast(id ? 'Conta atualizada!' : 'Conta cadastrada!'); }
         deleteAccount(id) { if (!confirm('Excluir esta conta?')) return; this.accounts = this.accounts.filter(a => a.id !== id); this.clearCache(); this.saveAccounts(); this.populateAccountSelects(); this.renderAccountsList(); this.render(); this.showToast('Conta removida!'); }
         editAccount(id) { let acc = null; for (let i = 0; i < this.accounts.length; i++) { if (this.accounts[i].id === id) { acc = this.accounts[i]; break; } } if (!acc) return; document.getElementById('accountEditId').value = acc.id; document.getElementById('accountName').value = acc.name; document.getElementById('accountType').value = acc.type; document.getElementById('accountBalance').value = acc.balance; document.getElementById('accountColor').value = acc.color; document.getElementById('newAccountTitle').textContent = 'Editar Conta'; document.getElementById('newAccountModal').classList.add('active'); }
-        renderAccountsList() { const container = document.getElementById('accountsList'); if (!container) return; if (!this.accounts.length) { container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px; opacity:0.5;">🏦</div><h3>Nenhuma conta cadastrada</h3></div>'; return; } const self = this; container.innerHTML = '<div class="accounts-grid">' + this.accounts.map(acc => { let investmentsHtml = ''; if (acc.type === 'investment') { const linkedInvestments = self.investments.filter(inv => inv.accountId === acc.id); if (linkedInvestments.length > 0) { investmentsHtml = '<div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.2); font-size:0.85rem;">'; investmentsHtml += '<div style="opacity:0.9; margin-bottom:6px;"> Aplicações vinculadas:</div>'; linkedInvestments.forEach(inv => { const typeLabels = { cdb: 'CDB', tesouro: 'Tesouro', lci: 'LCI/LCA', fundo: 'Fundo', acao: 'Ações', fiis: 'FIIs', poupanca: 'Poupança', outro: 'Outro' }; investmentsHtml += '<div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>' + (typeLabels[inv.type] || inv.type) + ': ' + self.escapeHtml(inv.name) + '</span><span>' + self.formatCurrency(inv.current) + '</span></div>'; }); investmentsHtml += '</div>'; } } return '<div class="account-card" style="background:linear-gradient(135deg, ' + acc.color + ' 0%, ' + self.adjustColor(acc.color, -30) + ' 100%);"><div class="account-card-actions"><button class="cc-action-btn" onclick="event.stopPropagation(); smartwallet.editAccount(\'' + acc.id + '\')">✏️</button><button class="cc-action-btn" onclick="event.stopPropagation(); smartwallet.deleteAccount(\'' + acc.id + '\')">🗑️</button></div><div class="account-card-header"><div class="account-card-type">' + (acc.type === 'checking' ? '💳 Conta Corrente' : '📈 Investimento') + '</div></div><div class="account-card-name">' + self.escapeHtml(acc.name) + '</div><div class="account-card-balance">' + self.formatCurrency(acc.balance) + '</div>' + investmentsHtml + '</div>'; }).join('') + '</div>'; }
-
+renderAccountsList() { 
+    const container = document.getElementById('accountsList'); 
+    if (!container) return; 
+    if (!this.accounts.length) { 
+        container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px; opacity:0.5;">🏦</div><h3>Nenhuma conta cadastrada</h3></div>'; 
+        return; 
+    } 
+    const self = this; 
+    container.innerHTML = '<div class="accounts-grid">' + this.accounts.map(acc => { 
+        // 🆕 Para contas investment, mostrar aplicações vinculadas
+        let investmentsHtml = '';
+        if (acc.type === 'investment') {
+            const linkedInvestments = self.investments.filter(inv => inv.accountId === acc.id);
+            if (linkedInvestments.length > 0) {
+                investmentsHtml = '<div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.2); font-size:0.85rem;">';
+                investmentsHtml += '<div style="opacity:0.9; margin-bottom:6px;">📊 Aplicações vinculadas:</div>';
+                linkedInvestments.forEach(inv => {
+                    const typeLabels = { cdb: 'CDB', tesouro: 'Tesouro', lci: 'LCI/LCA', fundo: 'Fundo', acao: 'Ações', fiis: 'FIIs', poupanca: 'Poupança', outro: 'Outro' };
+                    investmentsHtml += '<div style="display:flex; justify-content:space-between; margin-bottom:4px;">';
+                    investmentsHtml += '<span>' + (typeLabels[inv.type] || inv.type) + ': ' + self.escapeHtml(inv.name) + '</span>';
+                    investmentsHtml += '<span>' + self.formatCurrency(inv.current) + '</span>';
+                    investmentsHtml += '</div>';
+                });
+                investmentsHtml += '</div>';
+            }
+        }
+        
+        return '<div class="account-card" style="background:linear-gradient(135deg, ' + acc.color + ' 0%, ' + self.adjustColor(acc.color, -30) + ' 100%);">' +
+            '<div class="account-card-actions"><button class="cc-action-btn" onclick="event.stopPropagation(); smartwallet.editAccount(\'' + acc.id + '\')">✏️</button><button class="cc-action-btn" onclick="event.stopPropagation(); smartwallet.deleteAccount(\'' + acc.id + '\')">🗑️</button></div>' +
+            '<div class="account-card-header"><div class="account-card-type">' + (acc.type === 'checking' ? '💳 Conta Corrente' : '📈 Investimento') + '</div></div>' +
+            '<div class="account-card-name">' + self.escapeHtml(acc.name) + '</div>' +
+            '<div class="account-card-balance">' + self.formatCurrency(acc.balance) + '</div>' +
+            investmentsHtml +
+        '</div>'; 
+    }).join('') + '</div>'; 
+}
         renderBillsModal() { const container = document.getElementById('billsList'); if (!container) return; const today = new Date(); today.setHours(0, 0, 0, 0); const in3Days = new Date(today); in3Days.setDate(in3Days.getDate() + 3); const self = this; const bills = this.transactions.filter(t => { if (t.statusOk || t.amount >= 0) return false; const tDate = new Date(t.date + 'T12:00:00'); return tDate <= in3Days; }).sort((a, b) => new Date(a.date) - new Date(b.date)); if (bills.length === 0) { container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px;">✅</div><h3>Nenhuma conta pendente!</h3></div>'; return; } let total = 0; bills.forEach(b => total += Math.abs(b.amount)); let html = '<div style="background:var(--input-bg); border-radius:14px; padding:16px; margin-bottom:16px;">'; html += '<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);"><span style="color:var(--text-secondary);">Total de contas</span><span style="font-weight:600;">' + bills.length + '</span></div>'; html += '<div style="display:flex; justify-content:space-between; padding:12px 0 0 0; margin-top:4px; border-top:2px solid var(--border-color); font-weight:700; font-size:1.1rem;"><span>Total a pagar</span><span style="color:var(--danger-color);">' + self.formatCurrency(total) + '</span></div></div>'; bills.forEach(bill => { const cat = self.getCategoryById(bill.category); const billDate = new Date(bill.date + 'T12:00:00'); const diffDays = Math.round((billDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)); let daysClass = 'warning', daysText = '', itemClass = ''; if (diffDays < 0) { daysClass = 'overdue'; daysText = Math.abs(diffDays) + 'd atrasada'; itemClass = 'overdue'; } else if (diffDays === 0) { daysClass = 'urgent'; daysText = 'Vence hoje'; itemClass = 'urgent'; } else if (diffDays === 1) { daysClass = 'urgent'; daysText = 'Vence amanhã'; itemClass = 'urgent'; } else { daysText = 'Em ' + diffDays + ' dias'; } html += '<div class="bill-item ' + itemClass + '"><div class="bill-info"><div class="bill-desc">' + self.escapeHtml(bill.description) + '<span class="bill-days ' + daysClass + '">' + daysText + '</span></div><div class="bill-meta"><span>📅 ' + self.formatDate(bill.date) + '</span><span style="color:' + cat.color + ';">● ' + self.escapeHtml(cat.name) + '</span></div></div><div class="bill-amount">' + self.formatCurrency(Math.abs(bill.amount)) + '</div><div style="display:flex; gap:4px;"><button class="btn btn-success btn-small" onclick="smartwallet.markBillAsPaid(' + bill.id + ')">✓</button><button class="btn btn-secondary btn-small" onclick="smartwallet.editTransaction(' + bill.id + '); closeBillsModal();">✏️</button></div></div>'; }); container.innerHTML = html; }
         markBillAsPaid(id) { for (let i = 0; i < this.transactions.length; i++) { if (this.transactions[i].id === id) { this.transactions[i].statusOk = true; break; } } this.clearCache(); this.saveTransactions(); this.render(); this.updateAlertBadge(); this.renderBillsModal(); this.showToast('✓ Conta paga!'); }
 
