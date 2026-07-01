@@ -306,8 +306,27 @@ header p { color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px; }
 
 .info-wrapper, .menu-wrapper { position: relative; z-index: 1000; }
 .info-btn, .menu-btn { background: var(--glass-bg); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); color: var(--text-primary); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow); transition: all 0.3s ease; }
-.info-btn:hover, .menu-btn:hover { transform: scale(1.1); border-color: var(--primary-color); }
-.info-dropdown, .dropdown-menu { position: absolute; top: calc(100% + 8px); right: 0; background: var(--glass-bg); backdrop-filter: blur(30px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 8px; min-width: 280px; box-shadow: var(--shadow-lg); z-index: 10000; display: none; animation: slideDown 0.2s ease; }
+.info-btn:hover, .menu-btn:hover { transform: scale(1.1); border-color: var(--primary-color); }.info-dropdown, .dropdown-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 8px;
+    min-width: 280px;
+    box-shadow: var(--shadow-lg);
+    z-index: 10000;
+    display: none;
+    animation: slideDown 0.2s ease;
+}
+
+body.light .info-dropdown,
+body.light .dropdown-menu {
+    background: rgba(255, 255, 255, 0.95);
+}
 .info-dropdown.active, .dropdown-menu.active { display: block; }
 @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 .info-item, .dropdown-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; color: var(--text-primary); font-size: 0.95rem; font-weight: 500; border: none; background: none; width: 100%; text-align: left; font-family: inherit; }
