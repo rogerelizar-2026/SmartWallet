@@ -23,7 +23,7 @@
 <body>
     <div class="print-header">
         <h1>Smart Wallet</h1>
-        <div class="print-subtitle">Seu Controle Financeiro Pessoal Inteligente</div>
+        <div class="print-subtitle">Controle Financeiro Pessoal Inteligente</div>
         <div class="print-date" id="printDate"></div>
     </div>
     <div class="print-footer">
@@ -57,26 +57,38 @@
                 <p class="text-secondary">Por favor, leia atentamente antes de continuar</p>
             </div>
             <div class="disclaimer-body">
-                <h3> Sobre o Smart Wallet v4.1.</h3>
-                <p>O Smart Wallet é uma ferramenta de <strong>controle financeiro pessoal</strong> desenvolvida para ajudar você a organizar suas finanças.</p>
+                <h3>📋 Sobre o Smart Wallet</h3>
+                <p>O Smart Wallet é uma ferramenta de <strong>controle financeiro pessoal</strong> desenvolvida para ajudar você a organizar suas finanças de forma simples, segura e inteligente.</p>
                 <h3>🔒 Privacidade e Segurança</h3>
                 <ul>
-                    <li><strong>100% Offline:</strong> Dados armazenados localmente.</li>
-                    <li><strong>Sem Cadastro:</strong> Sem criação de conta.</li>
-                    <li><strong>Sem Rastreamento:</strong> Sem cookies de analytics.</li>
-                    <li><strong>Controle Total:</strong> Exporte e apague seus dados.</li>
+                    <li><strong>100% Offline:</strong> Todos os seus dados são armazenados localmente no seu dispositivo. Nenhum dado é enviado para servidores externos.</li>
+                    <li><strong>Sem Cadastro:</strong> Não é necessário criar conta, fornecer e-mail ou qualquer informação pessoal.</li>
+                    <li><strong>Sem Rastreamento:</strong> Não utilizamos cookies de analytics, pixels de rastreamento ou qualquer forma de coleta de dados.</li>
+                    <li><strong>Controle Total:</strong> Você pode exportar e apagar todos os seus dados a qualquer momento, sem restrições.</li>
                 </ul>
-                <h3>⚠️ Limitações</h3>
+                <h3>⚠️ Limitações e Isenção de Responsabilidade</h3>
                 <ul>
-                    <li><strong>Ferramenta de Apoio:</strong> Não substitui consultoria profissional.</li>
-                    <li><strong>Responsabilidade:</strong> Decisões são do usuário.</li>
-                    <li><strong>Backup:</strong> Faça backups regulares.</li>
+                    <li><strong>Ferramenta de Apoio:</strong> O Smart Wallet é uma ferramenta de organização pessoal e não substitui consultoria financeira profissional.</li>
+                    <li><strong>Responsabilidade:</strong> Todas as decisões financeiras são de inteira responsabilidade do usuário.</li>
+                    <li><strong>Precisão:</strong> Os dados exibidos dependem exclusivamente das informações inseridas pelo usuário. O sistema não verifica a veracidade dos lançamentos.</li>
+                    <li><strong>Backup:</strong> É responsabilidade do usuário manter backups regulares de seus dados. A perda de dados por falha do dispositivo não é de responsabilidade do desenvolvedor.</li>
+                    <li><strong>Disponibilidade:</strong> O aplicativo funciona offline e depende do navegador do usuário. Atualizações do navegador podem eventualmente causar incompatibilidades.</li>
                 </ul>
+                <h3>📜 Propriedade Intelectual</h3>
+                <p>O Smart Wallet foi idealizado e desenvolvido por <strong>RogerElizar™</strong>. Todos os direitos sobre o design, código-fonte e conceito são reservados. O uso é gratuito para fins pessoais.</p>
+                <h3>🔄 Atualizações e Manutenção</h3>
+                <p>O desenvolvedor reserva-se o direito de atualizar, modificar ou descontinuar o aplicativo a qualquer momento, sem aviso prévio. Recomenda-se fazer backup antes de qualquer atualização.</p>
                 <h3>✅ Seu Compromisso</h3>
-                <p>Ao continuar, você declara que leu e concorda com estes termos.</p>
+                <p>Ao clicar em "Li e Concordo com os Termos", você declara que:</p>
+                <ul>
+                    <li>Leu e compreendeu todos os termos acima;</li>
+                    <li>Concorda em utilizar o aplicativo de forma responsável;</li>
+                    <li>Entende que se trata de uma ferramenta de apoio e não de consultoria financeira;</li>
+                    <li>Aceita os termos de isenção de responsabilidade.</li>
+                </ul>
             </div>
             <div class="disclaimer-footer">
-                <div class="disclaimer-timer" id="disclaimerTimer" aria-live="polite">️ Aguarde <span id="countdown">12</span> segundos para continuar</div>
+                <div class="disclaimer-timer" id="disclaimerTimer" aria-live="polite">⏱️ Aguarde <span id="countdown">12</span> segundos para continuar</div>
                 <button class="disclaimer-accept-btn" id="acceptDisclaimerBtn" onclick="acceptDisclaimer()" disabled aria-label="Aceitar termos de uso">✓ Li e Concordo com os Termos</button>
             </div>
         </div>
@@ -169,6 +181,11 @@
                             <span>Aplicações</span>
                         </button>
                         <div class="dropdown-divider" role="separator"></div>
+                        <button class="dropdown-item" role="menuitem" onclick="openCategoryBudgetModal()">
+                            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v20M2 12h20"/></svg>
+                            <span>Orçamento por Categoria</span>
+                        </button>
+                        <div class="dropdown-divider" role="separator"></div>
                         <button class="dropdown-item" role="menuitem" onclick="openImportCsvModal()">
                             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                             <span>Importar CSV</span>
@@ -229,7 +246,7 @@
         <div class="transactions-section" role="region" aria-label="Histórico de transações">
             <h2>Histórico do Mês</h2>
             <div class="filters" role="search" aria-label="Filtros de transações">
-                <input type="text" id="searchFilter" placeholder="🔍 Buscar..." aria-label="Buscar transações">
+                <input type="text" id="searchFilter" placeholder=" Buscar..." aria-label="Buscar transações">
                 <select id="typeFilter" aria-label="Filtrar por tipo">
                     <option value="">Todos os tipos</option>
                     <option value="income">Receitas</option>
@@ -281,10 +298,29 @@
         </div>
     </div>
 
-    <button class="fab" onclick="openNewTransactionModal()" id="fabBtn" aria-label="Adicionar nova transação">
-        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    </button>
+    <!-- FAB SPEED DIAL -->
+    <div class="fab-wrapper" id="fabWrapper">
+        <button class="fab fab-main" onclick="toggleFab()" id="fabBtn" aria-label="Adicionar nova transação" aria-expanded="false">
+            <svg class="icon fab-icon-plus" viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg class="icon fab-icon-close" viewBox="0 0 24 24" aria-hidden="true" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <div class="fab-actions" id="fabActions">
+            <button class="fab-action fab-action-transfer" onclick="openTransferModal()" title="Transferência">
+                <span>🔄</span>
+                <span class="fab-label">Transferir</span>
+            </button>
+            <button class="fab-action fab-action-income" onclick="openIncomeModal()" title="Receita">
+                <span>💰</span>
+                <span class="fab-label">Receita</span>
+            </button>
+            <button class="fab-action fab-action-expense" onclick="openExpenseModal()" title="Despesa">
+                <span></span>
+                <span class="fab-label">Despesa</span>
+            </button>
+        </div>
+    </div>
 
+    <!-- Modal Nova Transação -->
     <div class="modal" id="newTransactionModal" role="dialog" aria-modal="true" aria-labelledby="newTransactionTitle" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
@@ -320,7 +356,7 @@
                     <select id="paymentMethod" required><option value="">Selecione...</option></select>
                 </div>
                 <div class="form-group">
-                    <label for="transactionAccount">🏦 Conta</label>
+                    <label for="transactionAccount"> Conta</label>
                     <select id="transactionAccount" required><option value="">Selecione a conta...</option></select>
                 </div>
                 <div class="form-group">
@@ -363,6 +399,7 @@
         </div>
     </div>
 
+    <!-- Modal Editar Transação -->
     <div class="modal" id="editModal" role="dialog" aria-modal="true" aria-labelledby="editTitle" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
@@ -443,6 +480,47 @@
         </div>
     </div>
 
+    <!-- Modal Transferência -->
+    <div class="modal" id="transferModal" role="dialog" aria-modal="true" aria-labelledby="transferTitle" aria-hidden="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="transferTitle">🔄 Transferência entre Contas</h2>
+                <button class="modal-close" onclick="closeTransferModal()" aria-label="Fechar modal">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <form id="transferForm" onsubmit="event.preventDefault(); smartwallet.saveTransfer();">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="transferFrom">Conta de Origem</label>
+                        <select id="transferFrom" required><option value="">Selecione...</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="transferTo">Conta de Destino</label>
+                        <select id="transferTo" required><option value="">Selecione...</option></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="transferAmount">Valor (R$)</label>
+                    <input type="number" id="transferAmount" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="transferDate">Data</label>
+                    <input type="date" id="transferDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="transferDescription">Descrição (opcional)</label>
+                    <input type="text" id="transferDescription" placeholder="Ex: Transferência entre contas">
+                </div>
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary"> Transferir</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeTransferModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Exportar -->
     <div class="modal" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="exportTitle" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
@@ -452,12 +530,13 @@
                 </button>
             </div>
             <div class="action-buttons" style="flex-direction:column;gap:12px;">
-                <button class="btn btn-primary" onclick="smartwallet.exportCSV()"> Baixar CSV</button>
+                <button class="btn btn-primary" onclick="smartwallet.exportCSV()">📥 Baixar CSV</button>
                 <button class="btn btn-secondary" onclick="smartwallet.printExtratoPDF()">🖨️ Imprimir / PDF</button>
             </div>
         </div>
     </div>
 
+    <!-- Modal Meta -->
     <div class="modal" id="goalModal" role="dialog" aria-modal="true" aria-labelledby="goalTitle" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
@@ -477,13 +556,27 @@
                 </div>
                 <div id="goalResult" style="background:var(--input-bg);padding:16px;border-radius:14px;margin:16px 0;display:none;"></div>
                 <div class="action-buttons">
-                    <button type="submit" class="btn btn-primary">💾 Calcular & Salvar</button>
+                    <button type="submit" class="btn btn-primary"> Calcular & Salvar</button>
                     <button type="button" class="btn btn-secondary" onclick="closeGoalModal()">Fechar</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- Modal Orçamento por Categoria -->
+    <div class="modal" id="categoryBudgetModal" role="dialog" aria-modal="true" aria-labelledby="categoryBudgetTitle" aria-hidden="true">
+        <div class="modal-content wide">
+            <div class="modal-header">
+                <h2 id="categoryBudgetTitle">📊 Orçamento por Categoria</h2>
+                <button class="modal-close" onclick="closeCategoryBudgetModal()" aria-label="Fechar modal">
+                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div id="categoryBudgetContent"></div>
+        </div>
+    </div>
+
+    <!-- Modal Importar CSV -->
     <div class="modal" id="importCsvModal" role="dialog" aria-modal="true" aria-labelledby="importCsvTitle" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
@@ -512,6 +605,7 @@
         </div>
     </div>
 
+    <!-- Modal Importar Backup -->
     <div class="modal" id="importBackupModal" role="dialog" aria-modal="true" aria-labelledby="importBackupTitle" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
@@ -520,7 +614,7 @@
                     <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
             </div>
-            <div class="danger-warning">️ Esta ação substituirá TODOS os dados atuais!</div>
+            <div class="danger-warning">⚠️ Esta ação substituirá TODOS os dados atuais!</div>
             <div class="form-group">
                 <label>Selecione o arquivo JSON</label>
                 <label class="file-input-wrapper">
@@ -529,12 +623,13 @@
                 </label>
             </div>
             <div class="action-buttons">
-                <button class="btn btn-primary" onclick="smartwallet.importBackup()"> Restaurar</button>
+                <button class="btn btn-primary" onclick="smartwallet.importBackup()">📥 Restaurar</button>
                 <button class="btn btn-secondary" onclick="closeImportBackupModal()">Cancelar</button>
             </div>
         </div>
     </div>
 
+    <!-- Modal Limpar Dados -->
     <div class="modal danger-modal" id="clearDataModal" role="dialog" aria-modal="true" aria-labelledby="clearDataTitle" aria-hidden="true">
         <div class="modal-content">
             <div class="modal-header">
@@ -558,13 +653,14 @@
                 <p class="font-semibold mb-16">Digite <strong style="color:var(--danger-color);">LIMPAR</strong> para confirmar</p>
                 <input type="text" class="confirm-input" id="clearConfirmInput" placeholder="LIMPAR" oninput="checkClearConfirm()" aria-label="Digite LIMPAR para confirmar">
                 <div class="action-buttons" style="margin-top:16px;">
-                    <button class="btn btn-danger-full" id="finalClearBtn" onclick="smartwallet.clearAllData()" disabled style="opacity:0.5;">️ Apagar Tudo</button>
+                    <button class="btn btn-danger-full" id="finalClearBtn" onclick="smartwallet.clearAllData()" disabled style="opacity:0.5;">🗑️ Apagar Tudo</button>
                     <button class="btn btn-secondary" onclick="closeClearDataModal()">Cancelar</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal Contas -->
     <div class="modal" id="accountsModal" role="dialog" aria-modal="true" aria-labelledby="accountsTitle" aria-hidden="true">
         <div class="modal-content wide">
             <div class="modal-header">
@@ -618,6 +714,7 @@
         </div>
     </div>
 
+    <!-- Modal Cartões -->
     <div class="modal" id="creditCardsModal" role="dialog" aria-modal="true" aria-labelledby="creditCardsTitle" aria-hidden="true">
         <div class="modal-content wide">
             <div class="modal-header">
@@ -700,18 +797,25 @@
         </div>
     </div>
 
-    <div class="modal" id="invoiceModal" role="dialog" aria-modal="true" aria-labelledby="invoiceTitle" aria-hidden="true">
-        <div class="modal-content wide">
-            <div class="modal-header">
+<div class="modal" id="invoiceModal" role="dialog" aria-modal="true" aria-labelledby="invoiceTitle" aria-hidden="true">
+    <div class="modal-content wide">
+        <div class="modal-header">
+            <div class="invoice-nav-wrapper">
+                <button class="invoice-nav-btn" onclick="smartwallet.navigateInvoice(-1)" aria-label="Fatura anterior">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
                 <h2 id="invoiceTitle">Fatura</h2>
-                <button class="modal-close" onclick="closeInvoiceModal()" aria-label="Fechar modal">
-                    <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <button class="invoice-nav-btn" onclick="smartwallet.navigateInvoice(1)" aria-label="Próxima fatura">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
                 </button>
             </div>
-            <div id="invoiceContent"></div>
+            <button class="modal-close" onclick="closeInvoiceModal()" aria-label="Fechar modal">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
         </div>
+        <div id="invoiceContent"></div>
     </div>
-
+</div>
     <div class="modal" id="billsModal" role="dialog" aria-modal="true" aria-labelledby="billsTitle" aria-hidden="true">
         <div class="modal-content wide">
             <div class="modal-header">
@@ -866,11 +970,62 @@
                 <button class="btn btn-success" onclick="copyPixKey()">📋 Copiar Chave PIX</button>
             </div>
             <div style="margin-top:30px;padding-top:20px;border-top:1px solid var(--border-color);text-align:center;">
-                <h3 style="margin-bottom:12px;"> Feedback</h3>
+                <h3 style="margin-bottom:12px;">📧 Feedback</h3>
                 <a href="mailto:rogerelizar@gmail.com?subject=Feedback%20Smart%20Wallet" class="btn btn-primary">✉️ Enviar Feedback</a>
             </div>
         </div>
     </div>
+
+<!-- Modal de Novidades da Versão -->
+<div class="modal" id="whatsNewModal" role="dialog" aria-modal="true" aria-labelledby="whatsNewTitle" aria-hidden="true">
+    <div class="modal-content wide">
+        <div class="modal-header">
+            <h2 id="whatsNewTitle">🎉 Novidades da Versão <span id="whatsNewVersion"></span></h2>
+            <button class="modal-close" onclick="closeWhatsNewModal()" aria-label="Fechar modal">
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        
+        <div class="whats-new-content">
+            <div class="whats-new-intro">
+                <div class="whats-new-icon">🚀</div>
+                <h3>O Smart Wallet foi atualizado!</h3>
+                <p>Confira as novidades que preparamos para melhorar sua experiência financeira.</p>
+            </div>
+            
+            <div id="whatsNewFeatures"></div>
+            
+            <div class="whats-new-manual-reminder">
+                <div class="reminder-icon">📘</div>
+                <div class="reminder-content">
+                    <h3>📖 Não perca as Dicas do Coach SW!</h3>
+                    <p>O Manual do Usuário contém <strong>dicas exclusivas de educação financeira</strong>, casos reais de sucesso, a regra 50-30-20 e um plano de ação de 4 semanas para transformar suas finanças.</p>
+                    <p><strong>Imprima ou salve o manual em PDF</strong> para consultar sempre que precisar!</p>
+                </div>
+                <div class="reminder-actions">
+                    <button class="btn btn-primary" onclick="printManualFromWhatsNew()">
+                        🖨️ Imprimir / Salvar Manual
+                    </button>
+                    <button class="btn btn-secondary" onclick="openManualFromWhatsNew()">
+                        📖 Ver Manual Agora
+                    </button>
+                </div>
+            </div>
+            
+            <div class="whats-new-footer">
+                <p>💚 Obrigado por usar o Smart Wallet!</p>
+                <p class="whats-new-author">Idealizado por RogerElizar™</p>
+            </div>
+        </div>
+        
+        <div class="action-buttons" style="margin-top: 20px;">
+            <button class="btn btn-primary" onclick="closeWhatsNewModal()" style="flex:1;">
+                ✅ Começar a Usar
+            </button>
+        </div>
+    </div>
+</div>
+
 
     <div class="toast" id="toast" role="alert" aria-live="assertive"></div>
 
