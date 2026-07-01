@@ -1,5 +1,5 @@
-// Smart Wallet Service Worker v4.0.1
-const CACHE_NAME = 'smartwallet-v4.0.1';
+// Smart Wallet Service Worker v4.1.0
+const CACHE_NAME = 'smartwallet-v4.1.0';
 const OFFLINE_URL = '/index.html';
 
 const STATIC_ASSETS = [
@@ -19,7 +19,7 @@ const DYNAMIC_ASSETS = [
 
 // Instalação: Cache dos recursos estáticos
 self.addEventListener('install', (event) => {
-    console.log('[SW] Instalando Smart Wallet v4.0.1...');
+    console.log('[SW] Instalando Smart Wallet v4.1.0...');
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.addAll(STATIC_ASSETS).catch((err) => {
@@ -33,7 +33,7 @@ self.addEventListener('install', (event) => {
 
 // Ativação: Limpar caches antigos
 self.addEventListener('activate', (event) => {
-    console.log('[SW] Ativando Smart Wallet v4.0.1...');
+    console.log('[SW] Ativando Smart Wallet v4.1.0...');
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
