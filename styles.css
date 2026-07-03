@@ -511,7 +511,7 @@ body.light .info-dropdown, body.light .dropdown-menu {
     }
 }
 
-/* DESKTOP (Acima de 640px) */
+/* ===== RESPONSIVO DESKTOP ===== */
 @media (min-width: 641px) {
     .app-header {
         flex-direction: row;
@@ -519,21 +519,30 @@ body.light .info-dropdown, body.light .dropdown-menu {
         justify-content: space-between;
         padding: 12px 24px;
         gap: 20px;
+        flex-wrap: wrap;
     }
     
+    /* Ordem no desktop: Título → Mês → Financeiro → Preferências → Sistema */
     .header-top {
+        order: 1;
         margin-bottom: 0;
         flex: 0 0 auto;
-        min-width: 220px;
     }
     
     .header-middle {
-        flex: 1;
-        max-width: 400px;
+        order: 2;
         margin-bottom: 0;
+        flex: 1;
+        max-width: 380px;
     }
     
     .header-bottom {
+        order: 3;
+        flex: 0 0 auto;
+    }
+    
+    .system-group {
+        order: 4; /* Vai para o final no desktop */
         flex: 0 0 auto;
     }
     
@@ -542,7 +551,13 @@ body.light .info-dropdown, body.light .dropdown-menu {
     }
     
     .header-btn {
-        width: 44px; height: 44px;
+        width: 44px;
+        height: 44px;
+    }
+    
+    .header-btn .icon {
+        width: 22px;
+        height: 22px;
     }
 }
 
