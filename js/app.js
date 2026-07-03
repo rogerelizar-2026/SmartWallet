@@ -204,7 +204,7 @@ const manualHTML = '<div class="manual-cover">' +
     '<li><strong>Saldo Unificado:</strong> Soma de todas as suas contas correntes e investimentos</li>' +
     '<li><strong>Receitas:</strong> Total de entradas do mês</li>' +
     '<li><strong>Despesas:</strong> Total de saídas do mês</li>' +
-    '<li><strong>Acumulado C.Crédito:</strong> Total gasto em todos os cartões</li>' +
+    '<li><strong>Cartões de Crédito:</strong> Total gasto em todos os cartões</li>' +
     '</ul>' +
     '<div class="manual-tip">' +
     '<strong>🆕 Novidade v4.1.0:</strong> Os cards do dashboard agora são <strong>clicáveis</strong>! Toque em qualquer card para filtrar rapidamente as transações ou abrir os modais correspondentes.' +
