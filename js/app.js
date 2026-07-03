@@ -433,6 +433,526 @@ const manualHTML = '<div class="manual-cover">' +
     '</div>' +
     '</div>';
 
+	const TRANSLATIONS = {
+    'pt-BR': {
+        // Header
+        appTitle: 'Smart Wallet',
+        appSubtitle: 'Suas finanças sob seu domínio!',
+        
+        // Dashboard
+        unifiedBalance: 'Saldo Unificado',
+        income: 'Receitas',
+        expenses: 'Despesas',
+        creditCardTotal: 'Acumulado C.Crédito',
+        
+        // Month navigation
+        months: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+        previousMonth: 'Mês anterior',
+        nextMonth: 'Próximo mês',
+        
+        // Buttons
+        privacy: 'Ocultar valores',
+        theme: 'Alternar tema',
+        alerts: 'Contas a vencer',
+        goal: 'Meta de Reserva',
+        info: 'Informações',
+        menu: 'Menu principal',
+        
+        // Menu items
+        monthlyStatement: 'Extrato do Mês',
+        myAccounts: 'Minhas Contas',
+        myCards: 'Meus Cartões',
+        investments: 'Acompanhamento de Aplicações',
+        categoryBudget: 'Orçamento por Categoria',
+        importCSV: 'Importar CSV',
+        backupJSON: 'Backup (JSON)',
+        restoreBackup: 'Restaurar Backup',
+        clearData: 'Limpar Dados',
+        language: 'Idioma',
+        
+        // Info menu
+        userManual: 'Manual do Usuário',
+        termsOfUse: 'Termos de Uso',
+        supportProject: 'Apoie o Projeto',
+        
+        // Transaction types
+        expense: 'Despesa',
+        income: 'Receita',
+        
+        // Status
+        completed: 'Concluído',
+        pending: 'Pendente',
+        
+        // Common
+        add: 'Adicionar',
+        save: 'Salvar',
+        cancel: 'Cancelar',
+        delete: 'Excluir',
+        edit: 'Editar',
+        close: 'Fechar',
+        confirm: 'Confirmar',
+        
+        // Messages
+        transactionAdded: 'Transação adicionada!',
+        transactionUpdated: 'Transação atualizada!',
+        transactionDeleted: 'Transação excluída!',
+        accountPaid: 'Conta paga!',
+        backupExported: 'Backup exportado!',
+        backupRestored: 'Backup restaurado!',
+        csvImported: 'transações importadas!',
+        dataCleared: 'Dados apagados!',
+        languageChanged: 'Idioma alterado!',
+        
+        // Categories
+        categories: {
+            moradia: 'Moradia',
+            despensa: 'Despensa',
+            transporte: 'Transporte',
+            saude: 'Saúde',
+            educacao: 'Educação',
+            cuidados_pessoais: 'Cuidados Pessoais',
+            servicos: 'Serviços',
+            lazer: 'Lazer',
+            pets: 'Pets',
+            inst_financeira: 'Instituição Financeira',
+            docs_juridico: 'Documento/Jurídico',
+            doacao_generosidade: 'Doação/Generosidade',
+            reserva_aplicacao: 'Reserva/Aplicação',
+            salario: 'Salário',
+            vale_alimentacao: 'Vale Alimentação',
+            auxilios: 'Auxílios',
+            beneficios: 'Benefícios',
+            restituicao: 'Restituição',
+            freelance: 'Freelance',
+            rendimentos: 'Rendimentos',
+            resgate: 'Resgate (invest/reserva)'
+        },
+        
+        // Payment methods
+        paymentMethods: {
+            pix: 'PIX',
+            debit: 'Cart.Débito',
+            auto: 'Débito Automático',
+            scheduled: 'Agendamento',
+            transfer: 'Transferência'
+        },
+        
+        // Charts
+        entriesExitsByMonth: 'Entradas e Saídas por Mês',
+        creditCards6Months: 'Cartões de Crédito (6 meses)',
+        expensesByCategory: 'Despesas por Categoria',
+        investmentsTracking: 'Acompanhamento de Aplicações',
+        monthlyHistory: 'Histórico do Mês',
+        
+        // Filters
+        allTypes: 'Todos os tipos',
+        allCategories: 'Todas as categorias',
+        allStatus: 'Todos os status',
+        allAccounts: 'Todas as contas',
+        searchPlaceholder: 'Buscar...',
+        
+        // Empty states
+        noTransactions: 'Nenhuma transação encontrada',
+        addFirstTransaction: 'Comece adicionando sua primeira transação!',
+        noCards: 'Nenhum cartão cadastrado',
+        noAccounts: 'Nenhuma conta cadastrada',
+        noInvestments: 'Nenhuma aplicação cadastrada',
+        noPendingBills: 'Nenhuma conta pendente!',
+        
+        // FAB
+        addTransaction: 'Adicionar transação',
+        transfer: 'Transferir',
+        newExpense: 'Nova Despesa',
+        newIncome: 'Nova Receita',
+        
+        // Invoice
+        invoice: 'Fatura',
+        invoicePeriod: 'Período da Fatura',
+        dueDate: 'Vencimento',
+        totalLimit: 'Limite Total',
+        invoiceTotal: 'Total da Fatura',
+        minimum: 'Mínimo (15%)',
+        available: 'Disponível',
+        purchases: 'Compras',
+        payInvoice: 'Pagar Fatura',
+        
+        // Bills alert
+        closingAlert: 'Fechamento de Fatura',
+        cardClosingTomorrow: 'O cartão {cardName} fecha amanhã!',
+        closingDate: 'Fechamento',
+        viewCard: 'Ver Cartão',
+        totalAccounts: 'Total de contas',
+        totalToPay: 'Total a pagar',
+        overdue: 'atrasada',
+        dueToday: 'Vence hoje',
+        dueTomorrow: 'Vence amanhã',
+        inDays: 'Em {days} dias',
+        
+        // Investments
+        newInvestment: 'Nova Aplicação',
+        investmentName: 'Nome da Aplicação',
+        investmentType: 'Tipo',
+        initialValue: 'Valor Inicial',
+        currentValue: 'Valor Atual',
+        applicationDate: 'Data da Aplicação',
+        rate: 'Taxa de Rendimento',
+        linkedAccount: 'Conta de Investimento Vinculada',
+        createLinkedAccount: 'Criar conta investment automaticamente',
+        updateValue: 'Atualizar Valor',
+        newValue: 'Novo Valor Atual',
+        updateDate: 'Data da Atualização',
+        update: 'Atualizar',
+        invested: 'Investido',
+        current: 'Atual',
+        return: 'Rendimento',
+        generalSummary: 'Resumo Geral',
+        
+        // Accounts
+        newAccount: 'Nova Conta',
+        accountName: 'Nome da Conta',
+        accountType: 'Tipo',
+        checkingAccount: 'Conta Corrente',
+        investmentAccount: 'Investimento',
+        initialBalance: 'Saldo Inicial',
+        color: 'Cor',
+        linkedInvestments: 'Aplicações vinculadas',
+        
+        // Cards
+        newCard: 'Novo Cartão',
+        cardName: 'Nome',
+        brand: 'Bandeira',
+        last4Digits: '4 dígitos',
+        closingDay: 'Fechamento',
+        dueDay: 'Vencimento',
+        limit: 'Limite',
+        currentInvoice: 'Fatura Atual',
+        
+        // Goal
+        goalAmount: 'Meta (R$)',
+        monthlyContribution: 'Aporte Mensal (R$)',
+        calculateAndSave: 'Calcular & Salvar',
+        
+        // Transfer
+        transferBetweenAccounts: 'Transferência entre Contas',
+        fromAccount: 'Conta de Origem',
+        toAccount: 'Conta de Destino',
+        transferAmount: 'Valor (R$)',
+        transferDate: 'Data',
+        transferDescription: 'Descrição (opcional)',
+        transfer: 'Transferir',
+        accountsMustBeDifferent: 'As contas devem ser diferentes',
+        insufficientBalance: 'Saldo insuficiente na conta de origem',
+        transferCompleted: 'Transferência realizada!',
+        
+        // Export
+        exportStatement: 'Exportar Extrato',
+        downloadCSV: 'Baixar CSV',
+        printPDF: 'Imprimir / PDF',
+        
+        // Import
+        importCSV: 'Importar CSV',
+        selectCSVFile: 'Selecione o arquivo CSV',
+        clickToSelect: 'Clique para selecionar',
+        replaceMonthTransactions: 'Substituir transações do mês',
+        import: 'Importar',
+        
+        // Backup
+        restoreBackup: 'Restaurar Backup',
+        warningReplaceData: 'Esta ação substituirá TODOS os dados atuais!',
+        selectJSONFile: 'Selecione o arquivo JSON',
+        restore: 'Restaurar',
+        
+        // Clear data
+        clearData: 'Limpar Dados',
+        irreversibleAction: 'Esta ação é IRREVERSÍVEL!',
+        areYouSure: 'Você tem certeza?',
+        yesImSure: 'Sim, tenho certeza',
+        typeToConfirm: 'Digite {text} para confirmar',
+        deleteAll: 'Apagar Tudo',
+        
+        // What's new
+        whatsNew: 'Novidades da Versão',
+        appUpdated: 'O Smart Wallet foi atualizado!',
+        checkNewFeatures: 'Confira as novidades que preparamos para melhorar sua experiência financeira.',
+        dontMissTips: 'Não perca as Dicas do Coach SW!',
+        manualContainsTips: 'O Manual do Usuário contém dicas exclusivas de educação financeira, casos reais de sucesso, a regra 50-30-20 e um plano de ação de 4 semanas para transformar suas finanças.',
+        printOrSaveManual: 'Imprima ou salve o manual em PDF para consultar sempre que precisar!',
+        printSaveManual: 'Imprimir / Salvar Manual',
+        viewManualNow: 'Ver Manual Agora',
+        thanksForUsing: 'Obrigado por usar o Smart Wallet!',
+        startUsing: 'Começar a Usar',
+        
+        // Disclaimer
+        termsOfUse: 'Termos de Uso e Aviso Legal',
+        readCarefully: 'Por favor, leia atentamente antes de continuar',
+        waitSeconds: 'Aguarde {seconds} segundos para continuar',
+        iAgree: 'Li e Concordo com os Termos',
+        canAcceptTerms: 'Pode aceitar os termos',
+        
+        // Quote
+        manageFinances: 'Gerenciar Minhas Finanças'
+    },
+    
+    'en-US': {
+        // Header
+        appTitle: 'Smart Wallet',
+        appSubtitle: 'Your finances under your control!',
+        
+        // Dashboard
+        unifiedBalance: 'Unified Balance',
+        income: 'Income',
+        expenses: 'Expenses',
+        creditCardTotal: 'Credit Card Total',
+        
+        // Month navigation
+        months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+        previousMonth: 'Previous month',
+        nextMonth: 'Next month',
+        
+        // Buttons
+        privacy: 'Hide values',
+        theme: 'Toggle theme',
+        alerts: 'Bills due',
+        goal: 'Savings Goal',
+        info: 'Information',
+        menu: 'Main menu',
+        
+        // Menu items
+        monthlyStatement: 'Monthly Statement',
+        myAccounts: 'My Accounts',
+        myCards: 'My Cards',
+        investments: 'Investments Tracking',
+        categoryBudget: 'Category Budget',
+        importCSV: 'Import CSV',
+        backupJSON: 'Backup (JSON)',
+        restoreBackup: 'Restore Backup',
+        clearData: 'Clear Data',
+        language: 'Language',
+        
+        // Info menu
+        userManual: 'User Manual',
+        termsOfUse: 'Terms of Use',
+        supportProject: 'Support the Project',
+        
+        // Transaction types
+        expense: 'Expense',
+        income: 'Income',
+        
+        // Status
+        completed: 'Completed',
+        pending: 'Pending',
+        
+        // Common
+        add: 'Add',
+        save: 'Save',
+        cancel: 'Cancel',
+        delete: 'Delete',
+        edit: 'Edit',
+        close: 'Close',
+        confirm: 'Confirm',
+        
+        // Messages
+        transactionAdded: 'Transaction added!',
+        transactionUpdated: 'Transaction updated!',
+        transactionDeleted: 'Transaction deleted!',
+        accountPaid: 'Bill paid!',
+        backupExported: 'Backup exported!',
+        backupRestored: 'Backup restored!',
+        csvImported: 'transactions imported!',
+        dataCleared: 'Data cleared!',
+        languageChanged: 'Language changed!',
+        
+        // Categories
+        categories: {
+            moradia: 'Housing',
+            despensa: 'Groceries',
+            transporte: 'Transportation',
+            saude: 'Health',
+            educacao: 'Education',
+            cuidados_pessoais: 'Personal Care',
+            servicos: 'Services',
+            lazer: 'Leisure',
+            pets: 'Pets',
+            inst_financeira: 'Financial Institution',
+            docs_juridico: 'Document/Legal',
+            doacao_generosidade: 'Donation/Generosity',
+            reserva_aplicacao: 'Savings/Investment',
+            salario: 'Salary',
+            vale_alimentacao: 'Food Voucher',
+            auxilios: 'Aid',
+            beneficios: 'Benefits',
+            restituicao: 'Refund',
+            freelance: 'Freelance',
+            rendimentos: 'Earnings',
+            resgate: 'Redemption (invest/savings)'
+        },
+        
+        // Payment methods
+        paymentMethods: {
+            pix: 'PIX',
+            debit: 'Debit Card',
+            auto: 'Auto Debit',
+            scheduled: 'Scheduled',
+            transfer: 'Transfer'
+        },
+        
+        // Charts
+        entriesExitsByMonth: 'Entries and Exits by Month',
+        creditCards6Months: 'Credit Cards (6 months)',
+        expensesByCategory: 'Expenses by Category',
+        investmentsTracking: 'Investments Tracking',
+        monthlyHistory: 'Monthly History',
+        
+        // Filters
+        allTypes: 'All types',
+        allCategories: 'All categories',
+        allStatus: 'All status',
+        allAccounts: 'All accounts',
+        searchPlaceholder: 'Search...',
+        
+        // Empty states
+        noTransactions: 'No transactions found',
+        addFirstTransaction: 'Start by adding your first transaction!',
+        noCards: 'No cards registered',
+        noAccounts: 'No accounts registered',
+        noInvestments: 'No investments registered',
+        noPendingBills: 'No pending bills!',
+        
+        // FAB
+        addTransaction: 'Add transaction',
+        transfer: 'Transfer',
+        newExpense: 'New Expense',
+        newIncome: 'New Income',
+        
+        // Invoice
+        invoice: 'Invoice',
+        invoicePeriod: 'Invoice Period',
+        dueDate: 'Due Date',
+        totalLimit: 'Total Limit',
+        invoiceTotal: 'Invoice Total',
+        minimum: 'Minimum (15%)',
+        available: 'Available',
+        purchases: 'Purchases',
+        payInvoice: 'Pay Invoice',
+        
+        // Bills alert
+        closingAlert: 'Invoice Closing',
+        cardClosingTomorrow: 'The card {cardName} closes tomorrow!',
+        closingDate: 'Closing',
+        viewCard: 'View Card',
+        totalAccounts: 'Total accounts',
+        totalToPay: 'Total to pay',
+        overdue: 'overdue',
+        dueToday: 'Due today',
+        dueTomorrow: 'Due tomorrow',
+        inDays: 'In {days} days',
+        
+        // Investments
+        newInvestment: 'New Investment',
+        investmentName: 'Investment Name',
+        investmentType: 'Type',
+        initialValue: 'Initial Value',
+        currentValue: 'Current Value',
+        applicationDate: 'Application Date',
+        rate: 'Rate of Return',
+        linkedAccount: 'Linked Investment Account',
+        createLinkedAccount: 'Create investment account automatically',
+        updateValue: 'Update Value',
+        newValue: 'New Current Value',
+        updateDate: 'Update Date',
+        update: 'Update',
+        invested: 'Invested',
+        current: 'Current',
+        return: 'Return',
+        generalSummary: 'General Summary',
+        
+        // Accounts
+        newAccount: 'New Account',
+        accountName: 'Account Name',
+        accountType: 'Type',
+        checkingAccount: 'Checking Account',
+        investmentAccount: 'Investment',
+        initialBalance: 'Initial Balance',
+        color: 'Color',
+        linkedInvestments: 'Linked investments',
+        
+        // Cards
+        newCard: 'New Card',
+        cardName: 'Name',
+        brand: 'Brand',
+        last4Digits: 'Last 4 digits',
+        closingDay: 'Closing Day',
+        dueDay: 'Due Day',
+        limit: 'Limit',
+        currentInvoice: 'Current Invoice',
+        
+        // Goal
+        goalAmount: 'Goal Amount',
+        monthlyContribution: 'Monthly Contribution',
+        calculateAndSave: 'Calculate & Save',
+        
+        // Transfer
+        transferBetweenAccounts: 'Transfer Between Accounts',
+        fromAccount: 'From Account',
+        toAccount: 'To Account',
+        transferAmount: 'Amount',
+        transferDate: 'Date',
+        transferDescription: 'Description (optional)',
+        transfer: 'Transfer',
+        accountsMustBeDifferent: 'Accounts must be different',
+        insufficientBalance: 'Insufficient balance in source account',
+        transferCompleted: 'Transfer completed!',
+        
+        // Export
+        exportStatement: 'Export Statement',
+        downloadCSV: 'Download CSV',
+        printPDF: 'Print / PDF',
+        
+        // Import
+        importCSV: 'Import CSV',
+        selectCSVFile: 'Select CSV file',
+        clickToSelect: 'Click to select',
+        replaceMonthTransactions: 'Replace month transactions',
+        import: 'Import',
+        
+        // Backup
+        restoreBackup: 'Restore Backup',
+        warningReplaceData: 'This action will replace ALL current data!',
+        selectJSONFile: 'Select JSON file',
+        restore: 'Restore',
+        
+        // Clear data
+        clearData: 'Clear Data',
+        irreversibleAction: 'This action is IRREVERSIBLE!',
+        areYouSure: 'Are you sure?',
+        yesImSure: 'Yes, I\'m sure',
+        typeToConfirm: 'Type {text} to confirm',
+        deleteAll: 'Delete All',
+        
+        // What's new
+        whatsNew: 'What\'s New in Version',
+        appUpdated: 'Smart Wallet has been updated!',
+        checkNewFeatures: 'Check out the new features we prepared to improve your financial experience.',
+        dontMissTips: 'Don\'t miss the Coach SW Tips!',
+        manualContainsTips: 'The User Manual contains exclusive financial education tips, real success stories, the 50-30-20 rule and a 4-week action plan to transform your finances.',
+        printOrSaveManual: 'Print or save the manual as PDF to consult whenever you need!',
+        printSaveManual: 'Print / Save Manual',
+        viewManualNow: 'View Manual Now',
+        thanksForUsing: 'Thank you for using Smart Wallet!',
+        startUsing: 'Start Using',
+        
+        // Disclaimer
+        termsOfUse: 'Terms of Use and Legal Notice',
+        readCarefully: 'Please read carefully before continuing',
+        waitSeconds: 'Wait {seconds} seconds to continue',
+        iAgree: 'I\'ve Read and Agree to the Terms',
+        canAcceptTerms: 'You can accept the terms',
+        
+        // Quote
+        manageFinances: 'Manage My Finances'
+    }
+};
+	
     class SmartWallet {
         constructor() {
             this.currentMonth = new Date();
@@ -586,7 +1106,51 @@ const manualHTML = '<div class="manual-cover">' +
         formatCurrency(v) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
         formatDate(d) { return new Date(d + 'T12:00:00').toLocaleDateString('pt-BR'); }
         escapeHtml(t) { if (t === null || t === undefined) return ''; const div = document.createElement('div'); div.textContent = String(t); return div.innerHTML; }
-        showToast(msg) { const t = document.getElementById('toast'); if (!t) return; t.textContent = msg; t.classList.add('active'); clearTimeout(this.toastT); this.toastT = setTimeout(() => t.classList.remove('active'), 3000); }
+        
+		t(key, params = {}) {
+    const lang = localStorage.getItem('smartwallet_language') || 'pt-BR';
+    let text = TRANSLATIONS[lang][key] || TRANSLATIONS['pt-BR'][key] || key;
+    
+    // Substituir parâmetros
+    Object.keys(params).forEach(param => {
+        text = text.replace(new RegExp(`\\{${param}\\}`, 'g'), params[param]);
+    });
+    
+    return text;
+}
+
+getLanguage() {
+    return localStorage.getItem('smartwallet_language') || 'pt-BR';
+}
+
+setLanguage(lang) {
+    localStorage.setItem('smartwallet_language', lang);
+    this.applyLanguage();
+    this.showToast(this.t('languageChanged'));
+}
+
+applyLanguage() {
+    const lang = this.getLanguage();
+    
+    // Atualizar textos estáticos
+    const elements = {
+        'header-title': 'appTitle',
+        'header-subtitle': 'appSubtitle',
+        'currentMonth': null // Especial
+    };
+    
+    // Atualizar dashboard
+    const balanceTitle = document.querySelector('.card-title');
+    if (balanceTitle) balanceTitle.textContent = this.t('unifiedBalance');
+    
+    // Atualizar mês atual
+    this.updateMonthDisplay();
+    
+    // Re-renderizar
+    this.render();
+    this.updateCharts();
+}
+		showToast(msg) { const t = document.getElementById('toast'); if (!t) return; t.textContent = msg; t.classList.add('active'); clearTimeout(this.toastT); this.toastT = setTimeout(() => t.classList.remove('active'), 3000); }
         updateDashboard() {
             if (!this.currentMonth || !(this.currentMonth instanceof Date) || isNaN(this.currentMonth.getTime())) { this.currentMonth = new Date(); this.currentMonth.setDate(1); this.currentMonth.setHours(0, 0, 0, 0); }
             const mt = this.getMonthTransactions();
