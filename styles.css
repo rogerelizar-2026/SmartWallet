@@ -239,13 +239,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-/* ===== NOVO HEADER ===== */
+/* ===== HEADER ===== */
 .app-header {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: 20px;
-    padding: 16px 20px;
+    padding: 18px 20px;
     margin-bottom: 20px;
     box-shadow: var(--shadow);
     position: relative;
@@ -253,8 +253,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     z-index: 10;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
+    align-items: center;
+    gap: 20px;
 }
 
 .app-header::before {
@@ -266,61 +266,53 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     border-radius: 20px 20px 0 0;
 }
 
-/* Container Esquerdo (invisível) */
+/* Container Esquerdo */
 .header-left {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 6px;
     flex: 1;
     min-width: 0;
 }
 
-.header-brand {
-    width: 100%;
-}
-
 .header-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: 800;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin: 0;
-    line-height: 1.1;
+    line-height: 1;
     letter-spacing: -0.5px;
 }
 
 .header-subtitle {
     color: var(--text-secondary);
-    font-size: 1rem;
-    margin: 6px 0 0 0;
+    font-size: 0.9rem;
+    margin: 0;
     font-weight: 500;
-    text-align: center;
-}
-
-.header-month-nav {
-    width: 100%;
+    line-height: 1.2;
 }
 
 .month-selector {
     background: var(--input-bg);
     border: 1px solid var(--glass-border);
-    border-radius: 14px;
-    padding: 6px;
+    border-radius: 12px;
+    padding: 4px;
     display: flex;
     align-items: center;
-    gap: 6px;
-    width: 100%;
+    gap: 4px;
+    margin-top: 4px;
 }
 
 .month-selector button {
     background: var(--gradient-primary);
     color: white;
     border: none;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -334,10 +326,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 }
 
 .current-month {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 700;
     text-align: center;
-    padding: 0 12px;
+    padding: 0 8px;
     flex: 1;
     color: var(--text-primary);
     min-width: 0;
@@ -346,12 +338,12 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     white-space: nowrap;
 }
 
-/* Container Direito (invisível) */
+/* Container Direito */
 .header-right {
     flex-shrink: 0;
 }
 
-.header-all-actions {
+.header-actions {
     display: flex;
     gap: 8px;
     align-items: center;
@@ -471,45 +463,57 @@ body.light .info-dropdown, body.light .dropdown-menu {
 .dropdown-divider { height: 1px; background: var(--border-color); margin: 6px 0; }
 
 /* ============================
-   MOBILE (≤ 640px)
+   MOBILE (≤ 640px) - TUDO CENTRALIZADO
    ============================ */
 @media (max-width: 640px) {
     .app-header {
-        padding: 16px;
-        gap: 12px;
         flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 16px;
+        gap: 10px;
     }
 
-    .header-title { 
-        font-size: 1.5rem; 
+    .header-left {
+        align-items: center;
+        width: 100%;
     }
 
-    .header-subtitle { 
-        font-size: 0.88rem; 
+    .header-title {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    .header-subtitle {
+        font-size: 0.85rem;
+        text-align: center;
+    }
+
+    .month-selector {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .header-right {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .header-actions {
+        gap: 6px;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
     .header-btn {
         width: 38px;
         height: 38px;
-        border-radius: 10px;
     }
 
     .header-btn .icon {
         width: 18px;
         height: 18px;
-    }
-
-    .header-all-actions {
-        gap: 6px;
-    }
-
-    .month-selector button {
-        width: 34px;
-        height: 34px;
-    }
-
-    .current-month {
-        font-size: 0.92rem;
     }
 }
 
@@ -519,7 +523,6 @@ body.light .info-dropdown, body.light .dropdown-menu {
 @media (min-width: 641px) {
     .app-header {
         padding: 14px 24px;
-        align-items: center;
     }
 
     .header-left {
@@ -528,11 +531,11 @@ body.light .info-dropdown, body.light .dropdown-menu {
     }
 
     .header-title {
-        font-size: 1.7rem;
+        font-size: 1.9rem;
     }
 
     .header-subtitle {
-        font-size: 0.92rem;
+        font-size: 0.88rem;
     }
 
     .header-right {
@@ -541,7 +544,7 @@ body.light .info-dropdown, body.light .dropdown-menu {
         justify-content: flex-end;
     }
 
-    .header-all-actions {
+    .header-actions {
         gap: 10px;
     }
 
