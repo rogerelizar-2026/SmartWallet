@@ -96,7 +96,10 @@
     <div class="container" id="mainApp" role="main">
         <header class="app-header">
             <div class="header-left">
-                <h1 class="header-title">Smart Wallet</h1>
+                <div class="header-brand-row">
+                    <h1 class="header-title">Smart Wallet</h1>
+                    <span class="demo-badge" id="demoBadge" style="display:none;">DEMO</span>
+                </div>
                 <p class="header-subtitle">Suas finanças sob seu domínio!</p>
                 <div class="month-selector">
                     <button type="button" id="prevMonthBtn" aria-label="Mês anterior">
@@ -110,6 +113,9 @@
             </div>
             <div class="header-right">
                 <div class="header-actions">
+                    <button class="header-btn demo-btn" id="demoBtn" aria-label="Carregar demonstração" title="Modo Demonstração">
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    </button>
                     <button class="header-btn alert-btn" id="alertBtn" aria-label="Contas a vencer">
                         <svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                         <span class="alert-badge" id="alertBadge">0</span>
@@ -153,6 +159,8 @@
                             <div class="dropdown-divider"></div>
                             <button class="dropdown-item" data-action="toggleLanguage"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span id="languageText">Idioma: Português</span></button>
                             <button class="dropdown-item" data-action="toggleCurrency" id="currencyMenuItem" style="display:none;"><svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span id="currencyText">Currency: $</span></button>
+                            <button class="dropdown-item" data-action="openSettingsModal"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Configurações</span></button>
+                            <button class="dropdown-item" data-action="enableNotifications"><svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="1" y1="1" x2="23" y2="23"/></svg><span id="notificationsText">Ativar Notificações</span></button>
                             <div class="dropdown-divider"></div>
                             <button class="dropdown-item danger" data-action="openClearDataModal"><svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span>Limpar Dados</span></button>
                         </div>
@@ -172,6 +180,13 @@
             <div class="chart-card"><h3>📈 Entradas e Saídas</h3><div class="chart-container"><canvas id="lineChart"></canvas></div></div>
             <div class="chart-card"><h3>💳 Cartões (6 meses)</h3><div class="chart-container"><canvas id="cardsChart"></canvas></div></div>
             <div class="chart-card"><h3>🥧 Despesas por Categoria</h3><div class="chart-container"><canvas id="pieChart"></canvas></div></div>
+        </div>
+
+        <div class="charts-section">
+            <div class="chart-card" style="grid-column: 1 / -1;">
+                <h3>💰 Fluxo de Caixa (Waterfall)</h3>
+                <div class="chart-container" style="height: 320px;"><canvas id="waterfallChart"></canvas></div>
+            </div>
         </div>
 
         <div class="transactions-section" role="region">
@@ -200,10 +215,22 @@
                     <tbody id="transactionsTable"></tbody>
                 </table>
             </div>
+            <div class="pagination-controls" id="paginationControls" style="display:none;">
+                <button class="btn btn-secondary btn-small" id="prevPageBtn">← Anterior</button>
+                <span class="pagination-info" id="paginationInfo">Página 1 de 1</span>
+                <button class="btn btn-secondary btn-small" id="nextPageBtn">Próxima →</button>
+                <select id="pageSizeSelect" class="page-size-select">
+                    <option value="10">10 por página</option>
+                    <option value="20">20 por página</option>
+                    <option value="50">50 por página</option>
+                    <option value="100">100 por página</option>
+                </select>
+            </div>
             <div class="empty-state" id="emptyState" style="display:none;">
                 <svg class="empty-state-icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
                 <h3>Nenhuma transação encontrada</h3>
                 <p>Comece adicionando sua primeira transação!</p>
+                <button class="btn btn-primary" id="loadDemoFromEmptyBtn" style="margin-top:16px;">🎯 Carregar Demonstração</button>
             </div>
         </div>
 
@@ -618,6 +645,107 @@
             <div class="action-buttons" style="margin-top: 20px;">
                 <button class="btn btn-primary" data-close-modal="whatsNewModal" style="flex:1;">✅ Começar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Configurações (NOVO v4.4.0) -->
+    <div class="modal" id="settingsModal" role="dialog" aria-modal="true" tabindex="-1">
+        <div class="modal-content" tabindex="0">
+            <div class="modal-header"><h2>⚙️ Configurações</h2><button class="modal-close" data-close-modal="settingsModal"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+            <div class="settings-section">
+                <h3>💰 Saldo Negativo</h3>
+                <div class="settings-item">
+                    <div class="settings-info">
+                        <div class="settings-label">Alertar quando saldo ficar negativo</div>
+                        <div class="settings-description">Mostra aviso visual quando alguma conta ficar com saldo negativo</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="alertNegativeBalance" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-info">
+                        <div class="settings-label">Bloquear transações que deixam saldo negativo</div>
+                        <div class="settings-description">Impede adicionar despesas que deixariam a conta no vermelho</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="blockNegativeBalance">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>💾 Backup Automático</h3>
+                <div class="settings-item">
+                    <div class="settings-info">
+                        <div class="settings-label">Backup automático semanal</div>
+                        <div class="settings-description">Sugere backup semanal quando há muitas transações novas</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autoBackupEnabled">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-item" id="lastBackupInfo">
+                    <div class="settings-info">
+                        <div class="settings-label">Último backup</div>
+                        <div class="settings-description" id="lastBackupDate">Nunca realizado</div>
+                    </div>
+                    <button class="btn btn-secondary btn-small" id="doBackupNowBtn">Fazer Agora</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>🔔 Notificações</h3>
+                <div class="settings-item">
+                    <div class="settings-info">
+                        <div class="settings-label">Notificações de contas a vencer</div>
+                        <div class="settings-description">Receba alertas de contas vencendo em 3 dias</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="notifyBills" disabled>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="settings-item">
+                    <div class="settings-info">
+                        <div class="settings-label">Status atual</div>
+                        <div class="settings-description" id="notificationsStatus">Não ativado</div>
+                    </div>
+                    <button class="btn btn-primary btn-small" id="requestNotificationsBtn">Ativar</button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>📄 Paginação</h3>
+                <div class="settings-item">
+                    <div class="settings-info">
+                        <div class="settings-label">Transações por página</div>
+                        <div class="settings-description">Quantidade de itens exibidos por vez no histórico</div>
+                    </div>
+                    <select id="settingsPageSize" class="page-size-select">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="0">Todos (sem paginação)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="saveSettingsBtn">💾 Salvar Configurações</button>
+                <button class="btn btn-secondary" data-close-modal="settingsModal">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alerta de Saldo Negativo -->
+    <div class="negative-balance-alert" id="negativeBalanceAlert" style="display:none;">
+        <div class="alert-content">
+            <span class="alert-icon">⚠️</span>
+            <div class="alert-text">
+                <strong>Atenção:</strong> <span id="negativeBalanceMessage">Você tem contas com saldo negativo!</span>
+            </div>
+            <button class="alert-close" id="closeNegativeAlertBtn">✕</button>
         </div>
     </div>
 
