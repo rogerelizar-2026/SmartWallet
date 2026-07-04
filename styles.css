@@ -323,11 +323,13 @@ body.modal-open { overflow: hidden; }
     background: var(--input-bg);
     border: 1px solid var(--glass-border);
     border-radius: 14px;
-    padding: 6px;
+    padding: 4px;
     display: flex;
     align-items: center;
-    gap: 6px;
-    width: 100%;
+    gap: 4px;
+    width: auto;
+    max-width: 280px;
+    flex-shrink: 0;
 }
 
 .month-selector button {
