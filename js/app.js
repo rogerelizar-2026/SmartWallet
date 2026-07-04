@@ -1,12 +1,15 @@
 (function() {
     'use strict';
+
+    // ===== CONSTANTES =====
     const PAYMENT_METHODS = [
         { id: 'pix', name: 'PIX', icon: '⚡' },
         { id: 'debit', name: 'Cart.Débito', icon: '💳' },
         { id: 'auto', name: 'Débito Automático', icon: '🔄' },
-        { id: 'scheduled', name: 'Agendamento', icon: '' },
+        { id: 'scheduled', name: 'Agendamento', icon: '📅' },
         { id: 'transfer', name: 'Transferência', icon: '↔️' }
     ];
+
     const DEFAULT_CATEGORIES = [
         { id: 'casa', name: 'Casa', color: '#f59e0b', type: 'expense' },
         { id: 'despensa', name: 'Despensa', color: '#10b981', type: 'expense' },
@@ -31,6 +34,7 @@
         { id: 'rendimentos', name: 'Rendimentos', color: '#8b5cf6', type: 'income' },
         { id: 'resgate', name: 'Resgate (invest/reserva)', color: '#6366f1', type: 'income' }
     ];
+
     const FINANCIAL_QUOTES = [
         { text: "Não se trata de quanto dinheiro você ganha, mas de quanto dinheiro você guarda.", author: "Robert Kiyosaki" },
         { text: "O hábito de poupar é em si mesmo uma educação.", author: "T.T. Munger" },
@@ -38,59 +42,41 @@
         { text: "Dinheiro é energia. Se você o retém com medo, ele estagna. Se o movimenta com propósito, ele se multiplica.", author: "Sabedoria Financeira" },
         { text: "Não pergunte quanto custa, pergunte quanto vale. Preço é o que você paga; valor é o que você recebe.", author: "Sabedoria Financeira" },
         { text: "O dinheiro deve trabalhar para você, não você para o dinheiro. Liberdade financeira é ter opções, não ostentação.", author: "Sabedoria Financeira" },
-        { text: "Riqueza verdadeira não é ter muito, é depender de pouco. O dinheiro é ponte para seus valores, não o destino final.", author: "Sabedoria Financeira" },
+        { text: "Riqueza verdadeira não é ter muito, é depender de pouco.", author: "Sabedoria Financeira" },
         { text: "Riqueza é a capacidade de viver completamente a vida.", author: "Henry David Thoreau" },
         { text: "Um orçamento está dizendo a seu dinheiro para onde ir, em vez de se perguntar para onde ele foi.", author: "Dave Ramsey" },
-        { text: "Amar dinheiro é a raiz de todos os problemas. Muita gente se afastou da fé por causa disso e se encheu de angústia.", author: "1 Timóteo 6:10 (Linguagem Atual)" },
-        { text: "É melhor ter pouco e temer a Deus do que ter um tesouro enorme e viver preocupado.", author: "Provérbios 15:16 (Linguagem Atual)" },
-        { text: "Quem deve fica escravo de quem empresta. O rico manda no pobre.", author: "Provérbios 22:7 (Linguagem Atual)" },
+        { text: "Amar dinheiro é a raiz de todos os problemas.", author: "1 Timóteo 6:10" },
+        { text: "É melhor ter pouco e temer a Deus do que ter um tesouro enorme e viver preocupado.", author: "Provérbios 15:16" },
+        { text: "Quem deve fica escravo de quem empresta.", author: "Provérbios 22:7" },
         { text: "O dinheiro não muda pessoas; apenas revela quem elas realmente são.", author: "Provérbio Financeiro Moderno" },
-        { text: "Quando Deus abençoa com prosperidade, isso não vem junto com dor de cabeça.", author: "Provérbios 10:22 (Linguagem Atual)" },
-        { text: "É melhor trabalhar com dedicação do que ser preguiçoso e só ficar sonhando.", author: "Provérbios 13:4 (Linguagem Atual)" },
+        { text: "Quando Deus abençoa com prosperidade, isso não vem junto com dor de cabeça.", author: "Provérbios 10:22" },
+        { text: "É melhor trabalhar com dedicação do que ser preguiçoso e só ficar sonhando.", author: "Provérbios 13:4" },
         { text: "Não economize o que resta depois de gastar; gaste o que resta depois de poupar.", author: "Warren Buffett" },
         { text: "Se você não encontrar uma maneira de ganhar dinheiro enquanto dorme, você trabalhará até morrer.", author: "Warren Buffett" },
         { text: "O melhor investimento que você pode fazer é em si mesmo.", author: "Warren Buffett" },
         { text: "Dinheiro é um péssimo mestre, mas um excelente servo.", author: "P.T. Barnum" },
         { text: "A riqueza não consiste em ter grandes posses, mas em ter poucas necessidades.", author: "Epicteto" },
         { text: "Cuidado com pequenos gastos; um pequeno vazamento afundará um grande navio.", author: "Benjamin Franklin" },
-        { text: "Dê um décimo para que você se torne rico.", author: "Talmude - Deuteronômio 14:22" },
-        { text: "O dinheiro não é sagrado, não é um objeto santo inatingível. É como roupa: uma ferramenta para viver.", author: "Talmude" },
-        { text: "Uma pessoa deve sempre dividir seu dinheiro em três partes: um terço em terra, um terço em negócios e um terço em dinheiro vivo.", author: "Talmude - Diversificação de Investimentos" },
+        { text: "Dê um décimo para que você se torne rico.", author: "Talmude" },
         { text: "Com dinheiro você não pode fazer tudo; sem dinheiro você não pode fazer nada!", author: "Provérbio Judaico" },
-        { text: "Todos reclamam da falta de dinheiro, mas ninguém reclama da falta de inteligência.", author: "Provérbio Judaico" },
         { text: "Quem compra o que não precisa, rouba a si mesmo.", author: "Provérbio Popular" },
         { text: "A independência financeira não é sobre ficar rico, é sobre ter opções.", author: "Chris Reining" },
-        { text: "Não é o quanto você ganha, é o quanto você faz o dinheiro trabalhar para você.", author: "Robert Kiyosaki" },
         { text: "Pague a si mesmo primeiro.", author: "George Samuel Clason" },
-        { text: "Riqueza é como um cigarro: se você não fumar, ela dura mais.", author: "Provérbio Popular" },
         { text: "O mercado de ações é um mecanismo para transferir dinheiro do impaciente para o paciente.", author: "Warren Buffett" },
         { text: "A melhor hora para plantar uma árvore foi há 20 anos. A segunda melhor hora é agora.", author: "Provérbio Chinês" },
         { text: "Finanças não são sobre matemática, são sobre comportamento.", author: "Morgan Housel" },
-        { text: "Pessoas ricas acreditam que ganham dinheiro com ideias. Pessoas pobres acreditam que ganham dinheiro com tempo.", author: "Robert Kiyosaki" },
+        { text: "Pessoas ricas acreditam que ganham dinheiro com ideias.", author: "Robert Kiyosaki" },
         { text: "Gastar dinheiro para impressionar pessoas é a maneira mais rápida de ficar pobre.", author: "Morgan Housel" },
-        { text: "A verdadeira medida da riqueza é quanto você valeria se perdesse todo o seu dinheiro.", author: "Provérbio" },
         { text: "Economizar é a melhor estratégia de investimento.", author: "Nathaniel Hale" },
-        { text: "A diferença entre ricos e pobres é o que eles fazem com o tempo livre.", author: "Robert Kiyosaki" },
         { text: "Cada real que você economiza é um empregado que trabalha para você.", author: "T. Harv Eker" },
-        { text: "A maior riqueza é a que menos se corrompe, a da consciência.", author: "Sêneca" },
-        { text: "Se você vive para impressionar os outros, nunca será rico de verdade.", author: "Morgan Housel" },
         { text: "A liberdade financeira é mais sobre controle do que sobre dinheiro.", author: "Ramit Sethi" },
-        { text: "Não coloque sua fé no dinheiro. Coloque seu dinheiro na sua fé.", author: "Provérbio" },
         { text: "O maior inimigo da riqueza é a expectativa de ficar rico rápido.", author: "Morgan Housel" },
-        { text: "Planeje suas finanças como planeja suas férias: com destino, roteiro e orçamento.", author: "Anônimo" },
-        { text: "Se você quer saber quanto vale uma pessoa, observe como ela trata quem não pode lhe dar nada em troca.", author: "Provérbio Judaico" },
-        { text: "O rico não é quem tem mais, é quem precisa de menos.", author: "Provérbio Judaico" },
-        { text: "Dinheiro emprestado sem confiança é como semente plantada em pedra: não nasce.", author: "Provérbio Judaico" },
-        { text: "A pobreza não é falta de dinheiro, é falta de visão. Quem enxerga oportunidades, nunca fica sem recursos.", author: "Provérbio Judaico" },
         { text: "Ricos adquirem ativos. Pobres e classe média adquirem passivos que acham serem ativos.", author: "Robert Kiyosaki" },
         { text: "A paciência é a virtude dos investidores bem-sucedidos.", author: "Peter Lynch" },
         { text: "Saber gastar é tão importante quanto saber ganhar.", author: "Provérbio Popular" },
-        { text: "Dinheiro é um ótimo servo, mas um péssimo mestre.", author: "Francis Bacon" },
-        { text: "A prosperidade depende mais da sua mentalidade do que da sua conta bancária.", author: "T. Harv Eker" },
         { text: "Investir em conhecimento paga os melhores juros.", author: "Benjamin Franklin" },
         { text: "Não espere; o tempo nunca será 'o certo'. Comece de onde você está.", author: "Napoleon Hill" },
         { text: "A educação financeira é a base da liberdade financeira.", author: "Robert Kiyosaki" },
-        { text: "O futuro pertence àqueles que se preparam hoje.", author: "Malcolm X" },
         { text: "Antes de gastar, aprenda a ganhar. Antes de ganhar, aprenda a poupar.", author: "Provérbio" }
     ];
 
@@ -98,7 +84,7 @@
         '<h1>📘 Manual do Usuário</h1>' +
         '<h2>Smart Wallet Brasil</h2>' +
         '<p>Controle Financeiro Pessoal Inteligente</p>' +
-        '<p class="version">Versão 4.1.0 - 2026</p>' +
+        '<p class="version">Versão 4.2.1 - 2026</p>' +
         '<p class="author">Idealizado por RogerElizar™</p>' +
         '</div>' +
         '<div class="manual-quote">' +
@@ -114,276 +100,41 @@
         '</div>' +
         '</div>' +
         '<h2>🎯 Bem-vindo ao Smart Wallet Brasil!</h2>' +
-        '<p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>! O Smart Wallet Brasil não é apenas mais um aplicativo de controle de gastos — é seu parceiro na jornada para transformar sua relação com o dinheiro.</p>' +
-        '<div class="manual-tip">' +
-        '<strong>💡 Você sabia?</strong> Estudos mostram que pessoas que acompanham suas finanças regularmente economizam em média <strong>20% a mais</strong> do que aquelas que não controlam seus gastos.' +
-        '</div>' +
+        '<p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p>' +
         '<h2>📱 Instalação como WebApp</h2>' +
-        '<p>O Smart Wallet funciona como um aplicativo instalado no seu dispositivo, mesmo sendo uma aplicação web.</p>' +
         '<h3>💻 No Computador (Chrome, Edge, Brave)</h3>' +
-        '<ol>' +
-        '<li>Acesse o site pelo navegador</li>' +
-        '<li>Procure o ícone de instalação na barra de endereços (monitor com seta para baixo)</li>' +
-        '<li>Ou clique no menu do navegador (⋮) → "Instalar Smart Wallet..."</li>' +
-        '<li>Confirme a instalação</li>' +
-        '<li>Pronto! O app aparecerá na sua área de trabalho</li>' +
-        '</ol>' +
+        '<ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação na barra de endereços</li><li>Confirme a instalação</li></ol>' +
         '<h3>📱 No Celular Android (Chrome)</h3>' +
-        '<ol>' +
-        '<li>Abra o site no Chrome</li>' +
-        '<li>Toque nos três pontos (⋮) no canto superior direito</li>' +
-        '<li>Selecione "Instalar aplicativo" ou "Adicionar à tela inicial"</li>' +
-        '<li>Confirme tocando em "Instalar"</li>' +
-        '<li>O ícone aparecerá na sua tela inicial</li>' +
-        '</ol>' +
+        '<ol><li>Abra o site no Chrome</li><li>Toque nos três pontos (⋮)</li><li>Selecione "Instalar aplicativo"</li></ol>' +
         '<h3>🍎 No iPhone (Safari)</h3>' +
-        '<ol>' +
-        '<li>Abra o site no Safari</li>' +
-        '<li>Toque no botão Compartilhar (quadrado com seta)</li>' +
-        '<li>Role para baixo e toque em "Adicionar à Tela de Início"</li>' +
-        '<li>Toque em "Adicionar"</li>' +
-        '<li>O app aparecerá na sua tela inicial</li>' +
-        '</ol>' +
-        '<div class="manual-tip">' +
-        '<strong>🔒 Privacidade Total:</strong> Após a instalação, o app funciona mesmo offline! Todos os dados ficam apenas no seu dispositivo.' +
-        '</div>' +
+        '<ol><li>Abra o site no Safari</li><li>Toque no botão Compartilhar</li><li>Toque em "Adicionar à Tela de Início"</li></ol>' +
+        '<div class="manual-tip"><strong>🔒 Privacidade Total:</strong> Todos os dados ficam apenas no seu dispositivo.</div>' +
         '<h2>💰 Funcionalidades Principais</h2>' +
-        '<h3>📊 Dashboard Financeiro Inteligente</h3>' +
-        '<p>A tela inicial mostra um resumo completo da sua situação financeira:</p>' +
-        '<ul>' +
-        '<li><strong>Saldo Unificado:</strong> Soma de todas as suas contas correntes e investimentos</li>' +
-        '<li><strong>Receitas:</strong> Total de entradas do mês</li>' +
-        '<li><strong>Despesas:</strong> Total de saídas do mês</li>' +
-        '<li><strong>Cartões de Crédito:</strong> Total gasto em todos os cartões</li>' +
-        '</ul>' +
-        '<div class="manual-tip">' +
-        '<strong>🆕 Novidade v4.1.0:</strong> Os cards do dashboard agora são <strong>clicáveis</strong>! Toque em qualquer card para filtrar rapidamente as transações ou abrir os modais correspondentes.' +
-        '</div>' +
-        '<div class="manual-success">' +
-        '<strong>🎯 Dica de Coach:</strong> Uma boa regra é ter uma reserva de emergência equivalente a <strong>6 meses</strong> das suas despesas mensais. Isso te protege contra imprevistos sem precisar recorrer a empréstimos.' +
-        '</div>' +
+        '<h3>📊 Dashboard Financeiro</h3>' +
+        '<p><strong>Saldo Unificado:</strong> Soma das contas correntes + investimentos. Cada lançamento de receita/despesa atualiza automaticamente o saldo da conta selecionada.</p>' +
+        '<div class="manual-tip"><strong>🆕 Novidade v4.2.1:</strong> Os lançamentos agora debita/credita corretamente nas contas. O saldo unificado reflete em tempo real.</div>' +
         '<h3>⚡ Ações Rápidas (Botão +)</h3>' +
-        '<p>O botão flutuante "+" no canto inferior direito agora é um <strong>menu de ações rápidas</strong>:</p>' +
-        '<ul>' +
-        '<li><strong>💸 Despesa:</strong> Abre o modal já com o tipo "Despesa" selecionado</li>' +
-        '<li><strong>💰 Receita:</strong> Abre o modal já com o tipo "Receita" selecionado</li>' +
-        '<li><strong>🔄 Transferência:</strong> Move saldo entre suas contas de forma rápida</li>' +
-        '</ul>' +
-        '<div class="manual-tip">' +
-        '<strong>💡 Dica:</strong> Use a transferência para mover dinheiro da conta corrente para a conta de investimento no mesmo dia que receber seu salário. Assim você "paga a si mesmo primeiro"!' +
-        '</div>' +
+        '<ul><li><strong>💸 Despesa:</strong> Modal já com tipo "Despesa"</li><li><strong>💰 Receita:</strong> Modal já com tipo "Receita"</li><li><strong>🔄 Transferência:</strong> Move saldo entre contas</li></ul>' +
         '<h3>💳 Gestão de Cartões de Crédito</h3>' +
-        '<p>Controle todos os seus cartões em um só lugar:</p>' +
-        '<ul>' +
-        '<li>Cadastre cartões com limite, dia de fechamento e vencimento</li>' +
-        '<li>Acompanhe faturas e compras parceladas</li>' +
-        '<li>Veja quanto do limite já foi utilizado</li>' +
-        '<li><strong>🆕 Navegue entre faturas</strong> usando as setas ← → para consultar períodos anteriores ou futuros</li>' +
-        '<li>O período da fatura é calculado automaticamente: do fechamento anterior até o fechamento atual</li>' +
-        '<li>O vencimento só avança para o mês seguinte quando a fatura efetivamente fecha</li>' +
-        '<li>Exporte faturas em CSV ou PDF</li>' +
-        '</ul>' +
-        '<div class="manual-tip">' +
-        '<strong>💡 Dica de Coach:</strong> Use as setas de navegação no modal de fatura para revisar gastos de meses anteriores. Isso ajuda a identificar padrões de consumo e planejar melhor o orçamento futuro!' +
-        '</div>' +
-        '<div class="manual-warning">' +
-        '<strong>⚠️ Atenção:</strong> Cartões de crédito podem ser grandes vilões financeiros se mal utilizados. A regra de ouro: <strong>só compre no crédito se puder pagar a fatura integralmente</strong>. Parcelar a fatura gera juros que podem multiplicar sua dívida em até 15x!' +
-        '</div>' +
-        '<h3>📈 Aplicações</h3>' +
-        '<p>Acompanhe todos os seus investimentos em um só lugar:</p>' +
-        '<ul>' +
-        '<li>Cadastre CDBs, Tesouro Direto, LCI/LCA, FIIs, Ações e mais</li>' +
-        '<li>Vincule aplicações às suas contas de investimento</li>' +
-        '<li>Atualize valores periodicamente para acompanhar rendimentos</li>' +
-        '<li>Visualize gráficos de evolução dos seus investimentos</li>' +
-        '<li>Veja o rendimento total em porcentagem e valor</li>' +
-        '</ul>' +
-        '<div class="manual-success">' +
-        '<strong>🎯 Dica de Ouro:</strong> Atualize o valor atual dos seus investimentos pelo menos uma vez por mês. Isso te dá uma visão real do seu patrimônio e motiva a continuar investindo!' +
-        '</div>' +
+        '<ul><li>Navegue entre faturas usando as setas ← →</li><li>Período: fechamento anterior até fechamento atual</li><li>Vencimento só avança quando a fatura fecha</li></ul>' +
         '<h3>📊 Orçamento por Categoria</h3>' +
-        '<p>Acesse pelo Menu → "Orçamento por Categoria" e veja:</p>' +
-        '<ul>' +
-        '<li>Barras de progresso comparando seus gastos com a <strong>média dos últimos 3 meses</strong></li>' +
-        '<li>Cores indicativas: <strong style="color:#10b981;">verde</strong> (dentro da média), <strong style="color:#f59e0b;">amarelo</strong> (próximo ao limite) e <strong style="color:#ef4444;">vermelho</strong> (acima da média)</li>' +
-        '<li>Indicadores ⬆️ ⬇️ mostrando se você gastou mais ou menos que a média</li>' +
-        '<li>Valor exato da diferença em relação à média histórica</li>' +
-        '</ul>' +
-        '<div class="manual-tip">' +
-        '<strong>💡 Como usar:</strong> Se você gastou 120% da média em "Lazer" este mês, a barra ficará vermelha e mostrará quanto você gastou a mais. Isso te ajuda a identificar categorias que precisam de atenção!' +
-        '</div>' +
+        '<p>Comparativo com a média dos últimos 3 meses.</p>' +
         '<h3>📱 Gestos no Celular (Swipe)</h3>' +
-        '<p>No celular, você pode usar gestos de deslizar nas transações:</p>' +
-        '<ul>' +
-        '<li><strong>Deslize para a direita:</strong> Marca a transação como "Concluída/Paga"</li>' +
-        '<li><strong>Deslize para a esquerda:</strong> Abre opção para excluir a transação</li>' +
-        '</ul>' +
-        '<div class="manual-tip">' +
-        '<strong>⚡ Dica Rápida:</strong> Os gestos funcionam apenas no mobile e economizam vários cliques! Perfeito para marcar contas como pagas rapidamente.' +
-        '</div>' +
-        '<h3>🔔 Alertas de Contas & Fechamento</h3>' +
-        '<p>Nunca mais esqueça uma conta! O sistema avisa automaticamente:</p>' +
-        '<ul>' +
-        '<li><strong>Contas a vencer:</strong> Pendências dos próximos 3 dias</li>' +
-        '<li><strong>🆕 Fechamento de fatura:</strong> Alerta especial 1 dia antes do fechamento do seu cartão</li>' +
-        '</ul>' +
-        '<div class="manual-tip">' +
-        '<strong>💡 Dica de Coach:</strong> Quando receber o alerta "O cartão X fecha amanhã!", revise suas compras pendentes. É o momento ideal para decidir o que pode ser adiado para a próxima fatura e evitar surpresas no vencimento!' +
-        '</div>' +
-        '<h3>📊 Gráficos, Análises e Impressão</h3>' +
-        '<p>Visualize seus dados de forma clara:</p>' +
-        '<ul>' +
-        '<li><strong>Entradas e Saídas:</strong> Evolução mensal dos últimos 6 meses</li>' +
-        '<li><strong>Despesas por Categoria:</strong> Onde seu dinheiro está indo</li>' +
-        '<li><strong>Cartões de Crédito:</strong> Evolução dos gastos por cartão</li>' +
-        '<li><strong>Investimentos:</strong> Evolução do patrimônio ao longo do tempo</li>' +
-        '</ul>' +
-        '<div class="manual-tip">' +
-        '<strong>🖨️ Impressão Simplificada:</strong> Ao imprimir o extrato, as colunas de Pagamento e Categoria aparecem de forma limpa (sem ícones e cores), facilitando a leitura em papel e economizando tinta!' +
-        '</div>' +
-        '<h2>🚀 Guia do Sucesso Financeiro</h2>' +
-        '<h3>💡 A Mentalidade da Prosperidade</h3>' +
-        '<p>Muitas pessoas acham que riqueza é apenas para "ricos". Mas a verdade é que <strong>prosperidade financeira</strong> é acessível a todos que seguem princípios básicos:</p>' +
-        '<div class="manual-success">' +
-        '<strong>Caso Real - João e Maria:</strong><br>' +
-        'João e Maria ganhavam R$ 5.000/mês. Sem controle, viviam no limite. Começaram a usar o Smart Wallet e aplicaram a regra 50-30-20:<br><br>' +
-        '• <strong>R$ 2.500</strong> (50%) - Necessidades (aluguel, comida, transporte)<br>' +
-        '• <strong>R$ 1.500</strong> (30%) - Desejos (lazer, restaurantes)<br>' +
-        '• <strong>R$ 1.000</strong> (20%) - Objetivos financeiros<br><br>' +
-        'Em 3 anos, construíram uma reserva de R$ 36.000 e começaram a investir. Hoje, 5 anos depois, têm R$ 120.000 investidos e uma vida financeira tranquila. Não são milionários, mas são <strong>financeiramente livres</strong>.' +
-        '</div>' +
-        '<h3>🎯 A Regra 50-30-20</h3>' +
-        '<p>Uma boa divisão do seu salário é:</p>' +
-        '<ul>' +
-        '<li><strong>50%</strong> para necessidades (aluguel, comida, transporte)</li>' +
-        '<li><strong>30%</strong> para desejos (lazer, restaurantes, hobbies)</li>' +
-        '<li><strong>20%</strong> para objetivos financeiros (reserva, investimentos, quitar dívidas)</li>' +
-        '</ul>' +
-        '<div class="manual-tip">' +
-        '<strong>💡 Como aplicar no Smart Wallet:</strong> Use o menu "Orçamento por Categoria" para verificar se seus gastos estão seguindo a proporção ideal. Se "Desejos" estiver acima de 30%, é hora de ajustar!' +
-        '</div>' +
-        '<h3>💎 Poupar NÃO é Suficiente - Invista!</h3>' +
-        '<p>Muitas pessoas cometem o erro de apenas guardar dinheiro na poupança. Mas com a inflação, seu dinheiro <strong>perde valor</strong> com o tempo!</p>' +
-        '<div class="manual-warning">' +
-        '<strong>Caso Real - Carlos:</strong><br>' +
-        'Carlos guardava R$ 500/mês na poupança. Em 10 anos, tinha R$ 60.000. Mas com inflação média de 5% ao ano, esses R$ 60.000 compravam apenas o equivalente a R$ 37.000 de 10 anos atrás. Ele <strong>perdeu R$ 23.000 em poder de compra</strong>!' +
-        '</div>' +
-        '<div class="manual-success">' +
-        '<strong>Caso Real - Ana:</strong><br>' +
-        'Ana investia R$ 500/mês em um CDB que rendia 10% ao ano. Em 10 anos, tinha R$ 102.000. Mesmo com a mesma inflação, seu dinheiro <strong>rendeu acima da inflação</strong> e ela ganhou poder de compra real!' +
-        '</div>' +
-        '<h3>📊 Onde Investir (Básico)</h3>' +
-        '<p>Para iniciantes, algumas opções seguras:</p>' +
-        '<ul>' +
-        '<li><strong>Tesouro Direto:</strong> Emprestar dinheiro para o governo (muito seguro)</li>' +
-        '<li><strong>CDB:</strong> Emprestar dinheiro para bancos (rendimento melhor que poupança)</li>' +
-        '<li><strong>LCI/LCA:</strong> Isentos de imposto de renda</li>' +
-        '<li><strong>Fundos de Investimento:</strong> Pool de investimentos gerenciados por profissionais</li>' +
-        '<li><strong>FIIs:</strong> Fundos Imobiliários - recebem aluguéis mensais isentos de IR</li>' +
-        '</ul>' +
-        '<div class="manual-tip">' +
-        '<strong>💡 Dica de Ouro:</strong> Antes de investir, quite todas as dívidas com juros altos (cartão de crédito, cheque especial). Os juros que você paga são quase sempre maiores que qualquer investimento!' +
-        '</div>' +
-        '<div class="manual-success">' +
-        '<strong>🎯 No Smart Wallet:</strong> Use o menu "Aplicações" para cadastrar seus investimentos. Vincule-os às suas contas de investimento para sincronização automática do saldo!' +
-        '</div>' +
-        '<h3>⚠️ Os Riscos da Estagnação Financeira</h3>' +
-        '<p>Não cuidar das finanças pode levar a situações graves:</p>' +
-        '<div class="manual-warning">' +
-        '<strong>Caso Hipotético - Pedro:</strong><br>' +
-        'Pedro ganhava bem, mas não controlava gastos. Acumulou R$ 30.000 em dívidas no cartão. Os juros de 12% ao mês fizeram a dívida crescer para R$ 100.000 em 2 anos. Perdeu o emprego, não conseguiu pagar, teve o nome negativado e não conseguia mais nem alugar um apartamento. Levou 5 anos para se recuperar.<br><br>' +
-        '<strong>Lição:</strong> Dívidas não resolvidas crescem exponencialmente e podem destruir sua vida financeira por anos.' +
-        '</div>' +
-        '<h3>🎓 Educação Financeira Contínua</h3>' +
-        '<p>O mundo financeiro está sempre mudando. Mantenha-se informado:</p>' +
-        '<ul>' +
-        '<li>Leia livros sobre finanças (sugestões: "Pai Rico, Pai Pobre", "O Homem Mais Rico da Babilônia")</li>' +
-        '<li>Acompanhe canais educativos no YouTube</li>' +
-        '<li>Faça cursos gratuitos online</li>' +
-        '<li>Converse com pessoas financeiramente organizadas</li>' +
-        '</ul>' +
-        '<h3>🎯 Dicas do Coach SW</h3>' +
-        '<p>O Smart Wallet não é apenas uma ferramenta de registro — é seu coach financeiro pessoal. Aqui estão dicas exclusivas para maximizar seus resultados:</p>' +
-        '<div class="manual-success">' +
-        '<strong>💡 Dica #1 - Navegação de Faturas:</strong><br>' +
-        'Use as setas no modal de fatura para revisar meses anteriores. Identifique em quais meses você gastou mais e tente entender o motivo. Foi um evento especial? Compras impulsivas? Essa análise é o primeiro passo para melhorar.' +
-        '</div>' +
-        '<div class="manual-success">' +
-        '<strong>💡 Dica #2 - Alerta de Fechamento:</strong><br>' +
-        'Quando o app avisar "O cartão X fecha amanhã!", faça uma revisão rápida: você tem compras grandes pendentes? Pode adiar alguma para o próximo ciclo? Essa pequena ação evita que você estoure o limite ou pague juros desnecessários.' +
-        '</div>' +
-        '<div class="manual-success">' +
-        '<strong>💡 Dica #3 - Impressão para Análise:</strong><br>' +
-        'Imprima seu extrato mensal e marque com caneta os gastos que poderiam ter sido evitados. Esse exercício visual é poderoso para criar consciência financeira. Guarde os extratos impressos em uma pasta — em 6 meses, você terá um histórico tangível da sua evolução!' +
-        '</div>' +
-        '<div class="manual-success">' +
-        '<strong>💡 Dica #4 - Regra dos 3 Dias:</strong><br>' +
-        'Antes de fazer uma compra acima de R$ 200, espere 3 dias. Se depois desse período você ainda sentir que precisa daquilo, provavelmente é uma compra consciente. Se esquecer, era impulso!' +
-        '</div>' +
-        '<div class="manual-success">' +
-        '<strong>💡 Dica #5 - Revisão Semanal:</strong><br>' +
-        'Tire 15 minutos todo domingo para revisar seus gastos da semana no Smart Wallet. Esse hábito simples reduz em até 30% os gastos por impulso, segundo estudos de comportamento financeiro.' +
-        '</div>' +
-        '<h2>🎯 Seu Plano de Ação</h2>' +
-        '<h3>Semana 1: Diagnóstico</h3>' +
-        '<ol>' +
-        '<li>Cadastre todas as suas fontes de renda</li>' +
-        '<li>Registre todos os gastos do mês atual</li>' +
-        '<li>Identifique onde seu dinheiro está indo</li>' +
-        '<li>Configure suas contas e cartões no app</li>' +
-        '</ol>' +
-        '<h3>Semana 2: Organização</h3>' +
-        '<ol>' +
-        '<li>Cadastre suas aplicações de investimento</li>' +
-        '<li>Defina sua meta de reserva de emergência</li>' +
-        '<li>Configure alertas para contas importantes</li>' +
-        '<li>Faça backup dos seus dados (Menu → Backup JSON)</li>' +
-        '</ol>' +
-        '<h3>Semana 3: Planejamento</h3>' +
-        '<ol>' +
-        '<li>Aplique a regra 50-30-20 ao seu orçamento</li>' +
-        '<li>Use "Orçamento por Categoria" para identificar desvios</li>' +
-        '<li>Defina metas financeiras de curto, médio e longo prazo</li>' +
-        '<li>Identifique gastos que podem ser cortados</li>' +
-        '</ol>' +
-        '<h3>Semana 4: Execução</h3>' +
-        '<ol>' +
-        '<li>Comece a registrar TODOS os gastos diariamente</li>' +
-        '<li>Use o botão "+" para ações rápidas (Despesa/Receita/Transferência)</li>' +
-        '<li>No celular, use gestos de swipe para marcar contas como pagas</li>' +
-        '<li>Revise seus gastos semanalmente</li>' +
-        '<li>Ajuste seu orçamento conforme necessário</li>' +
-        '</ol>' +
-        '<div class="manual-success">' +
-        '<strong>🌟 Lembre-se:</strong> A jornada de mil milhas começa com um único passo. Você já deu o primeiro passo ao baixar este aplicativo. Continue firme e consistente. Em 6 meses, você não vai se reconhecer!' +
-        '</div>' +
+        '<ul><li><strong>Direita:</strong> Marca como paga</li><li><strong>Esquerda:</strong> Exclui</li></ul>' +
+        '<h2>🎯 A Regra 50-30-20</h2>' +
+        '<ul><li><strong>50%</strong> necessidades</li><li><strong>30%</strong> desejos</li><li><strong>20%</strong> objetivos financeiros</li></ul>' +
         '<h2>💾 Backup & Segurança</h2>' +
-        '<p>Seus dados são preciosos. Proteja-os:</p>' +
-        '<ul>' +
-        '<li><strong>Backup Regular:</strong> Exporte JSON mensalmente (Menu → Backup JSON)</li>' +
-        '<li><strong>Armazenamento Seguro:</strong> Salve backups em nuvem (Google Drive, Dropbox) ou e-mail</li>' +
-        '<li><strong>Modo Privacidade:</strong> Ative o ícone 👁️ para ocultar valores em público</li>' +
-        '<li><strong>100% Offline:</strong> Seus dados nunca saem do seu dispositivo</li>' +
-        '</ul>' +
-        '<div class="manual-warning">' +
-        '<strong>⚠️ Importante:</strong> Se você limpar os dados do navegador ou trocar de dispositivo, perderá tudo. Por isso, faça backups regulares!' +
-        '</div>' +
-        '<h2>🥷 Ajuda & Suporte</h2>' +
-        '<p>Se tiver dúvidas ou sugestões, entre em contato:</p>' +
-        '<ul>' +
-        '<li><strong>E-mail:</strong> rogerelizar@gmail.com</li>' +
-        '<li><strong>Feedback:</strong> Use o botão "Apoie o Projeto" no menu (ícone ℹ️)</li>' +
-        '<li><strong>Atualizações:</strong> O app atualiza automaticamente via PWA</li>' +
-        '</ul>' +
-        '<div class="manual-blessing">' +
-        '<h3>🙏 É Isso! 💰</h3>' +
-        '<div class="manual-quote">' +
-        '<p>Que Deus abençoe sua jornada financeira. Que você tenha sabedoria para administrar, generosidade para compartilhar e disciplina para perseverar. Que cada decisão financeira seja um passo em direção à prosperidade que Deus preparou para você.</p>' +
-        '<div class="quote-author">Com amor e orações,<br>RogerElizar®</div>' +
-        '</div>' +
-        '</div>';
+        '<ul><li><strong>Backup Regular:</strong> Menu → Backup JSON</li><li><strong>Modo Privacidade:</strong> 👁️ oculta valores</li></ul>' +
+        '<h2>🌐 Sistema Bilíngue</h2>' +
+        '<p>Alterne entre Português e Inglês pelo menu. Ao usar inglês, pode alternar entre R$ e $.</p>' +
+        '<h2>💾 Salvamento Inteligente</h2>' +
+        '<p>Exportações e backups abrem o diálogo "Salvar como" com nome pré-preenchido (ex: SmartWallet-202607041530_extrato_07-2026.csv).</p>' +
+        '<h2>📋 Histórico Ordenável</h2>' +
+        '<p>Clique em qualquer cabeçalho de coluna (Data, Descrição, Categoria, etc.) para ordenar. Receitas e despesas aparecem agrupadas separadamente.</p>' +
+        '<div class="manual-blessing"><h3>🙏 É Isso! 💰</h3>' +
+        '<div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
 
-    // ===== SISTEMA DE TRADUÇÕES =====
+    // ===== TRADUÇÕES =====
     const TRANSLATIONS = {
         'pt-BR': {
             appTitle: 'Smart Wallet',
@@ -396,8 +147,8 @@
             languageChanged: 'Idioma alterado!',
             currencyChanged: 'Moeda alterada!',
             noTransactions: 'Nenhuma transação encontrada',
-            backupExported: 'Backup exportado!',
-            allowPopups: 'Por favor, permita popups para imprimir o extrato.',
+            backupExported: 'Exportado com sucesso!',
+            allowPopups: 'Por favor, permita popups.',
             monthlyStatement: 'Extrato do Mês',
             period: 'Período',
             date: 'Data',
@@ -409,7 +160,17 @@
             value: 'Valor',
             account: 'Conta',
             completed: 'Concluído',
-            pending: 'Pendente'
+            pending: 'Pendente',
+            income: 'Receita',
+            expense: 'Despesa',
+            incomeGroup: '💰 Receitas',
+            expenseGroup: '💸 Despesas',
+            allCards: 'Todos Cartões',
+            invoice: 'Fatura',
+            invoicePeriod: 'Período da Fatura',
+            dueDate: 'Vencimento',
+            invoiceTotal: 'Total da Fatura',
+            printPDF: 'Imprimir / PDF'
         },
         'en-US': {
             appTitle: 'Smart Wallet',
@@ -422,8 +183,8 @@
             languageChanged: 'Language changed!',
             currencyChanged: 'Currency changed!',
             noTransactions: 'No transactions found',
-            backupExported: 'Backup exported!',
-            allowPopups: 'Please allow popups to print the statement.',
+            backupExported: 'Exported successfully!',
+            allowPopups: 'Please allow popups.',
             monthlyStatement: 'Monthly Statement',
             period: 'Period',
             date: 'Date',
@@ -435,7 +196,17 @@
             value: 'Value',
             account: 'Account',
             completed: 'Completed',
-            pending: 'Pending'
+            pending: 'Pending',
+            income: 'Income',
+            expense: 'Expense',
+            incomeGroup: '💰 Income',
+            expenseGroup: '💸 Expenses',
+            allCards: 'All Cards',
+            invoice: 'Invoice',
+            invoicePeriod: 'Invoice Period',
+            dueDate: 'Due Date',
+            invoiceTotal: 'Invoice Total',
+            printPDF: 'Print / PDF'
         }
     };
 
@@ -444,7 +215,7 @@
         'USD': { symbol: '$', code: 'USD', locale: 'en-US', name: 'US Dollar' }
     };
 
-    // ===== HELPER: SALVAR ARQUIVO COM SELETOR DE LOCAL =====
+    // ===== HELPER: SALVAR ARQUIVO =====
     async function saveFileWithPicker(blob, suggestedName, mimeType) {
         if (window.showSaveFilePicker) {
             try {
@@ -452,7 +223,7 @@
                     suggestedName: suggestedName,
                     types: [{
                         description: 'Arquivo ' + suggestedName.split('.').pop().toUpperCase(),
-                        accept: { [mimeType]: [] }
+                        accept: { [mimeType]: ['.csv', '.json'] }
                     }],
                 });
                 const writable = await handle.createWritable();
@@ -464,7 +235,6 @@
                 console.warn('File System Access API falhou, usando fallback:', err);
             }
         }
-
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -479,6 +249,7 @@
         return 'downloaded';
     }
 
+    // ===== CLASSE PRINCIPAL =====
     class SmartWallet {
         constructor() {
             this.currentMonth = new Date();
@@ -494,7 +265,6 @@
             this.currentTransactionType = 'expense';
             this.currentEditType = 'expense';
             this.currentEditId = null;
-            this.newCategoryType = 'expense';
             this.darkMode = true;
             this.privacyOn = false;
             this.charts = {};
@@ -503,10 +273,13 @@
             this._cache = {};
             this.currentInvoiceCardId = null;
             this.currentInvoiceOffset = 0;
+            this.sortColumn = 'date';
+            this.sortDirection = 'desc';
             this.loadData();
             this.init();
         }
-		        // ===== CARREGAMENTO E SALVAMENTO =====
+
+        // ===== CARREGAMENTO E SALVAMENTO =====
         loadData() {
             try {
                 const t = localStorage.getItem('smartwallet_transactions');
@@ -537,6 +310,7 @@
         t(key, params = {}) {
             const lang = this.getLanguage();
             let text = (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || TRANSLATIONS['pt-BR'][key] || key;
+            if (typeof text !== 'string') return key;
             Object.keys(params).forEach(param => {
                 text = text.replace(new RegExp('\\{' + param + '\\}', 'g'), params[param]);
             });
@@ -550,12 +324,12 @@
             this.showToast(this.t('languageChanged'));
         }
         applyLanguage() {
-            const lang = this.getLanguage();
             const titleEl = document.querySelector('.header-title');
             if (titleEl) titleEl.textContent = this.t('appTitle');
             const subtitleEl = document.querySelector('.header-subtitle');
             if (subtitleEl) subtitleEl.textContent = this.t('appSubtitle');
             this.updateMonthDisplay();
+            this.populateCardFilter();
             this.clearCache();
             this.render();
             this.updateCharts();
@@ -576,9 +350,7 @@
         updateCurrencySelectorVisibility() {
             const lang = this.getLanguage();
             const currencyItem = document.getElementById('currencyMenuItem');
-            if (currencyItem) {
-                currencyItem.style.display = lang === 'en-US' ? 'flex' : 'none';
-            }
+            if (currencyItem) currencyItem.style.display = lang === 'en-US' ? 'flex' : 'none';
         }
         formatCurrency(value) {
             const currency = this.getCurrency();
@@ -593,15 +365,17 @@
 
         // ===== INICIALIZAÇÃO =====
         init() {
-            console.log('✅ Smart Wallet v4.2.0 inicializado');
+            console.log('✅ Smart Wallet v4.2.1 inicializado');
             this.applyTheme();
             this.applyPrivacy();
             this.setupEventListeners();
+            this.setupFocusTrap();
             this.setDefaultDate();
             this.updateMonthDisplay();
             this.populateCategorySelects();
             this.populatePaymentMethodSelects();
             this.populateAccountSelects();
+            this.populateCardFilter();
             this.restoreFilters();
             this.render();
             this.initCharts();
@@ -609,7 +383,7 @@
             this.applyLanguage();
             this.applyCurrency();
             this.checkVersionUpdate();
-            if (window.innerWidth <= 640) { this.initSwipeGestures(); }
+            if (window.innerWidth <= 640) this.initSwipeGestures();
         }
         setupEventListeners() {
             const self = this;
@@ -620,7 +394,7 @@
                     self.searchTimeout = setTimeout(() => { self.clearCache(); self.render(); self.clearDashboardHighlight(); }, 300);
                 });
             }
-            ['typeFilter', 'categoryFilter', 'statusFilter', 'accountFilter'].forEach(id => {
+            ['typeFilter', 'categoryFilter', 'statusFilter', 'accountFilter', 'cardFilter'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.addEventListener('change', () => {
                     if (id === 'typeFilter') self.filterCategoriesByType('categoryFilter', el.value);
@@ -645,12 +419,47 @@
                 });
             }
         }
+        setupFocusTrap() {
+            // Impede scroll do body quando modal aberto
+            document.addEventListener('keydown', (e) => {
+                const activeModal = document.querySelector('.modal.active');
+                if (!activeModal) return;
+                
+                // ESC fecha o modal ativo
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    const closeBtn = activeModal.querySelector('.modal-close');
+                    if (closeBtn) closeBtn.click();
+                    return;
+                }
+                
+                // TAB trap dentro do modal
+                if (e.key === 'Tab') {
+                    const focusable = activeModal.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+                    if (focusable.length === 0) return;
+                    const first = focusable[0];
+                    const last = focusable[focusable.length - 1];
+                    if (e.shiftKey) {
+                        if (document.activeElement === first) {
+                            e.preventDefault();
+                            last.focus();
+                        }
+                    } else {
+                        if (document.activeElement === last) {
+                            e.preventDefault();
+                            first.focus();
+                        }
+                    }
+                }
+            });
+        }
         saveFilters() {
             const filters = {
                 type: document.getElementById('typeFilter')?.value || '',
                 category: document.getElementById('categoryFilter')?.value || '',
                 status: document.getElementById('statusFilter')?.value || '',
                 account: document.getElementById('accountFilter')?.value || '',
+                card: document.getElementById('cardFilter')?.value || '',
                 search: document.getElementById('searchFilter')?.value || ''
             };
             try { localStorage.setItem('smartwallet_filters', JSON.stringify(filters)); } catch(e){}
@@ -661,6 +470,7 @@
                 if (filters.type) document.getElementById('typeFilter').value = filters.type;
                 if (filters.status) document.getElementById('statusFilter').value = filters.status;
                 if (filters.account) document.getElementById('accountFilter').value = filters.account;
+                if (filters.card) document.getElementById('cardFilter').value = filters.card;
                 if (filters.search) document.getElementById('searchFilter').value = filters.search;
                 setTimeout(() => { if (filters.category) document.getElementById('categoryFilter').value = filters.category; }, 100);
             } catch(e){}
@@ -787,6 +597,19 @@
                 sel.value = val;
             });
         }
+        populateCardFilter() {
+            const sel = document.getElementById('cardFilter');
+            if (!sel) return;
+            const val = sel.value;
+            sel.innerHTML = '<option value="">' + this.t('allCards') + '</option>';
+            this.cards.forEach(card => {
+                const opt = document.createElement('option');
+                opt.value = 'card:' + card.id;
+                opt.textContent = '💳 ' + card.name;
+                sel.appendChild(opt);
+            });
+            sel.value = val;
+        }
         filterCategoriesByType(selectId, type) {
             const sel = document.getElementById(selectId);
             if (!sel) return;
@@ -856,15 +679,24 @@
             const mt = this.getMonthTransactions();
             let inc = 0, exp = 0;
             mt.forEach(t => { if (t.amount > 0) inc += t.amount; else exp += t.amount; });
+            
+            // SALDO UNIFICADO = SOMA DE TODAS AS CONTAS CORRENTES
             let unifiedBalance = 0;
-            this.accounts.forEach(a => { if (a.type === 'checking') unifiedBalance += (parseFloat(a.balance) || 0); });
-            this.investments.forEach(inv => { if (!inv.accountId) unifiedBalance += inv.current; });
+            this.accounts.forEach(a => {
+                if (a.type === 'checking') unifiedBalance += (parseFloat(a.balance) || 0);
+            });
+            // Soma também investimentos sem conta vinculada
+            this.investments.forEach(inv => {
+                if (!inv.accountId) unifiedBalance += (inv.current || 0);
+            });
+            
             let creditCardTotal = 0;
             const self = this;
             this.cards.forEach(card => {
                 const cardTrans = self.getCardTransactions(card.id);
                 cardTrans.forEach(t => { creditCardTotal += Math.abs(t.amount); });
             });
+            
             const balEl = document.getElementById('totalBalance');
             if (balEl) {
                 balEl.textContent = this.formatCurrency(unifiedBalance);
@@ -880,66 +712,164 @@
                 goalEl.className = 'card-value privacy-value negative';
             }
         }
+		        // ===== RENDERIZAÇÃO =====
         render() {
             this.updateDashboard();
             const tbody = document.getElementById('transactionsTable');
             const empty = document.getElementById('emptyState');
             if (!tbody) return;
+            
             const filtered = this.getFilteredTransactions();
-            if (!filtered.length) { tbody.innerHTML = ''; if (empty) empty.style.display = 'block'; return; }
+            if (!filtered.length) {
+                tbody.innerHTML = '';
+                if (empty) empty.style.display = 'block';
+                return;
+            }
             if (empty) empty.style.display = 'none';
-            const sorted = filtered.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
-            const balMap = {}; let run = 0;
-            const reversed = sorted.slice().reverse();
-            const self = this;
-            reversed.forEach(t => { run += t.amount; balMap[t.id] = run; });
+            
+            // ORDENAR por coluna ativa
+            const sorted = filtered.slice().sort((a, b) => this.compareTransactions(a, b));
+            
+            // AGRUPAR Receitas e Despesas
+            const incomeGroup = sorted.filter(t => t.amount > 0);
+            const expenseGroup = sorted.filter(t => t.amount < 0);
+            
+            let totalIncome = 0, totalExpense = 0;
+            incomeGroup.forEach(t => totalIncome += t.amount);
+            expenseGroup.forEach(t => totalExpense += t.amount);
+            
             const fragment = document.createDocumentFragment();
             const isMobile = window.innerWidth <= 640;
-            sorted.forEach(t => {
-                const cat = self.getCategoryById(t.category);
-                let acc = null;
-                for (let i = 0; i < self.accounts.length; i++) {
-                    if (self.accounts[i].id === t.accountId) { acc = self.accounts[i]; break; }
-                }
-                const cls = t.amount >= 0 ? 'positive' : 'negative';
-                const statusClass = t.statusOk ? 'status-done' : 'status-pending';
-                const statusText = t.statusOk ? self.t('completed') : self.t('pending');
-                const paymentName = self.getPaymentMethodName(t.paymentMethod);
-                let recurrenceHtml = '';
-                if (t.recurrence) {
-                    if (t.recurrence.type === 'installment') recurrenceHtml = '<span class="recurrence-badge">📅 ' + (t.recurrence.current || 1) + '/' + (t.recurrence.total || 1) + '</span>';
-                    else if (t.recurrence.type === 'monthly') recurrenceHtml = '<span class="recurrence-badge">🔁 Mensal</span>';
-                    else if (t.recurrence.type === 'yearly') recurrenceHtml = '<span class="recurrence-badge">📅 Anual</span>';
-                }
-                const tr = document.createElement('tr');
-                tr.className = 'transaction-row';
-                tr.dataset.id = t.id;
-                tr.onclick = function() { smartwallet.editTransaction(t.id); };
-                let rowHtml = '<td data-label="Data">' + self.formatDate(t.date) + '</td>' +
-                    '<td data-label="Descrição">' + self.escapeHtml(t.description || '-') + '</td>' +
-                    '<td data-label="Categoria"><span class="category-badge" style="background:' + cat.color + '">' + self.escapeHtml(cat.name) + '</span></td>' +
-                    '<td data-label="Conta">' + (acc ? '<span class="account-badge">' + self.escapeHtml(acc.name) + '</span>' : '-') + '</td>' +
-                    '<td data-label="Pagamento"><span class="payment-badge">' + paymentName + '</span></td>' +
-                    '<td data-label="Status"><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
-                    '<td data-label="Recorrência">' + (recurrenceHtml || '-') + '</td>' +
-                    '<td data-label="Valor" class="amount ' + cls + ' privacy-value">' + self.formatCurrency(t.amount) + '</td>' +
-                    '<td data-label="Saldo" class="balance privacy-value">' + self.formatCurrency(balMap[t.id]) + '</td>';
-                if (isMobile) {
-                    rowHtml = '<div class="swipe-actions"><div class="swipe-action complete">✓ Paga</div><div class="swipe-action delete">🗑️ Excluir</div></div>' + rowHtml;
-                }
-                tr.innerHTML = rowHtml;
-                fragment.appendChild(tr);
-            });
+            const self = this;
+            
+            // Adicionar grupo Receitas
+            if (incomeGroup.length > 0) {
+                const incomeLabel = document.createElement('tr');
+                incomeLabel.innerHTML = '<td colspan="' + (isMobile ? 1 : 7) + '" class="transactions-group-label income"><span>' + this.t('incomeGroup') + ' (' + incomeGroup.length + ')</span><span class="group-total">+ ' + this.formatCurrency(totalIncome) + '</span></td>';
+                fragment.appendChild(incomeLabel);
+                incomeGroup.forEach(t => {
+                    fragment.appendChild(self.createTransactionRow(t, isMobile));
+                });
+            }
+            
+            // Adicionar grupo Despesas
+            if (expenseGroup.length > 0) {
+                const expenseLabel = document.createElement('tr');
+                expenseLabel.innerHTML = '<td colspan="' + (isMobile ? 1 : 7) + '" class="transactions-group-label expense"><span>' + this.t('expenseGroup') + ' (' + expenseGroup.length + ')</span><span class="group-total">- ' + this.formatCurrency(Math.abs(totalExpense)) + '</span></td>';
+                fragment.appendChild(expenseLabel);
+                expenseGroup.forEach(t => {
+                    fragment.appendChild(self.createTransactionRow(t, isMobile));
+                });
+            }
+            
             tbody.innerHTML = '';
             tbody.appendChild(fragment);
+            this.updateSortIndicators();
         }
+        
+        createTransactionRow(t, isMobile) {
+            const cat = this.getCategoryById(t.category);
+            let acc = null;
+            for (let i = 0; i < this.accounts.length; i++) {
+                if (this.accounts[i].id === t.accountId) { acc = this.accounts[i]; break; }
+            }
+            const cls = t.amount >= 0 ? 'positive' : 'negative';
+            const statusClass = t.statusOk ? 'status-done' : 'status-pending';
+            const statusText = t.statusOk ? this.t('completed') : this.t('pending');
+            const paymentName = this.getPaymentMethodName(t.paymentMethod);
+            
+            let recurrenceHtml = '-';
+            if (t.recurrence) {
+                if (t.recurrence.type === 'installment') recurrenceHtml = '<span class="recurrence-badge">📅 ' + (t.recurrence.current || 1) + '/' + (t.recurrence.total || 1) + '</span>';
+                else if (t.recurrence.type === 'monthly') recurrenceHtml = '<span class="recurrence-badge">🔁 Mensal</span>';
+                else if (t.recurrence.type === 'yearly') recurrenceHtml = '<span class="recurrence-badge">📅 Anual</span>';
+            }
+            
+            const tr = document.createElement('tr');
+            tr.className = 'transaction-row';
+            tr.dataset.id = t.id;
+            tr.onclick = function() { smartwallet.editTransaction(t.id); };
+            
+            let rowHtml = '';
+            if (isMobile) {
+                rowHtml += '<div class="swipe-actions"><div class="swipe-action complete">✓ Paga</div><div class="swipe-action delete">🗑️ Excluir</div></div>';
+            }
+            rowHtml += '<td data-label="Data">' + this.formatDate(t.date) + '</td>' +
+                '<td data-label="Descrição">' + this.escapeHtml(t.description || '-') + '</td>' +
+                '<td data-label="Categoria"><span class="category-badge" style="background:' + cat.color + '">' + this.escapeHtml(cat.name) + '</span></td>' +
+                '<td data-label="Conta">' + (acc ? '<span class="account-badge">' + this.escapeHtml(acc.name) + '</span>' : '-') + '</td>' +
+                '<td data-label="Pagamento"><span class="payment-badge">' + paymentName + '</span></td>' +
+                '<td data-label="Status"><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>' +
+                '<td data-label="Valor" class="amount ' + cls + ' privacy-value">' + this.formatCurrency(t.amount) + '</td>';
+            
+            tr.innerHTML = rowHtml;
+            return tr;
+        }
+        
+        updateSortIndicators() {
+            document.querySelectorAll('th[data-sort]').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+                if (th.dataset.sort === this.sortColumn) {
+                    th.classList.add(this.sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                }
+            });
+        }
+        
+        compareTransactions(a, b) {
+            const col = this.sortColumn;
+            const dir = this.sortDirection === 'asc' ? 1 : -1;
+            let va, vb;
+            
+            switch(col) {
+                case 'date':
+                    va = new Date(a.date).getTime();
+                    vb = new Date(b.date).getTime();
+                    break;
+                case 'description':
+                    va = (a.description || '').toLowerCase();
+                    vb = (b.description || '').toLowerCase();
+                    break;
+                case 'category':
+                    va = this.getCategoryById(a.category).name.toLowerCase();
+                    vb = this.getCategoryById(b.category).name.toLowerCase();
+                    break;
+                case 'account':
+                    const accA = this.accounts.find(x => x.id === a.accountId);
+                    const accB = this.accounts.find(x => x.id === b.accountId);
+                    va = (accA ? accA.name : '').toLowerCase();
+                    vb = (accB ? accB.name : '').toLowerCase();
+                    break;
+                case 'payment':
+                    va = this.getPaymentMethodName(a.paymentMethod).toLowerCase();
+                    vb = this.getPaymentMethodName(b.paymentMethod).toLowerCase();
+                    break;
+                case 'status':
+                    va = a.statusOk ? 1 : 0;
+                    vb = b.statusOk ? 1 : 0;
+                    break;
+                case 'amount':
+                    va = a.amount;
+                    vb = b.amount;
+                    break;
+                default:
+                    va = a.id;
+                    vb = b.id;
+            }
+            
+            if (va < vb) return -1 * dir;
+            if (va > vb) return 1 * dir;
+            return 0;
+        }
+        
         getFilteredTransactions() {
             const search = (document.getElementById('searchFilter').value || '').toLowerCase();
             const catFilter = document.getElementById('categoryFilter').value;
             const typeFilter = document.getElementById('typeFilter').value;
             const statusFilter = document.getElementById('statusFilter').value;
             const accountFilter = document.getElementById('accountFilter').value;
+            const cardFilter = document.getElementById('cardFilter')?.value || '';
             const self = this;
+            
             return this.getMonthTransactions().filter(t => {
                 const cat = self.getCategoryById(t.category);
                 const matchSearch = !search || (t.description || '').toLowerCase().indexOf(search) !== -1 || cat.name.toLowerCase().indexOf(search) !== -1;
@@ -947,15 +877,29 @@
                 const matchType = !typeFilter || (typeFilter === 'income' ? t.amount > 0 : t.amount < 0);
                 const matchStatus = !statusFilter || (statusFilter === 'done' ? t.statusOk : !t.statusOk);
                 const matchAccount = !accountFilter || t.accountId === accountFilter;
-                return matchSearch && matchCat && matchType && matchStatus && matchAccount;
+                const matchCard = !cardFilter || t.paymentMethod === cardFilter;
+                return matchSearch && matchCat && matchType && matchStatus && matchAccount && matchCard;
             });
         }
+        
         generateUniqueId() {
             if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
             return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
         }
 
-        // ===== ADICIONAR/EDITAR TRANSAÇÕES =====
+        // ===== SALDO DA CONTA =====
+        updateAccountBalance(accountId, amount) {
+            if (!accountId) return;
+            for (let i = 0; i < this.accounts.length; i++) {
+                if (this.accounts[i].id === accountId) {
+                    this.accounts[i].balance = (parseFloat(this.accounts[i].balance) || 0) + amount;
+                    break;
+                }
+            }
+            this.saveAccounts();
+        }
+
+        // ===== ADICIONAR TRANSAÇÃO =====
         addTransaction() {
             const date = document.getElementById('date').value;
             const amount = parseFloat(document.getElementById('amount').value);
@@ -965,16 +909,20 @@
             const paymentMethod = document.getElementById('paymentMethod').value;
             const accountId = document.getElementById('transactionAccount').value;
             const isRecurring = document.getElementById('recurring').checked;
+            
             if (!category) { this.showToast('Selecione uma categoria'); return; }
             if (!paymentMethod) { this.showToast('Selecione a forma de pagamento'); return; }
             if (!date) { this.showToast('Selecione uma data'); return; }
             if (isNaN(amount) || amount <= 0) { this.showToast('Valor inválido'); return; }
+            if (!accountId) { this.showToast('Selecione uma conta'); return; }
+            
+            const signedAmount = this.currentTransactionType === 'expense' ? -Math.abs(amount) : Math.abs(amount);
+            
             if (isRecurring) {
                 const recurrenceType = document.getElementById('recurrenceType').value;
                 const recurrenceCount = parseInt(document.getElementById('recurrenceCount').value);
                 if (recurrenceCount < 2) { this.showToast('Mínimo de 2 parcelas'); return; }
                 const startDate = new Date(date + 'T12:00:00');
-                const baseAmount = this.currentTransactionType === 'expense' ? -Math.abs(amount) : Math.abs(amount);
                 const recurrenceGroupId = this.generateUniqueId();
                 let createdCount = 0;
                 for (let i = 0; i < recurrenceCount; i++) {
@@ -992,29 +940,38 @@
                     if (recurrenceType === 'installment') transDescription = description + ' - Parcela ' + (i + 1) + '/' + recurrenceCount;
                     const uniqueId = this.generateUniqueId() + '_' + i;
                     this.transactions.push({
-                        id: uniqueId, date: transDate.toISOString().split('T')[0], amount: baseAmount,
+                        id: uniqueId, date: transDate.toISOString().split('T')[0], amount: signedAmount,
                         category: category, description: transDescription, statusOk: statusOk,
                         paymentMethod: paymentMethod, accountId: accountId,
                         recurrence: { groupId: recurrenceGroupId, type: recurrenceType, total: recurrenceCount, current: i + 1 }
                     });
                     createdCount++;
                 }
+                // Atualiza saldo apenas uma vez (soma de todas as parcelas do mês atual)
+                const monthTotal = this.getMonthTransactions().filter(t => 
+                    t.accountId === accountId && 
+                    t.recurrence && t.recurrence.groupId === recurrenceGroupId
+                ).reduce((sum, t) => sum + t.amount, 0);
+                this.updateAccountBalance(accountId, monthTotal);
+                
                 this.clearCache(); this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge();
                 this.showToast('✅ ' + createdCount + ' transações recorrentes criadas!');
                 closeNewTransactionModal(); this.clearForm();
                 return;
             }
+            
             const transaction = {
-                id: this.generateUniqueId(), date: date,
-                amount: this.currentTransactionType === 'expense' ? -Math.abs(amount) : Math.abs(amount),
+                id: this.generateUniqueId(), date: date, amount: signedAmount,
                 category: category, description: description, statusOk: statusOk,
                 paymentMethod: paymentMethod, accountId: accountId
             };
-            this.clearCache(); this.transactions.push(transaction); this.saveTransactions();
-            this.render(); this.updateCharts(); this.updateAlertBadge();
+            this.transactions.push(transaction);
+            this.updateAccountBalance(accountId, signedAmount);
+            this.clearCache(); this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge();
             this.showToast('Transação adicionada!');
             closeNewTransactionModal(); this.clearForm();
         }
+        
         clearForm() {
             const form = document.getElementById('transactionForm');
             if (form) form.reset();
@@ -1025,6 +982,7 @@
             const recurringOptions = document.getElementById('recurringOptions');
             if (recurringOptions) recurringOptions.style.display = 'none';
         }
+        
         editTransaction(id) {
             let t = null;
             for (let i = 0; i < this.transactions.length; i++) {
@@ -1053,54 +1011,79 @@
             document.querySelectorAll('#editForm .type-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-type') === this.currentEditType));
             this.filterCategoriesByType('editCategory', this.currentEditType);
             document.getElementById('editModal').classList.add('active');
+            document.body.classList.add('modal-open');
+            document.body.style.setProperty('--scroll-y', -window.scrollY + 'px');
         }
+        
         updateTransaction() {
             const id = document.getElementById('editId').value;
             const date = document.getElementById('editDate').value;
             const amount = parseFloat(document.getElementById('editAmount').value);
             const category = document.getElementById('editCategory').value;
             const paymentMethod = document.getElementById('editPaymentMethod').value;
-            if (!id || !date || isNaN(amount) || amount <= 0 || !category || !paymentMethod) {
+            const accountId = document.getElementById('editTransactionAccount').value;
+            
+            if (!id || !date || isNaN(amount) || amount <= 0 || !category || !paymentMethod || !accountId) {
                 this.showToast('⚠️ Preencha todos os campos');
                 return;
             }
+            
             let idx = -1;
             for (let i = 0; i < this.transactions.length; i++) {
                 if (String(this.transactions[i].id) === String(id)) { idx = i; break; }
             }
             if (idx === -1) { this.showToast('❌ Transação não encontrada'); return; }
+            
+            const oldTransaction = this.transactions[idx];
+            const oldAmount = oldTransaction.amount;
+            const oldAccountId = oldTransaction.accountId;
+            const newAmount = this.currentEditType === 'expense' ? -Math.abs(amount) : Math.abs(amount);
+            
+            // REVERTER saldo antigo
+            if (oldAccountId) this.updateAccountBalance(oldAccountId, -oldAmount);
+            
             const isRecurring = document.getElementById('editRecurring').checked;
             let recurrenceData = null;
             if (isRecurring) {
                 const recurrenceType = document.getElementById('editRecurrenceType').value;
                 const recurrenceCount = parseInt(document.getElementById('editRecurrenceCount').value);
-                recurrenceData = { type: recurrenceType, total: recurrenceCount, current: this.transactions[idx].recurrence ? this.transactions[idx].recurrence.current : 1 };
+                recurrenceData = { type: recurrenceType, total: recurrenceCount, current: oldTransaction.recurrence ? oldTransaction.recurrence.current : 1 };
             }
+            
             this.transactions[idx] = {
-                id: this.transactions[idx].id, date: date,
-                amount: this.currentEditType === 'expense' ? -Math.abs(amount) : Math.abs(amount),
+                id: oldTransaction.id, date: date, amount: newAmount,
                 category: category, description: document.getElementById('editDescription').value,
                 statusOk: document.getElementById('editStatusOk').checked,
-                paymentMethod: paymentMethod, accountId: document.getElementById('editTransactionAccount').value,
+                paymentMethod: paymentMethod, accountId: accountId,
                 recurrence: recurrenceData
             };
+            
+            // APLICAR novo saldo
+            this.updateAccountBalance(accountId, newAmount);
+            
             this.clearCache(); this.saveTransactions(); this.render();
             this.updateCharts(); this.updateAlertBadge();
             closeEditModal();
             this.showToast('✅ Transação atualizada!');
         }
+        
         deleteFromEdit() {
             if (!this.currentEditId) return;
             if (!confirm('Excluir esta transação?')) return;
-            this.transactions = this.transactions.filter(t => t.id !== this.currentEditId);
+            const t = this.transactions.find(x => x.id === this.currentEditId);
+            if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+            this.transactions = this.transactions.filter(x => x.id !== this.currentEditId);
             this.clearCache(); this.saveTransactions(); this.render();
             this.updateCharts(); this.updateAlertBadge();
             closeEditModal();
             this.showToast('Excluída!');
         }
+        
         deleteTransaction(id) {
             if (!confirm('Excluir esta transação?')) return;
-            this.transactions = this.transactions.filter(t => t.id !== id);
+            const t = this.transactions.find(x => x.id === id);
+            if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+            this.transactions = this.transactions.filter(x => x.id !== id);
             this.clearCache(); this.saveTransactions(); this.render();
             this.updateCharts(); this.updateAlertBadge();
             this.showToast('Transação excluída!');
@@ -1278,7 +1261,6 @@
             const today = new Date(); today.setHours(0, 0, 0, 0);
             const in3Days = new Date(today); in3Days.setDate(in3Days.getDate() + 3);
             const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
-            const self = this;
             const bills = this.transactions.filter(t => {
                 if (t.statusOk || t.amount >= 0) return false;
                 const tDate = new Date(t.date + 'T12:00:00');
@@ -1306,7 +1288,8 @@
                 }
             }
         }
-		        // ===== FATURA DE CARTÃO =====
+
+        // ===== FATURA DE CARTÃO =====
         getInvoicePeriod(card, referenceDate) {
             const refDate = referenceDate || this.cardModalMonth || new Date();
             const year = refDate.getFullYear();
@@ -1334,7 +1317,7 @@
             if (!container) return;
             window.updateCardMonthLabel();
             if (!this.cards.length) {
-                container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px; opacity:0.5;">💳</div><h3>Nenhum cartão cadastrado</h3><p>Clique em "Novo Cartão" para começar</p></div>';
+                container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px; opacity:0.5;">💳</div><h3>Nenhum cartão cadastrado</h3></div>';
                 return;
             }
             const self = this;
@@ -1386,7 +1369,7 @@
             closeNewCardModal(); this.showToast(id ? 'Cartão atualizado!' : 'Cartão cadastrado!');
         }
         deleteCard(id) {
-            if (!confirm('Excluir este cartão? As transações associadas serão mantidas.')) return;
+            if (!confirm('Excluir este cartão?')) return;
             this.cards = this.cards.filter(c => c.id !== id);
             this.clearCache(); this.saveCards(); this.populatePaymentMethodSelects(); this.renderCreditCardsList();
             this.showToast('Cartão removido!');
@@ -1417,7 +1400,7 @@
             const minimum = total * 0.15;
             const available = card.limit - total;
             const self = this;
-            document.getElementById('invoiceTitle').textContent = 'Fatura - ' + card.name;
+            document.getElementById('invoiceTitle').textContent = this.t('invoice') + ' - ' + card.name;
             const today = new Date(); today.setHours(0, 0, 0, 0);
             const daysUntilDue = Math.ceil((period.dueDate - today) / (1000 * 60 * 60 * 24));
             let dueClass = '';
@@ -1427,13 +1410,13 @@
             else if (daysUntilDue <= 3) { dueText += ' (Em ' + daysUntilDue + ' dias)'; }
             if (period.isClosed) dueText += ' ✓ Fechada';
             let html = '<div class="invoice-period-display">';
-            html += '<div class="invoice-period-info"><div class="invoice-period-label">📅 Período da Fatura</div>';
+            html += '<div class="invoice-period-info"><div class="invoice-period-label">📅 ' + this.t('invoicePeriod') + '</div>';
             html += '<div class="invoice-period-value">' + this.formatDate(period.startDate.toISOString().split('T')[0]) + ' até ' + this.formatDate(period.closingDate.toISOString().split('T')[0]) + '</div></div>';
-            html += '<div class="invoice-due-info"><div class="invoice-due-label">💳 Vencimento</div>';
+            html += '<div class="invoice-due-info"><div class="invoice-due-label">💳 ' + this.t('dueDate') + '</div>';
             html += '<div class="invoice-due-value ' + dueClass + '">' + dueText + '</div></div></div>';
             html += '<div style="background:var(--input-bg); border-radius:14px; padding:16px; margin-bottom:16px;">';
             html += '<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);"><span style="color:var(--text-secondary);">Limite Total</span><span style="font-weight:600;">' + this.formatCurrency(card.limit) + '</span></div>';
-            html += '<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);"><span style="color:var(--text-secondary);">Total da Fatura</span><span style="font-weight:600; color:var(--danger-color);">' + this.formatCurrency(total) + '</span></div>';
+            html += '<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);"><span style="color:var(--text-secondary);">' + this.t('invoiceTotal') + '</span><span style="font-weight:600; color:var(--danger-color);">' + this.formatCurrency(total) + '</span></div>';
             html += '<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);"><span style="color:var(--text-secondary);">Mínimo (15%)</span><span style="font-weight:600;">' + this.formatCurrency(minimum) + '</span></div>';
             html += '<div style="display:flex; justify-content:space-between; padding:12px 0 0 0; margin-top:4px; border-top:2px solid var(--border-color); font-weight:700;"><span>Disponível</span><span style="color:var(--success-color);">' + this.formatCurrency(available) + '</span></div></div>';
             html += '<div style="display:flex; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:10px;">';
@@ -1512,6 +1495,7 @@
             const total = this.calculateInvoiceTotal(purchases);
             const self = this;
             const printWindow = window.open('', '_blank');
+            if (!printWindow) { alert(this.t('allowPopups')); return; }
             const rows = purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).map(p => {
                 const cat = self.getCategoryById(p.category);
                 return '<tr><td>' + self.formatDate(p.date) + '</td><td>' + self.escapeHtml(p.description) + '</td><td>' + self.escapeHtml(cat.name) + '</td><td style="text-align:right;">' + self.formatCurrency(Math.abs(p.amount)) + '</td></tr>';
@@ -1523,10 +1507,11 @@
             printWindow.document.write('<p><strong>Vencimento:</strong> ' + this.formatDate(period.dueDate.toISOString().split('T')[0]) + '</p>');
             printWindow.document.write('<table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th></tr></thead><tbody>' + rows + '</tbody>');
             printWindow.document.write('<tfoot><tr class="total"><td colspan="3" style="text-align:right;">TOTAL:</td><td>' + this.formatCurrency(total) + '</td></tr></tfoot></table>');
-            printWindow.document.write('<div class="footer">Smart Wallet • Gerado em ' + new Date().toLocaleString('pt-BR') + '<br>Idealizado por RogerElizar™</div>');
+            printWindow.document.write('<div class="footer">Smart Wallet • Gerado em ' + new Date().toLocaleString(this.getLanguage()) + '<br>Idealizado por RogerElizar™</div>');
             printWindow.document.write('</body></html>');
             printWindow.document.close();
-            setTimeout(() => printWindow.print(), 250);
+            printWindow.document.title = fileName;
+            setTimeout(() => { printWindow.focus(); printWindow.print(); }, 300);
         }
 
         // ===== EXPORTAÇÕES =====
@@ -1588,7 +1573,7 @@
         exportBackup() {
             try {
                 const backup = {
-                    version: '4.2.0', exportDate: new Date().toISOString(),
+                    version: '4.2.1', exportDate: new Date().toISOString(),
                     appName: 'Smart Wallet', language: this.getLanguage(),
                     currency: this.getCurrency(), transactions: this.transactions,
                     categories: this.categories, accounts: this.accounts,
@@ -1798,7 +1783,7 @@
             }).join('') + '</div>';
         }
 
-        // ===== CONTAS A VENCER =====
+        // ===== BILLS =====
         renderBillsModal() {
             const container = document.getElementById('billsList');
             if (!container) return;
@@ -1872,8 +1857,7 @@
             this.updateAlertBadge(); this.renderBillsModal();
             this.showToast('✓ Conta paga!');
         }
-
-        // ===== INVESTIMENTOS =====
+		        // ===== INVESTIMENTOS =====
         updateInvestmentChart() {
             const section = document.getElementById('investmentsChartSection');
             if (!section) return;
@@ -1914,15 +1898,15 @@
                 this.charts.invest = new Chart(canvas.getContext('2d'), {
                     type: 'line',
                     data: { labels, datasets: [
-                        { label: 'Valor Investido', data: investedData, borderColor: '#94a3b8', backgroundColor: 'rgba(148,163,184,0.1)', tension: 0.4, fill: false, yAxisID: 'y' },
-                        { label: 'Valor Atual', data: currentData, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', tension: 0.4, fill: true, yAxisID: 'y' },
+                        { label: 'Investido', data: investedData, borderColor: '#94a3b8', backgroundColor: 'rgba(148,163,184,0.1)', tension: 0.4, fill: false, yAxisID: 'y' },
+                        { label: 'Atual', data: currentData, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', tension: 0.4, fill: true, yAxisID: 'y' },
                         { label: 'Rendimento (%)', data: profitPctData, borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.1)', tension: 0.4, fill: false, yAxisID: 'y1' }
                     ]},
                     options: {
                         responsive: true, maintainAspectRatio: false,
                         plugins: { legend: { position: 'top', labels: { color: colors.text } } },
                         scales: {
-                            y: { beginAtZero: true, ticks: { color: colors.textSecondary, callback: v => 'R$ ' + v.toLocaleString('pt-BR') }, grid: { color: colors.grid } },
+                            y: { beginAtZero: true, ticks: { color: colors.textSecondary }, grid: { color: colors.grid } },
                             y1: { position: 'right', ticks: { color: colors.textSecondary, callback: v => v + '%' }, grid: { display: false } },
                             x: { ticks: { color: colors.textSecondary }, grid: { color: colors.grid } }
                         }
@@ -1962,7 +1946,6 @@
                 accountId = newAccountId;
                 this.saveAccounts();
                 this.populateAccountSelects();
-                this.showToast('🏦 Conta de investimento criada automaticamente!');
             }
             if (id) {
                 for (let i = 0; i < this.investments.length; i++) {
@@ -1976,10 +1959,7 @@
             }
             if (accountId) {
                 for (let i = 0; i < this.accounts.length; i++) {
-                    if (this.accounts[i].id === accountId) {
-                        this.accounts[i].balance = current;
-                        break;
-                    }
+                    if (this.accounts[i].id === accountId) { this.accounts[i].balance = current; break; }
                 }
                 this.saveAccounts();
             }
@@ -2053,7 +2033,7 @@
             const container = document.getElementById('investmentsContent');
             if (!container) return;
             const self = this;
-            const typeLabels = { cdb: 'CDB', tesouro: 'Tesouro Direto', lci: 'LCI/LCA', fundo: 'Fundo', acao: 'Ações', fiis: 'FIIs', poupanca: 'Poupança', outro: 'Outro' };
+            const typeLabels = { cdb: 'CDB', tesouro: 'Tesouro', lci: 'LCI/LCA', fundo: 'Fundo', acao: 'Ações', fiis: 'FIIs', poupanca: 'Poupança', outro: 'Outro' };
             if (!this.investments.length) {
                 container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px; opacity:0.5;">📈</div><h3>Nenhuma aplicação cadastrada</h3></div>';
                 return;
@@ -2070,14 +2050,14 @@
                     const linkedAccount = self.accounts.find(a => a.id === inv.accountId);
                     if (linkedAccount) accountInfo = ' • 🏦 ' + self.escapeHtml(linkedAccount.name);
                 }
-                html += '<div class="investment-card"><div class="investment-card-header"><div><div class="investment-card-title">' + self.escapeHtml(inv.name) + '</div><div class="investment-card-type">' + (typeLabels[inv.type] || inv.type) + ' • Aplicado em ' + self.formatDate(inv.date) + accountInfo + '</div></div><div class="investment-card-actions"><button class="btn btn-secondary btn-small" onclick="smartwallet.openUpdateInvestment(\'' + inv.id + '\')">💰 Atualizar</button><button class="btn btn-secondary btn-small" onclick="smartwallet.editInvestment(\'' + inv.id + '\')">✏️</button><button class="btn btn-danger btn-small" onclick="smartwallet.deleteInvestment(\'' + inv.id + '\')">🗑️</button></div></div><div class="investment-card-values"><div class="investment-value-item"><div class="investment-value-label">Valor Inicial</div><div class="investment-value-amount privacy-value">' + self.formatCurrency(inv.initial) + '</div></div><div class="investment-value-item"><div class="investment-value-label">Valor Atual</div><div class="investment-value-amount privacy-value">' + self.formatCurrency(inv.current) + '</div></div><div class="investment-value-item"><div class="investment-value-label">Rendimento</div><div class="investment-value-amount privacy-value ' + (profit >= 0 ? 'positive' : 'negative') + '">' + profitPct.toFixed(2) + '% (' + self.formatCurrency(profit) + ')</div></div></div>';
+                html += '<div class="investment-card"><div class="investment-card-header"><div><div class="investment-card-title">' + self.escapeHtml(inv.name) + '</div><div class="investment-card-type">' + (typeLabels[inv.type] || inv.type) + ' • ' + self.formatDate(inv.date) + accountInfo + '</div></div><div class="investment-card-actions"><button class="btn btn-secondary btn-small" onclick="smartwallet.openUpdateInvestment(\'' + inv.id + '\')">💰</button><button class="btn btn-secondary btn-small" onclick="smartwallet.editInvestment(\'' + inv.id + '\')">✏️</button><button class="btn btn-danger btn-small" onclick="smartwallet.deleteInvestment(\'' + inv.id + '\')">🗑️</button></div></div><div class="investment-card-values"><div class="investment-value-item"><div class="investment-value-label">Inicial</div><div class="investment-value-amount privacy-value">' + self.formatCurrency(inv.initial) + '</div></div><div class="investment-value-item"><div class="investment-value-label">Atual</div><div class="investment-value-amount privacy-value">' + self.formatCurrency(inv.current) + '</div></div><div class="investment-value-item"><div class="investment-value-label">Rendimento</div><div class="investment-value-amount privacy-value ' + (profit >= 0 ? 'positive' : 'negative') + '">' + profitPct.toFixed(2) + '% (' + self.formatCurrency(profit) + ')</div></div></div>';
                 if (inv.rate > 0) html += '<div style="font-size:0.85rem; color:var(--text-secondary);" class="privacy-value">Taxa: ' + inv.rate + '% ao ano</div>';
                 html += '</div>';
             });
             html += '</div>';
             const totalProfit = totalCurrent - totalInitial;
             const totalProfitPct = totalInitial > 0 ? (totalProfit / totalInitial * 100) : 0;
-            html += '<div class="investment-summary"><h3>📊 Resumo Geral</h3><div class="investment-summary-grid"><div class="investment-summary-item"><div class="investment-summary-label">Total Investido</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalInitial) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Valor Atual</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalCurrent) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Rendimento Total</div><div class="investment-summary-value privacy-value" style="color:' + (totalProfit >= 0 ? 'var(--success-color)' : 'var(--danger-color)') + ';">' + totalProfitPct.toFixed(2) + '% (' + this.formatCurrency(totalProfit) + ')</div></div></div></div>';
+            html += '<div class="investment-summary"><h3>📊 Resumo Geral</h3><div class="investment-summary-grid"><div class="investment-summary-item"><div class="investment-summary-label">Investido</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalInitial) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Atual</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalCurrent) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Rendimento</div><div class="investment-summary-value privacy-value" style="color:' + (totalProfit >= 0 ? 'var(--success-color)' : 'var(--danger-color)') + ';">' + totalProfitPct.toFixed(2) + '% (' + this.formatCurrency(totalProfit) + ')</div></div></div></div>';
             container.innerHTML = html;
         }
 
@@ -2111,8 +2091,7 @@
                 const sum = values.reduce((a, b) => a + b, 0);
                 categoryAverages[catId] = sum / values.length;
             });
-            let html = '<div style="margin-bottom: 20px; padding: 16px; background: var(--glass-bg); border-radius: 14px;">';
-            html += '<p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">📊 Comparativo com a média dos últimos 3 meses</p></div>';
+            let html = '<div style="margin-bottom: 20px; padding: 16px; background: var(--glass-bg); border-radius: 14px;"><p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">📊 Comparativo com a média dos últimos 3 meses</p></div>';
             let html2 = '<div>';
             const sortedCategories = Object.keys(categoryTotals).sort((a, b) => categoryTotals[b] - categoryTotals[a]);
             sortedCategories.forEach(catId => {
@@ -2124,32 +2103,19 @@
                 if (percentage > 100) barClass = 'danger';
                 else if (percentage > 80) barClass = 'warning';
                 html2 += '<div class="category-budget-item" style="border-left-color: ' + category.color + ';">';
-                html2 += '<div class="category-budget-header">';
-                html2 += '<div class="category-budget-name">';
-                html2 += '<span style="width: 12px; height: 12px; background: ' + category.color + '; border-radius: 50%; display: inline-block;"></span>';
-                html2 += self.escapeHtml(category.name);
-                html2 += '</div>';
-                html2 += '<div class="category-budget-amount">' + self.formatCurrency(currentAmount) + '</div>';
-                html2 += '</div>';
-                html2 += '<div class="category-budget-bar">';
-                html2 += '<div class="category-budget-progress ' + barClass + '" style="width: ' + Math.min(percentage, 100) + '%"></div>';
-                html2 += '</div>';
-                html2 += '<div class="category-budget-info">';
-                html2 += '<span>' + percentage.toFixed(0) + '% da média</span>';
-                html2 += '<span>Média: ' + self.formatCurrency(averageAmount) + '</span>';
-                html2 += '</div>';
+                html2 += '<div class="category-budget-header"><div class="category-budget-name"><span style="width: 12px; height: 12px; background: ' + category.color + '; border-radius: 50%; display: inline-block;"></span>' + self.escapeHtml(category.name) + '</div><div class="category-budget-amount">' + self.formatCurrency(currentAmount) + '</div></div>';
+                html2 += '<div class="category-budget-bar"><div class="category-budget-progress ' + barClass + '" style="width: ' + Math.min(percentage, 100) + '%"></div></div>';
+                html2 += '<div class="category-budget-info"><span>' + percentage.toFixed(0) + '% da média</span><span>Média: ' + self.formatCurrency(averageAmount) + '</span></div>';
                 if (averageAmount > 0) {
                     const diff = currentAmount - averageAmount;
                     const diffText = diff > 0 ? '+' + self.formatCurrency(diff) : self.formatCurrency(diff);
-                    html2 += '<div class="category-budget-average" style="color: ' + (diff > 0 ? 'var(--danger-color)' : 'var(--success-color)') + ';">';
-                    html2 += (diff > 0 ? '⬆️' : '⬇️') + ' ' + diffText + ' vs média';
-                    html2 += '</div>';
+                    html2 += '<div class="category-budget-average" style="color: ' + (diff > 0 ? 'var(--danger-color)' : 'var(--success-color)') + ';">' + (diff > 0 ? '⬆️' : '⬇️') + ' ' + diffText + ' vs média</div>';
                 }
                 html2 += '</div>';
             });
             html2 += '</div>';
             if (Object.keys(categoryTotals).length === 0) {
-                html2 = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);"><div style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;">📊</div><h3>Nenhuma despesa este mês</h3><p>Adicione transações para ver o acompanhamento por categoria.</p></div>';
+                html2 = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);"><div style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;">📊</div><h3>Nenhuma despesa este mês</h3></div>';
             }
             container.innerHTML = html + html2;
         }
@@ -2160,15 +2126,15 @@
             const toId = document.getElementById('transferTo').value;
             const amount = parseFloat(document.getElementById('transferAmount').value);
             const date = document.getElementById('transferDate').value;
-            const description = document.getElementById('transferDescription').value || 'Transferência entre contas';
+            const description = document.getElementById('transferDescription').value || 'Transferência';
             if (!fromId || !toId) { this.showToast('Selecione as contas'); return; }
-            if (fromId === toId) { this.showToast('As contas devem ser diferentes'); return; }
+            if (fromId === toId) { this.showToast('Contas devem ser diferentes'); return; }
             if (isNaN(amount) || amount <= 0) { this.showToast('Valor inválido'); return; }
             if (!date) { this.showToast('Selecione uma data'); return; }
             const fromAcc = this.accounts.find(a => a.id === fromId);
             const toAcc = this.accounts.find(a => a.id === toId);
             if (!fromAcc || !toAcc) { this.showToast('Contas não encontradas'); return; }
-            if (fromAcc.balance < amount) { this.showToast('Saldo insuficiente na conta de origem'); return; }
+            if (fromAcc.balance < amount) { this.showToast('Saldo insuficiente'); return; }
             fromAcc.balance -= amount;
             toAcc.balance += amount;
             this.transactions.push({
@@ -2187,11 +2153,10 @@
             this.showToast('✅ Transferência realizada!');
         }
 
-        // ===== GESTOS (SWIPE) =====
+        // ===== SWIPE GESTURES =====
         initSwipeGestures() {
             const self = this;
-            let touchStartX = 0;
-            let touchStartY = 0;
+            let touchStartX = 0, touchStartY = 0;
             let currentRow = null;
             let isSwiping = false;
             document.addEventListener('touchstart', function(e) {
@@ -2204,10 +2169,8 @@
             }, { passive: true });
             document.addEventListener('touchmove', function(e) {
                 if (!currentRow) return;
-                const touchEndX = e.changedTouches[0].screenX;
-                const touchEndY = e.changedTouches[0].screenY;
-                const diffX = touchStartX - touchEndX;
-                const diffY = Math.abs(touchStartY - touchEndY);
+                const diffX = touchStartX - e.changedTouches[0].screenX;
+                const diffY = Math.abs(touchStartY - e.changedTouches[0].screenY);
                 if (Math.abs(diffX) > 30 && diffY < 50) {
                     isSwiping = true;
                     if (diffX < -30) {
@@ -2225,12 +2188,11 @@
                     currentRow = null;
                     return;
                 }
-                const touchEndX = e.changedTouches[0].screenX;
-                const diff = touchStartX - touchEndX;
-                const transactionId = currentRow.dataset.id;
-                if (Math.abs(diff) > 80 && transactionId) {
-                    if (diff < -80) self.completeTransaction(transactionId, currentRow);
-                    else if (diff > 80) self.deleteTransactionSwipe(transactionId, currentRow);
+                const diff = touchStartX - e.changedTouches[0].screenX;
+                const id = currentRow.dataset.id;
+                if (Math.abs(diff) > 80 && id) {
+                    if (diff < -80) self.completeTransaction(id);
+                    else if (diff > 80) self.deleteTransactionSwipe(id);
                 } else {
                     currentRow.classList.remove('swiping-right', 'swiping-left');
                 }
@@ -2238,50 +2200,45 @@
                 isSwiping = false;
             }, { passive: true });
         }
-        completeTransaction(id, row) {
-            const transaction = this.transactions.find(t => String(t.id) === String(id));
-            if (transaction) {
-                transaction.statusOk = true;
+        completeTransaction(id) {
+            const t = this.transactions.find(x => String(x.id) === String(id));
+            if (t) {
+                t.statusOk = true;
                 this.clearCache(); this.saveTransactions();
                 this.render(); this.updateAlertBadge();
                 this.showToast('✅ Transação concluída!');
             }
         }
-        deleteTransactionSwipe(id, row) {
+        deleteTransactionSwipe(id) {
             if (confirm('Excluir esta transação?')) {
-                this.transactions = this.transactions.filter(t => String(t.id) !== String(id));
+                const t = this.transactions.find(x => String(x.id) === String(id));
+                if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+                this.transactions = this.transactions.filter(x => String(x.id) !== String(id));
                 this.clearCache(); this.saveTransactions();
                 this.render(); this.updateCharts(); this.updateAlertBadge();
-                this.showToast('🗑️ Transação excluída!');
+                this.showToast('🗑️ Excluída!');
             }
         }
 
         // ===== IMPRESSÃO DO MANUAL =====
         printManual() {
             try {
-                const printWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
-                if (!printWindow || printWindow.closed || typeof printWindow.closed === 'undefined') {
-                    alert('⚠️ O navegador bloqueou a janela de impressão.\n\nPor favor, permita popups para este site e tente novamente.');
-                    return;
-                }
-                const content = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>Manual - Smart Wallet</title><style>@page { size: A4; margin: 2cm; }body { font-family: Georgia, serif; color: #1e293b; line-height: 1.6; font-size: 11pt; padding: 20px; max-width: 800px; margin: 0 auto; }h1 { color: #6366f1; font-size: 28pt; text-align: center; margin-bottom: 8px; }h2 { color: #6366f1; font-size: 16pt; margin-top: 30px; border-bottom: 2px solid #6366f1; padding-bottom: 8px; }h3 { color: #06b6d4; font-size: 13pt; margin-top: 20px; }p { margin-bottom: 12px; }ul, ol { margin-left: 24px; margin-bottom: 16px; }li { margin-bottom: 8px; }.manual-cover { text-align: center; padding: 40px 20px; border: 3px solid #6366f1; border-radius: 16px; margin-bottom: 30px; background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%); }.manual-quote { margin: 24px 0; padding: 20px 30px; border-left: 4px solid #6366f1; background: #f8fafc; border-radius: 8px; font-style: italic; }.manual-quote .quote-author { font-size: 9pt; font-weight: 600; color: #6366f1; text-align: right; margin-top: 12px; font-style: normal; }.manual-blessing { text-align: center; margin-top: 40px; padding: 30px; background: #f8fafc; border-radius: 16px; }.version { color: #64748b; font-size: 9pt; margin-top: 20px; }.author { color: #6366f1; font-weight: 600; font-size: 10pt; }@media print { body { padding: 0; } .manual-cover { page-break-after: always; } h2 { page-break-after: avoid; } }</style></head><body>' + manualHTML + '</body></html>';
+                const printWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
+                if (!printWindow) { alert('⚠️ Permita popups para imprimir.'); return; }
+                const fileName = this.generateTimestamp() + '_manual_smart_wallet.pdf';
+                const content = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page{size:A4;margin:2cm;}body{font-family:Georgia,serif;color:#1e293b;line-height:1.6;font-size:11pt;padding:20px;max-width:800px;margin:0 auto;}h1{color:#6366f1;font-size:28pt;text-align:center;}h2{color:#6366f1;font-size:16pt;margin-top:30px;border-bottom:2px solid #6366f1;padding-bottom:8px;}h3{color:#06b6d4;font-size:13pt;margin-top:20px;}p{margin-bottom:12px;}ul,ol{margin-left:24px;margin-bottom:16px;}li{margin-bottom:8px;}.manual-cover{text-align:center;padding:40px 20px;border:3px solid #6366f1;border-radius:16px;margin-bottom:30px;}.manual-quote{margin:24px 0;padding:20px 30px;border-left:4px solid #6366f1;background:#f8fafc;border-radius:8px;font-style:italic;}.quote-author{font-size:9pt;font-weight:600;color:#6366f1;text-align:right;margin-top:12px;font-style:normal;}.manual-blessing{text-align:center;margin-top:40px;padding:30px;background:#f8fafc;border-radius:16px;}.manual-tip,.manual-success,.manual-warning{padding:12px 16px;margin:12px 0;border-radius:8px;border-left:4px solid;}.manual-tip{background:rgba(6,182,212,0.1);border-color:#06b6d4;}.manual-success{background:rgba(16,185,129,0.1);border-color:#10b981;}.manual-warning{background:rgba(245,158,11,0.1);border-color:#f59e0b;}@media print{.manual-cover{page-break-after:always;}}</style></head><body>' + manualHTML + '</body></html>';
                 printWindow.document.write(content);
                 printWindow.document.close();
-                printWindow.onload = function() { setTimeout(() => { printWindow.focus(); printWindow.print(); }, 500); };
-                setTimeout(() => {
-                    try {
-                        if (!printWindow.closed) { printWindow.focus(); printWindow.print(); }
-                    } catch (e) { console.warn('[SmartWallet] Erro ao imprimir:', e); }
-                }, 1000);
+                printWindow.document.title = fileName;
+                setTimeout(() => { printWindow.focus(); printWindow.print(); }, 500);
             } catch (e) {
-                console.error('[SmartWallet] Erro em printManual:', e);
-                alert('❌ Erro ao abrir janela de impressão: ' + e.message);
+                alert('❌ Erro: ' + e.message);
             }
         }
 
         // ===== SISTEMA DE ATUALIZAÇÃO =====
         checkVersionUpdate() {
-            const CURRENT_VERSION = '4.2.0';
+            const CURRENT_VERSION = '4.2.1';
             const STORAGE_KEY = 'smartwallet_last_version';
             try {
                 const lastVersion = localStorage.getItem(STORAGE_KEY);
@@ -2293,21 +2250,20 @@
                     this.showWhatsNewModal(CURRENT_VERSION);
                     localStorage.setItem(STORAGE_KEY, CURRENT_VERSION);
                 }
-            } catch (e) {
-                console.warn('[SmartWallet] Erro ao verificar versão:', e);
-            }
+            } catch (e) {}
         }
         showWhatsNewModal(version) {
             const WHATS_NEW_DATA = {
-                '4.2.0': {
-                    version: '4.2.0',
-                    title: 'Sistema Bilíngue e Salvamento Inteligente',
+                '4.2.1': {
+                    version: '4.2.1',
                     features: [
-                        { type: 'new', icon: '🌐', title: 'Sistema Bilíngue', description: 'Agora o Smart Wallet está disponível em Português e Inglês! Alterne entre os idiomas pelo menu.' },
-                        { type: 'new', icon: '💵', title: 'Suporte a Múltiplas Moedas', description: 'Ao usar o inglês, você pode alternar entre Real (R$) e Dólar ($) com formatação automática.' },
-                        { type: 'new', icon: '💾', title: 'Seletor de Local de Salvamento', description: 'Exportações e backups agora abrem o diálogo "Salvar como" com nome pré-preenchido.' },
-                        { type: 'improved', icon: '🖨️', title: 'Impressões com Nome Pré-definido', description: 'Ao salvar PDFs, o navegador já sugere o nome correto com timestamp.' },
-                        { type: 'improved', icon: '📊', title: 'Exportações Traduzidas', description: 'CSVs e PDFs agora usam os textos no idioma selecionado.' }
+                        { type: 'new', icon: '💰', title: 'Saldo Atualizado em Tempo Real', description: 'Lançamentos agora debitam/creditam automaticamente nas contas. O saldo unificado reflete corretamente.' },
+                        { type: 'new', icon: '📊', title: 'Histórico Ordenável', description: 'Clique nos cabeçalhos das colunas (Data, Descrição, Valor...) para ordenar. Receitas e despesas aparecem agrupadas.' },
+                        { type: 'new', icon: '💳', title: 'Filtro de Cartão de Crédito', description: 'Novo filtro "Todos Cartões" no histórico do mês para ver transações de um cartão específico.' },
+                        { type: 'improved', icon: '🎯', title: 'Descrição Reposicionada', description: 'O campo de descrição agora fica logo após a data, facilitando o preenchimento.' },
+                        { type: 'improved', icon: '🔒', title: 'Focus Trap nos Modais', description: 'Ao abrir um modal, o fundo é bloqueado. TAB navega apenas dentro do modal. ESC fecha.' },
+                        { type: 'improved', icon: '🎨', title: 'Menus Recolhem Outros', description: 'Ao abrir um menu dropdown, outros abertos são fechados automaticamente.' },
+                        { type: 'improved', icon: '🖱️', title: 'Clicar fora não fecha modal', description: 'Modais agora só fecham com o botão X ou tecla ESC.' }
                     ]
                 }
             };
@@ -2320,11 +2276,7 @@
                 let html = '';
                 data.features.forEach(feature => {
                     const badgeText = feature.type === 'new' ? 'NOVO' : feature.type === 'improved' ? 'MELHORADO' : 'CORRIGIDO';
-                    html += '<div class="feature-item ' + feature.type + '">' +
-                        '<div class="feature-icon">' + feature.icon + '</div>' +
-                        '<div class="feature-content">' +
-                        '<h4>' + this.escapeHtml(feature.title) + ' <span class="feature-badge ' + feature.type + '">' + badgeText + '</span></h4>' +
-                        '<p>' + this.escapeHtml(feature.description) + '</p></div></div>';
+                    html += '<div class="feature-item ' + feature.type + '"><div class="feature-icon">' + feature.icon + '</div><div class="feature-content"><h4>' + this.escapeHtml(feature.title) + ' <span class="feature-badge ' + feature.type + '">' + badgeText + '</span></h4><p>' + this.escapeHtml(feature.description) + '</p></div></div>';
                 });
                 featuresContainer.innerHTML = html;
             }
@@ -2339,16 +2291,14 @@
     window.selectTransactionType = function(t) {
         smartwallet.currentTransactionType = t;
         document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
-            const isActive = btn.getAttribute('data-type') === t;
-            btn.classList.toggle('active', isActive);
+            btn.classList.toggle('active', btn.getAttribute('data-type') === t);
         });
         smartwallet.filterCategoriesByType('category', t);
     };
     window.selectEditType = function(t) {
         smartwallet.currentEditType = t;
         document.querySelectorAll('#editForm .type-btn').forEach(btn => {
-            const isActive = btn.getAttribute('data-type') === t;
-            btn.classList.toggle('active', isActive);
+            btn.classList.toggle('active', btn.getAttribute('data-type') === t);
         });
         smartwallet.filterCategoriesByType('editCategory', t);
     };
@@ -2357,6 +2307,7 @@
         const statusFilter = document.getElementById('statusFilter');
         const categoryFilter = document.getElementById('categoryFilter');
         const accountFilter = document.getElementById('accountFilter');
+        const cardFilter = document.getElementById('cardFilter');
         const searchFilter = document.getElementById('searchFilter');
         document.querySelectorAll('.card.clickable').forEach(c => c.classList.remove('active-filter'));
         switch(action) {
@@ -2366,6 +2317,7 @@
                 if (statusFilter) statusFilter.value = '';
                 if (categoryFilter) categoryFilter.value = '';
                 if (accountFilter) accountFilter.value = '';
+                if (cardFilter) cardFilter.value = '';
                 if (searchFilter) searchFilter.value = '';
                 smartwallet.clearCache(); smartwallet.render(); smartwallet.saveFilters();
                 document.querySelectorAll('.card.clickable')[1].classList.add('active-filter');
@@ -2375,6 +2327,7 @@
                 if (statusFilter) statusFilter.value = '';
                 if (categoryFilter) categoryFilter.value = '';
                 if (accountFilter) accountFilter.value = '';
+                if (cardFilter) cardFilter.value = '';
                 if (searchFilter) searchFilter.value = '';
                 smartwallet.clearCache(); smartwallet.render(); smartwallet.saveFilters();
                 document.querySelectorAll('.card.clickable')[2].classList.add('active-filter');
@@ -2386,6 +2339,16 @@
         const section = document.querySelector('.transactions-section');
         if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+
+    window.sortTransactions = function(column) {
+        if (smartwallet.sortColumn === column) {
+            smartwallet.sortDirection = smartwallet.sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            smartwallet.sortColumn = column;
+            smartwallet.sortDirection = column === 'date' ? 'desc' : 'asc';
+        }
+        smartwallet.render();
+    };
 
     window.changeCardMonth = function(delta) {
         smartwallet.cardModalMonth.setMonth(smartwallet.cardModalMonth.getMonth() + delta);
@@ -2402,47 +2365,73 @@
         if (label) label.textContent = months[smartwallet.cardModalMonth.getMonth()] + ' ' + smartwallet.cardModalMonth.getFullYear();
     };
 
+    // ===== HELPERS DE MODAIS =====
+    function openModal(id) {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        // Salva posição atual do scroll antes de bloquear
+        document.body.style.setProperty('--scroll-y', -window.scrollY + 'px');
+        document.body.classList.add('modal-open');
+        modal.classList.add('active');
+        // Focus trap: foca no primeiro elemento do modal
+        setTimeout(() => {
+            const focusable = modal.querySelector('.modal-content');
+            if (focusable) focusable.focus();
+        }, 50);
+    }
+    function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        modal.classList.remove('active');
+        // Verifica se há outro modal ativo antes de liberar o body
+        const stillOpen = document.querySelector('.modal.active');
+        if (!stillOpen) {
+            document.body.classList.remove('modal-open');
+            document.body.style.removeProperty('--scroll-y');
+            window.scrollTo(0, 0);
+        }
+    }
+
     window.openNewTransactionModal = function() {
         smartwallet.setDefaultDate();
         smartwallet.currentTransactionType = 'expense';
         document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
-            const isExpense = btn.getAttribute('data-type') === 'expense';
-            btn.classList.toggle('active', isExpense);
+            btn.classList.toggle('active', btn.getAttribute('data-type') === 'expense');
         });
         smartwallet.populateCategorySelects();
         smartwallet.populatePaymentMethodSelects();
         smartwallet.populateAccountSelects();
-        document.getElementById('newTransactionModal').classList.add('active');
+        openModal('newTransactionModal');
     };
     window.closeNewTransactionModal = function() {
-        document.getElementById('newTransactionModal').classList.remove('active');
+        closeModal('newTransactionModal');
         smartwallet.clearForm();
     };
     window.closeEditModal = function() {
-        document.getElementById('editModal').classList.remove('active');
+        closeModal('editModal');
         smartwallet.currentEditId = null;
     };
-    window.openExportModal = function() { document.getElementById('exportModal').classList.add('active'); };
-    window.closeExportModal = function() { document.getElementById('exportModal').classList.remove('active'); };
-    window.openGoalModal = function() { document.getElementById('goalModal').classList.add('active'); };
-    window.closeGoalModal = function() { document.getElementById('goalModal').classList.remove('active'); };
+    window.openExportModal = function() { openModal('exportModal'); };
+    window.closeExportModal = function() { closeModal('exportModal'); };
+    window.openGoalModal = function() { openModal('goalModal'); };
+    window.closeGoalModal = function() { closeModal('goalModal'); };
     window.openImportCsvModal = function() {
         window._pendingCsvData = null;
         document.getElementById('csvFileInput').value = '';
         document.getElementById('csvFileName').textContent = 'Clique para selecionar';
         document.getElementById('csvReplaceData').checked = false;
-        document.getElementById('importCsvModal').classList.add('active');
-        document.getElementById('mainMenu').classList.remove('active');
+        openModal('importCsvModal');
+        closeAllDropdowns();
     };
-    window.closeImportCsvModal = function() { document.getElementById('importCsvModal').classList.remove('active'); };
+    window.closeImportCsvModal = function() { closeModal('importCsvModal'); };
     window.openImportBackupModal = function() {
         window._pendingBackupData = null;
         document.getElementById('backupFileInput').value = '';
         document.getElementById('backupFileName').textContent = 'Clique para selecionar';
-        document.getElementById('importBackupModal').classList.add('active');
-        document.getElementById('mainMenu').classList.remove('active');
+        openModal('importBackupModal');
+        closeAllDropdowns();
     };
-    window.closeImportBackupModal = function() { document.getElementById('importBackupModal').classList.remove('active'); };
+    window.closeImportBackupModal = function() { closeModal('importBackupModal'); };
     window.openClearDataModal = function() {
         document.getElementById('clearStep1').style.display = 'block';
         document.getElementById('clearStep2').style.display = 'none';
@@ -2450,31 +2439,31 @@
         document.getElementById('clearConfirmInput').classList.remove('match');
         document.getElementById('finalClearBtn').disabled = true;
         document.getElementById('finalClearBtn').style.opacity = '0.5';
-        document.getElementById('clearDataModal').classList.add('active');
-        document.getElementById('mainMenu').classList.remove('active');
+        openModal('clearDataModal');
+        closeAllDropdowns();
     };
-    window.closeClearDataModal = function() { document.getElementById('clearDataModal').classList.remove('active'); };
+    window.closeClearDataModal = function() { closeModal('clearDataModal'); };
     window.openAccountsModal = function() {
         smartwallet.renderAccountsList();
-        document.getElementById('accountsModal').classList.add('active');
-        document.getElementById('mainMenu').classList.remove('active');
+        openModal('accountsModal');
+        closeAllDropdowns();
     };
-    window.closeAccountsModal = function() { document.getElementById('accountsModal').classList.remove('active'); };
+    window.closeAccountsModal = function() { closeModal('accountsModal'); };
     window.openNewAccountModal = function() {
         document.getElementById('accountEditId').value = '';
         document.getElementById('accountForm').reset();
         document.getElementById('accountColor').value = '#6366f1';
         document.getElementById('newAccountTitle').textContent = 'Nova Conta';
-        document.getElementById('newAccountModal').classList.add('active');
+        openModal('newAccountModal');
     };
-    window.closeNewAccountModal = function() { document.getElementById('newAccountModal').classList.remove('active'); };
+    window.closeNewAccountModal = function() { closeModal('newAccountModal'); };
     window.openCreditCardsModal = function() {
         smartwallet.cardModalMonth = new Date(smartwallet.currentMonth);
         smartwallet.renderCreditCardsList();
-        document.getElementById('creditCardsModal').classList.add('active');
-        document.getElementById('mainMenu').classList.remove('active');
+        openModal('creditCardsModal');
+        closeAllDropdowns();
     };
-    window.closeCreditCardsModal = function() { document.getElementById('creditCardsModal').classList.remove('active'); };
+    window.closeCreditCardsModal = function() { closeModal('creditCardsModal'); };
     window.openNewCardModal = function() {
         document.getElementById('cardEditId').value = '';
         document.getElementById('cardForm').reset();
@@ -2482,63 +2471,66 @@
         document.getElementById('cardDueDay').value = 27;
         document.getElementById('cardColor').value = '#6366f1';
         document.getElementById('newCardTitle').textContent = 'Novo Cartão';
-        document.getElementById('newCardModal').classList.add('active');
+        openModal('newCardModal');
     };
-    window.closeNewCardModal = function() { document.getElementById('newCardModal').classList.remove('active'); };
-    window.openInvoiceModal = function(cardId) { smartwallet.openInvoice(cardId); };
-    window.closeInvoiceModal = function() { document.getElementById('invoiceModal').classList.remove('active'); };
+    window.closeNewCardModal = function() { closeModal('newCardModal'); };
+    window.openInvoiceModal = function(cardId) {
+        smartwallet.openInvoice(cardId);
+    };
+    window.closeInvoiceModal = function() { closeModal('invoiceModal'); };
     window.openBillsModal = function() {
         smartwallet.renderBillsModal();
-        document.getElementById('billsModal').classList.add('active');
+        openModal('billsModal');
     };
-    window.closeBillsModal = function() { document.getElementById('billsModal').classList.remove('active'); };
+    window.closeBillsModal = function() { closeModal('billsModal'); };
     window.openInvestmentsModal = function() {
         smartwallet.renderInvestmentsModal();
-        document.getElementById('investmentsModal').classList.add('active');
-        document.getElementById('infoMenu').classList.remove('active');
+        openModal('investmentsModal');
+        closeAllDropdowns();
     };
-    window.closeInvestmentsModal = function() { document.getElementById('investmentsModal').classList.remove('active'); };
+    window.closeInvestmentsModal = function() { closeModal('investmentsModal'); };
     window.openNewInvestmentModal = function() {
         document.getElementById('investmentEditId').value = '';
         document.getElementById('investmentForm').reset();
         document.getElementById('investmentDate').value = new Date().toISOString().split('T')[0];
         document.getElementById('newInvestmentTitle').textContent = 'Nova Aplicação';
         const accountSelect = document.getElementById('investmentAccount');
-        accountSelect.innerHTML = '<option value="">-- Sem vínculo (criar nova automaticamente) --</option>';
+        accountSelect.innerHTML = '<option value="">-- Criar nova --</option>';
         smartwallet.accounts.filter(a => a.type === 'investment').forEach(acc => {
             const opt = document.createElement('option');
             opt.value = acc.id;
             opt.textContent = acc.name + ' - ' + smartwallet.formatCurrency(acc.balance);
             accountSelect.appendChild(opt);
         });
-        document.getElementById('newInvestmentModal').classList.add('active');
+        openModal('newInvestmentModal');
     };
-    window.closeNewInvestmentModal = function() { document.getElementById('newInvestmentModal').classList.remove('active'); };
-    window.closeUpdateInvestmentModal = function() { document.getElementById('updateInvestmentModal').classList.remove('active'); };
+    window.closeNewInvestmentModal = function() { closeModal('newInvestmentModal'); };
+    window.closeUpdateInvestmentModal = function() { closeModal('updateInvestmentModal'); };
     window.openManualModal = function() {
         document.getElementById('manualContent').innerHTML = manualHTML;
-        document.getElementById('manualModal').classList.add('active');
-        document.getElementById('infoMenu').classList.remove('active');
+        openModal('manualModal');
+        closeAllDropdowns();
     };
-    window.closeManualModal = function() { document.getElementById('manualModal').classList.remove('active'); };
+    window.closeManualModal = function() { closeModal('manualModal'); };
     window.printManual = function() { smartwallet.printManual(); };
     window.openTermsModal = function() {
-        document.getElementById('disclaimerModal').classList.add('active');
+        openModal('disclaimerModal');
         initDisclaimer();
-        document.getElementById('infoMenu').classList.remove('active');
+        closeAllDropdowns();
     };
     window.openThanksModal = function() {
-        document.getElementById('thanksModal').classList.add('active');
-        document.getElementById('infoMenu').classList.remove('active');
+        openModal('thanksModal');
+        closeAllDropdowns();
     };
-    window.closeThanksModal = function() { document.getElementById('thanksModal').classList.remove('active'); };
+    window.closeThanksModal = function() { closeModal('thanksModal'); };
     window.openCategoryBudgetModal = function() {
         smartwallet.renderCategoryBudget();
-        document.getElementById('categoryBudgetModal').classList.add('active');
-        document.getElementById('mainMenu').classList.remove('active');
+        openModal('categoryBudgetModal');
+        closeAllDropdowns();
     };
-    window.closeCategoryBudgetModal = function() { document.getElementById('categoryBudgetModal').classList.remove('active'); };
+    window.closeCategoryBudgetModal = function() { closeModal('categoryBudgetModal'); };
 
+    // ===== FAB =====
     window.toggleFab = function() {
         const fab = document.getElementById('fabBtn');
         const actions = document.getElementById('fabActions');
@@ -2558,36 +2550,35 @@
         smartwallet.setDefaultDate();
         smartwallet.currentTransactionType = 'expense';
         document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
-            const isExpense = btn.getAttribute('data-type') === 'expense';
-            btn.classList.toggle('active', isExpense);
+            btn.classList.toggle('active', btn.getAttribute('data-type') === 'expense');
         });
         smartwallet.populateCategorySelects();
         smartwallet.populatePaymentMethodSelects();
         smartwallet.populateAccountSelects();
-        document.getElementById('newTransactionModal').classList.add('active');
+        openModal('newTransactionModal');
     };
     window.openIncomeModal = function() {
         if (document.getElementById('fabBtn').classList.contains('active')) toggleFab();
         smartwallet.setDefaultDate();
         smartwallet.currentTransactionType = 'income';
         document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
-            const isIncome = btn.getAttribute('data-type') === 'income';
-            btn.classList.toggle('active', isIncome);
+            btn.classList.toggle('active', btn.getAttribute('data-type') === 'income');
         });
         smartwallet.populateCategorySelects();
         smartwallet.populatePaymentMethodSelects();
         smartwallet.populateAccountSelects();
-        document.getElementById('newTransactionModal').classList.add('active');
+        openModal('newTransactionModal');
     };
     window.openTransferModal = function() {
         if (document.getElementById('fabBtn').classList.contains('active')) toggleFab();
         smartwallet.populateAccountSelects();
         document.getElementById('transferForm').reset();
         document.getElementById('transferDate').value = new Date().toISOString().split('T')[0];
-        document.getElementById('transferModal').classList.add('active');
+        openModal('transferModal');
     };
-    window.closeTransferModal = function() { document.getElementById('transferModal').classList.remove('active'); };
+    window.closeTransferModal = function() { closeModal('transferModal'); };
 
+    // ===== TOGGLES =====
     window.togglePrivacy = function() {
         smartwallet.privacyOn = !smartwallet.privacyOn;
         localStorage.setItem('smartwallet_privacy', smartwallet.privacyOn);
@@ -2598,14 +2589,41 @@
         localStorage.setItem('smartwallet_dark', smartwallet.darkMode);
         smartwallet.applyTheme();
     };
+
+    // ===== MENUS DROPDOWN (com lógica de recolher outros) =====
+    function closeAllDropdowns() {
+        const info = document.getElementById('infoMenu');
+        const main = document.getElementById('mainMenu');
+        if (info) info.classList.remove('active');
+        if (main) main.classList.remove('active');
+        // Remove destaque dos botões
+        document.querySelectorAll('.header-btn').forEach(b => b.classList.remove('menu-active'));
+    }
     window.toggleMenu = function(e) {
         if (e) e.stopPropagation();
-        document.getElementById('mainMenu').classList.toggle('active');
-        document.getElementById('infoMenu').classList.remove('active');
+        const main = document.getElementById('mainMenu');
+        const info = document.getElementById('infoMenu');
+        const isActive = main.classList.contains('active');
+        // Fecha outros menus
+        if (info) info.classList.remove('active');
+        document.querySelectorAll('.header-btn.info-btn').forEach(b => b.classList.remove('menu-active'));
+        // Alterna
+        main.classList.toggle('active');
+        const menuBtn = document.querySelector('.header-btn.menu-btn');
+        if (menuBtn) menuBtn.classList.toggle('menu-active', !isActive);
     };
     window.toggleInfoMenu = function(e) {
         if (e) e.stopPropagation();
-        document.getElementById('infoMenu').classList.toggle('active');
+        const info = document.getElementById('infoMenu');
+        const main = document.getElementById('mainMenu');
+        const isActive = info.classList.contains('active');
+        // Fecha outros menus
+        if (main) main.classList.remove('active');
+        document.querySelectorAll('.header-btn.menu-btn').forEach(b => b.classList.remove('menu-active'));
+        // Alterna
+        info.classList.toggle('active');
+        const infoBtn = document.querySelector('.header-btn.info-btn');
+        if (infoBtn) infoBtn.classList.toggle('menu-active', !isActive);
     };
 
     window.toggleLanguage = function() {
@@ -2613,25 +2631,20 @@
         const newLang = currentLang === 'pt-BR' ? 'en-US' : 'pt-BR';
         smartwallet.setLanguage(newLang);
         const langText = document.getElementById('languageText');
-        if (langText) {
-            langText.textContent = newLang === 'pt-BR' ? 'Idioma: Português' : 'Language: English';
-        }
+        if (langText) langText.textContent = newLang === 'pt-BR' ? 'Idioma: Português' : 'Language: English';
         smartwallet.updateCurrencySelectorVisibility();
-        document.getElementById('mainMenu').classList.remove('active');
+        closeAllDropdowns();
     };
-
     window.toggleCurrency = function() {
         const currentCurrency = smartwallet.getCurrency();
         const newCurrency = currentCurrency === 'BRL' ? 'USD' : 'BRL';
         smartwallet.setCurrency(newCurrency);
         const currencyText = document.getElementById('currencyText');
-        if (currencyText) {
-            const currency = smartwallet.getCurrency();
-            currencyText.textContent = currency === 'BRL' ? 'Moeda: R$' : 'Currency: $';
-        }
-        document.getElementById('mainMenu').classList.remove('active');
+        if (currencyText) currencyText.textContent = newCurrency === 'BRL' ? 'Moeda: R$' : 'Currency: $';
+        closeAllDropdowns();
     };
 
+    // ===== FILE HANDLERS =====
     window.handleCsvFileSelect = function(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -2681,6 +2694,7 @@
         reader.readAsText(file, 'UTF-8');
     };
 
+    // ===== CLEAR DATA =====
     window.showClearStep2 = function() {
         document.getElementById('clearStep1').style.display = 'none';
         document.getElementById('clearStep2').style.display = 'block';
@@ -2703,9 +2717,10 @@
         const key = document.getElementById('pixKey').textContent;
         navigator.clipboard.writeText(key)
             .then(() => smartwallet.showToast('✅ Chave PIX copiada!'))
-            .catch(() => smartwallet.showToast('❌ Copie manualmente: ' + key));
+            .catch(() => smartwallet.showToast('❌ Copie: ' + key));
     };
 
+    // ===== DISCLAIMER & QUOTE =====
     function initDisclaimer() {
         let countdown = 12;
         const timerEl = document.getElementById('disclaimerTimer');
@@ -2733,10 +2748,7 @@
         const quoteModal = document.getElementById('quoteModal');
         if (quoteText) quoteText.textContent = '"' + quote.text + '"';
         if (quoteAuthor) quoteAuthor.textContent = '— ' + quote.author;
-        if (quoteModal) {
-            quoteModal.style.display = 'flex';
-            quoteModal.classList.add('active');
-        }
+        if (quoteModal) quoteModal.classList.add('active');
     }
     window.acceptDisclaimer = function() {
         const btn = document.getElementById('acceptDisclaimerBtn');
@@ -2774,9 +2786,7 @@
         if (dateEl) dateEl.textContent = 'Gerado em: ' + new Date().toLocaleString('pt-BR');
     }
 
-    window.closeWhatsNewModal = function() {
-        document.getElementById('whatsNewModal').classList.remove('active');
-    };
+    window.closeWhatsNewModal = function() { closeModal('whatsNewModal'); };
     window.printManualFromWhatsNew = function() {
         closeWhatsNewModal();
         setTimeout(() => { smartwallet.printManual(); }, 300);
@@ -2786,6 +2796,7 @@
         setTimeout(() => { openManualModal(); }, 300);
     };
 
+    // ===== EVENT LISTENERS GLOBAIS =====
     window.addEventListener('load', () => {
         updatePrintDate();
         const accepted = localStorage.getItem('smartwallet_disclaimer_accepted') === 'true';
@@ -2814,21 +2825,36 @@
         }, 3500);
     });
 
+    // Click fora fecha MENUS (não modais!)
     document.addEventListener('click', (e) => {
         const menu = document.getElementById('mainMenu');
         const info = document.getElementById('infoMenu');
-        if (!e.target.closest('.menu-btn') && menu && menu.classList.contains('active')) menu.classList.remove('active');
-        if (!e.target.closest('.info-btn') && info && info.classList.contains('active')) info.classList.remove('active');
+        const menuBtn = document.querySelector('.header-btn.menu-btn');
+        const infoBtn = document.querySelector('.header-btn.info-btn');
+        
+        if (menu && menu.classList.contains('active') && !e.target.closest('.dropdown-wrapper')) {
+            menu.classList.remove('active');
+            if (menuBtn) menuBtn.classList.remove('menu-active');
+        }
+        if (info && info.classList.contains('active') && !e.target.closest('.dropdown-wrapper')) {
+            info.classList.remove('active');
+            if (infoBtn) infoBtn.classList.remove('menu-active');
+        }
+        
         const fabWrapper = document.getElementById('fabWrapper');
         const fab = document.getElementById('fabBtn');
-        if (fabWrapper && !fabWrapper.contains(e.target) && fab.classList.contains('active')) toggleFab();
+        if (fabWrapper && !fabWrapper.contains(e.target) && fab && fab.classList.contains('active')) {
+            toggleFab();
+        }
     });
+
     document.addEventListener('keydown', (e) => {
         if (e.target.classList.contains('clickable') && (e.key === 'Enter' || e.key === ' ')) {
             e.preventDefault();
             e.target.click();
         }
     });
+
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js')
@@ -2837,5 +2863,5 @@
         });
     }
 
-    console.log('🎉 Smart Wallet v4.2.0 carregado com sucesso!');
+    console.log('🎉 Smart Wallet v4.2.1 carregado com sucesso!');
 })();
