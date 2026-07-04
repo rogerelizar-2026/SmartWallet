@@ -172,7 +172,7 @@
                             </button>
                             <button class="dropdown-item" onclick="openInvestmentsModal()">
                                 <svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
-                                <span>Acompanhamento de Aplicações</span>
+                                <span>Aplicações</span>
                             </button>
                             <div class="dropdown-divider"></div>
                             <button class="dropdown-item" onclick="openCategoryBudgetModal()">
@@ -295,7 +295,7 @@
 
         <div class="charts-section" id="investmentsChartSection" role="region" aria-label="Gráfico de investimentos">
             <div class="chart-card" style="grid-column: 1 / -1;">
-                <h3>📊 Acompanhamento de Aplicações</h3>
+                <h3>📊 Aplicações</h3>
                 <div class="chart-container" style="height: 400px;"><canvas id="investChart" aria-label="Gráfico de evolução dos investimentos"></canvas></div>
                 <div id="investSummary" style="margin-top: 20px;" aria-live="polite"></div>
             </div>
@@ -825,7 +825,7 @@
     <div class="modal" id="investmentsModal" role="dialog" aria-modal="true" aria-labelledby="investmentsTitle" aria-hidden="true">
         <div class="modal-content wide">
             <div class="modal-header">
-                <h2 id="investmentsTitle">📈 Acompanhamento de Aplicações</h2>
+                <h2 id="investmentsTitle">📈 Aplicações</h2>
                 <div class="flex-gap-8">
                     <button class="btn btn-primary btn-small" onclick="openNewInvestmentModal()">➕ Nova Aplicação</button>
                     <button class="modal-close" onclick="closeInvestmentsModal()" aria-label="Fechar modal">
