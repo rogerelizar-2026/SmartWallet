@@ -479,14 +479,13 @@
         setDefaultDate() { const el = document.getElementById('date'); if (el) el.value = new Date().toISOString().split('T')[0]; }
         changeMonth(delta) { this.currentMonth.setMonth(this.currentMonth.getMonth() + delta); this.updateMonthDisplay(); this.clearCache(); this.clearDashboardHighlight(); this.render(); this.updateCharts(); }
         updateMonthDisplay() {
-	updateMonthDisplay() {
     	const lang = this.getLanguage();
 	    const months = (TRANSLATIONS[lang] && TRANSLATIONS[lang].months) || TRANSLATIONS['pt-BR'].months;
     	const el = document.getElementById('currentMonth');
     		if (el && months) {
         	el.textContent = months[this.currentMonth.getMonth()] + ' ' + this.currentMonth.getFullYear();
-   		 }
-	}
+   			 }
+		}
         formatMonthYear(date) { if (!date) date = this.currentMonth; return String(date.getMonth() + 1).padStart(2, '0') + '-' + date.getFullYear(); }
         generateTimestamp() {
             const now = new Date();
