@@ -652,7 +652,7 @@
 
         applyLanguage() {
             const titleEl = document.querySelector('.header-title');
-            if (titleEl) titleEl.textContent = '💬 Mensagem do Sistema Smart Wallet';);
+            if (titleEl) titleEl.textContent = '💬 Mensagem do Sistema Smart Wallet';
             const subtitleEl = document.querySelector('.header-subtitle');
             if (subtitleEl) subtitleEl.textContent = this.t('appSubtitle');
             this.updateMonthDisplay();
