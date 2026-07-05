@@ -1,6 +1,187 @@
 (function() {
     'use strict';
 
+    // ===== NOVO v4.5.0: SISTEMA DE VERSIONAMENTO =====
+    const DATA_VERSION = 2; // Incrementar quando estrutura mudar
+    
+    // ===== NOVO v4.5.0: HELPERS DE SEGURANÇA =====
+    
+    /**
+     * Escapa HTML de forma robusta contra XSS
+     */
+    function safeHTML(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/\//g, '&#x2F;')
+            .replace(/`/g, '&#96;');
+    }
+
+    /**
+     * Sanitiza recursivamente um objeto
+     */
+    function sanitizeObject(obj, depth = 0) {
+        if (depth > 10) return obj;
+        if (obj === null || obj === undefined) return obj;
+        if (typeof obj === 'string') return safeHTML(obj);
+        if (typeof obj !== 'object') return obj;
+        if (Array.isArray(obj)) return obj.map(item => sanitizeObject(item, depth + 1));
+        
+        const sanitized = {};
+        for (const key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                if (key === 'manualHTML' || key === '_rawHTML') {
+                    sanitized[key] = obj[key];
+                } else {
+                    sanitized[key] = sanitizeObject(obj[key], depth + 1);
+                }
+            }
+        }
+        return sanitized;
+    }
+
+    /**
+     * Valida se uma URL é segura
+     */
+    function isSafeURL(url) {
+        if (!url || typeof url !== 'string') return false;
+        try {
+            const parsed = new URL(url, window.location.origin);
+            return parsed.protocol === 'http:' || parsed.protocol === 'https:' || parsed.protocol === 'mailto:';
+        } catch (e) {
+            return false;
+        }
+    }
+
+    /**
+     * Calcula SHA-256 checksum
+     */
+    async function computeChecksum(data) {
+        try {
+            if (!window.crypto || !window.crypto.subtle) {
+                return computeChecksumFallback(data);
+            }
+            const encoder = new TextEncoder();
+            const dataBuffer = encoder.encode(typeof data === 'string' ? data : JSON.stringify(data));
+            const hashBuffer = await window.crypto.subtle.digest('SHA-256', dataBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        } catch (e) {
+            return computeChecksumFallback(data);
+        }
+    }
+
+    function computeChecksumFallback(data) {
+        const str = typeof data === 'string' ? data : JSON.stringify(data);
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return 'fallback_' + Math.abs(hash).toString(16).padStart(8, '0');
+    }
+
+    async function verifyIntegrity(data, expectedChecksum) {
+        if (!expectedChecksum) return { valid: true, warning: 'Sem checksum' };
+        const actual = await computeChecksum(data);
+        return {
+            valid: actual === expectedChecksum,
+            expected: expectedChecksum,
+            actual: actual
+        };
+    }
+
+    // ===== NOVO v4.5.0: SISTEMA DE MIGRAÇÃO =====
+    
+    function migrateData(data) {
+        if (!data || typeof data !== 'object') return data;
+        
+        const currentVersion = data.dataVersion || 1;
+        let migrated = { ...data };
+        
+        if (currentVersion < 2) {
+            migrated = migrateV1toV2(migrated);
+        }
+        
+        migrated.dataVersion = DATA_VERSION;
+        return migrated;
+    }
+
+    function migrateV1toV2(data) {
+        const migrated = { ...data };
+        
+        if (Array.isArray(migrated.transactions)) {
+            migrated.transactions = migrated.transactions.map(t => ({
+                id: t.id || generateFallbackId(),
+                date: t.date || new Date().toISOString().split('T')[0],
+                amount: typeof t.amount === 'number' ? t.amount : 0,
+                category: t.category || 'outros',
+                description: t.description || '',
+                statusOk: !!t.statusOk,
+                paymentMethod: t.paymentMethod || 'pix',
+                accountId: t.accountId || '',
+                recurrence: t.recurrence || null
+            }));
+        }
+        
+        if (Array.isArray(migrated.accounts)) {
+            migrated.accounts = migrated.accounts.map(a => ({
+                id: a.id || generateFallbackId(),
+                name: a.name || 'Conta sem nome',
+                type: a.type || 'checking',
+                balance: typeof a.balance === 'number' ? a.balance : 0,
+                color: a.color || '#6366f1'
+            }));
+        }
+        
+        if (Array.isArray(migrated.cards)) {
+            migrated.cards = migrated.cards.map(c => ({
+                id: c.id || generateFallbackId(),
+                name: c.name || 'Cartão sem nome',
+                brand: c.brand || 'Outra',
+                last4: c.last4 || '',
+                closingDay: c.closingDay || 1,
+                dueDay: c.dueDay || 10,
+                limit: typeof c.limit === 'number' ? c.limit : 0,
+                color: c.color || '#6366f1'
+            }));
+        }
+        
+        if (Array.isArray(migrated.investments)) {
+            migrated.investments = migrated.investments.map(i => ({
+                id: i.id || generateFallbackId(),
+                name: i.name || 'Investimento sem nome',
+                type: i.type || 'outro',
+                initial: typeof i.initial === 'number' ? i.initial : 0,
+                current: typeof i.current === 'number' ? i.current : 0,
+                date: i.date || new Date().toISOString().split('T')[0],
+                rate: typeof i.rate === 'number' ? i.rate : 0,
+                accountId: i.accountId || null
+            }));
+        }
+        
+        if (!migrated.settings) {
+            migrated.settings = {
+                alertNegativeBalance: true,
+                blockNegativeBalance: false,
+                autoBackupEnabled: false,
+                notifyBills: false,
+                pageSize: 20
+            };
+        }
+        
+        return migrated;
+    }
+
+    function generateFallbackId() {
+        return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
+    }
+
     // ===== CONSTANTES =====
     const PAYMENT_METHODS = [
         { id: 'pix', name: 'PIX', icon: '⚡' },
@@ -2643,32 +2824,47 @@
             this.isSaving = true;
             try {
                 const backup = {
-                    version: '4.4.0', exportDate: new Date().toISOString(),
-                    appName: 'Smart Wallet', language: this.getLanguage(),
-                    currency: this.getCurrency(), transactions: this.transactions,
-                    categories: this.categories, accounts: this.accounts,
-                    cards: this.cards, investments: this.investments,
-                    darkMode: this.darkMode, privacyOn: this.privacyOn,
+                    version: '4.5.0',
+                    dataVersion: DATA_VERSION,
+                    exportDate: new Date().toISOString(),
+                    appName: 'Smart Wallet',
+                    language: this.getLanguage(),
+                    currency: this.getCurrency(),
+                    transactions: this.transactions,
+                    categories: this.categories,
+                    accounts: this.accounts,
+                    cards: this.cards,
+                    investments: this.investments,
+                    darkMode: this.darkMode,
+                    privacyOn: this.privacyOn,
                     settings: this.settings
                 };
-                const jsonString = JSON.stringify(backup, null, 2);
-                const blob = new Blob(['\ufeff' + jsonString], { type: 'application/json;charset=utf-8' });
-                const fileName = this.generateTimestamp() + '_backup.json';
-                saveFileWithPicker(blob, fileName, 'application/json').then(result => {
-                    if (result === 'saved' || result === 'downloaded') {
-                        localStorage.setItem('smartwallet_last_backup', Date.now().toString());
-                        this.showToast('✅ ' + this.t('backupExported'));
-                        this.updateSettingsUI();
-                    }
-                }).catch(e => this.showToast('❌ ' + e.message))
-                .finally(() => { this.isSaving = false; });
+                
+                // NOVO v4.5.0: Calcular checksum ANTES de stringificar
+                computeChecksum(backup).then(checksum => {
+                    backup.checksum = checksum;
+                    const jsonString = JSON.stringify(backup, null, 2);
+                    const blob = new Blob(['\ufeff' + jsonString], { type: 'application/json;charset=utf-8' });
+                    const fileName = this.generateTimestamp() + '_backup.json';
+                    
+                    saveFileWithPicker(blob, fileName, 'application/json').then(result => {
+                        if (result === 'saved' || result === 'downloaded') {
+                            localStorage.setItem('smartwallet_last_backup', Date.now().toString());
+                            this.showToast('✅ ' + this.t('backupExported'));
+                            this.updateSettingsUI();
+                        }
+                    }).catch(e => this.showToast('❌ ' + e.message))
+                    .finally(() => { this.isSaving = false; });
+                }).catch(e => {
+                    this.isSaving = false;
+                    this.showToast('❌ Erro ao gerar backup: ' + e.message);
+                });
             } catch (e) {
                 this.isSaving = false;
                 this.showToast('❌ Erro: ' + e.message);
             }
         }
-
-        importBackup() {
+        async importBackup() {
             if (!window._pendingBackupData) { this.showToast('⚠️ Selecione um arquivo'); return; }
             try {
                 let cleanData = window._pendingBackupData;
@@ -2677,17 +2873,37 @@
                 if (!cleanData) { this.showToast('⚠️ Arquivo vazio!'); return; }
                 const data = JSON.parse(cleanData);
                 if (!data || typeof data !== 'object') { this.showToast('❌ Estrutura inválida'); return; }
+
+                // NOVO v4.5.0: Verificar integridade
+                if (data.checksum) {
+                    const dataWithoutChecksum = { ...data };
+                    delete dataWithoutChecksum.checksum;
+                    const integrity = await verifyIntegrity(dataWithoutChecksum, data.checksum);
+                    if (!integrity.valid) {
+                        if (!confirm('⚠️ AVISO: Checksum inválido!\n\nO arquivo pode estar corrompido ou foi modificado manualmente.\n\nDeseja continuar mesmo assim? (NÃO RECOMENDADO)')) {
+                            this.showToast('❌ Importação cancelada');
+                            return;
+                        }
+                    }
+                }
+
+                // NOVO v4.5.0: Migrar dados se necessário
+                const migratedData = migrateData(data);
+                if ((data.dataVersion || 1) < DATA_VERSION) {
+                    console.log(`[SmartWallet] Migrando dados v${data.dataVersion || 1} → v${DATA_VERSION}`);
+                }
+
                 if (!confirm('⚠️ Substituir TODOS os dados?')) return;
                 
-                this.transactions = Array.isArray(data.transactions) ? data.transactions : [];
-                this.categories = Array.isArray(data.categories) ? data.categories : this.categories;
-                this.accounts = Array.isArray(data.accounts) ? data.accounts : [];
-                this.cards = Array.isArray(data.cards) ? data.cards : [];
-                this.investments = Array.isArray(data.investments) ? data.investments : [];
+                this.transactions = Array.isArray(migratedData.transactions) ? migratedData.transactions : [];
+                this.categories = Array.isArray(migratedData.categories) ? migratedData.categories : this.categories;
+                this.accounts = Array.isArray(migratedData.accounts) ? migratedData.accounts : [];
+                this.cards = Array.isArray(migratedData.cards) ? migratedData.cards : [];
+                this.investments = Array.isArray(migratedData.investments) ? migratedData.investments : [];
                 
-                if (typeof data.darkMode === 'boolean') this.darkMode = data.darkMode;
-                if (typeof data.privacyOn === 'boolean') this.privacyOn = data.privacyOn;
-                if (data.settings) this.settings = { ...this.settings, ...data.settings };
+                if (typeof migratedData.darkMode === 'boolean') this.darkMode = migratedData.darkMode;
+                if (typeof migratedData.privacyOn === 'boolean') this.privacyOn = migratedData.privacyOn;
+                if (migratedData.settings) this.settings = { ...this.settings, ...migratedData.settings };
                 if (typeof data.language === 'string') localStorage.setItem('smartwallet_language', data.language);
                 if (typeof data.currency === 'string') localStorage.setItem('smartwallet_currency', data.currency);
                 
