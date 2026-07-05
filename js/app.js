@@ -3705,6 +3705,57 @@
         }
     }
 
+	    // ===== NOVO v4.5.0: MODAL DE CONFIRMAÇÃO =====
+    
+    /**
+     * Substitui confirm() nativo por modal customizado
+     * Retorna Promise<boolean>
+     */
+    function showConfirm(title, message) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('confirmModal');
+            const titleEl = document.getElementById('confirmTitle');
+            const messageEl = document.getElementById('confirmMessage');
+            const yesBtn = document.getElementById('confirmYesBtn');
+            const noBtn = document.getElementById('confirmNoBtn');
+            
+            if (!modal || !titleEl || !messageEl || !yesBtn || !noBtn) {
+                // Fallback para confirm() nativo se modal não existir
+                resolve(confirm(title + '\n\n' + message));
+                return;
+            }
+            
+            titleEl.textContent = title;
+            messageEl.innerHTML = message.replace(/\n/g, '<br>');
+            
+            // Remove listeners antigos
+            const newYesBtn = yesBtn.cloneNode(true);
+            const newNoBtn = noBtn.cloneNode(true);
+            yesBtn.parentNode.replaceChild(newYesBtn, yesBtn);
+            noBtn.parentNode.replaceChild(newNoBtn, noBtn);
+            
+            // Adiciona novos listeners
+            newYesBtn.addEventListener('click', () => {
+                closeModal('confirmModal');
+                resolve(true);
+            });
+            
+            newNoBtn.addEventListener('click', () => {
+                closeModal('confirmModal');
+                resolve(false);
+            });
+            
+            // Abre o modal
+            openModal('confirmModal');
+            
+            // Foco no botão "Cancelar" por segurança
+            setTimeout(() => newNoBtn.focus(), 100);
+        });
+    }
+
+    // Expor globalmente para uso em outros contextos
+    window.showConfirm = showConfirm;
+
     function closeAllDropdowns() {
         const info = document.getElementById('infoMenu');
         const main = document.getElementById('mainMenu');
