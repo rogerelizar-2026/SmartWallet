@@ -2462,3 +2462,89 @@ body:not(.light) .form-group select,
 body:not(.light) .form-group textarea {
     color: var(--text-primary) !important;
 }
+/* ===== MODAL DE SENHA (NOVO v4.5.0) ===== */
+#passwordModal .modal-content {
+    animation: confirmSlideIn 0.3s ease;
+}
+
+#passwordModal .modal-header h2 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+}
+
+.password-strength {
+    margin-top: 8px;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.password-strength-bar {
+    height: 100%;
+    transition: width 0.3s ease, background 0.3s ease;
+    border-radius: 2px;
+}
+
+.password-strength-bar.weak { background: var(--danger-color); width: 33%; }
+.password-strength-bar.medium { background: var(--warning-color); width: 66%; }
+.password-strength-bar.strong { background: var(--success-color); width: 100%; }
+
+.password-strength-text {
+    font-size: 0.75rem;
+    margin-top: 4px;
+    font-weight: 600;
+}
+
+.password-strength-text.weak { color: var(--danger-color); }
+.password-strength-text.medium { color: var(--warning-color); }
+.password-strength-text.strong { color: var(--success-color); }
+
+.password-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border-left: 3px solid var(--warning-color);
+    padding: 12px;
+    border-radius: 8px;
+    margin: 16px 0;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.password-warning strong {
+    color: var(--warning-color);
+}
+
+#passwordModal .form-group input[type="password"] {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    padding: 14px;
+}
+
+#passwordModal .form-group input[type="password"]:focus {
+    letter-spacing: 3px;
+}
+
+/* Modo descriptografia (sem confirmação) */
+#passwordModal.decrypt-mode #confirmPasswordGroup,
+#passwordModal.decrypt-mode #passwordWarning {
+    display: none;
+}
+
+#passwordModal.decrypt-mode .modal-header h2 {
+    color: var(--accent-color);
+}
+
+/* Badge de backup criptografado */
+.backup-encrypted-badge {
+    display: inline-block;
+    background: var(--gradient-success);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-left: 8px;
+    letter-spacing: 0.5px;
+}
