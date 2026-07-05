@@ -436,6 +436,39 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Senha para Backup Criptografado (NOVO v4.5.0) -->
+    <div class="modal" id="passwordModal" role="dialog" aria-modal="true" tabindex="-1">
+        <div class="modal-content" tabindex="0" style="max-width: 450px;">
+            <div class="modal-header">
+                <h2 id="passwordModalTitle">🔒 Backup Criptografado</h2>
+                <button class="modal-close" data-close-modal="passwordModal">
+                    <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div id="passwordMessage" style="padding: 10px 0; color: var(--text-secondary); font-size: 0.9rem;"></div>
+            
+            <div class="form-group">
+                <label for="passwordInput">Senha</label>
+                <input type="password" id="passwordInput" placeholder="Digite sua senha" autocomplete="off">
+                <div class="password-strength" id="passwordStrength"></div>
+            </div>
+            
+            <div class="form-group" id="confirmPasswordGroup">
+                <label for="confirmPasswordInput">Confirmar Senha</label>
+                <input type="password" id="confirmPasswordInput" placeholder="Digite novamente" autocomplete="off">
+            </div>
+            
+            <div class="password-warning" id="passwordWarning">
+                ⚠️ <strong>Atenção:</strong> Anote esta senha em local seguro! Sem ela, você NÃO conseguirá restaurar o backup.
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="passwordConfirmBtn">Confirmar</button>
+                <button class="btn btn-secondary" data-close-modal="passwordModal">Cancelar</button>
+            </div>
+        </div>
+    </div>
     
     <!-- Modal Limpar -->
     <div class="modal danger-modal" id="clearDataModal" role="dialog" aria-modal="true" tabindex="-1">
