@@ -3765,6 +3765,11 @@
         closeAllDropdowns();
     };
     window.closeSettingsModal = function() { closeModal('settingsModal'); };
+	    // ===== CORREÇÃO v4.4.2: FUNÇÕES DE EXPORTAÇÃO COMO GLOBAIS =====
+    window.exportBackup = function() {
+        smartwallet.exportBackup();
+        closeAllDropdowns();
+    };
 
     // ===== NOVO v4.4.1: BOTÃO DEMO NO MENU INFO =====
     window.toggleDemoMode = function() {
