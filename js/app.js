@@ -3224,37 +3224,97 @@
                 this.showToast('❌ Erro: ' + e.message);
             }
         }
+		
         async importBackup() {
-            if (!window._pendingBackupData) { this.showToast('⚠️ Selecione um arquivo'); return; }
+            if (!window._pendingBackupData) {
+                this.showToast('⚠️ Selecione um arquivo');
+                return;
+            }
+            
             try {
                 let cleanData = window._pendingBackupData;
                 if (cleanData.charCodeAt(0) === 0xFEFF) cleanData = cleanData.substring(1);
                 cleanData = cleanData.trim();
-                if (!cleanData) { this.showToast('⚠️ Arquivo vazio!'); return; }
-                const data = JSON.parse(cleanData);
-                if (!data || typeof data !== 'object') { this.showToast('❌ Estrutura inválida'); return; }
-
-                // NOVO v4.5.0: Verificar integridade
-                if (data.checksum) {
+                if (!cleanData) {
+                    this.showToast('⚠️ Arquivo vazio!');
+                    return;
+                }
+                
+                let parsed = JSON.parse(cleanData);
+                if (!parsed || typeof parsed !== 'object') {
+                    this.showToast('❌ Estrutura inválida');
+                    return;
+                }
+                
+                let data;
+                
+                // NOVO v4.5.0: Detecta se é backup criptografado
+                if (parsed.magic === 'SWENCRYPTED') {
+                    if (!isCryptoSupported()) {
+                        this.showToast('❌ Seu navegador não suporta descriptografia');
+                        return;
+                    }
+                    
+                    // Pede senha
+                    const password = await showPasswordModal(
+                        'decrypt',
+                        'Este backup está protegido por senha. Digite a senha para descriptografar:'
+                    );
+                    
+                    if (!password) {
+                        this.showToast('❌ Operação cancelada');
+                        return;
+                    }
+                    
+                    try {
+                        const decrypted = await decryptData(parsed.encrypted, password);
+                        data = JSON.parse(decrypted);
+                        this.showToast('🔓 Backup descriptografado com sucesso!');
+                    } catch (e) {
+                        this.showToast('❌ ' + e.message);
+                        return;
+                    }
+                } else {
+                    data = parsed;
+                }
+                
+                if (!data || typeof data !== 'object') {
+                    this.showToast('❌ Estrutura inválida após descriptografia');
+                    return;
+                }
+                
+                // Verifica checksum (apenas para backups não criptografados)
+                if (data.checksum && !parsed.magic) {
                     const dataWithoutChecksum = { ...data };
                     delete dataWithoutChecksum.checksum;
                     const integrity = await verifyIntegrity(dataWithoutChecksum, data.checksum);
                     if (!integrity.valid) {
-                        if (!confirm('⚠️ AVISO: Checksum inválido!\n\nO arquivo pode estar corrompido ou foi modificado manualmente.\n\nDeseja continuar mesmo assim? (NÃO RECOMENDADO)')) {
+                        const proceed = await showConfirm(
+                            '⚠️ Checksum Inválido',
+                            'O arquivo pode estar corrompido ou foi modificado manualmente.<br><br>Deseja continuar mesmo assim? (NÃO RECOMENDADO)'
+                        );
+                        if (!proceed) {
                             this.showToast('❌ Importação cancelada');
                             return;
                         }
                     }
                 }
-
-                // NOVO v4.5.0: Migrar dados se necessário
+                
+                // Migração de versão
                 const migratedData = migrateData(data);
                 if ((data.dataVersion || 1) < DATA_VERSION) {
                     console.log(`[SmartWallet] Migrando dados v${data.dataVersion || 1} → v${DATA_VERSION}`);
                 }
-
-                if (!confirm('⚠️ Substituir TODOS os dados?')) return;
                 
+                // Confirma substituição
+                const confirmed = await showConfirm(
+                    '⚠️ Substituir Dados?',
+                    'Esta ação substituirá TODOS os seus dados atuais pelos dados do backup.<br><br>Esta operação não pode ser desfeita.'
+                );
+                
+                if (!confirmed) return;
+                
+                // Aplica dados
                 this.transactions = Array.isArray(migratedData.transactions) ? migratedData.transactions : [];
                 this.categories = Array.isArray(migratedData.categories) ? migratedData.categories : this.categories;
                 this.accounts = Array.isArray(migratedData.accounts) ? migratedData.accounts : [];
@@ -3264,30 +3324,39 @@
                 if (typeof migratedData.darkMode === 'boolean') this.darkMode = migratedData.darkMode;
                 if (typeof migratedData.privacyOn === 'boolean') this.privacyOn = migratedData.privacyOn;
                 if (migratedData.settings) this.settings = { ...this.settings, ...migratedData.settings };
-                if (typeof data.language === 'string') localStorage.setItem('smartwallet_language', data.language);
-                if (typeof data.currency === 'string') localStorage.setItem('smartwallet_currency', data.currency);
+                if (typeof migratedData.language === 'string') localStorage.setItem('smartwallet_language', migratedData.language);
+                if (typeof migratedData.currency === 'string') localStorage.setItem('smartwallet_currency', migratedData.currency);
                 
                 this.pageSize = this.settings.pageSize || 20;
                 
-                this.clearCache(); this.saveTransactions(); this.saveCategories();
+                this.clearCache();
+                this.saveTransactions(); this.saveCategories();
                 this.saveAccounts(); this.saveCards(); this.saveInvestments();
                 this.saveSettings();
                 localStorage.setItem('smartwallet_dark', this.darkMode);
                 localStorage.setItem('smartwallet_privacy', this.privacyOn);
-                this.populateCategorySelects(); this.populatePaymentMethodSelects();
-                this.populateAccountSelects(); this.applyTheme(); this.applyPrivacy();
-                this.applyLanguage(); this.applyCurrency();
+                
+                this.populateCategorySelects();
+                this.populatePaymentMethodSelects();
+                this.populateAccountSelects();
+                this.applyTheme();
+                this.applyPrivacy();
+                this.applyLanguage();
+                this.applyCurrency();
                 this.currentPage = 1;
-                this.render(); this.updateCharts(); this.updateAlertBadge();
+                this.render();
+                this.updateCharts();
+                this.updateAlertBadge();
                 this.checkNegativeBalance();
+                
                 closeModal('importBackupModal');
-                this.showToast('✅ Backup restaurado!');
+                this.showToast('✅ Backup restaurado com sucesso!');
                 window._pendingBackupData = null;
+                
             } catch (e) {
-                this.showToast('⚠️ Erro: ' + e.message);
+                this.showToast('⚠️ Erro ao processar: ' + e.message);
             }
         }
-
         importCSV() {
             if (!window._pendingCsvData) { this.showToast('Selecione um arquivo CSV'); return; }
             const replace = document.getElementById('csvReplaceData').checked;
