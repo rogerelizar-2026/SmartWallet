@@ -653,26 +653,23 @@
         <div class="modal-content" tabindex="0">
             <div class="modal-header"><h2>⚙️ Configurações</h2><button class="modal-close" data-close-modal="settingsModal"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
             <div class="settings-section">
-                <h3>💰 Saldo Negativo</h3>
+                <h3>🔔 Notificações</h3>
                 <div class="settings-item">
                     <div class="settings-info">
-                        <div class="settings-label">Alertar quando saldo ficar negativo</div>
-                        <div class="settings-description">Mostra aviso visual quando alguma conta ficar com saldo negativo</div>
+                        <div class="settings-label">Notificações de contas a vencer</div>
+                        <div class="settings-description">Receba alertas de contas vencendo em 3 dias</div>
                     </div>
                     <label class="toggle-switch">
-                        <input type="checkbox" id="alertNegativeBalance" checked>
+                        <input type="checkbox" id="notifyBills" disabled>
                         <span class="toggle-slider"></span>
                     </label>
                 </div>
                 <div class="settings-item">
                     <div class="settings-info">
-                        <div class="settings-label">Bloquear transações que deixam saldo negativo</div>
-                        <div class="settings-description">Impede adicionar despesas que deixariam a conta no vermelho</div>
+                        <div class="settings-label">Status atual</div>
+                        <div class="settings-description" id="notificationsStatus">⏳ Verificando...</div>
                     </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="blockNegativeBalance">
-                        <span class="toggle-slider"></span>
-                    </label>
+                    <button class="btn btn-primary btn-small" id="requestNotificationsBtn">Ativar</button>
                 </div>
             </div>
             <div class="settings-section">
@@ -719,6 +716,7 @@
     </div>
 
     <!-- Alerta de Saldo Negativo -->
+    <!-- Alerta de Saldo Negativo -->
     <div class="negative-balance-alert" id="negativeBalanceAlert" style="display:none;">
         <div class="alert-content">
             <span class="alert-icon">⚠️</span>
@@ -726,6 +724,20 @@
                 <strong>Atenção:</strong> <span id="negativeBalanceMessage">Você tem contas com saldo negativo!</span>
             </div>
             <button class="alert-close" id="closeNegativeAlertBtn">✕</button>
+        </div>
+    </div>
+
+    <!-- NOVO v4.4.1: Modal de Confirmação Custom -->
+    <div class="modal" id="confirmModal" role="dialog" aria-modal="true" tabindex="-1">
+        <div class="modal-content" tabindex="0" style="max-width: 450px;">
+            <div class="modal-header">
+                <h2 id="confirmTitle">⚠️ Confirmação</h2>
+            </div>
+            <div id="confirmMessage" style="padding: 20px 0; line-height: 1.6; color: var(--text-primary);"></div>
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="confirmYesBtn">Confirmar</button>
+                <button class="btn btn-secondary" id="confirmNoBtn">Cancelar</button>
+            </div>
         </div>
     </div>
 
