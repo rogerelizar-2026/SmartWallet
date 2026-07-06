@@ -53,7 +53,7 @@
         { text: "Quem compra o que não precisa, rouba a si mesmo.", author: "Provérbio Popular" }
     ];
 
-    const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Wallet Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 4.4.0 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Wallet!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v4.4.0</h2><ul><li><strong>Modo Demonstração:</strong> Carregue dados de exemplo para conhecer o app</li><li><strong>Paginação:</strong> Histórico dividido em páginas para melhor performance</li><li><strong>Gráfico Waterfall:</strong> Fluxo de caixa visual mês a mês</li><li><strong>Alerta de Saldo Negativo:</strong> Aviso quando contas ficam no vermelho</li><li><strong>Backup Automático:</strong> Sugestão semanal de backup</li><li><strong>Notificações Push:</strong> Alertas de contas a vencer</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! 💰</h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
+    const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Wallet Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 4.4.0 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>Bem-vindo ao Smart Wallet!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v4.4.0</h2><ul><li><strong>Modo Demonstração:</strong> Carregue dados de exemplo para conhecer o app</li><li><strong>Paginação:</strong> Histórico dividido em páginas para melhor performance</li><li><strong>Gráfico Waterfall:</strong> Fluxo de caixa visual mês a mês</li><li><strong>Alerta de Saldo Negativo:</strong> Aviso quando contas ficam no vermelho</li><li><strong>Backup Automático:</strong> Sugestão semanal de backup</li><li><strong>Notificações Push:</strong> Alertas de contas a vencer</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! 💰</h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
 
     // ===== TRADUÇÕES v4.4.0 =====
     const TRANSLATIONS = {
@@ -556,7 +556,7 @@
                     infoDemoText.textContent = '🔴 Encerrar Demonstração';
                     infoDemoBtn.classList.add('demo-active');
                 } else {
-                    infoDemoText.textContent = '🎯 Modo Demonstração';
+                    infoDemoText.textContent = 'Modo Demonstração';
                     infoDemoBtn.classList.remove('demo-active');
                 }
             }
@@ -1050,9 +1050,14 @@
         }
 
         // ===== MODO DEMONSTRAÇÃO =====
-        toggleDemoMode() {
+        async toggleDemoMode() {
             if (this.demoMode) {
-                if (confirm(this.t('confirmDemoClear'))) {
+                const confirmed = await showConfirm(
+                    '⚠️ Encerrar Demonstração?',
+                    'Encerrar modo demonstração e limpar todos os dados?\n\nEsta ação não pode ser desfeita.'
+                );
+                
+                if (confirmed) {
                     this.clearAllData(true);
                     this.demoMode = false;
                     localStorage.setItem('smartwallet_demo', 'false');
@@ -1060,7 +1065,12 @@
                     this.showToast(this.t('demoCleared'));
                 }
             } else {
-                if (confirm(this.t('confirmDemoLoad'))) {
+                const confirmed = await showConfirm(
+                    'Carregar Demonstração?',
+                    'Carregar dados de exemplo?\n\nSeus dados atuais serão substituídos pelos dados de demonstração.\n\nRecomendamos fazer backup antes de continuar.'
+                );
+                
+                if (confirmed) {
                     this.loadDemoData();
                 }
             }
@@ -1888,13 +1898,19 @@
                     });
                     createdCount++;
                 }
-                const monthTrans = this.transactions.filter(t => 
-                    t.accountId === accountId && 
-                    t.recurrence && t.recurrence.groupId === recurrenceGroupId &&
-                    new Date(t.date).getMonth() === this.currentMonth.getMonth()
-                );
+                // NOVO v4.4.1: Atualizar saldo de TODAS as parcelas no mês atual
+                const currentMonth = this.currentMonth.getMonth();
+                const currentYear = this.currentMonth.getFullYear();
+                const monthTrans = this.transactions.filter(t => {
+                    if (t.accountId !== accountId) return false;
+                    if (!t.recurrence || t.recurrence.groupId !== recurrenceGroupId) return false;
+                    const d = new Date(t.date);
+                    return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+                });
                 if (monthTrans.length > 0) {
-                    this.updateAccountBalance(accountId, monthTrans[0].amount);
+                    let monthTotal = 0;
+                    monthTrans.forEach(t => monthTotal += t.amount);
+                    this.updateAccountBalance(accountId, monthTotal);
                 }
                 this.clearCache(); this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge();
                 this.showToast('✅ ' + createdCount + ' ' + this.t('recurringCreated'));
@@ -2524,7 +2540,7 @@
             const total = this.calculateInvoiceTotal(purchases);
             const self = this;
             const printWindow = window.open('', '_blank');
-            if (!printWindow) { alert('⚠️ ' + this.t('allowPopups')); return; }
+            if (!printWindow) { this.showToast('⚠️ ' + this.t('allowPopups')); return; }
             const rows = purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).map(p => {
                 const cat = self.getCategoryById(p.category);
                 return '<tr><td>' + self.formatDate(p.date) + '</td><td>' + self.escapeHtml(p.description) + '</td><td>' + self.escapeHtml(cat.name) + '</td><td style="text-align:right;">' + self.formatCurrency(Math.abs(p.amount)) + '</td></tr>';
@@ -2594,7 +2610,7 @@
             const fileName = this.generateTimestamp() + '_extrato_' + period.replace(/ /g,'_') + '.pdf';
             const html = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page { size: A4; margin: 2cm; }body { font-family: Arial, sans-serif; color: #1e293b; padding: 20px; max-width: 900px; margin: 0 auto; }.header { text-align: center; border-bottom: 3px solid #6366f1; padding-bottom: 20px; margin-bottom: 30px; }.header h1 { color: #6366f1; font-size: 28pt; margin: 0 0 8px 0; }table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 9pt; }th { background: #6366f1; color: white; padding: 10px 8px; text-align: left; font-weight: 600; }td { padding: 8px; border-bottom: 1px solid #e5e7eb; }tr:nth-child(even) { background: #f8fafc; }.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }.summary-box { background: #f8fafc; border-radius: 8px; padding: 16px; text-align: center; border: 2px solid #e5e7eb; }.summary-box .label { font-size: 9pt; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }.summary-box .value { font-size: 16pt; font-weight: bold; }.summary-box.receitas .value { color: #10b981; }.summary-box.despesas .value { color: #ef4444; }.summary-box.saldo .value { color: #6366f1; }.footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #6366f1; text-align: center; font-size: 9pt; color: #64748b; }.no-print { text-align:center; margin-top:24px; }@media print { body { padding: 0; } .no-print { display: none; } }</style></head><body><div class="header"><h1>Smart Wallet</h1><p style="color:#64748b;">' + this.t('appSubtitle') + '</p><p style="color:#6366f1;font-size:14pt;font-weight:bold;margin:12px 0 0 0;">' + this.t('monthlyStatement') + ': ' + period + '</p></div><table><thead><tr><th>' + this.t('date') + '</th><th>' + this.t('description') + '</th><th>' + this.t('category') + '</th><th>' + this.t('account') + '</th><th>' + this.t('payment') + '</th><th>' + this.t('status') + '</th><th style="text-align:right;">' + this.t('value') + '</th></tr></thead><tbody>' + rowsHtml + '</tbody></table><div class="summary"><div class="summary-box receitas"><div class="label">' + this.t('income_plural') + '</div><div class="value">' + this.formatCurrency(totalReceitas) + '</div></div><div class="summary-box despesas"><div class="label">' + this.t('expense_plural') + '</div><div class="value">' + this.formatCurrency(totalDespesas) + '</div></div><div class="summary-box saldo"><div class="label">' + this.t('unifiedBalance') + '</div><div class="value">' + this.formatCurrency(saldo) + '</div></div></div><div class="footer"><p>Smart Wallet - ' + this.t('appSubtitle') + '</p><p style="font-weight:600;color:#6366f1;margin-top:6px;">Idealizado por RogerElizar™ | rogerelizar@gmail.com</p></div><div class="no-print"><button onclick="window.print()" style="background:#6366f1;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:11pt;cursor:pointer;">🖨️ ' + this.t('printPDF') + '</button></div></body></html>';
             const printWindow = window.open('', '_blank');
-            if (!printWindow) { alert('⚠️ ' + this.t('allowPopups')); return; }
+            if (!printWindow) { this.showToast('⚠️ ' + this.t('allowPopups')); return; }
             printWindow.document.write(html);
             printWindow.document.close();
             printWindow.document.title = fileName;
@@ -2895,7 +2911,7 @@
                 if (closingDate.getTime() === tomorrow.getTime()) {
                     closingAlerts.push({
                         card: card, closingDate: closingDate,
-                        message: 'O cartão ' + card.name + ' fecha amanhã!'
+                        message: 'O cartão ' + self.escapeHtml(card.name) + ' fecha amanhã!'
                     });
                 }
             });
@@ -2953,6 +2969,18 @@
             });
         }
 
+        /**
+         * NOVO v4.4.1: Comportamento documentado
+         * O saldo da conta é debitado no momento da CRIAÇÃO da despesa.
+         * Marcar como "paga" apenas atualiza o status visual (statusOk = true).
+         * 
+         * Racional: O saldo unificado reflete o saldo "projetado" incluindo pendências,
+         * dando ao usuário uma visão realista do que está comprometido.
+         * 
+         * Se quiser alterar este comportamento para debitar apenas quando marcada como paga,
+         * modifique addTransaction() para não atualizar saldo se statusOk = false,
+         * e desconte o valor aqui em markBillAsPaid().
+         */
         markBillAsPaid(id) {
             const t = this.transactions.find(x => x.id === id);
             if (t) {
@@ -2961,7 +2989,7 @@
                 this.updateAlertBadge(); this.renderBillsModal();
                 this.showToast('✅ Conta paga!');
             }
-        }
+        }}
 
 	        // ===== INVESTIMENTOS =====
         updateInvestmentChart() {
@@ -3264,24 +3292,41 @@
                 return;
             }
 
+            // NOVO v4.4.1: Salvar estado original para rollback
+            const originalFromBalance = fromAcc.balance;
+            const originalToBalance = toAcc.balance;
+            
+            // Atualizar saldos
             fromAcc.balance -= amount;
             toAcc.balance += amount;
-
-            this.transactions.push({
+            
+            // Criar transações
+            const trans1 = {
                 id: this.generateUniqueId(), date: date, amount: -amount,
                 category: 'reserva_aplicacao', description: description + ' (saída)',
                 statusOk: true, paymentMethod: 'transfer', accountId: fromId
-            });
-            this.transactions.push({
+            };
+            const trans2 = {
                 id: this.generateUniqueId(), date: date, amount: amount,
                 category: 'resgate', description: description + ' (entrada)',
                 statusOk: true, paymentMethod: 'transfer', accountId: toId
-            });
-            this.clearCache(); this.saveTransactions(); this.saveAccounts();
-            this.render(); this.renderAccountsList(); this.updateDashboard();
-            this.checkNegativeBalance();
-            closeModal('transferModal');
-            this.showToast('✅ Transferência realizada!');
+            };
+            
+            try {
+                this.transactions.push(trans1);
+                this.transactions.push(trans2);
+                this.clearCache(); this.saveTransactions(); this.saveAccounts();
+                this.render(); this.renderAccountsList(); this.updateDashboard();
+                this.checkNegativeBalance();
+                closeModal('transferModal');
+                this.showToast('✅ Transferência realizada!');
+            } catch (e) {
+                // NOVO v4.4.1: Rollback em caso de erro
+                fromAcc.balance = originalFromBalance;
+                toAcc.balance = originalToBalance;
+                this.saveAccounts();
+                this.showToast('❌ Erro na transferência: ' + e.message);
+            }
         }
 
         // ===== SWIPE GESTURES =====
@@ -3358,7 +3403,7 @@
         printManual() {
             try {
                 const printWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
-                if (!printWindow) { alert('⚠️ ' + this.t('allowPopups')); return; }
+                if (!printWindow) { this.showToast('⚠️ ' + this.t('allowPopups')); return; }
                 const fileName = this.generateTimestamp() + '_manual_smart_wallet.pdf';
                 const content = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page{size:A4;margin:2cm;}body{font-family:Georgia,serif;color:#1e293b;line-height:1.6;font-size:11pt;padding:20px;max-width:800px;margin:0 auto;}h1{color:#6366f1;font-size:28pt;text-align:center;}h2{color:#6366f1;font-size:16pt;margin-top:30px;border-bottom:2px solid #6366f1;padding-bottom:8px;}h3{color:#06b6d4;font-size:13pt;margin-top:20px;}p{margin-bottom:12px;}ul,ol{margin-left:24px;margin-bottom:16px;}li{margin-bottom:8px;}.manual-cover{text-align:center;padding:40px 20px;border:3px solid #6366f1;border-radius:16px;margin-bottom:30px;}.manual-quote{margin:24px 0;padding:20px 30px;border-left:4px solid #6366f1;background:#f8fafc;border-radius:8px;font-style:italic;}.quote-author{font-size:9pt;font-weight:600;color:#6366f1;text-align:right;margin-top:12px;font-style:normal;}.manual-blessing{text-align:center;margin-top:40px;padding:30px;background:#f8fafc;border-radius:16px;}.manual-tip,.manual-success,.manual-warning{padding:12px 16px;margin:12px 0;border-radius:8px;border-left:4px solid;}.manual-tip{background:rgba(6,182,212,0.1);border-color:#06b6d4;}.manual-success{background:rgba(16,185,129,0.1);border-color:#10b981;}.manual-warning{background:rgba(245,158,11,0.1);border-color:#f59e0b;}@media print{.manual-cover{page-break-after:always;}}</style></head><body>' + manualHTML + '</body></html>';
                 printWindow.document.write(content);
@@ -3366,9 +3411,8 @@
                 printWindow.document.title = fileName;
                 setTimeout(() => { printWindow.focus(); printWindow.print(); }, 500);
             } catch (e) {
-                alert('❌ Erro: ' + e.message);
+                this.showToast('❌ Erro: ' + e.message);
             }
-        }
 
         // ===== SISTEMA DE ATUALIZAÇÃO =====
         checkVersionUpdate() {
@@ -3722,6 +3766,12 @@
     };
     window.closeSettingsModal = function() { closeModal('settingsModal'); };
 
+    // ===== NOVO v4.4.1: BOTÃO DEMO NO MENU INFO =====
+    window.toggleDemoMode = function() {
+        smartwallet.toggleDemoMode();
+        closeAllDropdowns();
+    };
+	
     // ===== NOTIFICAÇÕES =====
     window.enableNotifications = function() {
         smartwallet.requestNotifications();
@@ -3842,12 +3892,12 @@
         const file = event.target.files[0];
         if (!file) return;
         if (!file.name.toLowerCase().endsWith('.csv')) {
-            alert('⚠️ Selecione um arquivo .csv');
+            smartwallet.showToast('⚠️ Selecione um arquivo .csv');
             event.target.value = '';
             return;
         }
         if (file.size > 10 * 1024 * 1024) {
-            alert('⚠️ Arquivo muito grande (máx 10MB)');
+            smartwallet.showToast('⚠️ Arquivo muito grande (máx 10MB)');
             event.target.value = '';
             return;
         }
@@ -3862,12 +3912,12 @@
         const file = event.target.files[0];
         if (!file) return;
         if (!file.name.toLowerCase().endsWith('.json')) {
-            alert('⚠️ Selecione um arquivo .json');
+            smartwallet.showToast('⚠️ Selecione um arquivo .json');
             event.target.value = '';
             return;
         }
         if (file.size > 10 * 1024 * 1024) {
-            alert('⚠️ Arquivo muito grande (máx 10MB)');
+            smartwallet.showToast('⚠️ Arquivo muito grande (máx 10MB)');
             event.target.value = '';
             return;
         }
@@ -3879,7 +3929,7 @@
                 window._pendingBackupData = e.target.result;
                 smartwallet.showToast('✅ Arquivo carregado!');
             } catch (error) {
-                alert('❌ JSON inválido: ' + error.message);
+                smartwallet.showToast('❌ JSON inválido: ' + error.message);
                 event.target.value = '';
                 window._pendingBackupData = null;
             }
