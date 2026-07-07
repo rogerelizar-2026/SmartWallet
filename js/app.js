@@ -369,9 +369,36 @@
         saveCards() {
             try { localStorage.setItem('smartwallet_cards', JSON.stringify(this.cards)); } catch(e) {}
         }
-        saveInvestments() {
-            try { localStorage.setItem('smartwallet_investments', JSON.stringify(this.investments)); } catch(e) {}
-        }
+        saveInvestment() {
+            // CORREÇÃO v4.4.2: Validação explícita com feedback
+            const name = document.getElementById('investmentName').value.trim();
+            const initial = parseFloat(document.getElementById('investmentInitial').value);
+            const current = parseFloat(document.getElementById('investmentCurrent').value);
+            const date = document.getElementById('investmentDate').value;
+            
+            if (!name) {
+                this.showToast('❌ Informe o nome da aplicação');
+                document.getElementById('investmentName').focus();
+                return;
+            }
+            
+            if (isNaN(initial) || initial < 0) {
+                this.showToast('❌ Valor inicial inválido');
+                document.getElementById('investmentInitial').focus();
+                return;
+            }
+            
+            if (isNaN(current) || current < 0) {
+                this.showToast('❌ Valor atual inválido');
+                document.getElementById('investmentCurrent').focus();
+                return;
+            }
+            
+            if (!date) {
+                this.showToast('❌ Selecione a data da aplicação');
+                document.getElementById('investmentDate').focus();
+                return;
+            }
 
         clearCache() {
             this._cache = {};
@@ -3527,6 +3554,13 @@
     function openModal(id) {
         const modal = document.getElementById(id);
         if (!modal) return;
+        
+        // CORREÇÃO v4.4.2: Remover modal-front de outros modais
+        document.querySelectorAll('.modal-front').forEach(m => m.classList.remove('modal-front'));
+        
+        // Adicionar modal-front ao modal atual (z-index maior)
+        modal.classList.add('modal-front');
+        
         document.body.style.setProperty('--scroll-y', -window.scrollY + 'px');
         document.body.classList.add('modal-open');
         modal.classList.add('active');
@@ -3544,12 +3578,18 @@
     function closeModal(id) {
         const modal = document.getElementById(id);
         if (!modal) return;
-        modal.classList.remove('active');
+        
+        // CORREÇÃO v4.4.2: Remover modal-front
+        modal.classList.remove('modal-front', 'active');
+        
         const stillOpen = document.querySelector('.modal.active');
         if (!stillOpen) {
             document.body.classList.remove('modal-open');
             document.body.style.removeProperty('--scroll-y');
             window.scrollTo(0, 0);
+        } else {
+            // CORREÇÃO v4.4.2: Restaurar modal-front no modal anterior
+            stillOpen.classList.add('modal-front');
         }
     }
 
