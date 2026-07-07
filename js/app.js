@@ -3349,7 +3349,7 @@
             
             // Criar transações
             // CORREÇÃO v4.4.2: Categorizar corretamente baseado no tipo de conta destino
-            const toAcc = this.getAccountById(toId);
+
             const isToInvestment = toAcc && toAcc.type === 'investment';
 			
 			// Saída da conta origem
