@@ -375,6 +375,11 @@
             const initial = parseFloat(document.getElementById('investmentInitial').value);
             const current = parseFloat(document.getElementById('investmentCurrent').value);
             const date = document.getElementById('investmentDate').value;
+            const rate = parseFloat(document.getElementById('investmentRate').value) || 0;
+            const type = document.getElementById('investmentType').value;
+            const selectedAccountId = document.getElementById('investmentAccount').value;
+            const createLinked = document.getElementById('createLinkedAccount').checked;
+            const id = document.getElementById('investmentEditId').value;
             
             if (!name) {
                 this.showToast('❌ Informe o nome da aplicação');
@@ -399,6 +404,69 @@
                 document.getElementById('investmentDate').focus();
                 return;
             }
+
+            // CORREÇÃO v4.4.2: Adicionar saldo, não sobrescrever
+            let accountId = selectedAccountId;
+            if (!accountId && createLinked) {
+                const newAccountId = this.generateUniqueId();
+                this.accounts.push({ 
+                    id: newAccountId, 
+                    name: name, 
+                    type: 'investment', 
+                    balance: current, 
+                    color: '#10b981' 
+                });
+                accountId = newAccountId;
+                this.saveAccounts();
+                this.populateAccountSelects();
+            }
+
+            if (id) {
+                // Edição
+                for (let i = 0; i < this.investments.length; i++) {
+                    if (this.investments[i].id === id) {
+                        this.investments[i] = { id, name, type, initial, current, date, rate, accountId };
+                        break;
+                    }
+                }
+            } else {
+                // Criação
+                this.investments.push({ 
+                    id: this.generateUniqueId(), 
+                    name, type, initial, current, date, rate, accountId 
+                });
+            }
+            
+            // CORREÇÃO v4.4.2: Adicionar saldo, não sobrescrever
+            if (accountId) {
+                const acc = this.getAccountById(accountId);
+                if (acc) {
+                    if (id) {
+                        // Edição: reverter valor antigo e aplicar novo
+                        const oldInv = this.investments.find(i => i.id === id);
+                        if (oldInv && oldInv.accountId === accountId) {
+                            acc.balance = (parseFloat(acc.balance) || 0) - (oldInv.current || 0) + current;
+                        } else {
+                            acc.balance = (parseFloat(acc.balance) || 0) + current;
+                        }
+                    } else {
+                        // Criação: adicionar valor inicial
+                        acc.balance = (parseFloat(acc.balance) || 0) + current;
+                    }
+                    this.saveAccounts();
+                    this.renderAccountsList();
+                }
+            }
+            
+            this.clearCache(); 
+            this.saveInvestments();
+            this.renderInvestmentsModal(); 
+            this.updateInvestmentChart();
+            this.renderAccountsList(); 
+            this.updateDashboard();
+            closeModal('newInvestmentModal');
+            this.showToast(id ? '✅ Aplicação atualizada!' : '✅ Aplicação cadastrada!');
+        }
 
         clearCache() {
             this._cache = {};
