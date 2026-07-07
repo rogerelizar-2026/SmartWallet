@@ -553,7 +553,7 @@
             
             if (infoDemoBtn && infoDemoText) {
                 if (this.demoMode) {
-                    infoDemoText.textContent = '🔴 Encerrar Demonstração';
+                    infoDemoText.textContent = 'Encerrar Demonstração';
                     infoDemoBtn.classList.add('demo-active');
                 } else {
                     infoDemoText.textContent = 'Modo Demonstração';
@@ -3436,7 +3436,7 @@
                 '4.4.0': {
                     version: '4.4.0',
                     features: [
-                        { type: 'new', icon: '🎯', title: 'Modo Demonstração', description: 'Carregue dados de exemplo para explorar todas as funcionalidades do app sem comprometer seus dados reais.' },
+                        { type: 'new', title: 'Modo Demonstração', description: 'Carregue dados de exemplo para explorar todas as funcionalidades do app sem comprometer seus dados reais.' },
                         { type: 'new', icon: '📄', title: 'Paginação de Transações', description: 'Histórico dividido em páginas para melhor performance. Configure 10, 20, 50 ou 100 itens por página.' },
                         { type: 'new', icon: '💰', title: 'Gráfico Waterfall', description: 'Visualize o fluxo de caixa mês a mês com gráfico de cachoeira mostrando receitas, despesas e saldo acumulado.' },
                         { type: 'new', icon: '⚠️', title: 'Alerta de Saldo Negativo', description: 'Receba avisos quando suas contas correntes ficarem no vermelho. Opção de bloquear transações que levariam ao saldo negativo.' },
