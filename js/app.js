@@ -3358,7 +3358,7 @@
                 category: isToInvestment ? 'reserva_aplicacao' : 'reserva_aplicacao',
                 description: description + ' (saída)',
                 statusOk: true, paymentMethod: 'transfer', accountId: fromId
-            });
+            }
 
 			// Entrada na conta destino
             const trans2 = {
@@ -3366,7 +3366,7 @@
                 category: isToInvestment ? 'reserva_aplicacao' : 'resgate',
                 description: description + ' (entrada)',
                 statusOk: true, paymentMethod: 'transfer', accountId: toId
-            });
+            }
             
             try {
                 this.transactions.push(trans1);
