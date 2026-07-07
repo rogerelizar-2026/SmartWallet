@@ -53,9 +53,9 @@
         { text: "Quem compra o que não precisa, rouba a si mesmo.", author: "Provérbio Popular" }
     ];
 
-    const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Wallet Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 4.4.0 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>Bem-vindo ao Smart Wallet!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v4.4.0</h2><ul><li><strong>Modo Demonstração:</strong> Carregue dados de exemplo para conhecer o app</li><li><strong>Paginação:</strong> Histórico dividido em páginas para melhor performance</li><li><strong>Gráfico Waterfall:</strong> Fluxo de caixa visual mês a mês</li><li><strong>Alerta de Saldo Negativo:</strong> Aviso quando contas ficam no vermelho</li><li><strong>Backup Automático:</strong> Sugestão semanal de backup</li><li><strong>Notificações Push:</strong> Alertas de contas a vencer</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! 💰</h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
+    const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Wallet Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 4.4.2 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Wallet!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v4.4.2</h2><ul><li><strong>Modo Demonstração:</strong> Carregue dados de exemplo para conhecer o app</li><li><strong>Paginação:</strong> Histórico dividido em páginas para melhor performance</li><li><strong>Gráfico Waterfall:</strong> Fluxo de caixa visual mês a mês</li><li><strong>Alerta de Saldo Negativo:</strong> Aviso quando contas ficam no vermelho</li><li><strong>Backup Automático:</strong> Sugestão semanal de backup</li><li><strong>Notificações Push:</strong> Alertas de contas a vencer</li><li><strong>Contas de Investimento:</strong> Separadas do saldo unificado</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! 💰</h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
 
-    // ===== TRADUÇÕES v4.4.0 =====
+    // ===== TRADUÇÕES v4.4.2 =====
     const TRANSLATIONS = {
         'pt-BR': {
             appTitle: 'Smart Wallet',
@@ -89,6 +89,7 @@
             expenseGroup: '💸 Despesas',
             allCards: 'Todos Cartões',
             allCategories: 'Todas as categorias',
+            allAccounts: 'Todas as contas',
             selectCategory: 'Selecione uma categoria',
             selectAccount: 'Selecione a conta',
             selectPayment: 'Selecione a forma de pagamento',
@@ -180,6 +181,7 @@
             expenseGroup: '💸 Expenses',
             allCards: 'All Cards',
             allCategories: 'All categories',
+            allAccounts: 'All accounts',
             selectCategory: 'Select a category',
             selectAccount: 'Select account',
             selectPayment: 'Select payment method',
@@ -296,7 +298,6 @@
             this.categories = [];
             this.accounts = [];
             this.cards = [];
-            this.investments = [];
             this.cardModalMonth = new Date();
             this.cardModalMonth.setDate(1);
             this.currentTransactionType = 'expense';
@@ -314,11 +315,9 @@
             this.sortDirection = 'desc';
             this.swipeInitialized = false;
             this.isSaving = false;
-            
             this.currentPage = 1;
             this.pageSize = 20;
             this.demoMode = false;
-            
             this.settings = {
                 alertNegativeBalance: true,
                 blockNegativeBalance: false,
@@ -326,7 +325,6 @@
                 notifyBills: false,
                 pageSize: 20
             };
-            
             this.loadData();
             this.loadSettings();
             this.init();
@@ -344,8 +342,6 @@
                 if (a) this.accounts = JSON.parse(a);
                 const cd = localStorage.getItem('smartwallet_cards');
                 if (cd) this.cards = JSON.parse(cd);
-                const inv = localStorage.getItem('smartwallet_investments');
-                if (inv) this.investments = JSON.parse(inv);
                 const dm = localStorage.getItem('smartwallet_dark');
                 if (dm !== null) this.darkMode = dm === 'true';
                 const pv = localStorage.getItem('smartwallet_privacy');
@@ -368,104 +364,6 @@
         }
         saveCards() {
             try { localStorage.setItem('smartwallet_cards', JSON.stringify(this.cards)); } catch(e) {}
-        }
-        saveInvestment() {
-            // CORREÇÃO v4.4.2: Validação explícita com feedback
-            const name = document.getElementById('investmentName').value.trim();
-            const initial = parseFloat(document.getElementById('investmentInitial').value);
-            const current = parseFloat(document.getElementById('investmentCurrent').value);
-            const date = document.getElementById('investmentDate').value;
-            const rate = parseFloat(document.getElementById('investmentRate').value) || 0;
-            const type = document.getElementById('investmentType').value;
-            const selectedAccountId = document.getElementById('investmentAccount').value;
-            const createLinked = document.getElementById('createLinkedAccount').checked;
-            const id = document.getElementById('investmentEditId').value;
-            
-            if (!name) {
-                this.showToast('❌ Informe o nome da aplicação');
-                document.getElementById('investmentName').focus();
-                return;
-            }
-            
-            if (isNaN(initial) || initial < 0) {
-                this.showToast('❌ Valor inicial inválido');
-                document.getElementById('investmentInitial').focus();
-                return;
-            }
-            
-            if (isNaN(current) || current < 0) {
-                this.showToast('❌ Valor atual inválido');
-                document.getElementById('investmentCurrent').focus();
-                return;
-            }
-            
-            if (!date) {
-                this.showToast('❌ Selecione a data da aplicação');
-                document.getElementById('investmentDate').focus();
-                return;
-            }
-
-            // CORREÇÃO v4.4.2: Adicionar saldo, não sobrescrever
-            let accountId = selectedAccountId;
-            if (!accountId && createLinked) {
-                const newAccountId = this.generateUniqueId();
-                this.accounts.push({ 
-                    id: newAccountId, 
-                    name: name, 
-                    type: 'investment', 
-                    balance: current, 
-                    color: '#10b981' 
-                });
-                accountId = newAccountId;
-                this.saveAccounts();
-                this.populateAccountSelects();
-            }
-
-            if (id) {
-                // Edição
-                for (let i = 0; i < this.investments.length; i++) {
-                    if (this.investments[i].id === id) {
-                        this.investments[i] = { id, name, type, initial, current, date, rate, accountId };
-                        break;
-                    }
-                }
-            } else {
-                // Criação
-                this.investments.push({ 
-                    id: this.generateUniqueId(), 
-                    name, type, initial, current, date, rate, accountId 
-                });
-            }
-            
-            // CORREÇÃO v4.4.2: Adicionar saldo, não sobrescrever
-            if (accountId) {
-                const acc = this.getAccountById(accountId);
-                if (acc) {
-                    if (id) {
-                        // Edição: reverter valor antigo e aplicar novo
-                        const oldInv = this.investments.find(i => i.id === id);
-                        if (oldInv && oldInv.accountId === accountId) {
-                            acc.balance = (parseFloat(acc.balance) || 0) - (oldInv.current || 0) + current;
-                        } else {
-                            acc.balance = (parseFloat(acc.balance) || 0) + current;
-                        }
-                    } else {
-                        // Criação: adicionar valor inicial
-                        acc.balance = (parseFloat(acc.balance) || 0) + current;
-                    }
-                    this.saveAccounts();
-                    this.renderAccountsList();
-                }
-            }
-            
-            this.clearCache(); 
-            this.saveInvestments();
-            this.renderInvestmentsModal(); 
-            this.updateInvestmentChart();
-            this.renderAccountsList(); 
-            this.updateDashboard();
-            closeModal('newInvestmentModal');
-            this.showToast(id ? '✅ Aplicação atualizada!' : '✅ Aplicação cadastrada!');
         }
 
         clearCache() {
@@ -500,15 +398,12 @@
             for (const field of fields) {
                 const element = document.getElementById(field.id);
                 if (!element) continue;
-                
                 const value = element.value?.trim();
-                
                 if (field.required && !value) {
                     this.showToast('❌ ' + field.label);
                     element.focus();
                     return false;
                 }
-                
                 if (field.type === 'number' && value) {
                     const num = parseFloat(value);
                     if (isNaN(num)) {
@@ -607,10 +502,9 @@
                 notation: 'standard'
             }).format(value || 0);
         }
-
-        // ===== INICIALIZAÇÃO =====
+		        // ===== INICIALIZAÇÃO =====
         init() {
-            console.log('✅ Smart Wallet v4.4.0 inicializado');
+            console.log('✅ Smart Wallet v4.4.2 inicializado');
             this.applyTheme();
             this.applyPrivacy();
             this.applyDemoBadge();
@@ -648,10 +542,10 @@
             
             if (infoDemoBtn && infoDemoText) {
                 if (this.demoMode) {
-                    infoDemoText.textContent = 'Encerrar Demonstração';
+                    infoDemoText.textContent = '🔴 Encerrar Demonstração';
                     infoDemoBtn.classList.add('demo-active');
                 } else {
-                    infoDemoText.textContent = 'Modo Demonstração';
+                    infoDemoText.textContent = '🎯 Modo Demonstração';
                     infoDemoBtn.classList.remove('demo-active');
                 }
             }
@@ -853,14 +747,6 @@
                 });
             }
 
-            const investmentForm = document.getElementById('investmentForm');
-            if (investmentForm) {
-                investmentForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    self.saveInvestment();
-                });
-            }
-
             const updateInvestmentForm = document.getElementById('updateInvestmentForm');
             if (updateInvestmentForm) {
                 updateInvestmentForm.addEventListener('submit', (e) => {
@@ -962,7 +848,7 @@
         // ===== FOCUS TRAP =====
         setupFocusTrap() {
             document.addEventListener('keydown', (e) => {
-                const activeModal = document.querySelector('.modal.active');
+                const activeModal = document.querySelector('.modal-front.active');
                 if (!activeModal) return;
 
                 if (e.key === 'Escape') {
@@ -1149,7 +1035,7 @@
             if (this.demoMode) {
                 const confirmed = await showConfirm(
                     '⚠️ Encerrar Demonstração?',
-                    'Encerrar modo demonstração e limpar todos os dados?\n\nEsta ação não pode ser desfeita.'
+                    'Encerrar modo demonstração e limpar todos os dados?<br><br>Esta ação não pode ser desfeita.'
                 );
                 
                 if (confirmed) {
@@ -1161,8 +1047,8 @@
                 }
             } else {
                 const confirmed = await showConfirm(
-                    'Carregar Demonstração?',
-                    'Carregar dados de exemplo?\n\nSeus dados atuais serão substituídos pelos dados de demonstração.\n\nRecomendamos fazer backup antes de continuar.'
+                    '🎯 Carregar Demonstração?',
+                    'Carregar dados de exemplo?<br><br>Seus dados atuais serão substituídos pelos dados de demonstração.<br><br>Recomendamos fazer backup antes de continuar.'
                 );
                 
                 if (confirmed) {
@@ -1175,7 +1061,7 @@
             this.accounts = [
                 { id: 'acc1', name: 'Conta Corrente Principal', type: 'checking', balance: 3500, color: '#6366f1' },
                 { id: 'acc2', name: 'Poupança', type: 'checking', balance: 8200, color: '#10b981' },
-                { id: 'acc3', name: 'Investimentos', type: 'investment', balance: 15000, color: '#f59e0b' }
+                { id: 'acc3', name: 'Investimentos', type: 'investment', balance: 39000, color: '#f59e0b' }
             ];
             
             this.cards = [
@@ -1215,7 +1101,7 @@
                     this.transactions.push({
                         id: this.generateUniqueId() + '_sup_' + m + '_' + d,
                         date: new Date(month.getFullYear(), month.getMonth(), 3 + d * 7).toISOString().split('T')[0],
-                        amount: -(200 + Math.random() * 300),
+                        amount: -(200 + Math.floor(Math.random() * 300)),
                         category: 'despensa',
                         description: 'Supermercado - Compra ' + (d + 1),
                         statusOk: true,
@@ -1246,6 +1132,7 @@
                     accountId: 'acc1'
                 });
                 
+                // Aplicação mensal para conta de investimento
                 this.transactions.push({
                     id: this.generateUniqueId() + '_inv_' + m,
                     date: new Date(month.getFullYear(), month.getMonth(), 25).toISOString().split('T')[0],
@@ -1254,14 +1141,9 @@
                     description: 'Aporte mensal investimentos',
                     statusOk: true,
                     paymentMethod: 'transfer',
-                    accountId: 'acc3'
+                    accountId: 'acc1'
                 });
             }
-            
-            this.investments = [
-                { id: 'inv1', name: 'CDB Banco XYZ', type: 'cdb', initial: 10000, current: 11200, date: '2025-01-15', rate: 12, accountId: 'acc3' },
-                { id: 'inv2', name: 'Tesouro IPCA+ 2029', type: 'tesouro', initial: 5000, current: 5800, date: '2025-03-10', rate: 6.5, accountId: 'acc3' }
-            ];
             
             this.demoMode = true;
             localStorage.setItem('smartwallet_demo', 'true');
@@ -1270,7 +1152,6 @@
             this.saveTransactions();
             this.saveAccounts();
             this.saveCards();
-            this.saveInvestments();
             
             this.applyDemoBadge();
             this.populateCategorySelects();
@@ -1358,7 +1239,7 @@
             
             if (notificationsStatus) {
                 if (!('Notification' in window)) {
-                    notificationsStatus.textContent = 'Não suportado';
+                    notificationsStatus.textContent = '❌ Não suportado';
                 } else if (Notification.permission === 'granted') {
                     notificationsStatus.textContent = '✅ Ativado';
                 } else if (Notification.permission === 'denied') {
@@ -1481,8 +1362,7 @@
                 }
             });
         }
-
-        // ===== TRANSAÇÕES DO MÊS =====
+		        // ===== TRANSAÇÕES DO MÊS =====
         getMonthTransactions(date) {
             if (!date) date = this.currentMonth;
             if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
@@ -1705,12 +1585,11 @@
             let inc = 0, exp = 0;
             mt.forEach(t => { if (t.amount > 0) inc += t.amount; else exp += t.amount; });
 
+            // CORREÇÃO v4.4.2: Saldo unificado = APENAS contas correntes (checking)
+            // Contas de investimento são separadas e consultadas apenas no menu Aplicações
             let unifiedBalance = 0;
             this.accounts.forEach(a => {
                 if (a.type === 'checking') unifiedBalance += (parseFloat(a.balance) || 0);
-            });
-            this.investments.forEach(inv => {
-                if (!inv.accountId) unifiedBalance += (inv.current || 0);
             });
 
             let creditCardTotal = 0;
@@ -1929,8 +1808,7 @@
             this.saveAccounts();
             return true;
         }
-
-	        // ===== ADICIONAR TRANSAÇÃO =====
+		        // ===== ADICIONAR TRANSAÇÃO =====
         addTransaction() {
             const fields = [
                 { id: 'date', label: this.t('selectDate'), required: true },
@@ -1967,10 +1845,14 @@
             if (isRecurring) {
                 const recurrenceType = document.getElementById('recurrenceType').value;
                 const recurrenceCount = parseInt(document.getElementById('recurrenceCount').value);
-                if (recurrenceCount < 2) { this.showToast('❌ ' + this.t('minInstallments')); return; }
+                if (recurrenceCount < 2) { 
+                    this.showToast('❌ ' + this.t('minInstallments')); 
+                    return; 
+                }
                 const startDate = new Date(date + 'T12:00:00');
                 const recurrenceGroupId = this.generateUniqueId();
                 let createdCount = 0;
+                
                 for (let i = 0; i < recurrenceCount; i++) {
                     const transDate = new Date(startDate);
                     if (recurrenceType === 'monthly' || recurrenceType === 'installment') {
@@ -1983,17 +1865,30 @@
                         transDate.setDate(startDate.getDate() > lastDay ? lastDay : startDate.getDate());
                     }
                     let transDescription = description;
-                    if (recurrenceType === 'installment') transDescription = description + ' - Parcela ' + (i + 1) + '/' + recurrenceCount;
+                    if (recurrenceType === 'installment') {
+                        transDescription = description + ' - Parcela ' + (i + 1) + '/' + recurrenceCount;
+                    }
                     const uniqueId = this.generateUniqueId() + '_' + i;
                     this.transactions.push({
-                        id: uniqueId, date: transDate.toISOString().split('T')[0], amount: signedAmount,
-                        category: category, description: transDescription, statusOk: statusOk,
-                        paymentMethod: paymentMethod, accountId: accountId,
-                        recurrence: { groupId: recurrenceGroupId, type: recurrenceType, total: recurrenceCount, current: i + 1 }
+                        id: uniqueId, 
+                        date: transDate.toISOString().split('T')[0], 
+                        amount: signedAmount,
+                        category: category, 
+                        description: transDescription, 
+                        statusOk: statusOk,
+                        paymentMethod: paymentMethod, 
+                        accountId: accountId,
+                        recurrence: { 
+                            groupId: recurrenceGroupId, 
+                            type: recurrenceType, 
+                            total: recurrenceCount, 
+                            current: i + 1 
+                        }
                     });
                     createdCount++;
                 }
-                // NOVO v4.4.1: Atualizar saldo de TODAS as parcelas no mês atual
+                
+                // CORREÇÃO v4.4.2: Atualizar saldo de TODAS as parcelas no mês atual
                 const currentMonth = this.currentMonth.getMonth();
                 const currentYear = this.currentMonth.getFullYear();
                 const monthTrans = this.transactions.filter(t => {
@@ -2002,22 +1897,34 @@
                     const d = new Date(t.date);
                     return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
                 });
+                
                 if (monthTrans.length > 0) {
                     let monthTotal = 0;
                     monthTrans.forEach(t => monthTotal += t.amount);
                     this.updateAccountBalance(accountId, monthTotal);
                 }
-                this.clearCache(); this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge();
+                
+                this.clearCache(); 
+                this.saveTransactions(); 
+                this.render(); 
+                this.updateCharts(); 
+                this.updateAlertBadge();
                 this.showToast('✅ ' + createdCount + ' ' + this.t('recurringCreated'));
-                closeModal('newTransactionModal'); this.clearForm();
+                closeModal('newTransactionModal'); 
+                this.clearForm();
                 this.checkNegativeBalance();
                 return;
             }
 
             const transaction = {
-                id: this.generateUniqueId(), date: date, amount: signedAmount,
-                category: category, description: description, statusOk: statusOk,
-                paymentMethod: paymentMethod, accountId: accountId
+                id: this.generateUniqueId(), 
+                date: date, 
+                amount: signedAmount,
+                category: category, 
+                description: description, 
+                statusOk: statusOk,
+                paymentMethod: paymentMethod, 
+                accountId: accountId
             };
             this.transactions.push(transaction);
             const success = this.updateAccountBalance(accountId, signedAmount);
@@ -2025,9 +1932,14 @@
                 this.transactions.pop();
                 return;
             }
-            this.clearCache(); this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge();
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render(); 
+            this.updateCharts(); 
+            this.updateAlertBadge();
             this.showToast('✅ ' + this.t('transactionAdded'));
-            closeModal('newTransactionModal'); this.clearForm();
+            closeModal('newTransactionModal'); 
+            this.clearForm();
             this.checkNegativeBalance();
         }
 
@@ -2036,7 +1948,9 @@
             if (form) form.reset();
             this.setDefaultDate();
             this.currentTransactionType = 'expense';
-            document.querySelectorAll('#transactionForm .type-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-type') === 'expense'));
+            document.querySelectorAll('#transactionForm .type-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-type') === 'expense');
+            });
             this.filterCategoriesByType('category', 'expense');
             const recurringOptions = document.getElementById('recurringOptions');
             if (recurringOptions) recurringOptions.style.display = 'none';
@@ -2055,6 +1969,7 @@
             document.getElementById('editTransactionAccount').value = t.accountId || '';
             document.getElementById('editDescription').value = t.description || '';
             document.getElementById('editStatusOk').checked = !!t.statusOk;
+            
             if (t.recurrence) {
                 document.getElementById('editRecurring').checked = true;
                 document.getElementById('editRecurringOptions').style.display = 'block';
@@ -2064,7 +1979,10 @@
                 document.getElementById('editRecurring').checked = false;
                 document.getElementById('editRecurringOptions').style.display = 'none';
             }
-            document.querySelectorAll('#editForm .type-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-type') === this.currentEditType));
+            
+            document.querySelectorAll('#editForm .type-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-type') === this.currentEditType);
+            });
             this.filterCategoriesByType('editCategory', this.currentEditType);
             openModal('editModal');
         }
@@ -2089,9 +2007,15 @@
 
             let idx = -1;
             for (let i = 0; i < this.transactions.length; i++) {
-                if (String(this.transactions[i].id) === String(id)) { idx = i; break; }
+                if (String(this.transactions[i].id) === String(id)) { 
+                    idx = i; 
+                    break; 
+                }
             }
-            if (idx === -1) { this.showToast('❌ ' + this.t('transactionNotFound')); return; }
+            if (idx === -1) { 
+                this.showToast('❌ ' + this.t('transactionNotFound')); 
+                return; 
+            }
 
             const oldTransaction = this.transactions[idx];
             const oldAmount = oldTransaction.amount;
@@ -2118,20 +2042,31 @@
             if (isRecurring) {
                 const recurrenceType = document.getElementById('editRecurrenceType').value;
                 const recurrenceCount = parseInt(document.getElementById('editRecurrenceCount').value);
-                recurrenceData = { type: recurrenceType, total: recurrenceCount, current: oldTransaction.recurrence ? oldTransaction.recurrence.current : 1 };
+                recurrenceData = { 
+                    type: recurrenceType, 
+                    total: recurrenceCount, 
+                    current: oldTransaction.recurrence ? oldTransaction.recurrence.current : 1 
+                };
             }
 
             this.transactions[idx] = {
-                id: oldTransaction.id, date: date, amount: newAmount,
-                category: category, description: document.getElementById('editDescription').value,
+                id: oldTransaction.id, 
+                date: date, 
+                amount: newAmount,
+                category: category, 
+                description: document.getElementById('editDescription').value,
                 statusOk: document.getElementById('editStatusOk').checked,
-                paymentMethod: paymentMethod, accountId: accountId,
+                paymentMethod: paymentMethod, 
+                accountId: accountId,
                 recurrence: recurrenceData
             };
 
             this.updateAccountBalance(accountId, newAmount);
-            this.clearCache(); this.saveTransactions(); this.render();
-            this.updateCharts(); this.updateAlertBadge();
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render();
+            this.updateCharts(); 
+            this.updateAlertBadge();
             closeModal('editModal');
             this.showToast('✅ ' + this.t('transactionUpdated'));
             this.checkNegativeBalance();
@@ -2143,8 +2078,11 @@
             const t = this.transactions.find(x => x.id === this.currentEditId);
             if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
             this.transactions = this.transactions.filter(x => x.id !== this.currentEditId);
-            this.clearCache(); this.saveTransactions(); this.render();
-            this.updateCharts(); this.updateAlertBadge();
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render();
+            this.updateCharts(); 
+            this.updateAlertBadge();
             closeModal('editModal');
             this.showToast('✅ ' + this.t('transactionDeleted'));
             this.checkNegativeBalance();
@@ -2155,8 +2093,11 @@
             const t = this.transactions.find(x => x.id === id);
             if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
             this.transactions = this.transactions.filter(x => x.id !== id);
-            this.clearCache(); this.saveTransactions(); this.render();
-            this.updateCharts(); this.updateAlertBadge();
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render();
+            this.updateCharts(); 
+            this.updateAlertBadge();
             this.showToast('✅ ' + this.t('transactionDeleted'));
             this.checkNegativeBalance();
         }
@@ -2171,7 +2112,11 @@
                     : '<svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
             }
             if (Object.keys(this.charts).length > 0) {
-                try { this.updateChartsTheme(); } catch (e) { console.warn('[SmartWallet] Erro tema:', e); }
+                try { 
+                    this.updateChartsTheme(); 
+                } catch (e) { 
+                    console.warn('[SmartWallet] Erro tema:', e); 
+                }
             }
         }
 
@@ -2197,55 +2142,123 @@
         }
 
         initCharts() {
-            if (typeof Chart === 'undefined') { console.error('[SmartWallet] Chart.js não carregado!'); return; }
+            if (typeof Chart === 'undefined') { 
+                console.error('[SmartWallet] Chart.js não carregado!'); 
+                return; 
+            }
             const colors = this.getChartColors();
             const lineOpts = {
-                responsive: true, maintainAspectRatio: false,
-                plugins: { legend: { position: 'top', labels: { color: colors.text } } },
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { 
+                        position: 'top', 
+                        labels: { color: colors.text } 
+                    } 
+                },
                 scales: {
-                    y: { beginAtZero: true, ticks: { color: colors.textSecondary }, grid: { color: colors.grid } },
-                    x: { ticks: { color: colors.textSecondary }, grid: { color: colors.grid } }
+                    y: { 
+                        beginAtZero: true, 
+                        ticks: { color: colors.textSecondary }, 
+                        grid: { color: colors.grid } 
+                    },
+                    x: { 
+                        ticks: { color: colors.textSecondary }, 
+                        grid: { color: colors.grid } 
+                    }
                 }
             };
             try {
                 this.charts.line = new Chart(document.getElementById('lineChart').getContext('2d'), {
                     type: 'line',
-                    data: { labels: [], datasets: [
-                        { label: this.t('income_plural'), data: [], borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', tension: 0.4 },
-                        { label: this.t('expense_plural'), data: [], borderColor: '#ef4444', backgroundColor: 'rgba(239,68,68,0.1)', tension: 0.4 }
-                    ]},
+                    data: { 
+                        labels: [], 
+                        datasets: [
+                            { 
+                                label: this.t('income_plural'), 
+                                data: [], 
+                                borderColor: '#10b981', 
+                                backgroundColor: 'rgba(16,185,129,0.1)', 
+                                tension: 0.4 
+                            },
+                            { 
+                                label: this.t('expense_plural'), 
+                                data: [], 
+                                borderColor: '#ef4444', 
+                                backgroundColor: 'rgba(239,68,68,0.1)', 
+                                tension: 0.4 
+                            }
+                        ]
+                    },
                     options: lineOpts
                 });
-            } catch (e) { console.error('[SmartWallet] Erro line:', e); }
+            } catch (e) { 
+                console.error('[SmartWallet] Erro line:', e); 
+            }
             try {
                 this.charts.pie = new Chart(document.getElementById('pieChart').getContext('2d'), {
                     type: 'bar',
-                    data: { labels: [], datasets: [{ data: [], backgroundColor: [] }] },
+                    data: { 
+                        labels: [], 
+                        datasets: [{ data: [], backgroundColor: [] }] 
+                    },
                     options: {
-                        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: {
-                            x: { beginAtZero: true, ticks: { color: colors.textSecondary }, grid: { color: colors.grid } },
-                            y: { ticks: { color: colors.textSecondary }, grid: { color: colors.grid } }
+                        indexAxis: 'y', 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false } 
                         },
-                        barPercentage: 0.3, categoryPercentage: 0.5
+                        scales: {
+                            x: { 
+                                beginAtZero: true, 
+                                ticks: { color: colors.textSecondary }, 
+                                grid: { color: colors.grid } 
+                            },
+                            y: { 
+                                ticks: { color: colors.textSecondary }, 
+                                grid: { color: colors.grid } 
+                            }
+                        },
+                        barPercentage: 0.3, 
+                        categoryPercentage: 0.5
                     }
                 });
-            } catch (e) { console.error('[SmartWallet] Erro pie:', e); }
+            } catch (e) { 
+                console.error('[SmartWallet] Erro pie:', e); 
+            }
             try {
                 this.charts.cards = new Chart(document.getElementById('cardsChart').getContext('2d'), {
                     type: 'line',
-                    data: { labels: [], datasets: [] },
+                    data: { 
+                        labels: [], 
+                        datasets: [] 
+                    },
                     options: {
-                        responsive: true, maintainAspectRatio: false,
-                        plugins: { legend: { position: 'top', labels: { color: colors.text } } },
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { 
+                                position: 'top', 
+                                labels: { color: colors.text } 
+                            } 
+                        },
                         scales: {
-                            y: { beginAtZero: true, ticks: { color: colors.textSecondary }, grid: { color: colors.grid } },
-                            x: { ticks: { color: colors.textSecondary }, grid: { color: colors.grid } }
+                            y: { 
+                                beginAtZero: true, 
+                                ticks: { color: colors.textSecondary }, 
+                                grid: { color: colors.grid } 
+                            },
+                            x: { 
+                                ticks: { color: colors.textSecondary }, 
+                                grid: { color: colors.grid } 
+                            }
                         }
                     }
                 });
-            } catch (e) { console.error('[SmartWallet] Erro cards:', e); }
+            } catch (e) { 
+                console.error('[SmartWallet] Erro cards:', e); 
+            }
             this.updateCharts();
         }
 
@@ -2262,7 +2275,9 @@
                     if (chart.options.scales?.x?.grid) chart.options.scales.x.grid.color = colors.grid;
                     if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = colors.text;
                     chart.update('none');
-                } catch (e) { console.warn('[SmartWallet] Erro tema gráfico:', e); }
+                } catch (e) { 
+                    console.warn('[SmartWallet] Erro tema gráfico:', e); 
+                }
             });
         }
 
@@ -2276,7 +2291,10 @@
                 lLabels.push(monthsShort[d.getMonth()] + '/' + d.getFullYear());
                 const mt = this.getMonthTransactions(d);
                 let inc = 0, exp = 0;
-                mt.forEach(t => { if (t.amount > 0) inc += t.amount; else exp += t.amount; });
+                mt.forEach(t => { 
+                    if (t.amount > 0) inc += t.amount; 
+                    else exp += t.amount; 
+                });
                 lInc.push(inc);
                 lExp.push(Math.abs(exp));
             }
@@ -2319,9 +2337,12 @@
                         data.push(total);
                     }
                     cardDatasets.push({
-                        label: card.name, data: data,
-                        borderColor: card.color, backgroundColor: card.color + '20',
-                        tension: 0.4, fill: false
+                        label: card.name, 
+                        data: data,
+                        borderColor: card.color, 
+                        backgroundColor: card.color + '20',
+                        tension: 0.4, 
+                        fill: false
                     });
                 });
                 this.charts.cards.data.labels = cardLabels;
@@ -2334,9 +2355,12 @@
 
         // ===== ALERTAS =====
         updateAlertBadge() {
-            const today = new Date(); today.setHours(0, 0, 0, 0);
-            const in3Days = new Date(today); in3Days.setDate(in3Days.getDate() + 3);
-            const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+            const today = new Date(); 
+            today.setHours(0, 0, 0, 0);
+            const in3Days = new Date(today); 
+            in3Days.setDate(in3Days.getDate() + 3);
+            const tomorrow = new Date(today); 
+            tomorrow.setDate(tomorrow.getDate() + 1);
             const bills = this.transactions.filter(t => {
                 if (t.statusOk || t.amount >= 0) return false;
                 const tDate = new Date(t.date + 'T12:00:00');
@@ -2388,12 +2412,18 @@
             const previousClosingDate = new Date(closingDate);
             previousClosingDate.setMonth(previousClosingDate.getMonth() - 1);
             previousClosingDate.setDate(previousClosingDate.getDate() + 1);
-            const today = new Date(); today.setHours(0, 0, 0, 0);
+            const today = new Date(); 
+            today.setHours(0, 0, 0, 0);
             const isClosed = closingDate < today;
             let dueDate = new Date(closingDate);
             if (isClosed) dueDate.setMonth(dueDate.getMonth() + 1);
             dueDate.setDate(card.dueDay);
-            return { startDate: previousClosingDate, closingDate: closingDate, dueDate: dueDate, isClosed: isClosed };
+            return { 
+                startDate: previousClosingDate, 
+                closingDate: closingDate, 
+                dueDate: dueDate, 
+                isClosed: isClosed 
+            };
         }
 
         calculateInvoiceTotal(purchases) {
@@ -2482,12 +2512,21 @@
 
             if (id) {
                 for (let i = 0; i < this.cards.length; i++) {
-                    if (this.cards[i].id === id) { this.cards[i] = { id, name, brand, last4, closingDay, dueDay, limit, color }; break; }
+                    if (this.cards[i].id === id) { 
+                        this.cards[i] = { id, name, brand, last4, closingDay, dueDay, limit, color }; 
+                        break; 
+                    }
                 }
             } else {
-                this.cards.push({ id: this.generateUniqueId(), name, brand, last4, closingDay, dueDay, limit, color });
+                this.cards.push({ 
+                    id: this.generateUniqueId(), 
+                    name, brand, last4, closingDay, dueDay, limit, color 
+                });
             }
-            this.clearCache(); this.saveCards(); this.populatePaymentMethodSelects(); this.renderCreditCardsList();
+            this.clearCache(); 
+            this.saveCards(); 
+            this.populatePaymentMethodSelects(); 
+            this.renderCreditCardsList();
             closeModal('newCardModal');
             this.showToast('✅ ' + (id ? this.t('cardUpdated') : this.t('cardCreated')));
         }
@@ -2495,12 +2534,16 @@
         deleteCard(id) {
             if (!confirm('Excluir este cartão?')) return;
             this.cards = this.cards.filter(c => c.id !== id);
-            this.clearCache(); this.saveCards(); this.populatePaymentMethodSelects(); this.renderCreditCardsList();
+            this.clearCache(); 
+            this.saveCards(); 
+            this.populatePaymentMethodSelects(); 
+            this.renderCreditCardsList();
             this.showToast('✅ ' + this.t('cardRemoved'));
         }
 
         editCard(id) {
-            const card = this.getCardById(id); if (!card) return;
+            const card = this.getCardById(id); 
+            if (!card) return;
             document.getElementById('cardEditId').value = card.id;
             document.getElementById('cardName').value = card.name;
             document.getElementById('cardBrand').value = card.brand;
@@ -2527,13 +2570,20 @@
             const available = card.limit - total;
             const self = this;
             document.getElementById('invoiceTitle').textContent = this.t('invoice') + ' - ' + card.name;
-            const today = new Date(); today.setHours(0, 0, 0, 0);
+            const today = new Date(); 
+            today.setHours(0, 0, 0, 0);
             const daysUntilDue = Math.ceil((period.dueDate - today) / (1000 * 60 * 60 * 24));
             let dueClass = '';
             let dueText = this.formatDate(period.dueDate.toISOString().split('T')[0]);
-            if (daysUntilDue < 0) { dueClass = 'overdue'; dueText += ' (' + this.t('overdue') + ' ' + Math.abs(daysUntilDue) + ' ' + this.t('days') + ')'; }
-            else if (daysUntilDue === 0) { dueClass = 'overdue'; dueText += ' (' + this.t('dueToday') + ')'; }
-            else if (daysUntilDue <= 3) { dueText += ' (' + this.t('inDays', {days: daysUntilDue}) + ')'; }
+            if (daysUntilDue < 0) { 
+                dueClass = 'overdue'; 
+                dueText += ' (' + this.t('overdue') + ' ' + Math.abs(daysUntilDue) + ' ' + this.t('days') + ')'; 
+            } else if (daysUntilDue === 0) { 
+                dueClass = 'overdue'; 
+                dueText += ' (' + this.t('dueToday') + ')'; 
+            } else if (daysUntilDue <= 3) { 
+                dueText += ' (' + this.t('inDays', {days: daysUntilDue}) + ')'; 
+            }
             if (period.isClosed) dueText += ' ✓ ' + this.t('closed');
             let html = '<div class="invoice-period-display">';
             html += '<div class="invoice-period-info"><div class="invoice-period-label">📅 ' + this.t('invoicePeriod') + '</div>';
@@ -2593,14 +2643,26 @@
             const period = this.getInvoicePeriod(card);
             const purchases = this.getCardTransactionsForPeriod(card.id, period.startDate, period.closingDate);
             const total = this.calculateInvoiceTotal(purchases);
-            if (total <= 0) { this.showToast('❌ ' + this.t('emptyInvoice')); return; }
+            if (total <= 0) { 
+                this.showToast('❌ ' + this.t('emptyInvoice')); 
+                return; 
+            }
             if (!confirm(this.t('confirmPayment') + ' ' + this.formatCurrency(total) + '?')) return;
             this.transactions.push({
-                id: this.generateUniqueId(), date: new Date().toISOString().split('T')[0],
-                amount: -total, category: 'servicos', description: 'Pagamento Fatura ' + card.name,
-                statusOk: false, paymentMethod: 'pix', accountId: ''
+                id: this.generateUniqueId(), 
+                date: new Date().toISOString().split('T')[0],
+                amount: -total, 
+                category: 'servicos', 
+                description: 'Pagamento Fatura ' + card.name,
+                statusOk: false, 
+                paymentMethod: 'pix', 
+                accountId: ''
             });
-            this.clearCache(); this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge();
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render(); 
+            this.updateCharts(); 
+            this.updateAlertBadge();
             this.showToast('✅ ' + this.t('paymentRegistered'));
         }
 
@@ -2623,7 +2685,9 @@
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const fileName = this.generateTimestamp() + '_fatura_' + card.name.replace(/\s+/g,'_') + '.csv';
             saveFileWithPicker(blob, fileName, 'text/csv').then(result => {
-                if (result === 'saved' || result === 'downloaded') this.showToast('✅ ' + this.t('backupExported'));
+                if (result === 'saved' || result === 'downloaded') {
+                    this.showToast('✅ ' + this.t('backupExported'));
+                }
             }).catch(e => this.showToast('❌ ' + e.message));
         }
 
@@ -2635,7 +2699,10 @@
             const total = this.calculateInvoiceTotal(purchases);
             const self = this;
             const printWindow = window.open('', '_blank');
-            if (!printWindow) { this.showToast('⚠️ ' + this.t('allowPopups')); return; }
+            if (!printWindow) { 
+                this.showToast('⚠️ ' + this.t('allowPopups')); 
+                return; 
+            }
             const rows = purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).map(p => {
                 const cat = self.getCategoryById(p.category);
                 return '<tr><td>' + self.formatDate(p.date) + '</td><td>' + self.escapeHtml(p.description) + '</td><td>' + self.escapeHtml(cat.name) + '</td><td style="text-align:right;">' + self.formatCurrency(Math.abs(p.amount)) + '</td></tr>';
@@ -2651,13 +2718,933 @@
             printWindow.document.write('</body></html>');
             printWindow.document.close();
             printWindow.document.title = fileName;
-            setTimeout(() => { printWindow.focus(); printWindow.print(); }, 300);
+            setTimeout(() => { 
+                printWindow.focus(); 
+                printWindow.print(); 
+            }, 300);
+        }
+		        // ===== ADICIONAR TRANSAÇÃO =====
+        addTransaction() {
+            const fields = [
+                { id: 'date', label: this.t('selectDate'), required: true },
+                { id: 'amount', label: this.t('invalidAmount'), required: true, type: 'number', min: 0.01 },
+                { id: 'category', label: this.t('selectCategory'), required: true },
+                { id: 'paymentMethod', label: this.t('selectPayment'), required: true },
+                { id: 'transactionAccount', label: this.t('selectAccount'), required: true }
+            ];
+
+            if (!this.validateForm(fields)) return;
+
+            const date = document.getElementById('date').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const category = document.getElementById('category').value;
+            const description = document.getElementById('description').value;
+            const statusOk = document.getElementById('statusOk').checked;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+            const accountId = document.getElementById('transactionAccount').value;
+            const isRecurring = document.getElementById('recurring').checked;
+            const signedAmount = this.currentTransactionType === 'expense' ? -Math.abs(amount) : Math.abs(amount);
+
+            // Verificar saldo negativo antes de adicionar
+            if (this.settings.blockNegativeBalance && signedAmount < 0) {
+                const acc = this.getAccountById(accountId);
+                if (acc) {
+                    const newBalance = (parseFloat(acc.balance) || 0) + signedAmount;
+                    if (newBalance < 0) {
+                        this.showToast(this.t('negativeBalanceBlocked'));
+                        return;
+                    }
+                }
+            }
+
+            if (isRecurring) {
+                const recurrenceType = document.getElementById('recurrenceType').value;
+                const recurrenceCount = parseInt(document.getElementById('recurrenceCount').value);
+                if (recurrenceCount < 2) { 
+                    this.showToast('❌ ' + this.t('minInstallments')); 
+                    return; 
+                }
+                const startDate = new Date(date + 'T12:00:00');
+                const recurrenceGroupId = this.generateUniqueId();
+                let createdCount = 0;
+                
+                for (let i = 0; i < recurrenceCount; i++) {
+                    const transDate = new Date(startDate);
+                    if (recurrenceType === 'monthly' || recurrenceType === 'installment') {
+                        transDate.setMonth(startDate.getMonth() + i);
+                        const lastDay = new Date(transDate.getFullYear(), transDate.getMonth() + 1, 0).getDate();
+                        transDate.setDate(startDate.getDate() > lastDay ? lastDay : startDate.getDate());
+                    } else if (recurrenceType === 'yearly') {
+                        transDate.setFullYear(startDate.getFullYear() + i);
+                        const lastDay = new Date(transDate.getFullYear(), transDate.getMonth() + 1, 0).getDate();
+                        transDate.setDate(startDate.getDate() > lastDay ? lastDay : startDate.getDate());
+                    }
+                    let transDescription = description;
+                    if (recurrenceType === 'installment') {
+                        transDescription = description + ' - Parcela ' + (i + 1) + '/' + recurrenceCount;
+                    }
+                    const uniqueId = this.generateUniqueId() + '_' + i;
+                    this.transactions.push({
+                        id: uniqueId, 
+                        date: transDate.toISOString().split('T')[0], 
+                        amount: signedAmount,
+                        category: category, 
+                        description: transDescription, 
+                        statusOk: statusOk,
+                        paymentMethod: paymentMethod, 
+                        accountId: accountId,
+                        recurrence: { 
+                            groupId: recurrenceGroupId, 
+                            type: recurrenceType, 
+                            total: recurrenceCount, 
+                            current: i + 1 
+                        }
+                    });
+                    createdCount++;
+                }
+                
+                // CORREÇÃO v4.4.2: Atualizar saldo de TODAS as parcelas no mês atual
+                const currentMonth = this.currentMonth.getMonth();
+                const currentYear = this.currentMonth.getFullYear();
+                const monthTrans = this.transactions.filter(t => {
+                    if (t.accountId !== accountId) return false;
+                    if (!t.recurrence || t.recurrence.groupId !== recurrenceGroupId) return false;
+                    const d = new Date(t.date);
+                    return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+                });
+                
+                if (monthTrans.length > 0) {
+                    let monthTotal = 0;
+                    monthTrans.forEach(t => monthTotal += t.amount);
+                    this.updateAccountBalance(accountId, monthTotal);
+                }
+                
+                this.clearCache(); 
+                this.saveTransactions(); 
+                this.render(); 
+                this.updateCharts(); 
+                this.updateAlertBadge();
+                this.showToast('✅ ' + createdCount + ' ' + this.t('recurringCreated'));
+                closeModal('newTransactionModal'); 
+                this.clearForm();
+                this.checkNegativeBalance();
+                return;
+            }
+
+            const transaction = {
+                id: this.generateUniqueId(), 
+                date: date, 
+                amount: signedAmount,
+                category: category, 
+                description: description, 
+                statusOk: statusOk,
+                paymentMethod: paymentMethod, 
+                accountId: accountId
+            };
+            this.transactions.push(transaction);
+            const success = this.updateAccountBalance(accountId, signedAmount);
+            if (!success) {
+                this.transactions.pop();
+                return;
+            }
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render(); 
+            this.updateCharts(); 
+            this.updateAlertBadge();
+            this.showToast('✅ ' + this.t('transactionAdded'));
+            closeModal('newTransactionModal'); 
+            this.clearForm();
+            this.checkNegativeBalance();
         }
 
-        // ===== EXPORTAÇÕES =====
+        clearForm() {
+            const form = document.getElementById('transactionForm');
+            if (form) form.reset();
+            this.setDefaultDate();
+            this.currentTransactionType = 'expense';
+            document.querySelectorAll('#transactionForm .type-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-type') === 'expense');
+            });
+            this.filterCategoriesByType('category', 'expense');
+            const recurringOptions = document.getElementById('recurringOptions');
+            if (recurringOptions) recurringOptions.style.display = 'none';
+        }
+
+        editTransaction(id) {
+            const t = this.transactions.find(x => x.id === id);
+            if (!t) return;
+            this.currentEditId = id;
+            this.currentEditType = t.amount > 0 ? 'income' : 'expense';
+            document.getElementById('editId').value = t.id;
+            document.getElementById('editDate').value = t.date;
+            document.getElementById('editAmount').value = Math.abs(t.amount);
+            document.getElementById('editCategory').value = t.category || '';
+            document.getElementById('editPaymentMethod').value = t.paymentMethod || '';
+            document.getElementById('editTransactionAccount').value = t.accountId || '';
+            document.getElementById('editDescription').value = t.description || '';
+            document.getElementById('editStatusOk').checked = !!t.statusOk;
+            
+            if (t.recurrence) {
+                document.getElementById('editRecurring').checked = true;
+                document.getElementById('editRecurringOptions').style.display = 'block';
+                document.getElementById('editRecurrenceType').value = t.recurrence.type;
+                document.getElementById('editRecurrenceCount').value = t.recurrence.total;
+            } else {
+                document.getElementById('editRecurring').checked = false;
+                document.getElementById('editRecurringOptions').style.display = 'none';
+            }
+            
+            document.querySelectorAll('#editForm .type-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-type') === this.currentEditType);
+            });
+            this.filterCategoriesByType('editCategory', this.currentEditType);
+            openModal('editModal');
+        }
+
+        updateTransaction() {
+            const fields = [
+                { id: 'editDate', label: this.t('selectDate'), required: true },
+                { id: 'editAmount', label: this.t('invalidAmount'), required: true, type: 'number', min: 0.01 },
+                { id: 'editCategory', label: this.t('selectCategory'), required: true },
+                { id: 'editPaymentMethod', label: this.t('selectPayment'), required: true },
+                { id: 'editTransactionAccount', label: this.t('selectAccount'), required: true }
+            ];
+
+            if (!this.validateForm(fields)) return;
+
+            const id = document.getElementById('editId').value;
+            const date = document.getElementById('editDate').value;
+            const amount = parseFloat(document.getElementById('editAmount').value);
+            const category = document.getElementById('editCategory').value;
+            const paymentMethod = document.getElementById('editPaymentMethod').value;
+            const accountId = document.getElementById('editTransactionAccount').value;
+
+            let idx = -1;
+            for (let i = 0; i < this.transactions.length; i++) {
+                if (String(this.transactions[i].id) === String(id)) { 
+                    idx = i; 
+                    break; 
+                }
+            }
+            if (idx === -1) { 
+                this.showToast('❌ ' + this.t('transactionNotFound')); 
+                return; 
+            }
+
+            const oldTransaction = this.transactions[idx];
+            const oldAmount = oldTransaction.amount;
+            const oldAccountId = oldTransaction.accountId;
+            const newAmount = this.currentEditType === 'expense' ? -Math.abs(amount) : Math.abs(amount);
+
+            if (oldAccountId) this.updateAccountBalance(oldAccountId, -oldAmount);
+
+            // Verificar saldo negativo
+            if (this.settings.blockNegativeBalance && newAmount < 0) {
+                const acc = this.getAccountById(accountId);
+                if (acc) {
+                    const newBalance = (parseFloat(acc.balance) || 0) + newAmount;
+                    if (newBalance < 0) {
+                        if (oldAccountId) this.updateAccountBalance(oldAccountId, oldAmount);
+                        this.showToast(this.t('negativeBalanceBlocked'));
+                        return;
+                    }
+                }
+            }
+
+            const isRecurring = document.getElementById('editRecurring').checked;
+            let recurrenceData = null;
+            if (isRecurring) {
+                const recurrenceType = document.getElementById('editRecurrenceType').value;
+                const recurrenceCount = parseInt(document.getElementById('editRecurrenceCount').value);
+                recurrenceData = { 
+                    type: recurrenceType, 
+                    total: recurrenceCount, 
+                    current: oldTransaction.recurrence ? oldTransaction.recurrence.current : 1 
+                };
+            }
+
+            this.transactions[idx] = {
+                id: oldTransaction.id, 
+                date: date, 
+                amount: newAmount,
+                category: category, 
+                description: document.getElementById('editDescription').value,
+                statusOk: document.getElementById('editStatusOk').checked,
+                paymentMethod: paymentMethod, 
+                accountId: accountId,
+                recurrence: recurrenceData
+            };
+
+            this.updateAccountBalance(accountId, newAmount);
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render();
+            this.updateCharts(); 
+            this.updateAlertBadge();
+            closeModal('editModal');
+            this.showToast('✅ ' + this.t('transactionUpdated'));
+            this.checkNegativeBalance();
+        }
+
+        deleteFromEdit() {
+            if (!this.currentEditId) return;
+            if (!confirm('Excluir esta transação?')) return;
+            const t = this.transactions.find(x => x.id === this.currentEditId);
+            if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+            this.transactions = this.transactions.filter(x => x.id !== this.currentEditId);
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render();
+            this.updateCharts(); 
+            this.updateAlertBadge();
+            closeModal('editModal');
+            this.showToast('✅ ' + this.t('transactionDeleted'));
+            this.checkNegativeBalance();
+        }
+
+        deleteTransaction(id) {
+            if (!confirm('Excluir esta transação?')) return;
+            const t = this.transactions.find(x => x.id === id);
+            if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+            this.transactions = this.transactions.filter(x => x.id !== id);
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render();
+            this.updateCharts(); 
+            this.updateAlertBadge();
+            this.showToast('✅ ' + this.t('transactionDeleted'));
+            this.checkNegativeBalance();
+        }
+
+        // ===== TEMA E PRIVACIDADE =====
+        applyTheme() {
+            document.body.classList.toggle('light', !this.darkMode);
+            const btn = document.getElementById('themeBtn');
+            if (btn) {
+                btn.innerHTML = this.darkMode
+                    ? '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>'
+                    : '<svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+            }
+            if (Object.keys(this.charts).length > 0) {
+                try { 
+                    this.updateChartsTheme(); 
+                } catch (e) { 
+                    console.warn('[SmartWallet] Erro tema:', e); 
+                }
+            }
+        }
+
+        applyPrivacy() {
+            document.body.classList.toggle('privacy-on', this.privacyOn);
+            const btn = document.getElementById('privacyBtn');
+            if (btn) {
+                btn.innerHTML = this.privacyOn
+                    ? '<svg class="icon" viewBox="0 0 24 24"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+                    : '<svg class="icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+                btn.classList.toggle('active', this.privacyOn);
+            }
+        }
+
+        // ===== GRÁFICOS =====
+        getChartColors() {
+            const isLight = document.body.classList.contains('light');
+            return {
+                text: isLight ? '#1e293b' : '#e2e8f0',
+                grid: isLight ? '#e5e7eb' : '#334155',
+                textSecondary: isLight ? '#64748b' : '#94a3b8'
+            };
+        }
+
+        initCharts() {
+            if (typeof Chart === 'undefined') { 
+                console.error('[SmartWallet] Chart.js não carregado!'); 
+                return; 
+            }
+            const colors = this.getChartColors();
+            const lineOpts = {
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { 
+                        position: 'top', 
+                        labels: { color: colors.text } 
+                    } 
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: true, 
+                        ticks: { color: colors.textSecondary }, 
+                        grid: { color: colors.grid } 
+                    },
+                    x: { 
+                        ticks: { color: colors.textSecondary }, 
+                        grid: { color: colors.grid } 
+                    }
+                }
+            };
+            try {
+                this.charts.line = new Chart(document.getElementById('lineChart').getContext('2d'), {
+                    type: 'line',
+                    data: { 
+                        labels: [], 
+                        datasets: [
+                            { 
+                                label: this.t('income_plural'), 
+                                data: [], 
+                                borderColor: '#10b981', 
+                                backgroundColor: 'rgba(16,185,129,0.1)', 
+                                tension: 0.4 
+                            },
+                            { 
+                                label: this.t('expense_plural'), 
+                                data: [], 
+                                borderColor: '#ef4444', 
+                                backgroundColor: 'rgba(239,68,68,0.1)', 
+                                tension: 0.4 
+                            }
+                        ]
+                    },
+                    options: lineOpts
+                });
+            } catch (e) { 
+                console.error('[SmartWallet] Erro line:', e); 
+            }
+            try {
+                this.charts.pie = new Chart(document.getElementById('pieChart').getContext('2d'), {
+                    type: 'bar',
+                    data: { 
+                        labels: [], 
+                        datasets: [{ data: [], backgroundColor: [] }] 
+                    },
+                    options: {
+                        indexAxis: 'y', 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { display: false } 
+                        },
+                        scales: {
+                            x: { 
+                                beginAtZero: true, 
+                                ticks: { color: colors.textSecondary }, 
+                                grid: { color: colors.grid } 
+                            },
+                            y: { 
+                                ticks: { color: colors.textSecondary }, 
+                                grid: { color: colors.grid } 
+                            }
+                        },
+                        barPercentage: 0.3, 
+                        categoryPercentage: 0.5
+                    }
+                });
+            } catch (e) { 
+                console.error('[SmartWallet] Erro pie:', e); 
+            }
+            try {
+                this.charts.cards = new Chart(document.getElementById('cardsChart').getContext('2d'), {
+                    type: 'line',
+                    data: { 
+                        labels: [], 
+                        datasets: [] 
+                    },
+                    options: {
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: { 
+                            legend: { 
+                                position: 'top', 
+                                labels: { color: colors.text } 
+                            } 
+                        },
+                        scales: {
+                            y: { 
+                                beginAtZero: true, 
+                                ticks: { color: colors.textSecondary }, 
+                                grid: { color: colors.grid } 
+                            },
+                            x: { 
+                                ticks: { color: colors.textSecondary }, 
+                                grid: { color: colors.grid } 
+                            }
+                        }
+                    }
+                });
+            } catch (e) { 
+                console.error('[SmartWallet] Erro cards:', e); 
+            }
+            this.updateCharts();
+        }
+
+        updateChartsTheme() {
+            const colors = this.getChartColors();
+            const self = this;
+            Object.keys(this.charts).forEach(key => {
+                const chart = self.charts[key];
+                if (!chart || !chart.options) return;
+                try {
+                    if (chart.options.scales?.y?.ticks) chart.options.scales.y.ticks.color = colors.textSecondary;
+                    if (chart.options.scales?.y?.grid) chart.options.scales.y.grid.color = colors.grid;
+                    if (chart.options.scales?.x?.ticks) chart.options.scales.x.ticks.color = colors.textSecondary;
+                    if (chart.options.scales?.x?.grid) chart.options.scales.x.grid.color = colors.grid;
+                    if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = colors.text;
+                    chart.update('none');
+                } catch (e) { 
+                    console.warn('[SmartWallet] Erro tema gráfico:', e); 
+                }
+            });
+        }
+
+        updateCharts() {
+            const self = this;
+            const monthsShort = this.getMonths('short');
+            const lLabels = [], lInc = [], lExp = [];
+            for (let i = -2; i <= 3; i++) {
+                const d = new Date(this.currentMonth);
+                d.setMonth(d.getMonth() + i);
+                lLabels.push(monthsShort[d.getMonth()] + '/' + d.getFullYear());
+                const mt = this.getMonthTransactions(d);
+                let inc = 0, exp = 0;
+                mt.forEach(t => { 
+                    if (t.amount > 0) inc += t.amount; 
+                    else exp += t.amount; 
+                });
+                lInc.push(inc);
+                lExp.push(Math.abs(exp));
+            }
+            if (this.charts.line) {
+                this.charts.line.data.labels = lLabels;
+                this.charts.line.data.datasets[0].data = lInc;
+                this.charts.line.data.datasets[1].data = lExp;
+                this.charts.line.update();
+            }
+            const exps = {};
+            this.getMonthTransactions().forEach(t => {
+                if (t.amount < 0) {
+                    const c = self.getCategoryById(t.category);
+                    if (!exps[c.name]) exps[c.name] = { t: 0, color: c.color };
+                    exps[c.name].t += Math.abs(t.amount);
+                }
+            });
+            if (this.charts.pie) {
+                this.charts.pie.data.labels = Object.keys(exps);
+                this.charts.pie.data.datasets[0].data = Object.keys(exps).map(k => exps[k].t);
+                this.charts.pie.data.datasets[0].backgroundColor = Object.keys(exps).map(k => exps[k].color);
+                this.charts.pie.update();
+            }
+            if (this.charts.cards) {
+                const cardLabels = [];
+                const cardDatasets = [];
+                for (let i = -2; i <= 3; i++) {
+                    const d = new Date(this.currentMonth);
+                    d.setMonth(d.getMonth() + i);
+                    cardLabels.push(monthsShort[d.getMonth()] + '/' + d.getFullYear());
+                }
+                this.cards.forEach(card => {
+                    const data = [];
+                    for (let i = -2; i <= 3; i++) {
+                        const d = new Date(self.currentMonth);
+                        d.setMonth(d.getMonth() + i);
+                        const cardTrans = self.getCardTransactions(card.id, d);
+                        let total = 0;
+                        cardTrans.forEach(t => total += Math.abs(t.amount));
+                        data.push(total);
+                    }
+                    cardDatasets.push({
+                        label: card.name, 
+                        data: data,
+                        borderColor: card.color, 
+                        backgroundColor: card.color + '20',
+                        tension: 0.4, 
+                        fill: false
+                    });
+                });
+                this.charts.cards.data.labels = cardLabels;
+                this.charts.cards.data.datasets = cardDatasets;
+                this.charts.cards.update();
+            }
+            this.updateInvestmentChart();
+            this.renderWaterfallChart();
+        }
+
+        // ===== ALERTAS =====
+        updateAlertBadge() {
+            const today = new Date(); 
+            today.setHours(0, 0, 0, 0);
+            const in3Days = new Date(today); 
+            in3Days.setDate(in3Days.getDate() + 3);
+            const tomorrow = new Date(today); 
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const bills = this.transactions.filter(t => {
+                if (t.statusOk || t.amount >= 0) return false;
+                const tDate = new Date(t.date + 'T12:00:00');
+                return tDate <= in3Days;
+            });
+            let closingAlertsCount = 0;
+            this.cards.forEach(card => {
+                const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+                const closingDay = Math.min(card.closingDay, lastDayOfMonth);
+                const closingDate = new Date(today.getFullYear(), today.getMonth(), closingDay);
+                closingDate.setHours(0, 0, 0, 0);
+                if (closingDate.getTime() === tomorrow.getTime()) closingAlertsCount++;
+            });
+            const totalAlerts = bills.length + closingAlertsCount;
+            const badge = document.getElementById('alertBadge');
+            const btn = document.getElementById('alertBtn');
+            if (badge && btn) {
+                if (totalAlerts > 0) {
+                    badge.textContent = totalAlerts;
+                    badge.classList.add('visible');
+                    btn.classList.add('has-alerts');
+                } else {
+                    badge.classList.remove('visible');
+                    btn.classList.remove('has-alerts');
+                }
+            }
+            
+            // Notificações push
+            if (this.settings.notifyBills && bills.length > 0 && Notification.permission === 'granted') {
+                const notifKey = 'smartwallet_notif_' + today.toISOString().split('T')[0];
+                if (!localStorage.getItem(notifKey)) {
+                    new Notification(this.t('notificationTitle'), {
+                        body: this.t('notificationBody', { count: bills.length }),
+                        icon: 'favicon.svg'
+                    });
+                    localStorage.setItem(notifKey, 'true');
+                }
+            }
+        }
+
+        // ===== FATURA DE CARTÃO =====
+        getInvoicePeriod(card, referenceDate) {
+            const refDate = referenceDate || this.cardModalMonth || new Date();
+            const year = refDate.getFullYear();
+            const month = refDate.getMonth();
+            const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+            const closingDay = Math.min(card.closingDay, lastDayOfMonth);
+            let closingDate = new Date(year, month, closingDay);
+            const previousClosingDate = new Date(closingDate);
+            previousClosingDate.setMonth(previousClosingDate.getMonth() - 1);
+            previousClosingDate.setDate(previousClosingDate.getDate() + 1);
+            const today = new Date(); 
+            today.setHours(0, 0, 0, 0);
+            const isClosed = closingDate < today;
+            let dueDate = new Date(closingDate);
+            if (isClosed) dueDate.setMonth(dueDate.getMonth() + 1);
+            dueDate.setDate(card.dueDay);
+            return { 
+                startDate: previousClosingDate, 
+                closingDate: closingDate, 
+                dueDate: dueDate, 
+                isClosed: isClosed 
+            };
+        }
+
+        calculateInvoiceTotal(purchases) {
+            let total = 0;
+            purchases.forEach(p => total += Math.abs(p.amount));
+            return total;
+        }
+
+        renderCreditCardsList() {
+            const container = document.getElementById('creditCardsList');
+            if (!container) return;
+            this.updateCardMonthLabel();
+            if (!this.cards.length) {
+                container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px; opacity:0.5;">💳</div><h3>Nenhum cartão cadastrado</h3></div>';
+                return;
+            }
+            const self = this;
+            const refDate = this.cardModalMonth;
+            let html = '<div class="credit-cards-grid">';
+            this.cards.forEach(card => {
+                const period = self.getInvoicePeriod(card, refDate);
+                const purchases = self.getCardTransactionsForPeriod(card.id, period.startDate, period.closingDate);
+                const total = self.calculateInvoiceTotal(purchases);
+                const available = card.limit - total;
+                const usedPct = Math.min(100, (total / card.limit) * 100);
+                html += '<div class="credit-card-visual" style="background:linear-gradient(135deg, ' + card.color + ' 0%, ' + self.adjustColor(card.color, -30) + ' 100%);" data-card-id="' + card.id + '">';
+                html += '<div class="cc-actions"><button class="cc-action-btn edit-card-btn" data-card-id="' + card.id + '">✏️</button><button class="cc-action-btn delete-card-btn" data-card-id="' + card.id + '">🗑️</button></div>';
+                html += '<div class="cc-header"><div class="cc-brand">' + self.escapeHtml(card.brand) + '</div><div class="cc-chip"></div></div>';
+                html += '<div class="cc-name">' + self.escapeHtml(card.name) + '</div>';
+                html += '<div class="cc-number">•••• •••• •••• ' + self.escapeHtml(card.last4 || '****') + '</div>';
+                html += '<div class="cc-footer"><div><div class="cc-label">Fatura Atual</div><div class="cc-value">' + self.formatCurrency(total) + '</div></div><div style="text-align:right;"><div class="cc-label">Disponível</div><div class="cc-value">' + self.formatCurrency(available) + '</div></div></div>';
+                html += '<div style="position:absolute; bottom:0; left:0; right:0; height:4px; background:rgba(0,0,0,0.3);"><div style="height:100%; width:' + usedPct + '%; background:' + (usedPct > 80 ? '#ef4444' : usedPct > 50 ? '#f59e0b' : '#10b981') + ';"></div></div>';
+                html += '</div>';
+            });
+            html += '</div>';
+            container.innerHTML = html;
+
+            container.querySelectorAll('.credit-card-visual').forEach(cardEl => {
+                cardEl.addEventListener('click', () => {
+                    const cardId = cardEl.dataset.cardId;
+                    openInvoiceModal(cardId);
+                });
+            });
+            container.querySelectorAll('.edit-card-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    self.editCard(btn.dataset.cardId);
+                });
+            });
+            container.querySelectorAll('.delete-card-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    self.deleteCard(btn.dataset.cardId);
+                });
+            });
+        }
+
+        updateCardMonthLabel() {
+            const months = this.getMonths();
+            const label = document.getElementById('cardMonthLabel');
+            if (label) label.textContent = months[this.cardModalMonth.getMonth()] + ' ' + this.cardModalMonth.getFullYear();
+        }
+
+        adjustColor(color, amount) {
+            const hex = color.replace('#', '');
+            const r = Math.max(0, Math.min(255, parseInt(hex.substr(0, 2), 16) + amount));
+            const g = Math.max(0, Math.min(255, parseInt(hex.substr(2, 2), 16) + amount));
+            const b = Math.max(0, Math.min(255, parseInt(hex.substr(4, 2), 16) + amount));
+            return '#' + r.toString(16).padStart(2,'0') + g.toString(16).padStart(2,'0') + b.toString(16).padStart(2,'0');
+        }
+
+        saveCard() {
+            const fields = [
+                { id: 'cardName', label: this.t('informName'), required: true }
+            ];
+            if (!this.validateForm(fields)) return;
+
+            const id = document.getElementById('cardEditId').value;
+            const name = document.getElementById('cardName').value.trim();
+            const brand = document.getElementById('cardBrand').value;
+            const last4 = document.getElementById('cardLast4').value.trim();
+            const closingDay = parseInt(document.getElementById('cardClosingDay').value);
+            const dueDay = parseInt(document.getElementById('cardDueDay').value);
+            const limit = parseFloat(document.getElementById('cardLimit').value);
+            const color = document.getElementById('cardColor').value;
+
+            if (id) {
+                for (let i = 0; i < this.cards.length; i++) {
+                    if (this.cards[i].id === id) { 
+                        this.cards[i] = { id, name, brand, last4, closingDay, dueDay, limit, color }; 
+                        break; 
+                    }
+                }
+            } else {
+                this.cards.push({ 
+                    id: this.generateUniqueId(), 
+                    name, brand, last4, closingDay, dueDay, limit, color 
+                });
+            }
+            this.clearCache(); 
+            this.saveCards(); 
+            this.populatePaymentMethodSelects(); 
+            this.renderCreditCardsList();
+            closeModal('newCardModal');
+            this.showToast('✅ ' + (id ? this.t('cardUpdated') : this.t('cardCreated')));
+        }
+
+        deleteCard(id) {
+            if (!confirm('Excluir este cartão?')) return;
+            this.cards = this.cards.filter(c => c.id !== id);
+            this.clearCache(); 
+            this.saveCards(); 
+            this.populatePaymentMethodSelects(); 
+            this.renderCreditCardsList();
+            this.showToast('✅ ' + this.t('cardRemoved'));
+        }
+
+        editCard(id) {
+            const card = this.getCardById(id); 
+            if (!card) return;
+            document.getElementById('cardEditId').value = card.id;
+            document.getElementById('cardName').value = card.name;
+            document.getElementById('cardBrand').value = card.brand;
+            document.getElementById('cardLast4').value = card.last4 || '';
+            document.getElementById('cardClosingDay').value = card.closingDay;
+            document.getElementById('cardDueDay').value = card.dueDay;
+            document.getElementById('cardLimit').value = card.limit;
+            document.getElementById('cardColor').value = card.color;
+            document.getElementById('newCardTitle').textContent = 'Editar Cartão';
+            openModal('newCardModal');
+        }
+
+        openInvoice(cardId, offset = 0) {
+            const card = this.getCardById(cardId);
+            if (!card) return;
+            this.currentInvoiceCardId = cardId;
+            this.currentInvoiceOffset = offset;
+            const refDate = new Date(this.cardModalMonth);
+            refDate.setMonth(refDate.getMonth() + offset);
+            const period = this.getInvoicePeriod(card, refDate);
+            const purchases = this.getCardTransactionsForPeriod(card.id, period.startDate, period.closingDate);
+            const total = this.calculateInvoiceTotal(purchases);
+            const minimum = total * 0.15;
+            const available = card.limit - total;
+            const self = this;
+            document.getElementById('invoiceTitle').textContent = this.t('invoice') + ' - ' + card.name;
+            const today = new Date(); 
+            today.setHours(0, 0, 0, 0);
+            const daysUntilDue = Math.ceil((period.dueDate - today) / (1000 * 60 * 60 * 24));
+            let dueClass = '';
+            let dueText = this.formatDate(period.dueDate.toISOString().split('T')[0]);
+            if (daysUntilDue < 0) { 
+                dueClass = 'overdue'; 
+                dueText += ' (' + this.t('overdue') + ' ' + Math.abs(daysUntilDue) + ' ' + this.t('days') + ')'; 
+            } else if (daysUntilDue === 0) { 
+                dueClass = 'overdue'; 
+                dueText += ' (' + this.t('dueToday') + ')'; 
+            } else if (daysUntilDue <= 3) { 
+                dueText += ' (' + this.t('inDays', {days: daysUntilDue}) + ')'; 
+            }
+            if (period.isClosed) dueText += ' ✓ ' + this.t('closed');
+            let html = '<div class="invoice-period-display">';
+            html += '<div class="invoice-period-info"><div class="invoice-period-label">📅 ' + this.t('invoicePeriod') + '</div>';
+            html += '<div class="invoice-period-value">' + this.formatDate(period.startDate.toISOString().split('T')[0]) + ' até ' + this.formatDate(period.closingDate.toISOString().split('T')[0]) + '</div></div>';
+            html += '<div class="invoice-due-info"><div class="invoice-due-label">💳 ' + this.t('dueDate') + '</div>';
+            html += '<div class="invoice-due-value ' + dueClass + '">' + dueText + '</div></div></div>';
+            html += '<div style="background:var(--input-bg); border-radius:14px; padding:16px; margin-bottom:16px;">';
+            html += '<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);"><span style="color:var(--text-secondary);">' + this.t('limit') + '</span><span style="font-weight:600;">' + this.formatCurrency(card.limit) + '</span></div>';
+            html += '<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);"><span style="color:var(--text-secondary);">' + this.t('invoiceTotal') + '</span><span style="font-weight:600; color:var(--danger-color);">' + this.formatCurrency(total) + '</span></div>';
+            html += '<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);"><span style="color:var(--text-secondary);">' + this.t('minimum') + '</span><span style="font-weight:600;">' + this.formatCurrency(minimum) + '</span></div>';
+            html += '<div style="display:flex; justify-content:space-between; padding:12px 0 0 0; margin-top:4px; border-top:2px solid var(--border-color); font-weight:700;"><span>' + this.t('available') + '</span><span style="color:var(--success-color);">' + this.formatCurrency(available) + '</span></div></div>';
+            html += '<div style="display:flex; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:10px;">';
+            html += '<h3 style="font-size:1.1rem;">' + this.t('purchases') + ' (' + purchases.length + ')</h3>';
+            html += '<div style="display:flex; gap:8px;">';
+            html += '<button class="btn btn-secondary btn-small" id="exportInvoiceCsvBtn">📥 CSV</button>';
+            html += '<button class="btn btn-secondary btn-small" id="printInvoicePdfBtn">🖨️ PDF</button></div></div>';
+            html += '<div>';
+            if (purchases.length === 0) {
+                html += '<p style="text-align:center; padding:20px; color:var(--text-secondary);">' + this.t('noPurchases') + '</p>';
+            } else {
+                purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(p => {
+                    const cat = self.getCategoryById(p.category);
+                    html += '<div style="background:var(--input-bg); border-radius:12px; padding:12px 16px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">';
+                    html += '<div style="flex:1;"><div style="font-weight:600;">' + self.escapeHtml(p.description) + '</div>';
+                    html += '<div style="font-size:0.8rem; color:var(--text-secondary); display:flex; gap:10px;"><span>' + self.formatDate(p.date) + '</span><span style="color:' + cat.color + ';">● ' + self.escapeHtml(cat.name) + '</span></div></div>';
+                    html += '<div style="font-weight:700;">' + self.formatCurrency(Math.abs(p.amount)) + '</div>';
+                    html += '<button class="btn btn-danger btn-small delete-invoice-item" data-id="' + p.id + '">🗑️</button></div>';
+                });
+            }
+            html += '</div>';
+            html += '<div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">';
+            html += '<button class="btn btn-success" id="payInvoiceBtn">💰 ' + this.t('payInvoice') + '</button>';
+            html += '<button class="btn btn-secondary" data-close-modal="invoiceModal">' + this.t('close') + '</button></div>';
+            document.getElementById('invoiceContent').innerHTML = html;
+            openModal('invoiceModal');
+
+            document.getElementById('exportInvoiceCsvBtn').addEventListener('click', () => self.exportInvoiceCSV(cardId));
+            document.getElementById('printInvoicePdfBtn').addEventListener('click', () => self.printInvoicePDF(cardId));
+            document.getElementById('payInvoiceBtn').addEventListener('click', () => self.payInvoice(cardId));
+            document.querySelectorAll('.delete-invoice-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    self.deleteTransaction(btn.dataset.id);
+                    self.openInvoice(cardId, offset);
+                });
+            });
+        }
+
+        navigateInvoice(direction) {
+            if (!this.currentInvoiceCardId) return;
+            this.currentInvoiceOffset += direction;
+            this.openInvoice(this.currentInvoiceCardId, this.currentInvoiceOffset);
+        }
+
+        payInvoice(cardId) {
+            const card = this.getCardById(cardId);
+            if (!card) return;
+            const period = this.getInvoicePeriod(card);
+            const purchases = this.getCardTransactionsForPeriod(card.id, period.startDate, period.closingDate);
+            const total = this.calculateInvoiceTotal(purchases);
+            if (total <= 0) { 
+                this.showToast('❌ ' + this.t('emptyInvoice')); 
+                return; 
+            }
+            if (!confirm(this.t('confirmPayment') + ' ' + this.formatCurrency(total) + '?')) return;
+            this.transactions.push({
+                id: this.generateUniqueId(), 
+                date: new Date().toISOString().split('T')[0],
+                amount: -total, 
+                category: 'servicos', 
+                description: 'Pagamento Fatura ' + card.name,
+                statusOk: false, 
+                paymentMethod: 'pix', 
+                accountId: ''
+            });
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render(); 
+            this.updateCharts(); 
+            this.updateAlertBadge();
+            this.showToast('✅ ' + this.t('paymentRegistered'));
+        }
+
+        exportInvoiceCSV(cardId) {
+            const card = this.getCardById(cardId);
+            if (!card) return;
+            const period = this.getInvoicePeriod(card);
+            const purchases = this.getCardTransactionsForPeriod(card.id, period.startDate, period.closingDate);
+            const self = this;
+            let csv = '\ufeff' + this.t('invoice') + ' - ' + card.name + '\n';
+            csv += this.t('invoicePeriod') + ': ' + this.formatDate(period.startDate.toISOString().split('T')[0]) + ' a ' + this.formatDate(period.closingDate.toISOString().split('T')[0]) + '\n';
+            csv += this.t('dueDate') + ': ' + this.formatDate(period.dueDate.toISOString().split('T')[0]) + '\n\n';
+            csv += this.t('date') + ';' + this.t('description') + ';' + this.t('category') + ';' + this.t('value') + '\n';
+            purchases.forEach(p => {
+                const cat = self.getCategoryById(p.category);
+                csv += p.date + ';"' + (p.description || '').replace(/"/g,'""') + '";"' + cat.name + '";' + Math.abs(p.amount).toFixed(2) + '\n';
+            });
+            const total = this.calculateInvoiceTotal(purchases);
+            csv += '\n' + this.t('invoiceTotal') + ';;;' + total.toFixed(2) + '\n';
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const fileName = this.generateTimestamp() + '_fatura_' + card.name.replace(/\s+/g,'_') + '.csv';
+            saveFileWithPicker(blob, fileName, 'text/csv').then(result => {
+                if (result === 'saved' || result === 'downloaded') {
+                    this.showToast('✅ ' + this.t('backupExported'));
+                }
+            }).catch(e => this.showToast('❌ ' + e.message));
+        }
+
+        printInvoicePDF(cardId) {
+            const card = this.getCardById(cardId);
+            if (!card) return;
+            const period = this.getInvoicePeriod(card);
+            const purchases = this.getCardTransactionsForPeriod(card.id, period.startDate, period.closingDate);
+            const total = this.calculateInvoiceTotal(purchases);
+            const self = this;
+            const printWindow = window.open('', '_blank');
+            if (!printWindow) { 
+                this.showToast('⚠️ ' + this.t('allowPopups')); 
+                return; 
+            }
+            const rows = purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).map(p => {
+                const cat = self.getCategoryById(p.category);
+                return '<tr><td>' + self.formatDate(p.date) + '</td><td>' + self.escapeHtml(p.description) + '</td><td>' + self.escapeHtml(cat.name) + '</td><td style="text-align:right;">' + self.formatCurrency(Math.abs(p.amount)) + '</td></tr>';
+            }).join('');
+            const fileName = this.generateTimestamp() + '_fatura_' + card.name.replace(/\s+/g,'_') + '.pdf';
+            printWindow.document.write('<!DOCTYPE html><html><head><title>' + fileName + '</title><style>body{font-family:Arial,sans-serif;padding:40px;max-width:800px;margin:0 auto;}.header{border-bottom:3px solid #6366f1;padding-bottom:20px;margin-bottom:30px;}.header h1{color:#6366f1;margin:0 0 5px 0;}table{width:100%;border-collapse:collapse;}th,td{padding:10px;text-align:left;border-bottom:1px solid #e5e7eb;}th{background:#f1f5f9;}.total{font-weight:700;font-size:1.2rem;}.footer{margin-top:40px;padding-top:20px;border-top:2px solid #6366f1;font-size:0.85rem;color:#64748b;text-align:center;}@media print{body{padding:20px;}}</style></head><body>');
+            printWindow.document.write('<div class="header"><h1>Fatura - ' + this.escapeHtml(card.name) + '</h1><div style="color:#64748b;">' + this.escapeHtml(card.brand) + ' •••• ' + this.escapeHtml(card.last4 || '****') + '</div></div>');
+            printWindow.document.write('<p><strong>Período:</strong> ' + this.formatDate(period.startDate.toISOString().split('T')[0]) + ' a ' + this.formatDate(period.closingDate.toISOString().split('T')[0]) + '</p>');
+            printWindow.document.write('<p><strong>Vencimento:</strong> ' + this.formatDate(period.dueDate.toISOString().split('T')[0]) + '</p>');
+            printWindow.document.write('<table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th></tr></thead><tbody>' + rows + '</tbody>');
+            printWindow.document.write('<tfoot><tr class="total"><td colspan="3" style="text-align:right;">' + this.t('total') + ':</td><td>' + this.formatCurrency(total) + '</td></tr></tfoot></table>');
+            printWindow.document.write('<div class="footer">Smart Wallet • Gerado em ' + new Date().toLocaleString(this.getLanguage()) + '<br>Idealizado por RogerElizar™</div>');
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.document.title = fileName;
+            setTimeout(() => { 
+                printWindow.focus(); 
+                printWindow.print(); 
+            }, 300);
+        }
+		        // ===== EXPORTAÇÕES =====
         exportCSV() {
             const mt = this.getMonthTransactions();
-            if (!mt.length) { this.showToast('❌ ' + this.t('noTransactions')); return; }
+            if (!mt.length) { 
+                this.showToast('❌ ' + this.t('noTransactions')); 
+                return; 
+            }
             const self = this;
             let csv = '\ufeff' + this.t('monthlyStatement') + '\n';
             csv += this.t('period') + ': ' + this.formatMonthYear(this.currentMonth) + '\n\n';
@@ -2676,14 +3663,19 @@
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const fileName = this.generateTimestamp() + '_extrato_' + this.formatMonthYear(this.currentMonth) + '.csv';
             saveFileWithPicker(blob, fileName, 'text/csv').then(result => {
-                if (result === 'saved' || result === 'downloaded') this.showToast('✅ ' + this.t('backupExported'));
+                if (result === 'saved' || result === 'downloaded') {
+                    this.showToast('✅ ' + this.t('backupExported'));
+                }
             }).catch(e => this.showToast('❌ ' + e.message));
             closeModal('exportModal');
         }
 
         printExtratoPDF() {
             const filtered = this.getFilteredTransactions();
-            if (!filtered.length) { this.showToast('❌ ' + this.t('noTransactions')); return; }
+            if (!filtered.length) { 
+                this.showToast('❌ ' + this.t('noTransactions')); 
+                return; 
+            }
             const months = this.getMonths();
             const period = months[this.currentMonth.getMonth()] + ' ' + this.currentMonth.getFullYear();
             let totalReceitas = 0, totalDespesas = 0;
@@ -2705,11 +3697,17 @@
             const fileName = this.generateTimestamp() + '_extrato_' + period.replace(/ /g,'_') + '.pdf';
             const html = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page { size: A4; margin: 2cm; }body { font-family: Arial, sans-serif; color: #1e293b; padding: 20px; max-width: 900px; margin: 0 auto; }.header { text-align: center; border-bottom: 3px solid #6366f1; padding-bottom: 20px; margin-bottom: 30px; }.header h1 { color: #6366f1; font-size: 28pt; margin: 0 0 8px 0; }table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 9pt; }th { background: #6366f1; color: white; padding: 10px 8px; text-align: left; font-weight: 600; }td { padding: 8px; border-bottom: 1px solid #e5e7eb; }tr:nth-child(even) { background: #f8fafc; }.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }.summary-box { background: #f8fafc; border-radius: 8px; padding: 16px; text-align: center; border: 2px solid #e5e7eb; }.summary-box .label { font-size: 9pt; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }.summary-box .value { font-size: 16pt; font-weight: bold; }.summary-box.receitas .value { color: #10b981; }.summary-box.despesas .value { color: #ef4444; }.summary-box.saldo .value { color: #6366f1; }.footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #6366f1; text-align: center; font-size: 9pt; color: #64748b; }.no-print { text-align:center; margin-top:24px; }@media print { body { padding: 0; } .no-print { display: none; } }</style></head><body><div class="header"><h1>Smart Wallet</h1><p style="color:#64748b;">' + this.t('appSubtitle') + '</p><p style="color:#6366f1;font-size:14pt;font-weight:bold;margin:12px 0 0 0;">' + this.t('monthlyStatement') + ': ' + period + '</p></div><table><thead><tr><th>' + this.t('date') + '</th><th>' + this.t('description') + '</th><th>' + this.t('category') + '</th><th>' + this.t('account') + '</th><th>' + this.t('payment') + '</th><th>' + this.t('status') + '</th><th style="text-align:right;">' + this.t('value') + '</th></tr></thead><tbody>' + rowsHtml + '</tbody></table><div class="summary"><div class="summary-box receitas"><div class="label">' + this.t('income_plural') + '</div><div class="value">' + this.formatCurrency(totalReceitas) + '</div></div><div class="summary-box despesas"><div class="label">' + this.t('expense_plural') + '</div><div class="value">' + this.formatCurrency(totalDespesas) + '</div></div><div class="summary-box saldo"><div class="label">' + this.t('unifiedBalance') + '</div><div class="value">' + this.formatCurrency(saldo) + '</div></div></div><div class="footer"><p>Smart Wallet - ' + this.t('appSubtitle') + '</p><p style="font-weight:600;color:#6366f1;margin-top:6px;">Idealizado por RogerElizar™ | rogerelizar@gmail.com</p></div><div class="no-print"><button onclick="window.print()" style="background:#6366f1;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:11pt;cursor:pointer;">🖨️ ' + this.t('printPDF') + '</button></div></body></html>';
             const printWindow = window.open('', '_blank');
-            if (!printWindow) { this.showToast('⚠️ ' + this.t('allowPopups')); return; }
+            if (!printWindow) { 
+                this.showToast('⚠️ ' + this.t('allowPopups')); 
+                return; 
+            }
             printWindow.document.write(html);
             printWindow.document.close();
             printWindow.document.title = fileName;
-            setTimeout(() => { printWindow.focus(); printWindow.print(); }, 300);
+            setTimeout(() => { 
+                printWindow.focus(); 
+                printWindow.print(); 
+            }, 300);
         }
 
         exportBackup() {
@@ -2717,12 +3715,17 @@
             this.isSaving = true;
             try {
                 const backup = {
-                    version: '4.4.0', exportDate: new Date().toISOString(),
-                    appName: 'Smart Wallet', language: this.getLanguage(),
-                    currency: this.getCurrency(), transactions: this.transactions,
-                    categories: this.categories, accounts: this.accounts,
-                    cards: this.cards, investments: this.investments,
-                    darkMode: this.darkMode, privacyOn: this.privacyOn,
+                    version: '4.4.2', 
+                    exportDate: new Date().toISOString(),
+                    appName: 'Smart Wallet', 
+                    language: this.getLanguage(),
+                    currency: this.getCurrency(), 
+                    transactions: this.transactions,
+                    categories: this.categories, 
+                    accounts: this.accounts,
+                    cards: this.cards,
+                    darkMode: this.darkMode, 
+                    privacyOn: this.privacyOn,
                     settings: this.settings
                 };
                 const jsonString = JSON.stringify(backup, null, 2);
@@ -2743,42 +3746,64 @@
         }
 
         importBackup() {
-            if (!window._pendingBackupData) { this.showToast('⚠️ Selecione um arquivo'); return; }
+            if (!window._pendingBackupData) { 
+                this.showToast('⚠️ Selecione um arquivo'); 
+                return; 
+            }
             try {
                 let cleanData = window._pendingBackupData;
                 if (cleanData.charCodeAt(0) === 0xFEFF) cleanData = cleanData.substring(1);
                 cleanData = cleanData.trim();
-                if (!cleanData) { this.showToast('⚠️ Arquivo vazio!'); return; }
+                if (!cleanData) { 
+                    this.showToast('⚠️ Arquivo vazio!'); 
+                    return; 
+                }
                 const data = JSON.parse(cleanData);
-                if (!data || typeof data !== 'object') { this.showToast('❌ Estrutura inválida'); return; }
+                if (!data || typeof data !== 'object') { 
+                    this.showToast('❌ Estrutura inválida'); 
+                    return; 
+                }
                 const transactions = Array.isArray(data.transactions) ? data.transactions : [];
                 const categories = Array.isArray(data.categories) ? data.categories : this.categories;
                 const accounts = Array.isArray(data.accounts) ? data.accounts : [];
                 const cards = Array.isArray(data.cards) ? data.cards : [];
-                const investments = Array.isArray(data.investments) ? data.investments : [];
-                if (!confirm('⚠️ Substituir TODOS os dados?')) return this.showToast('Cancelado');
+                if (!confirm('⚠️ Substituir TODOS os dados?')) return;
+                
                 this.transactions = transactions;
                 this.categories = categories;
                 this.accounts = accounts;
                 this.cards = cards;
-                this.investments = investments;
+                
                 if (typeof data.darkMode === 'boolean') this.darkMode = data.darkMode;
                 if (typeof data.privacyOn === 'boolean') this.privacyOn = data.privacyOn;
                 if (data.settings) this.settings = { ...this.settings, ...data.settings };
                 if (typeof data.language === 'string') localStorage.setItem('smartwallet_language', data.language);
                 if (typeof data.currency === 'string') localStorage.setItem('smartwallet_currency', data.currency);
+                
                 this.pageSize = this.settings.pageSize || 20;
-                this.clearCache(); this.saveTransactions(); this.saveCategories();
-                this.saveAccounts(); this.saveCards(); this.saveInvestments();
+                
+                this.clearCache(); 
+                this.saveTransactions(); 
+                this.saveCategories();
+                this.saveAccounts(); 
+                this.saveCards();
                 this.saveSettings();
                 localStorage.setItem('smartwallet_dark', this.darkMode);
                 localStorage.setItem('smartwallet_privacy', this.privacyOn);
-                this.populateCategorySelects(); this.populatePaymentMethodSelects();
-                this.populateAccountSelects(); this.applyTheme(); this.applyPrivacy();
-                this.applyLanguage(); this.applyCurrency();
+                
+                this.populateCategorySelects(); 
+                this.populatePaymentMethodSelects();
+                this.populateAccountSelects(); 
+                this.applyTheme(); 
+                this.applyPrivacy();
+                this.applyLanguage(); 
+                this.applyCurrency();
                 this.currentPage = 1;
-                this.render(); this.updateCharts(); this.updateAlertBadge();
+                this.render(); 
+                this.updateCharts(); 
+                this.updateAlertBadge();
                 this.checkNegativeBalance();
+                
                 closeModal('importBackupModal');
                 this.showToast('✅ Backup restaurado!');
                 window._pendingBackupData = null;
@@ -2788,25 +3813,41 @@
         }
 
         importCSV() {
-            if (!window._pendingCsvData) { this.showToast('Selecione um arquivo CSV'); return; }
+            if (!window._pendingCsvData) { 
+                this.showToast('Selecione um arquivo CSV'); 
+                return; 
+            }
             const replace = document.getElementById('csvReplaceData').checked;
             const lines = window._pendingCsvData.split(/\r?\n/).filter(l => l.trim());
-            if (lines.length < 2) { this.showToast('CSV vazio ou inválido'); return; }
+            if (lines.length < 2) { 
+                this.showToast('CSV vazio ou inválido'); 
+                return; 
+            }
             const header = lines[0].toLowerCase();
             if (header.indexOf('data') === -1 || header.indexOf('valor') === -1) {
-                this.showToast('Formato CSV inválido'); return;
+                this.showToast('Formato CSV inválido'); 
+                return;
             }
             const self = this;
             const transactionsToAdd = [];
             let skipped = 0;
             for (let i = 1; i < lines.length; i++) {
                 const cols = this.parseCSVLine(lines[i]);
-                if (cols.length < 6) { skipped++; continue; }
+                if (cols.length < 6) { 
+                    skipped++; 
+                    continue; 
+                }
                 const [date, desc, catName, tipo, payment, status, valor] = cols;
-                if (!date || !valor) { skipped++; continue; }
+                if (!date || !valor) { 
+                    skipped++; 
+                    continue; 
+                }
                 const category = this.findCategoryByName(catName);
                 const amount = parseFloat(valor.replace(',', '.'));
-                if (isNaN(amount)) { skipped++; continue; }
+                if (isNaN(amount)) { 
+                    skipped++; 
+                    continue; 
+                }
                 const signedAmount = tipo.toLowerCase().indexOf('despesa') !== -1 ? -Math.abs(amount) : Math.abs(amount);
                 let paymentMethod = 'pix';
                 const payLower = (payment || '').toLowerCase();
@@ -2815,10 +3856,14 @@
                 else if (payLower.indexOf('auto') !== -1) paymentMethod = 'auto';
                 else if (payLower.indexOf('transf') !== -1) paymentMethod = 'transfer';
                 transactionsToAdd.push({
-                    id: this.generateUniqueId(), date, amount: signedAmount,
-                    category: category ? category.id : '', description: desc,
+                    id: this.generateUniqueId(), 
+                    date, 
+                    amount: signedAmount,
+                    category: category ? category.id : '', 
+                    description: desc,
                     statusOk: status.toLowerCase().indexOf('conclu') !== -1,
-                    paymentMethod, accountId: ''
+                    paymentMethod, 
+                    accountId: ''
                 });
             }
             if (replace) {
@@ -2829,10 +3874,12 @@
                 });
             }
             this.transactions = this.transactions.concat(transactionsToAdd);
-            this.clearCache(); this.saveTransactions();
+            this.clearCache(); 
+            this.saveTransactions();
             this.currentPage = 1;
             this.render();
-            this.updateCharts(); this.updateAlertBadge();
+            this.updateCharts(); 
+            this.updateAlertBadge();
             this.checkNegativeBalance();
             closeModal('importCsvModal');
             this.showToast(transactionsToAdd.length + ' transações importadas!' + (skipped > 0 ? ' (' + skipped + ' ignoradas)' : ''));
@@ -2846,8 +3893,12 @@
             for (let i = 0; i < line.length; i++) {
                 const c = line[i];
                 if (c === '"') {
-                    if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
-                    else { inQuotes = !inQuotes; }
+                    if (inQuotes && line[i+1] === '"') { 
+                        current += '"'; 
+                        i++; 
+                    } else { 
+                        inQuotes = !inQuotes; 
+                    }
                 } else if (c === ';' && !inQuotes) {
                     result.push(current.trim());
                     current = '';
@@ -2866,18 +3917,22 @@
             this.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
             this.accounts = [];
             this.cards = [];
-            this.investments = [];
             this.demoMode = false;
             
             this.clearCache();
-            this.saveTransactions(); this.saveCategories(); this.saveAccounts();
-            this.saveCards(); this.saveInvestments();
+            this.saveTransactions(); 
+            this.saveCategories(); 
+            this.saveAccounts();
+            this.saveCards();
             localStorage.setItem('smartwallet_demo', 'false');
             
-            this.populateCategorySelects(); this.populatePaymentMethodSelects();
-            this.populateAccountSelects(); this.populateCardFilter();
+            this.populateCategorySelects(); 
+            this.populatePaymentMethodSelects();
+            this.populateAccountSelects(); 
+            this.populateCardFilter();
             this.currentPage = 1;
-            this.render(); this.updateCharts();
+            this.render(); 
+            this.updateCharts();
             this.updateAlertBadge();
             this.applyDemoBadge();
             
@@ -2909,10 +3964,16 @@
                     }
                 }
             } else {
-                this.accounts.push({ id: this.generateUniqueId(), name, type, balance, color });
+                this.accounts.push({ 
+                    id: this.generateUniqueId(), 
+                    name, type, balance, color 
+                });
             }
-            this.clearCache(); this.saveAccounts();
-            this.populateAccountSelects(); this.renderAccountsList(); this.render();
+            this.clearCache(); 
+            this.saveAccounts();
+            this.populateAccountSelects(); 
+            this.renderAccountsList(); 
+            this.render();
             this.updateDashboard();
             this.checkNegativeBalance();
             closeModal('newAccountModal');
@@ -2922,8 +3983,11 @@
         deleteAccount(id) {
             if (!confirm('Excluir esta conta?')) return;
             this.accounts = this.accounts.filter(a => a.id !== id);
-            this.clearCache(); this.saveAccounts();
-            this.populateAccountSelects(); this.renderAccountsList(); this.render();
+            this.clearCache(); 
+            this.saveAccounts();
+            this.populateAccountSelects(); 
+            this.renderAccountsList(); 
+            this.render();
             this.updateDashboard();
             this.checkNegativeBalance();
             this.showToast('✅ Conta removida!');
@@ -2950,24 +4014,11 @@
             }
             const self = this;
             container.innerHTML = '<div class="accounts-grid">' + this.accounts.map(acc => {
-                let investmentsHtml = '';
                 let balanceClass = '';
-                if (acc.type === 'investment') {
-                    const linkedInvestments = self.investments.filter(inv => inv.accountId === acc.id);
-                    if (linkedInvestments.length > 0) {
-                        investmentsHtml = '<div style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.2); font-size:0.85rem;">';
-                        investmentsHtml += '<div style="opacity:0.9; margin-bottom:6px;">📊 Aplicações vinculadas:</div>';
-                        linkedInvestments.forEach(inv => {
-                            const typeLabels = { cdb: 'CDB', tesouro: 'Tesouro', lci: 'LCI/LCA', fundo: 'Fundo', acao: 'Ações', fiis: 'FIIs', poupanca: 'Poupança', outro: 'Outro' };
-                            investmentsHtml += '<div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>' + (typeLabels[inv.type] || inv.type) + ': ' + self.escapeHtml(inv.name) + '</span><span>' + self.formatCurrency(inv.current) + '</span></div>';
-                        });
-                        investmentsHtml += '</div>';
-                    }
-                }
                 if (acc.type === 'checking' && acc.balance < 0) {
                     balanceClass = 'negative-balance';
                 }
-                return '<div class="account-card ' + balanceClass + '" style="background:linear-gradient(135deg, ' + acc.color + ' 0%, ' + self.adjustColor(acc.color, -30) + ' 100%);" data-account-id="' + acc.id + '"><div class="account-card-actions"><button class="cc-action-btn edit-account-btn" data-account-id="' + acc.id + '">✏️</button><button class="cc-action-btn delete-account-btn" data-account-id="' + acc.id + '">🗑️</button></div><div class="account-card-header"><div class="account-card-type">' + (acc.type === 'checking' ? '💳 Conta Corrente' : '📈 Investimento') + '</div></div><div class="account-card-name">' + self.escapeHtml(acc.name) + '</div><div class="account-card-balance">' + self.formatCurrency(acc.balance) + '</div>' + investmentsHtml + '</div>';
+                return '<div class="account-card ' + balanceClass + '" style="background:linear-gradient(135deg, ' + acc.color + ' 0%, ' + self.adjustColor(acc.color, -30) + ' 100%);" data-account-id="' + acc.id + '"><div class="account-card-actions"><button class="cc-action-btn edit-account-btn" data-account-id="' + acc.id + '">✏️</button><button class="cc-action-btn delete-account-btn" data-account-id="' + acc.id + '">🗑️</button></div><div class="account-card-header"><div class="account-card-type">' + (acc.type === 'checking' ? '💳 Conta Corrente' : '📈 Investimento') + '</div></div><div class="account-card-name">' + self.escapeHtml(acc.name) + '</div><div class="account-card-balance">' + self.formatCurrency(acc.balance) + '</div></div>';
             }).join('') + '</div>';
 
             container.querySelectorAll('.edit-account-btn').forEach(btn => {
@@ -2988,9 +4039,12 @@
         renderBillsModal() {
             const container = document.getElementById('billsList');
             if (!container) return;
-            const today = new Date(); today.setHours(0, 0, 0, 0);
-            const in3Days = new Date(today); in3Days.setDate(in3Days.getDate() + 3);
-            const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+            const today = new Date(); 
+            today.setHours(0, 0, 0, 0);
+            const in3Days = new Date(today); 
+            in3Days.setDate(in3Days.getDate() + 3);
+            const tomorrow = new Date(today); 
+            tomorrow.setDate(tomorrow.getDate() + 1);
             const self = this;
             const bills = this.transactions.filter(t => {
                 if (t.statusOk || t.amount >= 0) return false;
@@ -3004,8 +4058,10 @@
                 const closingDate = new Date(today.getFullYear(), today.getMonth(), closingDay);
                 closingDate.setHours(0, 0, 0, 0);
                 if (closingDate.getTime() === tomorrow.getTime()) {
+                    // CORREÇÃO v4.4.2: XSS - escapar card.name
                     closingAlerts.push({
-                        card: card, closingDate: closingDate,
+                        card: card, 
+                        closingDate: closingDate,
                         message: 'O cartão ' + self.escapeHtml(card.name) + ' fecha amanhã!'
                     });
                 }
@@ -3022,7 +4078,7 @@
                 html += '<h3 style="color: var(--accent-color); margin-bottom: 12px; font-size: 1.1rem;">🔔 Fechamento de Fatura</h3>';
                 closingAlerts.forEach(alert => {
                     html += '<div class="bill-item closing-alert">';
-                    html += '<div class="bill-info"><div class="bill-desc">💳 ' + self.escapeHtml(alert.message) + '</div>';
+                    html += '<div class="bill-info"><div class="bill-desc">💳 ' + alert.message + '</div>';
                     html += '<div class="bill-meta"><span>📅 Fechamento: ' + self.formatDate(alert.closingDate.toISOString().split('T')[0]) + '</span></div></div>';
                     html += '<div style="display:flex; gap:4px;">';
                     html += '<button class="btn btn-secondary btn-small view-card-btn">Ver Cartão</button></div></div>';
@@ -3038,10 +4094,21 @@
                     const billDate = new Date(bill.date + 'T12:00:00');
                     const diffDays = Math.round((billDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
                     let daysClass = 'warning', daysText = '', itemClass = '';
-                    if (diffDays < 0) { daysClass = 'overdue'; daysText = Math.abs(diffDays) + 'd atrasada'; itemClass = 'overdue'; }
-                    else if (diffDays === 0) { daysClass = 'urgent'; daysText = 'Vence hoje'; itemClass = 'urgent'; }
-                    else if (diffDays === 1) { daysClass = 'urgent'; daysText = 'Vence amanhã'; itemClass = 'urgent'; }
-                    else { daysText = 'Em ' + diffDays + ' dias'; }
+                    if (diffDays < 0) { 
+                        daysClass = 'overdue'; 
+                        daysText = Math.abs(diffDays) + 'd atrasada'; 
+                        itemClass = 'overdue'; 
+                    } else if (diffDays === 0) { 
+                        daysClass = 'urgent'; 
+                        daysText = 'Vence hoje'; 
+                        itemClass = 'urgent'; 
+                    } else if (diffDays === 1) { 
+                        daysClass = 'urgent'; 
+                        daysText = 'Vence amanhã'; 
+                        itemClass = 'urgent'; 
+                    } else { 
+                        daysText = 'Em ' + diffDays + ' dias'; 
+                    }
                     html += '<div class="bill-item ' + itemClass + '"><div class="bill-info"><div class="bill-desc">' + self.escapeHtml(bill.description) + '<span class="bill-days ' + daysClass + '">' + daysText + '</span></div><div class="bill-meta"><span>📅 ' + self.formatDate(bill.date) + '</span><span style="color:' + cat.color + ';">● ' + self.escapeHtml(cat.name) + '</span></div></div><div class="bill-amount">' + self.formatCurrency(Math.abs(bill.amount)) + '</div><div style="display:flex; gap:4px;"><button class="btn btn-success btn-small mark-paid-btn" data-id="' + bill.id + '">✓</button><button class="btn btn-secondary btn-small edit-bill-btn" data-id="' + bill.id + '">✏️</button></div></div>';
                 });
             }
@@ -3064,32 +4131,25 @@
             });
         }
 
-        /**
-         * NOVO v4.4.1: Comportamento documentado
-         * O saldo da conta é debitado no momento da CRIAÇÃO da despesa.
-         * Marcar como "paga" apenas atualiza o status visual (statusOk = true).
-         * 
-         * Racional: O saldo unificado reflete o saldo "projetado" incluindo pendências,
-         * dando ao usuário uma visão realista do que está comprometido.
-         * 
-         * Se quiser alterar este comportamento para debitar apenas quando marcada como paga,
-         * modifique addTransaction() para não atualizar saldo se statusOk = false,
-         * e desconte o valor aqui em markBillAsPaid().
-         */
         markBillAsPaid(id) {
             const t = this.transactions.find(x => x.id === id);
             if (t) {
                 t.statusOk = true;
-                this.clearCache(); this.saveTransactions(); this.render();
-                this.updateAlertBadge(); this.renderBillsModal();
+                this.clearCache(); 
+                this.saveTransactions(); 
+                this.render();
+                this.updateAlertBadge(); 
+                this.renderBillsModal();
                 this.showToast('✅ Conta paga!');
             }
         }
-	
-	        // ===== INVESTIMENTOS =====
+
+        // ===== INVESTIMENTOS =====
         updateInvestmentChart() {
             const section = document.getElementById('investmentsChartSection');
             if (!section) return;
+            
+            // CORREÇÃO v4.4.2: Usar contas de investment ao invés de entidade separada
             const investmentAccounts = this.accounts.filter(a => a.type === 'investment');
             
             if (!investmentAccounts.length) { 
@@ -3102,32 +4162,22 @@
             const now = new Date();
             const monthsShort = this.getMonths('short');
             
-            // Calcular saldo de cada conta de investimento nos últimos 6 meses
             const labels = [];
-            const totalBalanceData = [];
             const accountDatasets = [];
-            
-            // Cores para cada conta
             const accountColors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
             
-            // Labels dos meses
             for (let i = 5; i >= 0; i--) {
                 const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
                 labels.push(monthsShort[d.getMonth()] + '/' + d.getFullYear());
             }
             
-            // Para cada conta de investimento, criar um dataset
             investmentAccounts.forEach((acc, idx) => {
                 const color = acc.color || accountColors[idx % accountColors.length];
-                
-                // Reconstruir histórico baseado nas transações
                 const balanceHistory = [];
+                
                 for (let i = 5; i >= 0; i--) {
                     const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                    const month = d.getMonth();
-                    const year = d.getFullYear();
                     
-                    // Saldo atual menos transações futuras
                     let futureOutflows = 0;
                     let futureInflows = 0;
                     
@@ -3140,7 +4190,6 @@
                         }
                     });
                     
-                    // Saldo no mês = saldo atual - entradas futuras + saídas futuras
                     const balanceAtMonth = (parseFloat(acc.balance) || 0) - futureInflows + futureOutflows;
                     balanceHistory.push(Math.max(0, balanceAtMonth));
                 }
@@ -3156,12 +4205,10 @@
                 });
             });
             
-            // Total acumulado
             const totalData = labels.map((_, i) => {
                 return accountDatasets.reduce((sum, ds) => sum + ds.data[i], 0);
             });
             
-            // Destruir chart anterior
             if (this.charts.invest) {
                 this.charts.invest.destroy();
             }
@@ -3215,7 +4262,6 @@
                 }
             });
             
-            // Resumo
             const summaryEl = document.getElementById('investSummary');
             if (summaryEl) {
                 const totalBalance = investmentAccounts.reduce((sum, a) => sum + (parseFloat(a.balance) || 0), 0);
@@ -3241,12 +4287,165 @@
             }
         }
 
-       // ===== Investimentos / Aplicações =====
-		        renderInvestmentsModal() {
+        saveInvestment() {
+            // CORREÇÃO v4.4.2: Validação explícita com feedback
+            const name = document.getElementById('investmentName').value.trim();
+            const initial = parseFloat(document.getElementById('investmentInitial').value);
+            const current = parseFloat(document.getElementById('investmentCurrent').value);
+            const date = document.getElementById('investmentDate').value;
+            const rate = parseFloat(document.getElementById('investmentRate').value) || 0;
+            const type = document.getElementById('investmentType').value;
+            const selectedAccountId = document.getElementById('investmentAccount').value;
+            const createLinked = document.getElementById('createLinkedAccount').checked;
+            const id = document.getElementById('investmentEditId').value;
+            
+            if (!name) {
+                this.showToast('❌ Informe o nome da aplicação');
+                document.getElementById('investmentName').focus();
+                return;
+            }
+            
+            if (isNaN(initial) || initial < 0) {
+                this.showToast('❌ Valor inicial inválido');
+                document.getElementById('investmentInitial').focus();
+                return;
+            }
+            
+            if (isNaN(current) || current < 0) {
+                this.showToast('❌ Valor atual inválido');
+                document.getElementById('investmentCurrent').focus();
+                return;
+            }
+            
+            if (!date) {
+                this.showToast('❌ Selecione a data da aplicação');
+                document.getElementById('investmentDate').focus();
+                return;
+            }
+
+            // CORREÇÃO v4.4.2: Criar conta de investment vinculada
+            let accountId = selectedAccountId;
+            if (!accountId && createLinked) {
+                const newAccountId = this.generateUniqueId();
+                this.accounts.push({ 
+                    id: newAccountId, 
+                    name: name, 
+                    type: 'investment', 
+                    balance: current, 
+                    color: '#10b981' 
+                });
+                accountId = newAccountId;
+                this.saveAccounts();
+                this.populateAccountSelects();
+            }
+
+            if (id) {
+                // Edição
+                for (let i = 0; i < this.accounts.length; i++) {
+                    if (this.accounts[i].id === id) {
+                        this.accounts[i] = { 
+                            id, 
+                            name, 
+                            type: 'investment', 
+                            balance: current, 
+                            color: this.accounts[i].color || '#10b981' 
+                        };
+                        break;
+                    }
+                }
+            } else {
+                // Criação - já foi criada acima se createLinked
+                if (!accountId) {
+                    const newAccountId = this.generateUniqueId();
+                    this.accounts.push({ 
+                        id: newAccountId, 
+                        name: name, 
+                        type: 'investment', 
+                        balance: current, 
+                        color: '#10b981' 
+                    });
+                    this.saveAccounts();
+                    this.populateAccountSelects();
+                }
+            }
+            
+            this.clearCache(); 
+            this.renderInvestmentsModal(); 
+            this.updateInvestmentChart();
+            this.renderAccountsList(); 
+            this.updateDashboard();
+            closeModal('newInvestmentModal');
+            this.showToast(id ? '✅ Aplicação atualizada!' : '✅ Aplicação cadastrada!');
+        }
+
+        deleteInvestment(id) {
+            if (!confirm('Excluir esta aplicação?')) return;
+            
+            const acc = this.getAccountById(id);
+            if (acc && acc.type === 'investment') {
+                this.accounts = this.accounts.filter(a => a.id !== id);
+                this.saveAccounts();
+            }
+            
+            this.clearCache();
+            this.renderInvestmentsModal(); 
+            this.updateInvestmentChart();
+            this.renderAccountsList();
+            this.updateDashboard();
+            this.showToast('✅ Aplicação excluída!');
+        }
+
+        editInvestment(id) {
+            const acc = this.getAccountById(id);
+            if (!acc || acc.type !== 'investment') return;
+            
+            document.getElementById('investmentEditId').value = acc.id;
+            document.getElementById('investmentName').value = acc.name;
+            document.getElementById('investmentInitial').value = acc.balance;
+            document.getElementById('investmentCurrent').value = acc.balance;
+            document.getElementById('investmentDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('investmentRate').value = '';
+            document.getElementById('newInvestmentTitle').textContent = 'Editar Aplicação';
+            openModal('newInvestmentModal');
+        }
+
+        openUpdateInvestment(id) {
+            const acc = this.getAccountById(id);
+            if (!acc) return;
+            document.getElementById('updateInvestmentId').value = acc.id;
+            document.getElementById('updateInvestmentName').textContent = acc.name;
+            document.getElementById('updateInvestmentValue').value = acc.balance;
+            document.getElementById('updateInvestmentDate').value = new Date().toISOString().split('T')[0];
+            openModal('updateInvestmentModal');
+        }
+
+        updateInvestmentValue() {
+            const id = document.getElementById('updateInvestmentId').value;
+            const newValue = parseFloat(document.getElementById('updateInvestmentValue').value);
+            
+            if (isNaN(newValue) || newValue < 0) {
+                this.showToast('❌ Valor inválido');
+                return;
+            }
+            
+            const acc = this.getAccountById(id);
+            if (!acc) return;
+            
+            acc.balance = newValue;
+            this.saveAccounts();
+            this.renderAccountsList();
+            this.renderInvestmentsModal(); 
+            this.updateInvestmentChart();
+            this.updateDashboard();
+            closeModal('updateInvestmentModal');
+            this.showToast('✅ Valor atualizado!');
+        }
+
+        renderInvestmentsModal() {
             const container = document.getElementById('investmentsContent');
             if (!container) return;
             
-            // CORREÇÃO v4.4.2: Mostrar contas de investment, não "investments"
+            // CORREÇÃO v4.4.2: Mostrar contas de investment
             const investmentAccounts = this.accounts.filter(a => a.type === 'investment');
             
             if (!investmentAccounts.length) {
@@ -3269,17 +4468,15 @@
                 const balance = parseFloat(acc.balance) || 0;
                 totalBalance += balance;
                 
-                // Contar transferências recebidas (aplicações)
                 const inflows = this.transactions.filter(t => 
                     t.accountId === acc.id && t.amount > 0 && t.paymentMethod === 'transfer'
                 );
                 const totalInflows = inflows.reduce((sum, t) => sum + t.amount, 0);
                 
-                // Contar saídas (resgates)
                 const outflows = this.transactions.filter(t => 
                     t.accountId === acc.id && t.amount < 0 && t.paymentMethod === 'transfer'
                 );
-                const totalOutflows = outflows.reduce((sum, t) => Math.abs(sum + t.amount), 0);
+                const totalOutflows = outflows.reduce((sum, t) => sum + Math.abs(t.amount), 0);
                 
                 html += `
                     <div class="investment-card" style="border-left: 4px solid ${acc.color};">
@@ -3289,7 +4486,9 @@
                                 <div class="investment-card-type">Conta de Investimento</div>
                             </div>
                             <div class="investment-card-actions">
-                                <button class="btn btn-secondary btn-small edit-account-btn" data-account-id="${acc.id}">✏️ Editar</button>
+                                <button class="btn btn-secondary btn-small update-invest-btn" data-id="${acc.id}">💰</button>
+                                <button class="btn btn-secondary btn-small edit-invest-btn" data-id="${acc.id}">✏️</button>
+                                <button class="btn btn-danger btn-small delete-invest-btn" data-id="${acc.id}">🗑️</button>
                             </div>
                         </div>
                         <div class="investment-card-values">
@@ -3318,7 +4517,6 @@
             
             html += '</div>';
             
-            // Resumo geral
             html += `
                 <div class="investment-summary">
                     <h3>📊 Resumo Geral</h3>
@@ -3341,14 +4539,18 @@
             
             container.innerHTML = html;
             
-            // Event listeners para editar
-            container.querySelectorAll('.edit-account-btn').forEach(btn => {
-                btn.addEventListener('click', () => self.editAccount(btn.dataset.accountId));
+            container.querySelectorAll('.update-invest-btn').forEach(btn => {
+                btn.addEventListener('click', () => self.openUpdateInvestment(btn.dataset.id));
+            });
+            container.querySelectorAll('.edit-invest-btn').forEach(btn => {
+                btn.addEventListener('click', () => self.editInvestment(btn.dataset.id));
+            });
+            container.querySelectorAll('.delete-invest-btn').forEach(btn => {
+                btn.addEventListener('click', () => self.deleteInvestment(btn.dataset.id));
             });
         }
 
-		
-		// ===== ORÇAMENTO POR CATEGORIA =====
+        // ===== ORÇAMENTO POR CATEGORIA =====
         renderCategoryBudget() {
             const container = document.getElementById('categoryBudgetContent');
             if (!container) return;
@@ -3423,56 +4625,68 @@
             const date = document.getElementById('transferDate').value;
             const description = document.getElementById('transferDescription').value || 'Transferência';
 
-            if (fromId === toId) { this.showToast('❌ Contas devem ser diferentes'); return; }
+            if (fromId === toId) { 
+                this.showToast('❌ Contas devem ser diferentes'); 
+                return; 
+            }
 
             const fromAcc = this.getAccountById(fromId);
             const toAcc = this.getAccountById(toId);
-            if (!fromAcc || !toAcc) { this.showToast('❌ Contas não encontradas'); return; }
+            if (!fromAcc || !toAcc) { 
+                this.showToast('❌ Contas não encontradas'); 
+                return; 
+            }
             
             if (this.settings.blockNegativeBalance && fromAcc.balance < amount) {
                 this.showToast(this.t('negativeBalanceBlocked'));
                 return;
             }
 
-            // NOVO v4.4.1: Salvar estado original para rollback
+            // CORREÇÃO v4.4.2: Salvar estado original para rollback
             const originalFromBalance = fromAcc.balance;
             const originalToBalance = toAcc.balance;
             
-            // Atualizar saldos
             fromAcc.balance -= amount;
             toAcc.balance += amount;
             
-            // Criar transações
-            // CORREÇÃO v4.4.2: Categorizar corretamente baseado no tipo de conta destino
-
-            const isToInvestment = toAcc && toAcc.type === 'investment';
-			
-			// Saída da conta origem
-            const trans1 = {
-                id: this.generateUniqueId(), date: date, amount: -amount,
+            // CORREÇÃO v4.4.2: Categorizar baseado no tipo de conta destino
+            const isToInvestment = toAcc.type === 'investment';
+            const isFromInvestment = fromAcc.type === 'investment';
+            
+            this.transactions.push({
+                id: this.generateUniqueId(), 
+                date: date, 
+                amount: -amount,
                 category: isToInvestment ? 'reserva_aplicacao' : 'reserva_aplicacao',
                 description: description + ' (saída)',
-                statusOk: true, paymentMethod: 'transfer', accountId: fromId
-            }
-
-			// Entrada na conta destino
-            const trans2 = {
-                id: this.generateUniqueId(), date: date, amount: amount,
-                category: isToInvestment ? 'reserva_aplicacao' : 'resgate',
+                statusOk: true, 
+                paymentMethod: 'transfer', 
+                accountId: fromId
+            });
+            
+            this.transactions.push({
+                id: this.generateUniqueId(), 
+                date: date, 
+                amount: amount,
+                category: isFromInvestment ? 'resgate' : 'reserva_aplicacao',
                 description: description + ' (entrada)',
-                statusOk: true, paymentMethod: 'transfer', accountId: toId
-            }
+                statusOk: true, 
+                paymentMethod: 'transfer', 
+                accountId: toId
+            });
             
             try {
-                this.transactions.push(trans1);
-                this.transactions.push(trans2);
-                this.clearCache(); this.saveTransactions(); this.saveAccounts();
-                this.render(); this.renderAccountsList(); this.updateDashboard();
+                this.clearCache(); 
+                this.saveTransactions(); 
+                this.saveAccounts();
+                this.render(); 
+                this.renderAccountsList(); 
+                this.updateDashboard();
                 this.checkNegativeBalance();
                 closeModal('transferModal');
                 this.showToast('✅ Transferência realizada!');
             } catch (e) {
-                // NOVO v4.4.1: Rollback em caso de erro
+                // CORREÇÃO v4.4.2: Rollback em caso de erro
                 fromAcc.balance = originalFromBalance;
                 toAcc.balance = originalToBalance;
                 this.saveAccounts();
@@ -3532,8 +4746,10 @@
             const t = this.transactions.find(x => String(x.id) === String(id));
             if (t) {
                 t.statusOk = true;
-                this.clearCache(); this.saveTransactions();
-                this.render(); this.updateAlertBadge();
+                this.clearCache(); 
+                this.saveTransactions();
+                this.render(); 
+                this.updateAlertBadge();
                 this.showToast('✅ Transação concluída!');
             }
         }
@@ -3543,8 +4759,11 @@
                 const t = this.transactions.find(x => String(x.id) === String(id));
                 if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
                 this.transactions = this.transactions.filter(x => String(x.id) !== String(id));
-                this.clearCache(); this.saveTransactions();
-                this.render(); this.updateCharts(); this.updateAlertBadge();
+                this.clearCache(); 
+                this.saveTransactions();
+                this.render(); 
+                this.updateCharts(); 
+                this.updateAlertBadge();
                 this.checkNegativeBalance();
                 this.showToast('🗑️ Excluída!');
             }
@@ -3554,20 +4773,27 @@
         printManual() {
             try {
                 const printWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
-                if (!printWindow) { this.showToast('⚠️ ' + this.t('allowPopups')); return; }
+                if (!printWindow) { 
+                    this.showToast('⚠️ ' + this.t('allowPopups')); 
+                    return; 
+                }
                 const fileName = this.generateTimestamp() + '_manual_smart_wallet.pdf';
                 const content = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page{size:A4;margin:2cm;}body{font-family:Georgia,serif;color:#1e293b;line-height:1.6;font-size:11pt;padding:20px;max-width:800px;margin:0 auto;}h1{color:#6366f1;font-size:28pt;text-align:center;}h2{color:#6366f1;font-size:16pt;margin-top:30px;border-bottom:2px solid #6366f1;padding-bottom:8px;}h3{color:#06b6d4;font-size:13pt;margin-top:20px;}p{margin-bottom:12px;}ul,ol{margin-left:24px;margin-bottom:16px;}li{margin-bottom:8px;}.manual-cover{text-align:center;padding:40px 20px;border:3px solid #6366f1;border-radius:16px;margin-bottom:30px;}.manual-quote{margin:24px 0;padding:20px 30px;border-left:4px solid #6366f1;background:#f8fafc;border-radius:8px;font-style:italic;}.quote-author{font-size:9pt;font-weight:600;color:#6366f1;text-align:right;margin-top:12px;font-style:normal;}.manual-blessing{text-align:center;margin-top:40px;padding:30px;background:#f8fafc;border-radius:16px;}.manual-tip,.manual-success,.manual-warning{padding:12px 16px;margin:12px 0;border-radius:8px;border-left:4px solid;}.manual-tip{background:rgba(6,182,212,0.1);border-color:#06b6d4;}.manual-success{background:rgba(16,185,129,0.1);border-color:#10b981;}.manual-warning{background:rgba(245,158,11,0.1);border-color:#f59e0b;}@media print{.manual-cover{page-break-after:always;}}</style></head><body>' + manualHTML + '</body></html>';
                 printWindow.document.write(content);
                 printWindow.document.close();
                 printWindow.document.title = fileName;
-                setTimeout(() => { printWindow.focus(); printWindow.print(); }, 500);
+                setTimeout(() => { 
+                    printWindow.focus(); 
+                    printWindow.print(); 
+                }, 500);
             } catch (e) {
                 this.showToast('❌ Erro: ' + e.message);
             }
-		}
+        }
+
         // ===== SISTEMA DE ATUALIZAÇÃO =====
         checkVersionUpdate() {
-            const CURRENT_VERSION = '4.4.0';
+            const CURRENT_VERSION = '4.4.2';
             const STORAGE_KEY = 'smartwallet_last_version';
             try {
                 const lastVersion = localStorage.getItem(STORAGE_KEY);
@@ -3584,17 +4810,17 @@
 
         showWhatsNewModal(version) {
             const WHATS_NEW_DATA = {
-                '4.4.0': {
-                    version: '4.4.0',
+                '4.4.2': {
+                    version: '4.4.2',
                     features: [
-                        { type: 'new', title: 'Modo Demonstração', description: 'Carregue dados de exemplo para explorar todas as funcionalidades do app sem comprometer seus dados reais.' },
-                        { type: 'new', icon: '📄', title: 'Paginação de Transações', description: 'Histórico dividido em páginas para melhor performance. Configure 10, 20, 50 ou 100 itens por página.' },
-                        { type: 'new', icon: '💰', title: 'Gráfico Waterfall', description: 'Visualize o fluxo de caixa mês a mês com gráfico de cachoeira mostrando receitas, despesas e saldo acumulado.' },
-                        { type: 'new', icon: '⚠️', title: 'Alerta de Saldo Negativo', description: 'Receba avisos quando suas contas correntes ficarem no vermelho. Opção de bloquear transações que levariam ao saldo negativo.' },
-                        { type: 'new', icon: '💾', title: 'Backup Automático', description: 'Sugestão semanal automática de backup quando há muitas transações novas. Nunca mais perca seus dados!' },
-                        { type: 'new', icon: '🔔', title: 'Notificações Push', description: 'Receba alertas no navegador sobre contas vencendo em até 3 dias. Ative nas configurações.' },
-                        { type: 'improved', icon: '⚙️', title: 'Central de Configurações', description: 'Novo modal unificado para gerenciar saldo negativo, backup automático, notificações e paginação.' },
-                        { type: 'improved', icon: '🎨', title: 'Indicadores Visuais', description: 'Headers de coluna ordenada agora ficam destacados. Contas com saldo negativo pulsam em vermelho.' }
+                        { type: 'new', icon: '🎯', title: 'Modo Demonstração', description: 'Carregue dados de exemplo para explorar todas as funcionalidades do app.' },
+                        { type: 'new', icon: '📄', title: 'Paginação de Transações', description: 'Histórico dividido em páginas para melhor performance.' },
+                        { type: 'new', icon: '💰', title: 'Gráfico Waterfall', description: 'Fluxo de caixa visual mês a mês.' },
+                        { type: 'new', icon: '⚠️', title: 'Alerta de Saldo Negativo', description: 'Aviso quando contas ficam no vermelho.' },
+                        { type: 'new', icon: '📈', title: 'Contas de Investimento', description: 'Separadas do saldo unificado, com gráfico próprio.' },
+                        { type: 'improved', icon: '⚙️', title: 'Central de Configurações', description: 'Modal unificado para gerenciar todas as preferências.' },
+                        { type: 'improved', icon: '🔒', title: 'Segurança', description: 'XSS corrigido, confirmações customizadas, atomicidade em transferências.' },
+                        { type: 'improved', icon: '🎨', title: 'UX Aprimorada', description: 'Sem alertas nativos, modais em primeiro plano, validações claras.' }
                     ]
                 }
             };
@@ -3618,12 +4844,51 @@
     // ===== INSTÂNCIA GLOBAL =====
     window.smartwallet = new SmartWallet();
 
-    // ===== HELPERS DE MODAIS (CENTRALIZADOS) =====
+    // ===== NOVO v4.4.2: MODAL DE CONFIRMAÇÃO CUSTOM =====
+    function showConfirm(title, message) {
+        return new Promise((resolve) => {
+            const modal = document.getElementById('confirmModal');
+            const titleEl = document.getElementById('confirmTitle');
+            const messageEl = document.getElementById('confirmMessage');
+            const yesBtn = document.getElementById('confirmYesBtn');
+            const noBtn = document.getElementById('confirmNoBtn');
+            
+            if (!modal || !titleEl || !messageEl || !yesBtn || !noBtn) {
+                resolve(confirm(title + '\n\n' + message));
+                return;
+            }
+            
+            titleEl.textContent = title;
+            messageEl.innerHTML = message.replace(/\n/g, '<br>');
+            
+            const newYesBtn = yesBtn.cloneNode(true);
+            const newNoBtn = noBtn.cloneNode(true);
+            yesBtn.parentNode.replaceChild(newYesBtn, yesBtn);
+            noBtn.parentNode.replaceChild(newNoBtn, noBtn);
+            
+            newYesBtn.addEventListener('click', () => {
+                closeModal('confirmModal');
+                resolve(true);
+            });
+            
+            newNoBtn.addEventListener('click', () => {
+                closeModal('confirmModal');
+                resolve(false);
+            });
+            
+            openModal('confirmModal');
+            setTimeout(() => newNoBtn.focus(), 100);
+        });
+    }
+    
+    window.showConfirm = showConfirm;
+
+    // ===== HELPERS DE MODAIS (CORREÇÃO v4.4.2: modal-front) =====
     function openModal(id) {
         const modal = document.getElementById(id);
         if (!modal) return;
         
-        // CORREÇÃO v4.4.2: Remover modal-front de outros modais
+        // Remover modal-front de outros modais
         document.querySelectorAll('.modal-front').forEach(m => m.classList.remove('modal-front'));
         
         // Adicionar modal-front ao modal atual (z-index maior)
@@ -3647,7 +4912,6 @@
         const modal = document.getElementById(id);
         if (!modal) return;
         
-        // CORREÇÃO v4.4.2: Remover modal-front
         modal.classList.remove('modal-front', 'active');
         
         const stillOpen = document.querySelector('.modal.active');
@@ -3656,7 +4920,7 @@
             document.body.style.removeProperty('--scroll-y');
             window.scrollTo(0, 0);
         } else {
-            // CORREÇÃO v4.4.2: Restaurar modal-front no modal anterior
+            // Restaurar modal-front no modal anterior
             stillOpen.classList.add('modal-front');
         }
     }
@@ -3669,52 +4933,6 @@
         document.querySelectorAll('.header-btn').forEach(b => b.classList.remove('menu-active'));
     }
 
-    // ===== NOVO v4.4.1: MODAL DE CONFIRMAÇÃO CUSTOM =====
-    
-    /**
-     * Substitui confirm() nativo por modal customizado
-     * Retorna Promise<boolean>
-     */
-    function showConfirm(title, message) {
-        return new Promise((resolve) => {
-            const modal = document.getElementById('confirmModal');
-            const titleEl = document.getElementById('confirmTitle');
-            const messageEl = document.getElementById('confirmMessage');
-            const yesBtn = document.getElementById('confirmYesBtn');
-            const noBtn = document.getElementById('confirmNoBtn');
-            
-            if (!modal || !titleEl || !messageEl || !yesBtn || !noBtn) {
-                resolve(confirm(title + '\n\n' + message));
-                return;
-            }
-            
-            titleEl.textContent = title;
-            messageEl.innerHTML = message.replace(/\n/g, '<br>');
-            
-            // Remove listeners antigos
-            const newYesBtn = yesBtn.cloneNode(true);
-            const newNoBtn = noBtn.cloneNode(true);
-            yesBtn.parentNode.replaceChild(newYesBtn, yesBtn);
-            noBtn.parentNode.replaceChild(newNoBtn, noBtn);
-            
-            // Listeners
-            newYesBtn.addEventListener('click', () => {
-                closeModal('confirmModal');
-                resolve(true);
-            });
-            
-            newNoBtn.addEventListener('click', () => {
-                closeModal('confirmModal');
-                resolve(false);
-            });
-            
-            openModal('confirmModal');
-            setTimeout(() => newNoBtn.focus(), 100);
-        });
-    }
-    
-    window.showConfirm = showConfirm;
-	
     // ===== FUNÇÕES GLOBAIS (INTERFACE PÚBLICA) =====
     window.selectTransactionType = function(t) {
         smartwallet.currentTransactionType = t;
@@ -3886,17 +5104,12 @@
     window.closeInvestmentsModal = function() { closeModal('investmentsModal'); };
     window.openNewInvestmentModal = function() {
         document.getElementById('investmentEditId').value = '';
-        document.getElementById('investmentForm').reset();
+        document.getElementById('investmentName').value = '';
+        document.getElementById('investmentInitial').value = '';
+        document.getElementById('investmentCurrent').value = '';
         document.getElementById('investmentDate').value = new Date().toISOString().split('T')[0];
+        document.getElementById('investmentRate').value = '';
         document.getElementById('newInvestmentTitle').textContent = 'Nova Aplicação';
-        const accountSelect = document.getElementById('investmentAccount');
-        accountSelect.innerHTML = '<option value="">-- Criar nova --</option>';
-        smartwallet.accounts.filter(a => a.type === 'investment').forEach(acc => {
-            const opt = document.createElement('option');
-            opt.value = acc.id;
-            opt.textContent = acc.name + ' - ' + smartwallet.formatCurrency(acc.balance);
-            accountSelect.appendChild(opt);
-        });
         openModal('newInvestmentModal');
     };
     window.closeNewInvestmentModal = function() { closeModal('newInvestmentModal'); };
@@ -3930,25 +5143,17 @@
     };
     window.closeSettingsModal = function() { closeModal('settingsModal'); };
 
-    // ===== CORREÇÃO v4.4.2: FUNÇÕES DE EXPORTAÇÃO COMO GLOBAIS =====
+    // ===== CORREÇÃO v4.4.2: FUNÇÕES GLOBAIS FALTANTES =====
     window.exportBackup = function() {
         smartwallet.exportBackup();
         closeAllDropdowns();
     };
 
-    // ===== NOTIFICAÇÕES =====
-    window.enableNotifications = function() {
-        smartwallet.requestNotifications();
-        closeAllDropdowns();
-    };
-
-    // ===== NOVO v4.4.1: BOTÃO DEMO NO MENU INFO =====
     window.toggleDemoMode = function() {
         smartwallet.toggleDemoMode();
         closeAllDropdowns();
     };
-	
-    // ===== NOTIFICAÇÕES =====
+
     window.enableNotifications = function() {
         smartwallet.requestNotifications();
         closeAllDropdowns();
@@ -4019,7 +5224,6 @@
         smartwallet.applyTheme();
     };
 
-    // ===== MENUS DROPDOWN (com lógica de recolher outros) =====
     window.toggleMenu = function(e) {
         if (e) e.stopPropagation();
         const main = document.getElementById('mainMenu');
@@ -4080,7 +5284,10 @@
         document.getElementById('csvFileName').textContent = '📄 ' + file.name + ' (' + (file.size/1024).toFixed(1) + ' KB)';
         const reader = new FileReader();
         reader.onload = (e) => { window._pendingCsvData = e.target.result; };
-        reader.onerror = () => { alert('❌ Erro ao ler arquivo'); event.target.value = ''; };
+        reader.onerror = () => { 
+            smartwallet.showToast('❌ Erro ao ler arquivo'); 
+            event.target.value = ''; 
+        };
         reader.readAsText(file, 'UTF-8');
     };
 
@@ -4110,7 +5317,10 @@
                 window._pendingBackupData = null;
             }
         };
-        reader.onerror = () => { alert('❌ Erro ao ler arquivo'); event.target.value = ''; };
+        reader.onerror = () => { 
+            smartwallet.showToast('❌ Erro ao ler arquivo'); 
+            event.target.value = ''; 
+        };
         reader.readAsText(file, 'UTF-8');
     };
 
@@ -4249,7 +5459,6 @@
         }, 3500);
     });
 
-    // Click fora fecha MENUS (não modais!)
     document.addEventListener('click', (e) => {
         const menu = document.getElementById('mainMenu');
         const info = document.getElementById('infoMenu');
@@ -4287,5 +5496,5 @@
         });
     }
 
-    console.log('🎉 Smart Wallet v4.4.0 carregado com sucesso!');
+    console.log('🎉 Smart Wallet v4.4.2 carregado com sucesso!');
 })();
