@@ -2995,218 +2995,265 @@
         updateInvestmentChart() {
             const section = document.getElementById('investmentsChartSection');
             if (!section) return;
-            if (!this.investments.length) { section.style.display = 'none'; return; }
+            const investmentAccounts = this.accounts.filter(a => a.type === 'investment');
+            
+            if (!investmentAccounts.length) { 
+                section.style.display = 'none'; 
+                return; 
+            }
             section.style.display = 'block';
+            
             const colors = this.getChartColors();
             const now = new Date();
-            const monthlyData = {};
             const monthsShort = this.getMonths('short');
+            
+            // Calcular saldo de cada conta de investimento nos últimos 6 meses
+            const labels = [];
+            const totalBalanceData = [];
+            const accountDatasets = [];
+            
+            // Cores para cada conta
+            const accountColors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4'];
+            
+            // Labels dos meses
             for (let i = 5; i >= 0; i--) {
                 const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-                const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
-                monthlyData[key] = { invested: 0, current: 0 };
-            }
-            this.investments.forEach(inv => {
-                const invDate = new Date(inv.date + 'T12:00:00');
-                const invKey = invDate.getFullYear() + '-' + String(invDate.getMonth() + 1).padStart(2, '0');
-                Object.keys(monthlyData).forEach(key => {
-                    if (key >= invKey) monthlyData[key].invested += inv.initial;
-                });
-                const currentKey = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
-                if (monthlyData[currentKey]) monthlyData[currentKey].current += inv.current;
-            });
-            const labels = [], investedData = [], currentData = [], profitPctData = [];
-            Object.keys(monthlyData).forEach(key => {
-                const d = new Date(key + '-01');
                 labels.push(monthsShort[d.getMonth()] + '/' + d.getFullYear());
-                const invested = monthlyData[key].invested;
-                const current = monthlyData[key].current || invested;
-                investedData.push(invested);
-                currentData.push(current);
-                profitPctData.push(invested > 0 ? ((current - invested) / invested * 100) : 0);
+            }
+            
+            // Para cada conta de investimento, criar um dataset
+            investmentAccounts.forEach((acc, idx) => {
+                const color = acc.color || accountColors[idx % accountColors.length];
+                
+                // Reconstruir histórico baseado nas transações
+                const balanceHistory = [];
+                for (let i = 5; i >= 0; i--) {
+                    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+                    const month = d.getMonth();
+                    const year = d.getFullYear();
+                    
+                    // Saldo atual menos transações futuras
+                    let futureOutflows = 0;
+                    let futureInflows = 0;
+                    
+                    this.transactions.forEach(t => {
+                        if (t.accountId !== acc.id) return;
+                        const tDate = new Date(t.date + 'T12:00:00');
+                        if (tDate > d) {
+                            if (t.amount < 0) futureOutflows += Math.abs(t.amount);
+                            else futureInflows += t.amount;
+                        }
+                    });
+                    
+                    // Saldo no mês = saldo atual - entradas futuras + saídas futuras
+                    const balanceAtMonth = (parseFloat(acc.balance) || 0) - futureInflows + futureOutflows;
+                    balanceHistory.push(Math.max(0, balanceAtMonth));
+                }
+                
+                accountDatasets.push({
+                    label: acc.name,
+                    data: balanceHistory,
+                    borderColor: color,
+                    backgroundColor: color + '20',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                });
             });
+            
+            // Total acumulado
+            const totalData = labels.map((_, i) => {
+                return accountDatasets.reduce((sum, ds) => sum + ds.data[i], 0);
+            });
+            
+            // Destruir chart anterior
             if (this.charts.invest) {
                 this.charts.invest.destroy();
             }
+            
             const canvas = document.getElementById('investChart');
             if (!canvas) return;
+            
             this.charts.invest = new Chart(canvas.getContext('2d'), {
                 type: 'line',
-                data: { labels, datasets: [
-                    { label: 'Investido', data: investedData, borderColor: '#94a3b8', backgroundColor: 'rgba(148,163,184,0.1)', tension: 0.4, fill: false, yAxisID: 'y' },
-                    { label: 'Atual', data: currentData, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', tension: 0.4, fill: true, yAxisID: 'y' },
-                    { label: 'Rendimento (%)', data: profitPctData, borderColor: '#06b6d4', backgroundColor: 'rgba(6,182,212,0.1)', tension: 0.4, fill: false, yAxisID: 'y1' }
-                ]},
+                data: { 
+                    labels, 
+                    datasets: [
+                        ...accountDatasets,
+                        {
+                            label: 'Total Aplicações',
+                            data: totalData,
+                            borderColor: '#1e293b',
+                            backgroundColor: 'rgba(30, 41, 59, 0.1)',
+                            borderWidth: 3,
+                            borderDash: [5, 5],
+                            fill: false,
+                            tension: 0.4,
+                            pointRadius: 4
+                        }
+                    ]
+                },
                 options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top', labels: { color: colors.text } } },
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'top', labels: { color: colors.text } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + smartwallet.formatCurrency(context.parsed.y);
+                                }
+                            }
+                        }
+                    },
                     scales: {
-                        y: { beginAtZero: true, ticks: { color: colors.textSecondary }, grid: { color: colors.grid } },
-                        y1: { position: 'right', ticks: { color: colors.textSecondary, callback: v => v + '%' }, grid: { display: false } },
+                        y: { 
+                            beginAtZero: true, 
+                            ticks: { 
+                                color: colors.textSecondary,
+                                callback: v => smartwallet.formatCurrency(v)
+                            }, 
+                            grid: { color: colors.grid } 
+                        },
                         x: { ticks: { color: colors.textSecondary }, grid: { color: colors.grid } }
                     }
                 }
             });
+            
+            // Resumo
             const summaryEl = document.getElementById('investSummary');
             if (summaryEl) {
-                let totalInitial = 0, totalCurrent = 0;
-                this.investments.forEach(inv => { totalInitial += inv.initial; totalCurrent += inv.current; });
-                const totalProfit = totalCurrent - totalInitial;
-                const totalProfitPct = totalInitial > 0 ? (totalProfit / totalInitial * 100) : 0;
-                summaryEl.innerHTML = '<div class="investment-summary"><h3>📊 Resumo</h3><div class="investment-summary-grid"><div class="investment-summary-item"><div class="investment-summary-label">Total Investido</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalInitial) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Valor Atual</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalCurrent) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Rendimento</div><div class="investment-summary-value privacy-value" style="color:' + (totalProfit >= 0 ? 'var(--success-color)' : 'var(--danger-color)') + ';">' + totalProfitPct.toFixed(2) + '% (' + this.formatCurrency(totalProfit) + ')</div></div></div></div>';
+                const totalBalance = investmentAccounts.reduce((sum, a) => sum + (parseFloat(a.balance) || 0), 0);
+                summaryEl.innerHTML = `
+                    <div class="investment-summary">
+                        <h3>📊 Resumo das Aplicações</h3>
+                        <div class="investment-summary-grid">
+                            <div class="investment-summary-item">
+                                <div class="investment-summary-label">Total em Aplicações</div>
+                                <div class="investment-summary-value privacy-value">${this.formatCurrency(totalBalance)}</div>
+                            </div>
+                            <div class="investment-summary-item">
+                                <div class="investment-summary-label">Contas de Investimento</div>
+                                <div class="investment-summary-value">${investmentAccounts.length}</div>
+                            </div>
+                            <div class="investment-summary-item">
+                                <div class="investment-summary-label">Período</div>
+                                <div class="investment-summary-value" style="font-size:1rem;">Últimos 6 meses</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }
         }
 
-        saveInvestment() {
-            const fields = [
-                { id: 'investmentName', label: this.t('informName'), required: true },
-                { id: 'investmentInitial', label: 'Valor inicial', required: true, type: 'number', min: 0 },
-                { id: 'investmentCurrent', label: 'Valor atual', required: true, type: 'number', min: 0 },
-                { id: 'investmentDate', label: this.t('selectDate'), required: true }
-            ];
-            if (!this.validateForm(fields)) return;
-
-            const id = document.getElementById('investmentEditId').value;
-            const name = document.getElementById('investmentName').value.trim();
-            const type = document.getElementById('investmentType').value;
-            const initial = parseFloat(document.getElementById('investmentInitial').value) || 0;
-            const current = parseFloat(document.getElementById('investmentCurrent').value) || 0;
-            const date = document.getElementById('investmentDate').value;
-            const rate = parseFloat(document.getElementById('investmentRate').value) || 0;
-            const selectedAccountId = document.getElementById('investmentAccount').value;
-            const createLinked = document.getElementById('createLinkedAccount').checked;
-
-            let accountId = selectedAccountId;
-            if (!accountId && createLinked) {
-                const newAccountId = this.generateUniqueId();
-                this.accounts.push({ id: newAccountId, name: name, type: 'investment', balance: current, color: '#10b981' });
-                accountId = newAccountId;
-                this.saveAccounts();
-                this.populateAccountSelects();
-            }
-
-            if (id) {
-                for (let i = 0; i < this.investments.length; i++) {
-                    if (this.investments[i].id === id) {
-                        this.investments[i] = { id, name, type, initial, current, date, rate, accountId };
-                        break;
-                    }
-                }
-            } else {
-                this.investments.push({ id: this.generateUniqueId(), name, type, initial, current, date, rate, accountId });
-            }
-            if (accountId) {
-                const acc = this.getAccountById(accountId);
-                if (acc) acc.balance = current;
-                this.saveAccounts();
-            }
-            this.clearCache(); this.saveInvestments();
-            this.renderInvestmentsModal(); this.updateInvestmentChart();
-            this.renderAccountsList(); this.updateDashboard();
-            closeModal('newInvestmentModal');
-            this.showToast(id ? '✅ Aplicação atualizada!' : '✅ Aplicação cadastrada!');
-        }
-
-        deleteInvestment(id) {
-            if (!confirm('Excluir esta aplicação?')) return;
-            this.investments = this.investments.filter(i => i.id !== id);
-            this.clearCache(); this.saveInvestments();
-            this.renderInvestmentsModal(); this.updateInvestmentChart();
-            this.showToast('✅ Aplicação excluída!');
-        }
-
-        editInvestment(id) {
-            const inv = this.investments.find(i => i.id === id);
-            if (!inv) return;
-            document.getElementById('investmentEditId').value = inv.id;
-            document.getElementById('investmentName').value = inv.name;
-            document.getElementById('investmentType').value = inv.type;
-            document.getElementById('investmentInitial').value = inv.initial;
-            document.getElementById('investmentCurrent').value = inv.current;
-            document.getElementById('investmentDate').value = inv.date;
-            document.getElementById('investmentRate').value = inv.rate;
-            document.getElementById('newInvestmentTitle').textContent = 'Editar Aplicação';
-            openModal('newInvestmentModal');
-        }
-
-        openUpdateInvestment(id) {
-            const inv = this.investments.find(i => i.id === id);
-            if (!inv) return;
-            document.getElementById('updateInvestmentId').value = inv.id;
-            document.getElementById('updateInvestmentName').textContent = inv.name;
-            document.getElementById('updateInvestmentValue').value = inv.current;
-            document.getElementById('updateInvestmentDate').value = new Date().toISOString().split('T')[0];
-            openModal('updateInvestmentModal');
-        }
-
-        updateInvestmentValue() {
-            const fields = [
-                { id: 'updateInvestmentValue', label: 'Valor', required: true, type: 'number', min: 0 },
-                { id: 'updateInvestmentDate', label: this.t('selectDate'), required: true }
-            ];
-            if (!this.validateForm(fields)) return;
-
-            const id = document.getElementById('updateInvestmentId').value;
-            const newValue = parseFloat(document.getElementById('updateInvestmentValue').value) || 0;
-            const inv = this.investments.find(i => i.id === id);
-            if (!inv) return;
-            inv.current = newValue;
-            if (inv.accountId) {
-                const acc = this.getAccountById(inv.accountId);
-                if (acc) acc.balance = newValue;
-                this.saveAccounts();
-                this.renderAccountsList();
-            }
-            this.clearCache(); this.saveInvestments();
-            this.renderInvestmentsModal(); this.updateInvestmentChart();
-            this.updateDashboard();
-            closeModal('updateInvestmentModal');
-            this.showToast('✅ Valor atualizado!');
-        }
-
-        renderInvestmentsModal() {
+       // ===== Investimentos / Aplicações =====
+		        renderInvestmentsModal() {
             const container = document.getElementById('investmentsContent');
             if (!container) return;
-            const self = this;
-            const typeLabels = { cdb: 'CDB', tesouro: 'Tesouro', lci: 'LCI/LCA', fundo: 'Fundo', acao: 'Ações', fiis: 'FIIs', poupanca: 'Poupança', outro: 'Outro' };
-            if (!this.investments.length) {
-                container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px; opacity:0.5;">📈</div><h3>Nenhuma aplicação cadastrada</h3></div>';
+            
+            // CORREÇÃO v4.4.2: Mostrar contas de investment, não "investments"
+            const investmentAccounts = this.accounts.filter(a => a.type === 'investment');
+            
+            if (!investmentAccounts.length) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding:40px 20px; color:var(--text-secondary);">
+                        <div style="font-size:3rem; margin-bottom:12px; opacity:0.5;">📈</div>
+                        <h3>Nenhuma conta de investimento cadastrada</h3>
+                        <p style="margin-top:12px;">Adicione uma conta do tipo "Investimento" em Minhas Contas.</p>
+                        <button class="btn btn-primary" style="margin-top:16px;" onclick="openAccountsModal()">➕ Nova Conta</button>
+                    </div>
+                `;
                 return;
             }
-            let totalInitial = 0, totalCurrent = 0;
+            
+            const self = this;
+            let totalBalance = 0;
             let html = '<div>';
-            this.investments.forEach(inv => {
-                const profit = inv.current - inv.initial;
-                const profitPct = inv.initial > 0 ? (profit / inv.initial * 100) : 0;
-                totalInitial += inv.initial;
-                totalCurrent += inv.current;
-                let accountInfo = '';
-                if (inv.accountId) {
-                    const linkedAccount = self.getAccountById(inv.accountId);
-                    if (linkedAccount) accountInfo = ' • 🏦 ' + self.escapeHtml(linkedAccount.name);
-                }
-                html += '<div class="investment-card"><div class="investment-card-header"><div><div class="investment-card-title">' + self.escapeHtml(inv.name) + '</div><div class="investment-card-type">' + (typeLabels[inv.type] || inv.type) + ' • ' + self.formatDate(inv.date) + accountInfo + '</div></div><div class="investment-card-actions"><button class="btn btn-secondary btn-small update-invest-btn" data-id="' + inv.id + '">💰</button><button class="btn btn-secondary btn-small edit-invest-btn" data-id="' + inv.id + '">✏️</button><button class="btn btn-danger btn-small delete-invest-btn" data-id="' + inv.id + '">🗑️</button></div></div><div class="investment-card-values"><div class="investment-value-item"><div class="investment-value-label">Inicial</div><div class="investment-value-amount privacy-value">' + self.formatCurrency(inv.initial) + '</div></div><div class="investment-value-item"><div class="investment-value-label">Atual</div><div class="investment-value-amount privacy-value">' + self.formatCurrency(inv.current) + '</div></div><div class="investment-value-item"><div class="investment-value-label">Rendimento</div><div class="investment-value-amount privacy-value ' + (profit >= 0 ? 'positive' : 'negative') + '">' + profitPct.toFixed(2) + '% (' + self.formatCurrency(profit) + ')</div></div></div>';
-                if (inv.rate > 0) html += '<div style="font-size:0.85rem; color:var(--text-secondary);" class="privacy-value">Taxa: ' + inv.rate + '% ao ano</div>';
-                html += '</div>';
+            
+            investmentAccounts.forEach(acc => {
+                const balance = parseFloat(acc.balance) || 0;
+                totalBalance += balance;
+                
+                // Contar transferências recebidas (aplicações)
+                const inflows = this.transactions.filter(t => 
+                    t.accountId === acc.id && t.amount > 0 && t.paymentMethod === 'transfer'
+                );
+                const totalInflows = inflows.reduce((sum, t) => sum + t.amount, 0);
+                
+                // Contar saídas (resgates)
+                const outflows = this.transactions.filter(t => 
+                    t.accountId === acc.id && t.amount < 0 && t.paymentMethod === 'transfer'
+                );
+                const totalOutflows = outflows.reduce((sum, t) => Math.abs(sum + t.amount), 0);
+                
+                html += `
+                    <div class="investment-card" style="border-left: 4px solid ${acc.color};">
+                        <div class="investment-card-header">
+                            <div>
+                                <div class="investment-card-title">📈 ${self.escapeHtml(acc.name)}</div>
+                                <div class="investment-card-type">Conta de Investimento</div>
+                            </div>
+                            <div class="investment-card-actions">
+                                <button class="btn btn-secondary btn-small edit-account-btn" data-account-id="${acc.id}">✏️ Editar</button>
+                            </div>
+                        </div>
+                        <div class="investment-card-values">
+                            <div class="investment-value-item">
+                                <div class="investment-value-label">Saldo Atual</div>
+                                <div class="investment-value-amount privacy-value" style="color: ${acc.color};">
+                                    ${self.formatCurrency(balance)}
+                                </div>
+                            </div>
+                            <div class="investment-value-item">
+                                <div class="investment-value-label">Total Aplicado</div>
+                                <div class="investment-value-amount positive privacy-value">
+                                    ${self.formatCurrency(totalInflows)}
+                                </div>
+                            </div>
+                            <div class="investment-value-item">
+                                <div class="investment-value-label">Total Resgatado</div>
+                                <div class="investment-value-amount negative privacy-value">
+                                    ${self.formatCurrency(totalOutflows)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             });
+            
             html += '</div>';
-            const totalProfit = totalCurrent - totalInitial;
-            const totalProfitPct = totalInitial > 0 ? (totalProfit / totalInitial * 100) : 0;
-            html += '<div class="investment-summary"><h3>📊 Resumo Geral</h3><div class="investment-summary-grid"><div class="investment-summary-item"><div class="investment-summary-label">Investido</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalInitial) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Atual</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalCurrent) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Rendimento</div><div class="investment-summary-value privacy-value" style="color:' + (totalProfit >= 0 ? 'var(--success-color)' : 'var(--danger-color)') + ';">' + totalProfitPct.toFixed(2) + '% (' + this.formatCurrency(totalProfit) + ')</div></div></div></div>';
+            
+            // Resumo geral
+            html += `
+                <div class="investment-summary">
+                    <h3>📊 Resumo Geral</h3>
+                    <div class="investment-summary-grid">
+                        <div class="investment-summary-item">
+                            <div class="investment-summary-label">Total em Aplicações</div>
+                            <div class="investment-summary-value privacy-value">${this.formatCurrency(totalBalance)}</div>
+                        </div>
+                        <div class="investment-summary-item">
+                            <div class="investment-summary-label">Contas</div>
+                            <div class="investment-summary-value">${investmentAccounts.length}</div>
+                        </div>
+                        <div class="investment-summary-item">
+                            <div class="investment-summary-label">Última atualização</div>
+                            <div class="investment-summary-value" style="font-size:0.9rem;">${new Date().toLocaleDateString(this.getLanguage())}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
             container.innerHTML = html;
-
-            container.querySelectorAll('.update-invest-btn').forEach(btn => {
-                btn.addEventListener('click', () => self.openUpdateInvestment(btn.dataset.id));
-            });
-            container.querySelectorAll('.edit-invest-btn').forEach(btn => {
-                btn.addEventListener('click', () => self.editInvestment(btn.dataset.id));
-            });
-            container.querySelectorAll('.delete-invest-btn').forEach(btn => {
-                btn.addEventListener('click', () => self.deleteInvestment(btn.dataset.id));
+            
+            // Event listeners para editar
+            container.querySelectorAll('.edit-account-btn').forEach(btn => {
+                btn.addEventListener('click', () => self.editAccount(btn.dataset.accountId));
             });
         }
 
-        // ===== ORÇAMENTO POR CATEGORIA =====
+		
+		// ===== ORÇAMENTO POR CATEGORIA =====
         renderCategoryBudget() {
             const container = document.getElementById('categoryBudgetContent');
             if (!container) return;
@@ -3301,16 +3348,25 @@
             toAcc.balance += amount;
             
             // Criar transações
+            // CORREÇÃO v4.4.2: Categorizar corretamente baseado no tipo de conta destino
+            const toAcc = this.getAccountById(toId);
+            const isToInvestment = toAcc && toAcc.type === 'investment';
+			
+			// Saída da conta origem
             const trans1 = {
                 id: this.generateUniqueId(), date: date, amount: -amount,
-                category: 'reserva_aplicacao', description: description + ' (saída)',
+                category: isToInvestment ? 'reserva_aplicacao' : 'reserva_aplicacao',
+                description: description + ' (saída)',
                 statusOk: true, paymentMethod: 'transfer', accountId: fromId
-            };
+            });
+
+			// Entrada na conta destino
             const trans2 = {
                 id: this.generateUniqueId(), date: date, amount: amount,
-                category: 'resgate', description: description + ' (entrada)',
+                category: isToInvestment ? 'reserva_aplicacao' : 'resgate',
+                description: description + ' (entrada)',
                 statusOk: true, paymentMethod: 'transfer', accountId: toId
-            };
+            });
             
             try {
                 this.transactions.push(trans1);
