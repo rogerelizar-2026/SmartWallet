@@ -3765,9 +3765,16 @@
         closeAllDropdowns();
     };
     window.closeSettingsModal = function() { closeModal('settingsModal'); };
-	    // ===== CORREÇÃO v4.4.2: FUNÇÕES DE EXPORTAÇÃO COMO GLOBAIS =====
+
+    // ===== CORREÇÃO v4.4.2: FUNÇÕES DE EXPORTAÇÃO COMO GLOBAIS =====
     window.exportBackup = function() {
         smartwallet.exportBackup();
+        closeAllDropdowns();
+    };
+
+    // ===== NOTIFICAÇÕES =====
+    window.enableNotifications = function() {
+        smartwallet.requestNotifications();
         closeAllDropdowns();
     };
 
