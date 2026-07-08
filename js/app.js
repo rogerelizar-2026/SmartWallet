@@ -542,10 +542,10 @@
             
             if (infoDemoBtn && infoDemoText) {
                 if (this.demoMode) {
-                    infoDemoText.textContent = '🔴 Encerrar Demonstração';
+                    infoDemoText.textContent = 'Encerrar Demonstração';
                     infoDemoBtn.classList.add('demo-active');
                 } else {
-                    infoDemoText.textContent = '🎯 Modo Demonstração';
+                    infoDemoText.textContent = 'Modo Demonstração';
                     infoDemoBtn.classList.remove('demo-active');
                 }
             }
@@ -1047,7 +1047,7 @@
                 }
             } else {
                 const confirmed = await showConfirm(
-                    '🎯 Carregar Demonstração?',
+                    'Carregar Demonstração?',
                     'Carregar dados de exemplo?<br><br>Seus dados atuais serão substituídos pelos dados de demonstração.<br><br>Recomendamos fazer backup antes de continuar.'
                 );
                 
@@ -4814,7 +4814,7 @@
                 '4.4.2': {
                     version: '4.4.2',
                     features: [
-                        { type: 'new', icon: '🎯', title: 'Modo Demonstração', description: 'Carregue dados de exemplo para explorar todas as funcionalidades do app.' },
+                        { type: 'new', title: 'Modo Demonstração', description: 'Carregue dados de exemplo para explorar todas as funcionalidades do app.' },
                         { type: 'new', icon: '📄', title: 'Paginação de Transações', description: 'Histórico dividido em páginas para melhor performance.' },
                         { type: 'new', icon: '💰', title: 'Gráfico Waterfall', description: 'Fluxo de caixa visual mês a mês.' },
                         { type: 'new', icon: '⚠️', title: 'Alerta de Saldo Negativo', description: 'Aviso quando contas ficam no vermelho.' },
