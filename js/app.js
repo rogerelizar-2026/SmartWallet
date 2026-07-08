@@ -249,8 +249,14 @@
     };
 
     // ===== HELPER: SALVAR ARQUIVO COM SELETOR =====
+    // CORREÇÃO v4.4.4: Função robusta para download em todos os dispositivos
     async function saveFileWithPicker(blob, suggestedName, mimeType) {
-        if (window.showSaveFilePicker) {
+        // CORREÇÃO v4.4.4: Detectar se é mobile (não usar showSaveFilePicker em mobile)
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isDesktopChrome = !isMobile && window.showSaveFilePicker && navigator.userAgent.indexOf('Chrome') > -1;
+        
+        // Tentar File System Access API apenas em desktop Chrome/Edge
+        if (isDesktopChrome) {
             try {
                 const ext = suggestedName.split('.').pop().toLowerCase();
                 const acceptMap = {
@@ -271,21 +277,45 @@
                 return 'saved';
             } catch (err) {
                 if (err.name === 'AbortError') return 'cancelled';
-                console.warn('File System Access API falhou:', err);
+                console.warn('[SmartWallet] File System Access API falhou, usando fallback:', err);
             }
         }
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = suggestedName;
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 100);
-        return 'downloaded';
+        
+        // CORREÇÃO v4.4.4: Fallback robusto para mobile e outros navegadores
+        try {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = suggestedName;
+            a.style.display = 'none';
+            a.setAttribute('download', suggestedName);
+            a.setAttribute('target', '_blank');
+            a.rel = 'noopener noreferrer';
+            document.body.appendChild(a);
+            
+            // CORREÇÃO v4.4.4: Disparar evento de forma mais compatível
+            const clickEvent = new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true
+            });
+            a.dispatchEvent(clickEvent);
+            
+            // CORREÇÃO v4.4.4: Limpar com delay maior para mobile
+            setTimeout(() => {
+                try {
+                    if (a.parentNode) a.parentNode.removeChild(a);
+                    URL.revokeObjectURL(url);
+                } catch (cleanupErr) {
+                    console.warn('[SmartWallet] Erro ao limpar URL:', cleanupErr);
+                }
+            }, 1000);
+            
+            return 'downloaded';
+        } catch (fallbackErr) {
+            console.error('[SmartWallet] Erro no fallback de download:', fallbackErr);
+            return 'error';
+        }
     }
 
     // ===== CLASSE PRINCIPAL =====
