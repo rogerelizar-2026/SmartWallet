@@ -2114,7 +2114,7 @@
                     }
                 );
                 return;
-
+        }
         deleteFromEdit() {
             if (!this.currentEditId) return;
             if (!confirm('Excluir esta transação?')) return;
