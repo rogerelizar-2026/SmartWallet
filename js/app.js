@@ -1977,7 +1977,7 @@
             closeModal('newTransactionModal'); 
             this.clearForm();
             this.checkNegativeBalance();
-        }
+            }
         }
         clearForm() {
             const form = document.getElementById('transactionForm');
