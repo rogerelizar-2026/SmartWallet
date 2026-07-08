@@ -572,10 +572,10 @@
             
             if (infoDemoBtn && infoDemoText) {
                 if (this.demoMode) {
-                    infoDemoText.textContent = '🔴 Encerrar Demonstração';
+                    infoDemoText.textContent = 'Encerrar Demonstração';
                     infoDemoBtn.classList.add('demo-active');
                 } else {
-                    infoDemoText.textContent = '🎯 Modo Demonstração';
+                    infoDemoText.textContent = 'Modo Demonstração';
                     infoDemoBtn.classList.remove('demo-active');
                 }
             }
@@ -1064,7 +1064,7 @@
         async toggleDemoMode() {
             if (this.demoMode) {
                 const confirmed = await showConfirm(
-                    '⚠️ Encerrar Demonstração?',
+                    'Encerrar Demonstração?',
                     'Encerrar modo demonstração e limpar todos os dados?<br><br>Esta ação não pode ser desfeita.'
                 );
                 
@@ -1077,7 +1077,7 @@
                 }
             } else {
                 const confirmed = await showConfirm(
-                    '🎯 Carregar Demonstração?',
+                    'Carregar Demonstração?',
                     'Carregar dados de exemplo?<br><br>Seus dados atuais serão substituídos pelos dados de demonstração.<br><br>Recomendamos fazer backup antes de continuar.'
                 );
                 
