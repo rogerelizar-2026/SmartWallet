@@ -4288,6 +4288,7 @@
         }
 
         saveInvestment() {
+
             // CORREÇÃO v4.4.2: Validação explícita com feedback
             const name = document.getElementById('investmentName').value.trim();
             const initial = parseFloat(document.getElementById('investmentInitial').value);
