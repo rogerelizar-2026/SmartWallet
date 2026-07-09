@@ -1162,8 +1162,8 @@
             if (this._cache.monthTransactions[key]) return this._cache.monthTransactions[key];
             const m = date.getMonth(), y = date.getFullYear();
             const result = this.transactions.filter(t => {
-                const d = new Date(t.date + 'T12:00:00');
-                return d.getMonth() === m && d.getFullYear() === y;
+               const d = this.parseDate(t.date);
+               return d.getMonth() === m && d.getFullYear() === y;
             });
             this._cache.monthTransactions[key] = result;
             return result;
@@ -1173,21 +1173,21 @@
             if (!date) date = this.currentMonth;
             const m = date.getMonth(), y = date.getFullYear();
             return this.transactions.filter(t => {
-                if (t.paymentMethod !== 'card:' + cardId || t.amount >= 0) return false;
-                const d = new Date(t.date + 'T12:00:00');
-                return d.getMonth() === m && d.getFullYear() === y;
+                 if (t.paymentMethod !== 'card:' + cardId || t.amount >= 0) return false;
+                 const d = this.parseDate(t.date);
+                 return d.getMonth() === m && d.getFullYear() === y;
             });
         }
 
         getCardTransactionsForPeriod(cardId, startDate, closingDate) {
             const start = new Date(startDate); start.setHours(0, 0, 0, 0);
             const end = new Date(closingDate); end.setHours(23, 59, 59, 999);
-            return this.transactions.filter(t => {
-                if (t.paymentMethod !== 'card:' + cardId) return false;
-                if (t.amount >= 0) return false;
-                const tDate = new Date(t.date + 'T12:00:00');
-                return tDate >= start && tDate <= end;
-            });
+         return this.transactions.filter(t => {
+             if (t.paymentMethod !== 'card:' + cardId) return false;
+             if (t.amount >= 0) return false;
+             const tDate = this.parseDate(t.date);
+             return tDate >= start && tDate <= end;
+         });
         }
 
         // ===== POPULAR SELECTS =====
@@ -1335,10 +1335,24 @@
             return method;
         }
 
-        formatDate(d) { if (!d) return ''; return new Date(d + 'T12:00:00').toLocaleDateString(this.getLanguage()); }
+            formatDate(d) {
+             if (!d) return '';
+             return this.parseDate(d).toLocaleDateString(this.getLanguage());
+             }
         escapeHtml(t) { if (t === null || t === undefined) return ''; const div = document.createElement('div'); div.textContent = String(t); return div.innerHTML; }
         showToast(msg) { const t = document.getElementById('toast'); if (!t) return; t.textContent = msg; t.classList.add('active'); clearTimeout(this.toastT); this.toastT = setTimeout(() => t.classList.remove('active'), 3000); }
 
+         // Função para ler a data corretamente sem errar o dia por causa do fuso horário
+         parseDate(dateString) {
+             if (!dateString) return new Date();
+             const parts = dateString.split('-');
+             if (parts.length !== 3) return new Date(dateString);
+             const year = parseInt(parts[0], 10);
+             const month = parseInt(parts[1], 10) - 1;
+             const day = parseInt(parts[2], 10);
+             return new Date(year, month, day);
+         }
+        
         // ===== DASHBOARD =====
         updateDashboard() {
             if (!this.currentMonth || !(this.currentMonth instanceof Date) || isNaN(this.currentMonth.getTime())) {
@@ -1576,7 +1590,7 @@
                     this.showToast('❌ ' + this.t('minInstallments')); 
                     return; 
                 }
-                const startDate = new Date(date + 'T12:00:00');
+                const startDate = this.parseDate(date);
                 const recurrenceGroupId = this.generateUniqueId();
                 let createdCount = 0;
                 
@@ -1991,10 +2005,10 @@
             const in3Days = new Date(today); in3Days.setDate(in3Days.getDate() + 3);
             const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
             const bills = this.transactions.filter(t => {
-                if (t.statusOk || t.amount >= 0) return false;
-                const tDate = new Date(t.date + 'T12:00:00');
-                return tDate <= in3Days;
-            });
+             if (t.statusOk || t.amount >= 0) return false;
+             const tDate = this.parseDate(t.date);
+             return tDate <= in3Days;
+             });
             let closingAlertsCount = 0;
             this.cards.forEach(card => {
                 const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
