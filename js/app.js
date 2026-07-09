@@ -1,187 +1,6 @@
 (function() {
     'use strict';
 
-    // ===== NOVO v4.5.0: SISTEMA DE VERSIONAMENTO =====
-    const DATA_VERSION = 2; // Incrementar quando estrutura mudar
-    
-    // ===== NOVO v4.5.0: HELPERS DE SEGURANÇA =====
-    
-    /**
-     * Escapa HTML de forma robusta contra XSS
-     */
-    function safeHTML(str) {
-        if (str === null || str === undefined) return '';
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;')
-            .replace(/\//g, '&#x2F;')
-            .replace(/`/g, '&#96;');
-    }
-
-    /**
-     * Sanitiza recursivamente um objeto
-     */
-    function sanitizeObject(obj, depth = 0) {
-        if (depth > 10) return obj;
-        if (obj === null || obj === undefined) return obj;
-        if (typeof obj === 'string') return safeHTML(obj);
-        if (typeof obj !== 'object') return obj;
-        if (Array.isArray(obj)) return obj.map(item => sanitizeObject(item, depth + 1));
-        
-        const sanitized = {};
-        for (const key in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                if (key === 'manualHTML' || key === '_rawHTML') {
-                    sanitized[key] = obj[key];
-                } else {
-                    sanitized[key] = sanitizeObject(obj[key], depth + 1);
-                }
-            }
-        }
-        return sanitized;
-    }
-
-    /**
-     * Valida se uma URL é segura
-     */
-    function isSafeURL(url) {
-        if (!url || typeof url !== 'string') return false;
-        try {
-            const parsed = new URL(url, window.location.origin);
-            return parsed.protocol === 'http:' || parsed.protocol === 'https:' || parsed.protocol === 'mailto:';
-        } catch (e) {
-            return false;
-        }
-    }
-
-    /**
-     * Calcula SHA-256 checksum
-     */
-    async function computeChecksum(data) {
-        try {
-            if (!window.crypto || !window.crypto.subtle) {
-                return computeChecksumFallback(data);
-            }
-            const encoder = new TextEncoder();
-            const dataBuffer = encoder.encode(typeof data === 'string' ? data : JSON.stringify(data));
-            const hashBuffer = await window.crypto.subtle.digest('SHA-256', dataBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        } catch (e) {
-            return computeChecksumFallback(data);
-        }
-    }
-
-    function computeChecksumFallback(data) {
-        const str = typeof data === 'string' ? data : JSON.stringify(data);
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-        return 'fallback_' + Math.abs(hash).toString(16).padStart(8, '0');
-    }
-
-    async function verifyIntegrity(data, expectedChecksum) {
-        if (!expectedChecksum) return { valid: true, warning: 'Sem checksum' };
-        const actual = await computeChecksum(data);
-        return {
-            valid: actual === expectedChecksum,
-            expected: expectedChecksum,
-            actual: actual
-        };
-    }
-
-    // ===== NOVO v4.5.0: SISTEMA DE MIGRAÇÃO =====
-    
-    function migrateData(data) {
-        if (!data || typeof data !== 'object') return data;
-        
-        const currentVersion = data.dataVersion || 1;
-        let migrated = { ...data };
-        
-        if (currentVersion < 2) {
-            migrated = migrateV1toV2(migrated);
-        }
-        
-        migrated.dataVersion = DATA_VERSION;
-        return migrated;
-    }
-
-    function migrateV1toV2(data) {
-        const migrated = { ...data };
-        
-        if (Array.isArray(migrated.transactions)) {
-            migrated.transactions = migrated.transactions.map(t => ({
-                id: t.id || generateFallbackId(),
-                date: t.date || new Date().toISOString().split('T')[0],
-                amount: typeof t.amount === 'number' ? t.amount : 0,
-                category: t.category || 'outros',
-                description: t.description || '',
-                statusOk: !!t.statusOk,
-                paymentMethod: t.paymentMethod || 'pix',
-                accountId: t.accountId || '',
-                recurrence: t.recurrence || null
-            }));
-        }
-        
-        if (Array.isArray(migrated.accounts)) {
-            migrated.accounts = migrated.accounts.map(a => ({
-                id: a.id || generateFallbackId(),
-                name: a.name || 'Conta sem nome',
-                type: a.type || 'checking',
-                balance: typeof a.balance === 'number' ? a.balance : 0,
-                color: a.color || '#6366f1'
-            }));
-        }
-        
-        if (Array.isArray(migrated.cards)) {
-            migrated.cards = migrated.cards.map(c => ({
-                id: c.id || generateFallbackId(),
-                name: c.name || 'Cartão sem nome',
-                brand: c.brand || 'Outra',
-                last4: c.last4 || '',
-                closingDay: c.closingDay || 1,
-                dueDay: c.dueDay || 10,
-                limit: typeof c.limit === 'number' ? c.limit : 0,
-                color: c.color || '#6366f1'
-            }));
-        }
-        
-        if (Array.isArray(migrated.investments)) {
-            migrated.investments = migrated.investments.map(i => ({
-                id: i.id || generateFallbackId(),
-                name: i.name || 'Investimento sem nome',
-                type: i.type || 'outro',
-                initial: typeof i.initial === 'number' ? i.initial : 0,
-                current: typeof i.current === 'number' ? i.current : 0,
-                date: i.date || new Date().toISOString().split('T')[0],
-                rate: typeof i.rate === 'number' ? i.rate : 0,
-                accountId: i.accountId || null
-            }));
-        }
-        
-        if (!migrated.settings) {
-            migrated.settings = {
-                alertNegativeBalance: true,
-                blockNegativeBalance: false,
-                autoBackupEnabled: false,
-                notifyBills: false,
-                pageSize: 20
-            };
-        }
-        
-        return migrated;
-    }
-
-    function generateFallbackId() {
-        return Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
-    }
-
     // ===== CONSTANTES =====
     const PAYMENT_METHODS = [
         { id: 'pix', name: 'PIX', icon: '⚡' },
@@ -234,9 +53,9 @@
         { text: "Quem compra o que não precisa, rouba a si mesmo.", author: "Provérbio Popular" }
     ];
 
-    const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Wallet Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 4.4.0 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Wallet!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v4.4.0</h2><ul><li><strong>Modo Demonstração:</strong> Carregue dados de exemplo para conhecer o app</li><li><strong>Paginação:</strong> Histórico dividido em páginas para melhor performance</li><li><strong>Gráfico Waterfall:</strong> Fluxo de caixa visual mês a mês</li><li><strong>Alerta de Saldo Negativo:</strong> Aviso quando contas ficam no vermelho</li><li><strong>Backup Automático:</strong> Sugestão semanal de backup</li><li><strong>Notificações Push:</strong> Alertas de contas a vencer</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! 💰</h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
+    const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Wallet Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 4.4.4 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Wallet!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v4.4.4</h2><ul><li><strong>Continuar Inserindo:</strong> Após salvar, pergunte se quer adicionar outro registro</li><li><strong>Backup Mobile:</strong> Corrigido bug que voltava para splash screen</li><li><strong>Splash Inteligente:</strong> Aparece apenas na primeira visita</li><li><strong>Contas de Investimento:</strong> Separadas do saldo unificado</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! 💰</h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
 
-    // ===== TRADUÇÕES v4.4.0 =====
+    // ===== TRADUÇÕES v4.4.4 =====
     const TRANSLATIONS = {
         'pt-BR': {
             appTitle: 'Smart Wallet',
@@ -270,6 +89,7 @@
             expenseGroup: '💸 Despesas',
             allCards: 'Todos Cartões',
             allCategories: 'Todas as categorias',
+            allAccounts: 'Todas as contas',
             selectCategory: 'Selecione uma categoria',
             selectAccount: 'Selecione a conta',
             selectPayment: 'Selecione a forma de pagamento',
@@ -307,7 +127,6 @@
             dueDate: 'Vencimento',
             invoiceTotal: 'Total da Fatura',
             printPDF: 'Imprimir / PDF',
-            // NOVO v4.4.0
             demoLoaded: 'Dados de demonstração carregados!',
             demoCleared: 'Modo demonstração encerrado!',
             confirmDemoLoad: 'Carregar dados de demonstração? Seus dados atuais serão substituídos.',
@@ -362,6 +181,7 @@
             expenseGroup: '💸 Expenses',
             allCards: 'All Cards',
             allCategories: 'All categories',
+            allAccounts: 'All accounts',
             selectCategory: 'Select a category',
             selectAccount: 'Select account',
             selectPayment: 'Select payment method',
@@ -399,7 +219,6 @@
             dueDate: 'Due Date',
             invoiceTotal: 'Invoice Total',
             printPDF: 'Print / PDF',
-            // NOVO v4.4.0
             demoLoaded: 'Demo data loaded!',
             demoCleared: 'Demo mode ended!',
             confirmDemoLoad: 'Load demo data? Your current data will be replaced.',
@@ -429,9 +248,12 @@
         'USD': { symbol: '$', code: 'USD', locale: 'en-US', name: 'US Dollar' }
     };
 
-    // ===== HELPER: SALVAR ARQUIVO COM SELETOR =====
+    // ===== CORREÇÃO v4.4.4: Função robusta para download em todos os dispositivos =====
     async function saveFileWithPicker(blob, suggestedName, mimeType) {
-        if (window.showSaveFilePicker) {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isDesktopChrome = !isMobile && window.showSaveFilePicker && navigator.userAgent.indexOf('Chrome') > -1;
+        
+        if (isDesktopChrome) {
             try {
                 const ext = suggestedName.split('.').pop().toLowerCase();
                 const acceptMap = {
@@ -452,21 +274,40 @@
                 return 'saved';
             } catch (err) {
                 if (err.name === 'AbortError') return 'cancelled';
-                console.warn('File System Access API falhou:', err);
+                console.warn('[SmartWallet] File System Access API falhou, usando fallback:', err);
             }
         }
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = suggestedName;
-        a.style.display = 'none';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }, 100);
-        return 'downloaded';
+        
+        try {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = suggestedName;
+            a.style.display = 'none';
+            a.setAttribute('download', suggestedName);
+            document.body.appendChild(a);
+            
+            const clickEvent = new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true
+            });
+            a.dispatchEvent(clickEvent);
+            
+            setTimeout(() => {
+                try {
+                    if (a.parentNode) a.parentNode.removeChild(a);
+                    URL.revokeObjectURL(url);
+                } catch (cleanupErr) {
+                    console.warn('[SmartWallet] Erro ao limpar URL:', cleanupErr);
+                }
+            }, 1000);
+            
+            return 'downloaded';
+        } catch (fallbackErr) {
+            console.error('[SmartWallet] Erro no fallback de download:', fallbackErr);
+            return 'error';
+        }
     }
 
     // ===== CLASSE PRINCIPAL =====
@@ -479,7 +320,6 @@
             this.categories = [];
             this.accounts = [];
             this.cards = [];
-            this.investments = [];
             this.cardModalMonth = new Date();
             this.cardModalMonth.setDate(1);
             this.currentTransactionType = 'expense';
@@ -497,15 +337,9 @@
             this.sortDirection = 'desc';
             this.swipeInitialized = false;
             this.isSaving = false;
-            
-            // NOVO v4.4.0: Estado de paginação
             this.currentPage = 1;
             this.pageSize = 20;
-            
-            // NOVO v4.4.0: Modo demo
             this.demoMode = false;
-            
-            // NOVO v4.4.0: Configurações
             this.settings = {
                 alertNegativeBalance: true,
                 blockNegativeBalance: false,
@@ -513,7 +347,6 @@
                 notifyBills: false,
                 pageSize: 20
             };
-            
             this.loadData();
             this.loadSettings();
             this.init();
@@ -531,8 +364,6 @@
                 if (a) this.accounts = JSON.parse(a);
                 const cd = localStorage.getItem('smartwallet_cards');
                 if (cd) this.cards = JSON.parse(cd);
-                const inv = localStorage.getItem('smartwallet_investments');
-                if (inv) this.investments = JSON.parse(inv);
                 const dm = localStorage.getItem('smartwallet_dark');
                 if (dm !== null) this.darkMode = dm === 'true';
                 const pv = localStorage.getItem('smartwallet_privacy');
@@ -544,27 +375,14 @@
             }
         }
 
-        saveTransactions() {
-            try { localStorage.setItem('smartwallet_transactions', JSON.stringify(this.transactions)); } catch(e) {}
-        }
-        saveCategories() {
-            try { localStorage.setItem('smartwallet_categories', JSON.stringify(this.categories)); } catch(e) {}
-        }
-        saveAccounts() {
-            try { localStorage.setItem('smartwallet_accounts', JSON.stringify(this.accounts)); } catch(e) {}
-        }
-        saveCards() {
-            try { localStorage.setItem('smartwallet_cards', JSON.stringify(this.cards)); } catch(e) {}
-        }
-        saveInvestments() {
-            try { localStorage.setItem('smartwallet_investments', JSON.stringify(this.investments)); } catch(e) {}
-        }
+        saveTransactions() { try { localStorage.setItem('smartwallet_transactions', JSON.stringify(this.transactions)); } catch(e) {} }
+        saveCategories() { try { localStorage.setItem('smartwallet_categories', JSON.stringify(this.categories)); } catch(e) {} }
+        saveAccounts() { try { localStorage.setItem('smartwallet_accounts', JSON.stringify(this.accounts)); } catch(e) {} }
+        saveCards() { try { localStorage.setItem('smartwallet_cards', JSON.stringify(this.cards)); } catch(e) {} }
 
-        clearCache() {
-            this._cache = {};
-        }
+        clearCache() { this._cache = {}; }
 
-        // ===== NOVO v4.4.0: CONFIGURAÇÕES =====
+        // ===== CONFIGURAÇÕES =====
         loadSettings() {
             try {
                 const saved = localStorage.getItem('smartwallet_settings');
@@ -575,11 +393,7 @@
             } catch (e) {}
         }
 
-        saveSettings() {
-            try {
-                localStorage.setItem('smartwallet_settings', JSON.stringify(this.settings));
-            } catch (e) {}
-        }
+        saveSettings() { try { localStorage.setItem('smartwallet_settings', JSON.stringify(this.settings)); } catch (e) {} }
 
         // ===== MÉTODOS CENTRALIZADOS =====
         getMonths(type = 'full') {
@@ -592,32 +406,13 @@
             for (const field of fields) {
                 const element = document.getElementById(field.id);
                 if (!element) continue;
-                
                 const value = element.value?.trim();
-                
-                if (field.required && !value) {
-                    this.showToast('❌ ' + field.label);
-                    element.focus();
-                    return false;
-                }
-                
+                if (field.required && !value) { this.showToast('❌ ' + field.label); element.focus(); return false; }
                 if (field.type === 'number' && value) {
                     const num = parseFloat(value);
-                    if (isNaN(num)) {
-                        this.showToast('❌ ' + field.label + ' inválido');
-                        element.focus();
-                        return false;
-                    }
-                    if (field.min !== undefined && num < field.min) {
-                        this.showToast('❌ ' + field.label + ' muito baixo');
-                        element.focus();
-                        return false;
-                    }
-                    if (field.max !== undefined && num > field.max) {
-                        this.showToast('❌ ' + field.label + ' muito alto');
-                        element.focus();
-                        return false;
-                    }
+                    if (isNaN(num)) { this.showToast('❌ ' + field.label + ' inválido'); element.focus(); return false; }
+                    if (field.min !== undefined && num < field.min) { this.showToast('❌ ' + field.label + ' muito baixo'); element.focus(); return false; }
+                    if (field.max !== undefined && num > field.max) { this.showToast('❌ ' + field.label + ' muito alto'); element.focus(); return false; }
                 }
             }
             return true;
@@ -628,600 +423,31 @@
             const lang = this.getLanguage();
             let text = (TRANSLATIONS[lang] && TRANSLATIONS[lang][key]) || TRANSLATIONS['pt-BR'][key] || key;
             if (typeof text !== 'string') return key;
-            Object.keys(params).forEach(param => {
-                text = text.replace(new RegExp('\\{' + param + '\\}', 'g'), params[param]);
-            });
+            Object.keys(params).forEach(param => { text = text.replace(new RegExp('\\{' + param + '\\}', 'g'), params[param]); });
             return text;
         }
 
-        tCount(keyBase, count) {
-            const suffix = count === 1 ? '_singular' : '_plural';
-            return this.t(keyBase + suffix);
-        }
-
-        getLanguage() {
-            return localStorage.getItem('smartwallet_language') || 'pt-BR';
-        }
-
-        setLanguage(lang) {
-            localStorage.setItem('smartwallet_language', lang);
-            document.documentElement.lang = lang;
-            this.applyLanguage();
-            this.showToast(this.t('languageChanged'));
-        }
-
+        tCount(keyBase, count) { const suffix = count === 1 ? '_singular' : '_plural'; return this.t(keyBase + suffix); }
+        getLanguage() { return localStorage.getItem('smartwallet_language') || 'pt-BR'; }
+        setLanguage(lang) { localStorage.setItem('smartwallet_language', lang); document.documentElement.lang = lang; this.applyLanguage(); this.showToast(this.t('languageChanged')); }
+        
         applyLanguage() {
-            const titleEl = document.querySelector('.header-title');
-            if (titleEl) titleEl.textContent = this.t('appTitle');
-            const subtitleEl = document.querySelector('.header-subtitle');
-            if (subtitleEl) subtitleEl.textContent = this.t('appSubtitle');
-            this.updateMonthDisplay();
-            this.populateCardFilter();
-            this.clearCache();
-            this.render();
-            this.updateCharts();
+            const titleEl = document.querySelector('.header-title'); if (titleEl) titleEl.textContent = this.t('appTitle');
+            const subtitleEl = document.querySelector('.header-subtitle'); if (subtitleEl) subtitleEl.textContent = this.t('appSubtitle');
+            this.updateMonthDisplay(); this.populateCardFilter(); this.clearCache(); this.render(); this.updateCharts();
         }
 
-        getCurrency() {
-            return localStorage.getItem('smartwallet_currency') || 'BRL';
-        }
-
-        setCurrency(currency) {
-            if (!CURRENCIES[currency]) return;
-            localStorage.setItem('smartwallet_currency', currency);
-            this.applyCurrency();
-            this.showToast(this.t('currencyChanged'));
-        }
-
-        applyCurrency() {
-            this.clearCache();
-            this.render();
-            this.updateCharts();
-            this.updateCurrencySelectorVisibility();
-        }
-
-        updateCurrencySelectorVisibility() {
-            const lang = this.getLanguage();
-            const currencyItem = document.getElementById('currencyMenuItem');
-            if (currencyItem) {
-                currencyItem.style.display = lang === 'en-US' ? 'flex' : 'none';
-            }
-        }
-
+        getCurrency() { return localStorage.getItem('smartwallet_currency') || 'BRL'; }
+        setCurrency(currency) { if (!CURRENCIES[currency]) return; localStorage.setItem('smartwallet_currency', currency); this.applyCurrency(); this.showToast(this.t('currencyChanged')); }
+        applyCurrency() { this.clearCache(); this.render(); this.updateCharts(); this.updateCurrencySelectorVisibility(); }
+        updateCurrencySelectorVisibility() { const lang = this.getLanguage(); const currencyItem = document.getElementById('currencyMenuItem'); if (currencyItem) currencyItem.style.display = lang === 'en-US' ? 'flex' : 'none'; }
+        
         formatCurrency(value) {
             const currency = this.getCurrency();
             const data = CURRENCIES[currency];
-            return new Intl.NumberFormat(data.locale, {
-                style: 'currency',
-                currency: data.code,
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-                notation: 'standard'
-            }).format(value || 0);
-        }
+            return new Intl.NumberFormat(data.locale, { style: 'currency', currency: data.code, minimumFractionDigits: 2, maximumFractionDigits: 2, notation: 'standard' }).format(value || 0);
 
-        // ===== INICIALIZAÇÃO =====
-        init() {
-            console.log('✅ Smart Wallet v4.4.0 inicializado');
-            this.applyTheme();
-            this.applyPrivacy();
-            this.applyDemoBadge();
-            this.setupEventListeners();
-            this.setupFocusTrap();
-            this.setDefaultDate();
-            this.updateMonthDisplay();
-            this.populateCategorySelects();
-            this.populatePaymentMethodSelects();
-            this.populateAccountSelects();
-            this.populateCardFilter();
-            this.restoreFilters();
-            this.render();
-            this.initCharts();
-            this.updateAlertBadge();
-            this.applyLanguage();
-            this.applyCurrency();
-            this.checkVersionUpdate();
-            this.checkAutoBackup();
-            this.checkNegativeBalance();
-            if (window.innerWidth <= 640 && !this.swipeInitialized) {
-                this.initSwipeGestures();
-                this.swipeInitialized = true;
-            }
-        }
-
-        // ===== NOVO v4.4.0: BADGE DEMO =====
-        // ===== NOVO v4.4.0: BADGE DEMO (ATUALIZADO v4.5.0) =====
-        applyDemoBadge() {
-            const badge = document.getElementById('demoBadge');
-            const infoDemoBtn = document.getElementById('infoDemoBtn');
-            const infoDemoText = document.getElementById('infoDemoText');
-            
-            // Atualiza badge no header
-            if (badge) {
-                badge.style.display = this.demoMode ? 'inline-block' : 'none';
-            }
-            
-            // NOVO v4.5.0: Atualiza botão no menu Info
-            if (infoDemoBtn && infoDemoText) {
-                if (this.demoMode) {
-                    infoDemoText.textContent = 'Encerrar Demonstração';
-                    infoDemoBtn.classList.add('demo-active');
-                } else {
-                    infoDemoText.textContent = 'Modo Demonstração';
-                    infoDemoBtn.classList.remove('demo-active');
-                }
-            }
-        }
-
-        // ===== EVENT LISTENERS =====
-        setupEventListeners() {
-            const self = this;
-
-            // Busca com debounce
-            const search = document.getElementById('searchFilter');
-            if (search) {
-                search.addEventListener('input', () => {
-                    clearTimeout(self.searchTimeout);
-                    self.searchTimeout = setTimeout(() => {
-                        self.currentPage = 1;
-                        self.clearCache();
-                        self.render();
-                        self.clearDashboardHighlight();
-                    }, 300);
-                });
-            }
-
-            // Filtros
-            const filterIds = ['typeFilter', 'categoryFilter', 'statusFilter', 'accountFilter', 'cardFilter'];
-            filterIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('change', () => {
-                        if (id === 'typeFilter') {
-                            self.filterCategoriesByType('categoryFilter', el.value);
-                        }
-                        self.currentPage = 1;
-                        self.clearCache();
-                        self.render();
-                        self.saveFilters();
-                        self.clearDashboardHighlight();
-                    });
-                }
-            });
-
-            // Recorrência checkbox
-            const recurringCheckbox = document.getElementById('recurring');
-            if (recurringCheckbox) {
-                recurringCheckbox.addEventListener('change', function() {
-                    const options = document.getElementById('recurringOptions');
-                    if (options) options.style.display = this.checked ? 'block' : 'none';
-                });
-            }
-
-            const editRecurringCheckbox = document.getElementById('editRecurring');
-            if (editRecurringCheckbox) {
-                editRecurringCheckbox.addEventListener('change', function() {
-                    const options = document.getElementById('editRecurringOptions');
-                    if (options) options.style.display = this.checked ? 'block' : 'none';
-                });
-            }
-
-            // Seletor de mês
-            const prevMonthBtn = document.getElementById('prevMonthBtn');
-            const nextMonthBtn = document.getElementById('nextMonthBtn');
-            if (prevMonthBtn) prevMonthBtn.addEventListener('click', () => self.changeMonth(-1));
-            if (nextMonthBtn) nextMonthBtn.addEventListener('click', () => self.changeMonth(1));
-
-            // Botões do header
-            const alertBtn = document.getElementById('alertBtn');
-            if (alertBtn) alertBtn.addEventListener('click', () => openBillsModal());
-
-            const goalBtn = document.getElementById('goalBtn');
-            if (goalBtn) goalBtn.addEventListener('click', () => openGoalModal());
-
-            const privacyBtn = document.getElementById('privacyBtn');
-            if (privacyBtn) privacyBtn.addEventListener('click', () => togglePrivacy());
-
-            const themeBtn = document.getElementById('themeBtn');
-            if (themeBtn) themeBtn.addEventListener('click', () => toggleTheme());
-
-            const infoBtn = document.getElementById('infoBtn');
-            if (infoBtn) infoBtn.addEventListener('click', (e) => toggleInfoMenu(e));
-
-            const menuBtn = document.getElementById('menuBtn');
-            if (menuBtn) menuBtn.addEventListener('click', (e) => toggleMenu(e));
-
-            // FAB
-            const fabBtn = document.getElementById('fabBtn');
-            if (fabBtn) fabBtn.addEventListener('click', () => toggleFab());
-
-            // FAB Actions
-            document.querySelectorAll('.fab-action').forEach(btn => {
-                const action = btn.dataset.action;
-                if (action) {
-                    btn.addEventListener('click', () => {
-                        if (typeof window[action] === 'function') window[action]();
-                    });
-                }
-            });
-
-            // Cards do dashboard
-            document.querySelectorAll('.card.clickable').forEach(card => {
-                const action = card.dataset.action;
-                if (action) {
-                    card.addEventListener('click', () => {
-                        if (action === 'dashboard-accounts') dashboardAction('accounts');
-                        else if (action === 'dashboard-income') dashboardAction('income');
-                        else if (action === 'dashboard-expense') dashboardAction('expense');
-                        else if (action === 'dashboard-cards') dashboardAction('cards');
-                    });
-                }
-            });
-
-            // Ordenação de colunas
-            document.querySelectorAll('th[data-sort]').forEach(th => {
-                th.addEventListener('click', () => {
-                    sortTransactions(th.dataset.sort);
-                });
-            });
-
-            // NOVO v4.4.0: Paginação
-            const prevPageBtn = document.getElementById('prevPageBtn');
-            const nextPageBtn = document.getElementById('nextPageBtn');
-            const pageSizeSelect = document.getElementById('pageSizeSelect');
-            if (prevPageBtn) prevPageBtn.addEventListener('click', () => self.changePage(-1));
-            if (nextPageBtn) nextPageBtn.addEventListener('click', () => self.changePage(1));
-            if (pageSizeSelect) {
-                pageSizeSelect.value = this.pageSize.toString();
-                pageSizeSelect.addEventListener('change', (e) => {
-                    self.pageSize = parseInt(e.target.value);
-                    self.settings.pageSize = self.pageSize;
-                    self.saveSettings();
-                    self.currentPage = 1;
-                    self.render();
-                });
-            }
-
-            // NOVO v4.4.0: Botão demo no empty state
-            const loadDemoFromEmptyBtn = document.getElementById('loadDemoFromEmptyBtn');
-            if (loadDemoFromEmptyBtn) loadDemoFromEmptyBtn.addEventListener('click', () => self.loadDemoData());
-
-            // NOVO v4.4.0: Fechar alerta de saldo negativo
-            const closeNegativeAlertBtn = document.getElementById('closeNegativeAlertBtn');
-            if (closeNegativeAlertBtn) {
-                closeNegativeAlertBtn.addEventListener('click', () => {
-                    const alert = document.getElementById('negativeBalanceAlert');
-                    if (alert) alert.style.display = 'none';
-                });
-            }
-
-            // Botões fechar modal (data-close-modal)
-            document.querySelectorAll('[data-close-modal]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const modalId = btn.dataset.closeModal;
-                    closeModal(modalId);
-                });
-            });
-
-            // Botões do menu dropdown (data-action)
-            document.querySelectorAll('.info-item[data-action], .dropdown-item[data-action]').forEach(item => {
-                item.addEventListener('click', () => {
-                    const action = item.dataset.action;
-                    if (typeof window[action] === 'function') window[action]();
-                });
-            });
-
-            // Botões de tipo de transação
-            document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    selectTransactionType(btn.dataset.type);
-                });
-            });
-
-            document.querySelectorAll('#editForm .type-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    selectEditType(btn.dataset.type);
-                });
-            });
-
-            // Forms submit
-            const transactionForm = document.getElementById('transactionForm');
-            if (transactionForm) {
-                transactionForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    self.addTransaction();
-                });
-            }
-
-            const editForm = document.getElementById('editForm');
-            if (editForm) {
-                editForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    self.updateTransaction();
-                });
-            }
-
-            const transferForm = document.getElementById('transferForm');
-            if (transferForm) {
-                transferForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    self.saveTransfer();
-                });
-            }
-
-            const accountForm = document.getElementById('accountForm');
-            if (accountForm) {
-                accountForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    self.saveAccount();
-                });
-            }
-
-            const cardForm = document.getElementById('cardForm');
-            if (cardForm) {
-                cardForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    self.saveCard();
-                });
-            }
-
-            const investmentForm = document.getElementById('investmentForm');
-            if (investmentForm) {
-                investmentForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    self.saveInvestment();
-                });
-            }
-
-            const updateInvestmentForm = document.getElementById('updateInvestmentForm');
-            if (updateInvestmentForm) {
-                updateInvestmentForm.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    self.updateInvestmentValue();
-                });
-            }
-
-            // Botões específicos
-            const deleteFromEditBtn = document.getElementById('deleteFromEditBtn');
-            if (deleteFromEditBtn) deleteFromEditBtn.addEventListener('click', () => self.deleteFromEdit());
-
-            const exportCsvBtn = document.getElementById('exportCsvBtn');
-            if (exportCsvBtn) exportCsvBtn.addEventListener('click', () => self.exportCSV());
-
-            const printExtratoBtn = document.getElementById('printExtratoBtn');
-            if (printExtratoBtn) printExtratoBtn.addEventListener('click', () => self.printExtratoPDF());
-
-            const importCsvBtn = document.getElementById('importCsvBtn');
-            if (importCsvBtn) importCsvBtn.addEventListener('click', () => self.importCSV());
-
-            const importBackupBtn = document.getElementById('importBackupBtn');
-            if (importBackupBtn) importBackupBtn.addEventListener('click', () => self.importBackup());
-
-            const newAccountBtn = document.getElementById('newAccountBtn');
-            if (newAccountBtn) newAccountBtn.addEventListener('click', () => openNewAccountModal());
-
-            const newCardBtn = document.getElementById('newCardBtn');
-            if (newCardBtn) newCardBtn.addEventListener('click', () => openNewCardModal());
-
-            const newInvestmentBtn = document.getElementById('newInvestmentBtn');
-            if (newInvestmentBtn) newInvestmentBtn.addEventListener('click', () => openNewInvestmentModal());
-
-            const printManualBtn = document.getElementById('printManualBtn');
-            if (printManualBtn) printManualBtn.addEventListener('click', () => self.printManual());
-
-            const copyPixKeyBtn = document.getElementById('copyPixKeyBtn');
-            if (copyPixKeyBtn) copyPixKeyBtn.addEventListener('click', () => copyPixKey());
-
-            const printManualFromWhatsNewBtn = document.getElementById('printManualFromWhatsNewBtn');
-            if (printManualFromWhatsNewBtn) printManualFromWhatsNewBtn.addEventListener('click', () => printManualFromWhatsNew());
-
-            const openManualFromWhatsNewBtn = document.getElementById('openManualFromWhatsNewBtn');
-            if (openManualFromWhatsNewBtn) openManualFromWhatsNewBtn.addEventListener('click', () => openManualFromWhatsNew());
-
-            // Cartões de crédito - navegação de mês
-            const prevCardMonthBtn = document.getElementById('prevCardMonthBtn');
-            const nextCardMonthBtn = document.getElementById('nextCardMonthBtn');
-            const cardMonthTodayBtn = document.getElementById('cardMonthTodayBtn');
-            if (prevCardMonthBtn) prevCardMonthBtn.addEventListener('click', () => changeCardMonth(-1));
-            if (nextCardMonthBtn) nextCardMonthBtn.addEventListener('click', () => changeCardMonth(1));
-            if (cardMonthTodayBtn) cardMonthTodayBtn.addEventListener('click', () => changeCardMonthToToday());
-
-            // Fatura - navegação
-            const prevInvoiceBtn = document.getElementById('prevInvoiceBtn');
-            const nextInvoiceBtn = document.getElementById('nextInvoiceBtn');
-            if (prevInvoiceBtn) prevInvoiceBtn.addEventListener('click', () => self.navigateInvoice(-1));
-            if (nextInvoiceBtn) nextInvoiceBtn.addEventListener('click', () => self.navigateInvoice(1));
-
-            // Clear data modal
-            const showClearStep2Btn = document.getElementById('showClearStep2Btn');
-            if (showClearStep2Btn) showClearStep2Btn.addEventListener('click', () => showClearStep2());
-
-            const clearConfirmInput = document.getElementById('clearConfirmInput');
-            if (clearConfirmInput) clearConfirmInput.addEventListener('input', () => checkClearConfirm());
-
-            const finalClearBtn = document.getElementById('finalClearBtn');
-            if (finalClearBtn) finalClearBtn.addEventListener('click', () => self.clearAllData());
-
-            // Disclaimer
-            const acceptDisclaimerBtn = document.getElementById('acceptDisclaimerBtn');
-            if (acceptDisclaimerBtn) acceptDisclaimerBtn.addEventListener('click', () => acceptDisclaimer());
-
-            const startAppBtn = document.getElementById('startAppBtn');
-            if (startAppBtn) startAppBtn.addEventListener('click', () => startApp());
-
-            // File inputs
-            const csvFileInput = document.getElementById('csvFileInput');
-            if (csvFileInput) csvFileInput.addEventListener('change', (e) => handleCsvFileSelect(e));
-
-            const backupFileInput = document.getElementById('backupFileInput');
-            if (backupFileInput) backupFileInput.addEventListener('change', (e) => handleBackupFileSelect(e));
-
-            // NOVO v4.4.0: Settings modal
-            const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-            if (saveSettingsBtn) saveSettingsBtn.addEventListener('click', () => self.saveSettingsFromModal());
-
-            const doBackupNowBtn = document.getElementById('doBackupNowBtn');
-            if (doBackupNowBtn) doBackupNowBtn.addEventListener('click', () => self.exportBackup());
-
-            const requestNotificationsBtn = document.getElementById('requestNotificationsBtn');
-            if (requestNotificationsBtn) requestNotificationsBtn.addEventListener('click', () => self.requestNotifications());
-
-            const settingsPageSize = document.getElementById('settingsPageSize');
-            if (settingsPageSize) {
-                settingsPageSize.value = this.settings.pageSize.toString();
-                settingsPageSize.addEventListener('change', (e) => {
-                    self.settings.pageSize = parseInt(e.target.value);
-                    self.pageSize = self.settings.pageSize;
-                    self.currentPage = 1;
-                    self.render();
-                });
-            }
-        }
-
-        // ===== FOCUS TRAP =====
-        setupFocusTrap() {
-            document.addEventListener('keydown', (e) => {
-                const activeModal = document.querySelector('.modal.active');
-                if (!activeModal) return;
-
-                if (e.key === 'Escape') {
-                    e.preventDefault();
-                    const closeBtn = activeModal.querySelector('.modal-close');
-                    if (closeBtn) closeBtn.click();
-                    return;
-                }
-
-                if (e.key === 'Tab') {
-                    const focusable = activeModal.querySelectorAll(
-                        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-                    );
-                    if (focusable.length === 0) return;
-                    const first = focusable[0];
-                    const last = focusable[focusable.length - 1];
-                    if (e.shiftKey) {
-                        if (document.activeElement === first) {
-                            e.preventDefault();
-                            last.focus();
-                        }
-                    } else {
-                        if (document.activeElement === last) {
-                            e.preventDefault();
-                            first.focus();
-                        }
-                    }
-                }
-            });
-        }
-
-        // ===== FILTROS =====
-        saveFilters() {
-            const filters = {
-                type: document.getElementById('typeFilter')?.value || '',
-                category: document.getElementById('categoryFilter')?.value || '',
-                status: document.getElementById('statusFilter')?.value || '',
-                account: document.getElementById('accountFilter')?.value || '',
-                card: document.getElementById('cardFilter')?.value || '',
-                search: document.getElementById('searchFilter')?.value || ''
-            };
-            try { localStorage.setItem('smartwallet_filters', JSON.stringify(filters)); } catch(e) {}
-        }
-
-        restoreFilters() {
-            try {
-                const filters = JSON.parse(localStorage.getItem('smartwallet_filters') || '{}');
-                if (filters.type) document.getElementById('typeFilter').value = filters.type;
-                if (filters.status) document.getElementById('statusFilter').value = filters.status;
-                if (filters.account) document.getElementById('accountFilter').value = filters.account;
-                if (filters.card) document.getElementById('cardFilter').value = filters.card;
-                if (filters.search) document.getElementById('searchFilter').value = filters.search;
-                setTimeout(() => {
-                    if (filters.category) document.getElementById('categoryFilter').value = filters.category;
-                }, 100);
-            } catch(e) {}
-        }
-
-        clearDashboardHighlight() {
-            document.querySelectorAll('.card.clickable').forEach(c => c.classList.remove('active-filter'));
-        }
-
-        setDefaultDate() {
-            const el = document.getElementById('date');
-            if (el) el.value = new Date().toISOString().split('T')[0];
-        }
-
-        changeMonth(delta) {
-            this.currentMonth.setMonth(this.currentMonth.getMonth() + delta);
-            this.updateMonthDisplay();
-            this.clearCache();
-            this.clearDashboardHighlight();
-            this.currentPage = 1;
-            this.render();
-            this.updateCharts();
-        }
-
-        updateMonthDisplay() {
-            const months = this.getMonths();
-            const el = document.getElementById('currentMonth');
-            if (el && months) {
-                el.textContent = months[this.currentMonth.getMonth()] + ' ' + this.currentMonth.getFullYear();
-            }
-        }
-
-        formatMonthYear(date) {
-            if (!date) date = this.currentMonth;
-            return String(date.getMonth() + 1).padStart(2, '0') + '-' + date.getFullYear();
-        }
-
-        generateTimestamp() {
-            const now = new Date();
-            return 'SmartWallet-' + now.getFullYear() +
-                String(now.getMonth() + 1).padStart(2, '0') +
-                String(now.getDate()).padStart(2, '0') +
-                String(now.getHours()).padStart(2, '0') +
-                String(now.getMinutes()).padStart(2, '0') +
-                String(now.getSeconds()).padStart(2, '0');
-        }
-
-        // ===== NOVO v4.4.0: PAGINAÇÃO =====
-        changePage(delta) {
-            const filtered = this.getFilteredTransactions();
-            const totalPages = this.pageSize > 0 ? Math.ceil(filtered.length / this.pageSize) : 1;
-            this.currentPage = Math.max(1, Math.min(totalPages, this.currentPage + delta));
-            this.render();
-        }
-
-        renderPagination(totalItems) {
-            const controls = document.getElementById('paginationControls');
-            const prevBtn = document.getElementById('prevPageBtn');
-            const nextBtn = document.getElementById('nextPageBtn');
-            const info = document.getElementById('paginationInfo');
-            
-            if (!controls || !prevBtn || !nextBtn || !info) return;
-            
-            if (this.pageSize === 0 || totalItems === 0) {
-                controls.style.display = 'none';
-                return;
-            }
-            
-            const totalPages = Math.ceil(totalItems / this.pageSize);
-            if (totalPages <= 1) {
-                controls.style.display = 'none';
-                return;
-            }
-            
-            controls.style.display = 'flex';
-            const from = (this.currentPage - 1) * this.pageSize + 1;
-            const to = Math.min(this.currentPage * this.pageSize, totalItems);
-            
-            info.textContent = this.t('showingItems', { from, to, total: totalItems }) + 
-                ' • ' + this.t('pageOf', { current: this.currentPage, total: totalPages });
-            
-            prevBtn.disabled = this.currentPage === 1;
-            nextBtn.disabled = this.currentPage === totalPages;
-            prevBtn.textContent = '← ' + this.t('previous');
-            nextBtn.textContent = this.t('next') + ' →';
-        }
-		        // ===== TRANSAÇÕES DO MÊS =====
+        // ===== TRANSAÇÕES DO MÊS =====
         getMonthTransactions(date) {
             if (!date) date = this.currentMonth;
             if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
@@ -1270,9 +496,7 @@
                 const sel = document.getElementById(id);
                 if (!sel) return;
                 const val = sel.value;
-                sel.innerHTML = i === 2
-                    ? '<option value="">' + self.t('allCategories') + '</option>'
-                    : '<option value="">' + self.t('selectCategory') + '</option>';
+                sel.innerHTML = i === 2 ? '<option value="">' + self.t('allCategories') + '</option>' : '<option value="">' + self.t('selectCategory') + '</option>';
                 self.categories.forEach(cat => {
                     const opt = document.createElement('option');
                     opt.value = cat.id;
@@ -1325,9 +549,7 @@
                 if (!sel) return;
                 const val = sel.value;
                 const isFilter = id === 'accountFilter';
-                sel.innerHTML = isFilter
-                    ? '<option value="">' + self.t('allAccounts') + '</option>'
-                    : '<option value="">' + self.t('selectAccount') + '</option>';
+                sel.innerHTML = isFilter ? '<option value="">' + self.t('allAccounts') + '</option>' : '<option value="">' + self.t('selectAccount') + '</option>';
                 self.accounts.forEach(acc => {
                     const opt = document.createElement('option');
                     opt.value = acc.id;
@@ -1412,26 +634,9 @@
             return method;
         }
 
-        formatDate(d) {
-            if (!d) return '';
-            return new Date(d + 'T12:00:00').toLocaleDateString(this.getLanguage());
-        }
-
-        escapeHtml(t) {
-            if (t === null || t === undefined) return '';
-            const div = document.createElement('div');
-            div.textContent = String(t);
-            return div.innerHTML;
-        }
-
-        showToast(msg) {
-            const t = document.getElementById('toast');
-            if (!t) return;
-            t.textContent = msg;
-            t.classList.add('active');
-            clearTimeout(this.toastT);
-            this.toastT = setTimeout(() => t.classList.remove('active'), 3000);
-        }
+        formatDate(d) { if (!d) return ''; return new Date(d + 'T12:00:00').toLocaleDateString(this.getLanguage()); }
+        escapeHtml(t) { if (t === null || t === undefined) return ''; const div = document.createElement('div'); div.textContent = String(t); return div.innerHTML; }
+        showToast(msg) { const t = document.getElementById('toast'); if (!t) return; t.textContent = msg; t.classList.add('active'); clearTimeout(this.toastT); this.toastT = setTimeout(() => t.classList.remove('active'), 3000); }
 
         // ===== DASHBOARD =====
         updateDashboard() {
@@ -1444,13 +649,9 @@
             let inc = 0, exp = 0;
             mt.forEach(t => { if (t.amount > 0) inc += t.amount; else exp += t.amount; });
 
+            // CORREÇÃO v4.4.4: Saldo unificado = APENAS contas correntes (checking)
             let unifiedBalance = 0;
-            this.accounts.forEach(a => {
-                if (a.type === 'checking') unifiedBalance += (parseFloat(a.balance) || 0);
-            });
-            this.investments.forEach(inv => {
-                if (!inv.accountId) unifiedBalance += (inv.current || 0);
-            });
+            this.accounts.forEach(a => { if (a.type === 'checking') unifiedBalance += (parseFloat(a.balance) || 0); });
 
             let creditCardTotal = 0;
             const self = this;
@@ -1493,7 +694,6 @@
 
             const sorted = filtered.slice().sort((a, b) => this.compareTransactions(a, b));
             
-            // NOVO v4.4.0: Aplicar paginação
             let paginated = sorted;
             if (this.pageSize > 0) {
                 const start = (this.currentPage - 1) * this.pageSize;
@@ -1516,18 +716,14 @@
                 const incomeLabel = document.createElement('tr');
                 incomeLabel.innerHTML = '<td colspan="' + (isMobile ? 1 : 7) + '" class="transactions-group-label income"><span>' + this.t('incomeGroup') + ' (' + incomeGroup.length + ')</span><span class="group-total">+ ' + this.formatCurrency(totalIncome) + '</span></td>';
                 fragment.appendChild(incomeLabel);
-                incomeGroup.forEach(t => {
-                    fragment.appendChild(self.createTransactionRow(t, isMobile));
-                });
+                incomeGroup.forEach(t => { fragment.appendChild(self.createTransactionRow(t, isMobile)); });
             }
 
             if (expenseGroup.length > 0) {
                 const expenseLabel = document.createElement('tr');
                 expenseLabel.innerHTML = '<td colspan="' + (isMobile ? 1 : 7) + '" class="transactions-group-label expense"><span>' + this.t('expenseGroup') + ' (' + expenseGroup.length + ')</span><span class="group-total">- ' + this.formatCurrency(Math.abs(totalExpense)) + '</span></td>';
                 fragment.appendChild(expenseLabel);
-                expenseGroup.forEach(t => {
-                    fragment.appendChild(self.createTransactionRow(t, isMobile));
-                });
+                expenseGroup.forEach(t => { fragment.appendChild(self.createTransactionRow(t, isMobile)); });
             }
 
             tbody.innerHTML = '';
@@ -1543,13 +739,6 @@
             const statusClass = t.statusOk ? 'status-done' : 'status-pending';
             const statusText = t.statusOk ? this.t('completed') : this.t('pending');
             const paymentName = this.getPaymentMethodName(t.paymentMethod);
-
-            let recurrenceHtml = '-';
-            if (t.recurrence) {
-                if (t.recurrence.type === 'installment') recurrenceHtml = '<span class="recurrence-badge">📅 ' + (t.recurrence.current || 1) + '/' + (t.recurrence.total || 1) + '</span>';
-                else if (t.recurrence.type === 'monthly') recurrenceHtml = '<span class="recurrence-badge">🔁 Mensal</span>';
-                else if (t.recurrence.type === 'yearly') recurrenceHtml = '<span class="recurrence-badge">📅 Anual</span>';
-            }
 
             const tr = document.createElement('tr');
             tr.className = 'transaction-row';
@@ -1587,39 +776,14 @@
             let va, vb;
 
             switch(col) {
-                case 'date':
-                    va = new Date(a.date).getTime();
-                    vb = new Date(b.date).getTime();
-                    break;
-                case 'description':
-                    va = (a.description || '').toLowerCase();
-                    vb = (b.description || '').toLowerCase();
-                    break;
-                case 'category':
-                    va = this.getCategoryById(a.category).name.toLowerCase();
-                    vb = this.getCategoryById(b.category).name.toLowerCase();
-                    break;
-                case 'account':
-                    const accA = this.getAccountById(a.accountId);
-                    const accB = this.getAccountById(b.accountId);
-                    va = (accA ? accA.name : '').toLowerCase();
-                    vb = (accB ? accB.name : '').toLowerCase();
-                    break;
-                case 'payment':
-                    va = this.getPaymentMethodName(a.paymentMethod).toLowerCase();
-                    vb = this.getPaymentMethodName(b.paymentMethod).toLowerCase();
-                    break;
-                case 'status':
-                    va = a.statusOk ? 1 : 0;
-                    vb = b.statusOk ? 1 : 0;
-                    break;
-                case 'amount':
-                    va = a.amount;
-                    vb = b.amount;
-                    break;
-                default:
-                    va = a.id;
-                    vb = b.id;
+                case 'date': va = new Date(a.date).getTime(); vb = new Date(b.date).getTime(); break;
+                case 'description': va = (a.description || '').toLowerCase(); vb = (b.description || '').toLowerCase(); break;
+                case 'category': va = this.getCategoryById(a.category).name.toLowerCase(); vb = this.getCategoryById(b.category).name.toLowerCase(); break;
+                case 'account': const accA = this.getAccountById(a.accountId); const accB = this.getAccountById(b.accountId); va = (accA ? accA.name : '').toLowerCase(); vb = (accB ? accB.name : '').toLowerCase(); break;
+                case 'payment': va = this.getPaymentMethodName(a.paymentMethod).toLowerCase(); vb = this.getPaymentMethodName(b.paymentMethod).toLowerCase(); break;
+                case 'status': va = a.statusOk ? 1 : 0; vb = b.statusOk ? 1 : 0; break;
+                case 'amount': va = a.amount; vb = b.amount; break;
+                default: va = a.id; vb = b.id;
             }
 
             if (va < vb) return -1 * dir;
@@ -1659,7 +823,6 @@
             const acc = this.getAccountById(accountId);
             if (!acc) return;
             
-            // NOVO v4.4.0: Verificar se bloqueia saldo negativo
             const newBalance = (parseFloat(acc.balance) || 0) + amount;
             if (this.settings.blockNegativeBalance && newBalance < 0 && amount < 0) {
                 this.showToast(this.t('negativeBalanceBlocked'));
@@ -1693,7 +856,7 @@
             const isRecurring = document.getElementById('recurring').checked;
             const signedAmount = this.currentTransactionType === 'expense' ? -Math.abs(amount) : Math.abs(amount);
 
-            // NOVO v4.4.0: Verificar saldo negativo antes de adicionar
+            // Verificar saldo negativo antes de adicionar
             if (this.settings.blockNegativeBalance && signedAmount < 0) {
                 const acc = this.getAccountById(accountId);
                 if (acc) {
@@ -1708,10 +871,14 @@
             if (isRecurring) {
                 const recurrenceType = document.getElementById('recurrenceType').value;
                 const recurrenceCount = parseInt(document.getElementById('recurrenceCount').value);
-                if (recurrenceCount < 2) { this.showToast('❌ ' + this.t('minInstallments')); return; }
+                if (recurrenceCount < 2) { 
+                    this.showToast('❌ ' + this.t('minInstallments')); 
+                    return; 
+                }
                 const startDate = new Date(date + 'T12:00:00');
                 const recurrenceGroupId = this.generateUniqueId();
                 let createdCount = 0;
+                
                 for (let i = 0; i < recurrenceCount; i++) {
                     const transDate = new Date(startDate);
                     if (recurrenceType === 'monthly' || recurrenceType === 'installment') {
@@ -1724,36 +891,73 @@
                         transDate.setDate(startDate.getDate() > lastDay ? lastDay : startDate.getDate());
                     }
                     let transDescription = description;
-                    if (recurrenceType === 'installment') transDescription = description + ' - Parcela ' + (i + 1) + '/' + recurrenceCount;
+                    if (recurrenceType === 'installment') {
+                        transDescription = description + ' - Parcela ' + (i + 1) + '/' + recurrenceCount;
+                    }
                     const uniqueId = this.generateUniqueId() + '_' + i;
                     this.transactions.push({
-                        id: uniqueId, date: transDate.toISOString().split('T')[0], amount: signedAmount,
-                        category: category, description: transDescription, statusOk: statusOk,
-                        paymentMethod: paymentMethod, accountId: accountId,
-                        recurrence: { groupId: recurrenceGroupId, type: recurrenceType, total: recurrenceCount, current: i + 1 }
+                        id: uniqueId, 
+                        date: transDate.toISOString().split('T')[0], 
+                        amount: signedAmount,
+                        category: category, 
+                        description: transDescription, 
+                        statusOk: statusOk,
+                        paymentMethod: paymentMethod, 
+                        accountId: accountId,
+                        recurrence: { 
+                            groupId: recurrenceGroupId, 
+                            type: recurrenceType, 
+                            total: recurrenceCount, 
+                            current: i + 1 
+                        }
                     });
                     createdCount++;
                 }
-                // Atualiza saldo apenas da primeira transação (mês atual)
-                const monthTrans = this.transactions.filter(t => 
-                    t.accountId === accountId && 
-                    t.recurrence && t.recurrence.groupId === recurrenceGroupId &&
-                    new Date(t.date).getMonth() === this.currentMonth.getMonth()
-                );
+                
+                // Atualizar saldo de TODAS as parcelas no mês atual
+                const currentMonth = this.currentMonth.getMonth();
+                const currentYear = this.currentMonth.getFullYear();
+                const monthTrans = this.transactions.filter(t => {
+                    if (t.accountId !== accountId) return false;
+                    if (!t.recurrence || t.recurrence.groupId !== recurrenceGroupId) return false;
+                    const d = new Date(t.date);
+                    return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+                });
+                
                 if (monthTrans.length > 0) {
-                    this.updateAccountBalance(accountId, monthTrans[0].amount);
+                    let monthTotal = 0;
+                    monthTrans.forEach(t => monthTotal += t.amount);
+                    this.updateAccountBalance(accountId, monthTotal);
                 }
-                this.clearCache(); this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge();
-                this.showToast('✅ ' + createdCount + ' ' + this.t('recurringCreated'));
-                closeModal('newTransactionModal'); this.clearForm();
+                
+                this.clearCache(); 
+                this.saveTransactions(); 
+                this.render(); 
+                this.updateCharts(); 
+                this.updateAlertBadge();
                 this.checkNegativeBalance();
+                
+                // CORREÇÃO v4.4.4: Perguntar se quer continuar inserindo
+                askContinueOrClose(
+                    'newTransactionModal',
+                    '✅ ' + createdCount + ' ' + this.t('recurringCreated'),
+                    () => {
+                        this.clearForm();
+                        openModal('newTransactionModal');
+                    }
+                );
                 return;
             }
 
             const transaction = {
-                id: this.generateUniqueId(), date: date, amount: signedAmount,
-                category: category, description: description, statusOk: statusOk,
-                paymentMethod: paymentMethod, accountId: accountId
+                id: this.generateUniqueId(), 
+                date: date, 
+                amount: signedAmount,
+                category: category, 
+                description: description, 
+                statusOk: statusOk,
+                paymentMethod: paymentMethod, 
+                accountId: accountId
             };
             this.transactions.push(transaction);
             const success = this.updateAccountBalance(accountId, signedAmount);
@@ -1761,10 +965,22 @@
                 this.transactions.pop();
                 return;
             }
-            this.clearCache(); this.saveTransactions(); this.render(); this.updateCharts(); this.updateAlertBadge();
-            this.showToast('✅ ' + this.t('transactionAdded'));
-            closeModal('newTransactionModal'); this.clearForm();
+            this.clearCache(); 
+            this.saveTransactions(); 
+            this.render(); 
+            this.updateCharts(); 
+            this.updateAlertBadge();
             this.checkNegativeBalance();
+            
+            // CORREÇÃO v4.4.4: Perguntar se quer continuar inserindo
+            askContinueOrClose(
+                'newTransactionModal',
+                '✅ ' + this.t('transactionAdded'),
+                () => {
+                    this.clearForm();
+                    openModal('newTransactionModal');
+                }
+            );
         }
 
         clearForm() {
@@ -1772,11 +988,14 @@
             if (form) form.reset();
             this.setDefaultDate();
             this.currentTransactionType = 'expense';
-            document.querySelectorAll('#transactionForm .type-btn').forEach(b => b.classList.toggle('active', b.getAttribute('data-type') === 'expense'));
+            document.querySelectorAll('#transactionForm .type-btn').forEach(b => {
+                b.classList.toggle('active', b.getAttribute('data-type') === 'expense');
+            });
             this.filterCategoriesByType('category', 'expense');
             const recurringOptions = document.getElementById('recurringOptions');
             if (recurringOptions) recurringOptions.style.display = 'none';
         }
+
 
         editTransaction(id) {
             const t = this.transactions.find(x => x.id === id);
