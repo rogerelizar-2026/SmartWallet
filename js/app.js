@@ -2749,6 +2749,30 @@
     // ===== INSTÂNCIA GLOBAL =====
     window.smartwallet = new SmartWallet();
 
+ // ===== NOVO v4.4.4: PERGUNTAR SE QUER CONTINUAR INSERINDO =====
+ function askContinueOrClose(modalId, successMessage, onContinue) {
+     const useCustom = typeof showConfirm === 'function';
+     if (useCustom) {
+         showConfirm(
+             '✅ ' + successMessage,
+             'Deseja adicionar outro registro?'
+         ).then(confirmed => {
+             if (confirmed && typeof onContinue === 'function') {
+                 onContinue();
+             } else {
+                 closeModal(modalId);
+             }
+         });
+     } else {
+         // Fallback se showConfirm não existir
+         if (confirm(successMessage + '\n\nDeseja adicionar outro registro?')) {
+             if (typeof onContinue === 'function') onContinue();
+         } else {
+             closeModal(modalId);
+         }
+     }
+ }
+    
     // ===== NOVO v4.4.4: MODAL DE CONFIRMAÇÃO CUSTOM =====
     function showConfirm(title, message) {
         return new Promise((resolve) => {
