@@ -698,7 +698,7 @@ class SmartWallet {
         }
 
         const deleteFromEditBtn = document.getElementById('deleteFromEditBtn');
-        if (deleteFromEditBtn) deleteFromEditBtn.addEventListener('click', () => self.deleteFromEdit());
+        if (deleteFromEditBtn) deleteFromEditBtn.addEventListener('click', () => self.));
 
         const exportCsvBtn = document.getElementById('exportCsvBtn');
         if (exportCsvBtn) exportCsvBtn.addEventListener('click', () => self.exportCSV());
