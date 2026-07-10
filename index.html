@@ -51,40 +51,51 @@
     </div>
 
     <!-- Disclaimer Modal -->
-    <div class="disclaimer-modal" id="disclaimerModal" role="dialog" aria-modal="true" tabindex="-1">
-        <div class="disclaimer-content" tabindex="0">
-            <div class="disclaimer-header">
-                <div class="disclaimer-icon">⚠️</div>
-                <h2 class="disclaimer-title" id="disclaimerTitle">Termos de Uso e Aviso Legal</h2>
-                <p class="text-secondary">Por favor, leia atentamente antes de continuar</p>
-            </div>
-            <div class="disclaimer-body">
-                <h3>📋 Sobre o Smart Wallet</h3>
-                <p>O Smart Wallet é uma ferramenta de <strong>controle financeiro pessoal</strong> desenvolvida para ajudar você a organizar suas finanças de forma simples, segura e inteligente.</p>
-                <h3>🔒 Privacidade e Segurança</h3>
-                <ul>
-                    <li><strong>100% Offline:</strong> Todos os seus dados são armazenados localmente no seu dispositivo.</li>
-                    <li><strong>Sem Cadastro:</strong> Não é necessário criar conta ou fornecer e-mail.</li>
-                    <li><strong>Sem Rastreamento:</strong> Não utilizamos cookies de analytics ou rastreamento.</li>
-                    <li><strong>Controle Total:</strong> Você pode exportar e apagar todos os seus dados a qualquer momento.</li>
-                </ul>
-                <h3>⚠️ Limitações</h3>
-                <ul>
-                    <li><strong>Ferramenta de Apoio:</strong> Não substitui consultoria financeira profissional.</li>
-                    <li><strong>Responsabilidade:</strong> Todas as decisões são do usuário.</li>
-                    <li><strong>Backup:</strong> É responsabilidade do usuário manter backups regulares.</li>
-                </ul>
-                <h3>📜 Propriedade Intelectual</h3>
-                <p>O Smart Wallet foi idealizado e desenvolvido por <strong>RogerElizar™</strong>. Uso gratuito para fins pessoais.</p>
-                <h3>✅ Seu Compromisso</h3>
-                <p>Ao clicar em "Li e Concordo com os Termos", você declara que leu e aceitou os termos.</p>
-            </div>
-            <div class="disclaimer-footer">
-                <div class="disclaimer-timer" id="disclaimerTimer">⏱️ Aguarde <span id="countdown">12</span> segundos para continuar</div>
-                <button class="disclaimer-accept-btn" id="acceptDisclaimerBtn" disabled>✓ Li e Concordo com os Termos</button>
-            </div>
-        </div>
+<div id="disclaimerModal" class="disclaimer-modal fullscreen">
+  <div class="disclaimer-content">
+    <div class="disclaimer-header">
+      <div class="disclaimer-icon">⚠️</div>
+      <h2 class="disclaimer-title">Termos de Uso e Aviso Legal</h2>
+      <p class="disclaimer-subtitle">Por favor, leia atentamente antes de continuar</p>
     </div>
+    <div class="disclaimer-body">
+      <h3>📋 Sobre o Smart Wallet</h3>
+      <p>O Smart Wallet é uma ferramenta de controle financeiro pessoal desenvolvida para ajudar você a organizar suas finanças de forma simples, segura e inteligente.</p>
+
+      <h3>🔒 Privacidade e Segurança</h3>
+      <ul>
+        <li><strong>100% Offline:</strong> Todos os seus dados são armazenados localmente no seu dispositivo.</li>
+        <li><strong>Sem Cadastro:</strong> Não é necessário criar conta ou fornecer e-mail.</li>
+        <li><strong>Sem Rastreamento:</strong> Não utilizamos cookies de analytics ou rastreamento.</li>
+        <li><strong>Controle Total:</strong> Você pode exportar e apagar todos os seus dados a qualquer momento.</li>
+      </ul>
+
+      <h3>⚠️ Limitações</h3>
+      <ul>
+        <li><strong>Ferramenta de Apoio:</strong> Não substitui consultoria financeira profissional.</li>
+        <li><strong>Responsabilidade:</strong> Todas as decisões são do usuário.</li>
+        <li><strong>Backup:</strong> É responsabilidade do usuário manter backups regulares.</li>
+      </ul>
+
+      <h3>📜 Propriedade Intelectual</h3>
+      <p>O Smart Wallet foi idealizado e desenvolvido por RogerElizar™. Uso gratuito para fins pessoais.</p>
+
+      <h3>✅ Seu Compromisso</h3>
+      <p>Ao clicar em "Aceitar e Continuar", você declara que leu e aceitou os termos acima.</p>
+
+      <!-- Checkbox novo -->
+      <div class="disclaimer-checkbox-group">
+        <input type="checkbox" id="acceptTermsCheckbox">
+        <label for="acceptTermsCheckbox">Li e concordo com os Termos de Uso e Aviso Legal</label>
+      </div>
+    </div>
+    <div class="disclaimer-footer">
+      <button id="acceptDisclaimerBtn" class="disclaimer-accept-btn" disabled>
+        ✅ Aceitar e Continuar
+      </button>
+    </div>
+  </div>
+</div>
 
     <!-- Quote Modal -->
     <div class="quote-modal" id="quoteModal" role="dialog" aria-modal="true" tabindex="-1">
