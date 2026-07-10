@@ -646,13 +646,7 @@ if (acceptCheckbox && acceptBtn) {
         }
     });
 }
-        const acceptCheckbox = document.getElementById('acceptTermsCheckbox');
-        const acceptBtn = document.getElementById('acceptDisclaimerBtn');
-        if (acceptCheckbox && acceptBtn) {
-            acceptCheckbox.addEventListener('change', () => {
-            acceptBtn.disabled = !acceptCheckbox.checked;
-            });
-        }
+
         document.querySelectorAll('[data-close-modal]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const modalId = btn.dataset.closeModal;
