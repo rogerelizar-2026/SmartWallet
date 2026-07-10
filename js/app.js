@@ -320,6 +320,7 @@
             this.categories = [];
             this.accounts = [];
             this.cards = [];
+            this.investments = [];
             this.cardModalMonth = new Date();
             this.cardModalMonth.setDate(1);
             this.currentTransactionType = 'expense';
@@ -364,6 +365,8 @@
                 if (a) this.accounts = JSON.parse(a);
                 const cd = localStorage.getItem('smartwallet_cards');
                 if (cd) this.cards = JSON.parse(cd);
+                const inv = localStorage.getItem('smartwallet_investments');
+                if (inv) this.investments = JSON.parse(inv);
                 const dm = localStorage.getItem('smartwallet_dark');
                 if (dm !== null) this.darkMode = dm === 'true';
                 const pv = localStorage.getItem('smartwallet_privacy');
@@ -379,7 +382,9 @@
         saveCategories() { try { localStorage.setItem('smartwallet_categories', JSON.stringify(this.categories)); } catch(e) {} }
         saveAccounts() { try { localStorage.setItem('smartwallet_accounts', JSON.stringify(this.accounts)); } catch(e) {} }
         saveCards() { try { localStorage.setItem('smartwallet_cards', JSON.stringify(this.cards)); } catch(e) {} }
-
+        
+        saveInvestments() { try { localStorage.setItem('smartwallet_investments', JSON.stringify(this.investments)); } catch(e) {} }
+        
         clearCache() { this._cache = {}; }
 
         // ===== CONFIGURAÇÕES =====
