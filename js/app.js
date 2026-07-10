@@ -2837,89 +2837,98 @@ if (acceptCheckbox && acceptBtn) {
         setTimeout(() => { printWindow.focus(); printWindow.print(); }, 300);
     }
 
-    exportBackup() {
-        if (this.isSaving) return;
+// ===== SISTEMA DE BACKUP (Exportar & Importar) =====
+async exportBackup() {
+    try {
         this.isSaving = true;
-        try {
-            const backup = {
-                version: '4.4.4',
-                exportDate: new Date().toISOString(),
-                appName: 'Smart Wallet',
-                language: this.getLanguage(),
-                currency: this.getCurrency(),
-                transactions: this.transactions,
-                categories: this.categories,
-                accounts: this.accounts,
-                cards: this.cards,
-                investments: this.investments,
-                darkMode: this.darkMode,
-                privacyOn: this.privacyOn,
-                settings: this.settings
-            };
-            const jsonString = JSON.stringify(backup, null, 2);
-            const blob = new Blob(['\ufeff' + jsonString], { type: 'application/json;charset=utf-8;' });
-            const fileName = this.generateTimestamp() + '_backup.json';
-            saveFileWithPicker(blob, fileName, 'application/json').then(result => {
-                if (result === 'saved' || result === 'downloaded') {
-                    localStorage.setItem('smartwallet_last_backup', Date.now().toString());
-                    this.showToast('✅ ' + this.t('backupExported'));
-                    this.updateSettingsUI();
-                }
-            }).catch(e => this.showToast('❌ ' + e.message))
-            .finally(() => { this.isSaving = false; });
-        } catch (e) {
-            this.isSaving = false;
-            this.showToast('❌ Erro: ' + e.message);
+        const backupData = {
+            version: '4.4.4',
+            exportDate: new Date().toISOString(),
+            transactions: this.transactions,
+            categories: this.categories,
+            accounts: this.accounts,
+            cards: this.cards,
+            investments: this.investments,
+            settings: this.settings
+        };
+
+        const jsonStr = JSON.stringify(backupData, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+        const fileName = `SmartWallet-Backup-${dateStr}.json`;
+
+        const result = await saveFileWithPicker(blob, fileName, 'application/json');
+        if (result === 'saved' || result === 'downloaded') {
+            localStorage.setItem('smartwallet_last_backup', Date.now().toString());
+            this.showToast('✅ Backup exportado com sucesso!');
+            this.updateSettingsUI();
         }
+    } catch (error) {
+        console.error('Erro ao exportar backup:', error);
+        this.showToast('❌ Falha ao exportar: ' + error.message);
+    } finally {
+        this.isSaving = false;
     }
+}
 
 async importBackup() {
-    if (!window._pendingBackupData) { this.showToast('⚠️ Selecione um arquivo'); return; }
+    if (!window._pendingBackupData) {
+        this.showToast('⚠️ Selecione um arquivo de backup');
+        return;
+    }
     try {
         let cleanData = window._pendingBackupData;
         if (cleanData.charCodeAt(0) === 0xFEFF) cleanData = cleanData.substring(1);
         cleanData = cleanData.trim();
-        if (!cleanData) { this.showToast('⚠️ Arquivo vazio!'); return; }
-        
-        // CORREÇÃO: Remover espaços extras das chaves JSON
+        if (!cleanData) { this.showToast('⚠️ Arquivo vazio'); return; }
+
+        // CORREÇÃO: Remove espaços extras nas chaves JSON
         cleanData = cleanData.replace(/"\s*:/g, '":').replace(/:\s*"/g, ':"');
         
         const data = JSON.parse(cleanData);
         if (!data || typeof data !== 'object') { this.showToast('❌ Estrutura inválida'); return; }
-        
-        const confirmed = await showConfirm('⚠️ Substituir TODOS os dados?', 'Esta ação não pode ser desfeita.');
+
+        const confirmed = await showConfirm('⚠️ Restaurar Backup?', 'Isso substituirá TODOS os seus dados atuais. Esta ação não pode ser desfeita.');
         if (!confirmed) return;
-        
+
         this.transactions = Array.isArray(data.transactions) ? data.transactions : [];
         this.categories = Array.isArray(data.categories) ? data.categories : this.categories;
         this.accounts = Array.isArray(data.accounts) ? data.accounts : [];
         this.cards = Array.isArray(data.cards) ? data.cards : [];
         this.investments = Array.isArray(data.investments) ? data.investments : [];
-            if (typeof data.darkMode === 'boolean') this.darkMode = data.darkMode;
-            if (typeof data.privacyOn === 'boolean') this.privacyOn = data.privacyOn;
-            if (data.settings) this.settings = { ...this.settings, ...data.settings };
-            if (typeof data.language === 'string') localStorage.setItem('smartwallet_language', data.language);
-            if (typeof data.currency === 'string') localStorage.setItem('smartwallet_currency', data.currency);
-            this.pageSize = this.settings.pageSize || 20;
-            this.clearCache(); this.saveTransactions(); this.saveCategories();
-            this.saveAccounts(); this.saveCards(); this.saveInvestments();
-            this.saveSettings();
-            localStorage.setItem('smartwallet_dark', this.darkMode);
-            localStorage.setItem('smartwallet_privacy', this.privacyOn);
-            this.populateCategorySelects(); this.populatePaymentMethodSelects();
-            this.populateAccountSelects(); this.applyTheme(); this.applyPrivacy();
-            this.applyLanguage(); this.applyCurrency();
-            this.currentPage = 1;
-            this.render(); this.updateCharts(); this.updateAlertBadge();
-            this.checkNegativeBalance();
-            closeModal('importBackupModal');
-            this.showToast('✅ Backup restaurado!');
-            window._pendingBackupData = null;
-        } catch (e) {
-            this.showToast('⚠️ Erro: ' + e.message);
-        }
-    }
+        if (data.settings) this.settings = { ...this.settings, ...data.settings };
 
+        // Salva no localStorage
+        this.saveTransactions();
+        this.saveCategories();
+        this.saveAccounts();
+        this.saveCards();
+        this.saveInvestments();
+        localStorage.setItem('smartwallet_settings', JSON.stringify(this.settings));
+
+        this.clearCache();
+        this.populateCategorySelects();
+        this.populatePaymentMethodSelects();
+        this.populateAccountSelects();
+        this.applyTheme();
+        this.applyPrivacy();
+        this.applyLanguage();
+        this.applyCurrency();
+        
+        this.currentPage = 1;
+        this.render();
+        this.updateCharts();
+        this.updateAlertBadge();
+        this.checkNegativeBalance();
+
+        closeModal('importBackupModal');
+        this.showToast('✅ Backup restaurado com sucesso!');
+        window._pendingBackupData = null;
+    } catch (error) {
+        console.error('Erro ao importar backup:', error);
+        this.showToast('⚠️ Erro ao importar: ' + error.message);
+    }
+}
     importCSV() {
         if (!window._pendingCsvData) { this.showToast('Selecione um arquivo CSV'); return; }
         const replace = document.getElementById('csvReplaceData').checked;
