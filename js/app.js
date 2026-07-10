@@ -634,7 +634,7 @@ class SmartWallet {
         }
 
         // Listener do checkbox do disclaimer
-const acceptCheckbox = document.getElementById('acceptTermsCheckbox');
+        const acceptCheckbox = document.getElementById('acceptTermsCheckbox');
 const acceptBtn = document.getElementById('acceptDisclaimerBtn');
 if (acceptCheckbox && acceptBtn) {
     acceptCheckbox.addEventListener('change', () => {
@@ -646,14 +646,6 @@ if (acceptCheckbox && acceptBtn) {
         }
     });
 }
-
-        document.querySelectorAll('[data-close-modal]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const modalId = btn.dataset.closeModal;
-                closeModal(modalId);
-            });
-        });
-
         const acceptCheckbox = document.getElementById('acceptTermsCheckbox');
         const acceptBtn = document.getElementById('acceptDisclaimerBtn');
         if (acceptCheckbox && acceptBtn) {
@@ -661,6 +653,12 @@ if (acceptCheckbox && acceptBtn) {
             acceptBtn.disabled = !acceptCheckbox.checked;
             });
         }
+        document.querySelectorAll('[data-close-modal]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const modalId = btn.dataset.closeModal;
+                closeModal(modalId);
+            });
+        });
         
         document.querySelectorAll('.info-item[data-action], .dropdown-item[data-action]').forEach(item => {
             item.addEventListener('click', () => {
