@@ -1937,9 +1937,10 @@ class SmartWallet {
         this.checkNegativeBalance();
     }
 
-    deleteFromEdit() {
-        if (!this.currentEditId) return;
-        if (!confirm('Excluir esta transação?')) return;
+     async deleteFromEdit() {
+         if (!this.currentEditId) return;
+         const confirmed = await showConfirm('Excluir esta transação?', 'Esta ação não pode ser desfeita.');
+         if (!confirmed) return;
         const t = this.transactions.find(x => x.id === this.currentEditId);
         if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
         this.transactions = this.transactions.filter(x => x.id !== this.currentEditId);
@@ -1953,8 +1954,9 @@ class SmartWallet {
         this.checkNegativeBalance();
     }
 
-    deleteTransaction(id) {
-        if (!confirm('Excluir esta transação?')) return;
+     async deleteTransaction(id) {
+         const confirmed = await showConfirm('Excluir esta transação?', 'Esta ação não pode ser desfeita.');
+         if (!confirmed) return;
         const t = this.transactions.find(x => x.id === id);
         if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
         this.transactions = this.transactions.filter(x => x.id !== id);
@@ -2358,47 +2360,47 @@ class SmartWallet {
          }
      }
 
-    async importBackup() {
-        if (!window._pendingBackupData) { this.showToast('⚠️ Selecione um arquivo'); return; }
-        try {
-            let cleanData = window._pendingBackupData;
-            if (cleanData.charCodeAt(0) === 0xFEFF) cleanData = cleanData.substring(1);
-            cleanData = cleanData.trim();
-            if (!cleanData) { this.showToast('⚠️ Arquivo vazio!'); return; }
-            const data = JSON.parse(cleanData);
-            if (!data || typeof data !== 'object') { this.showToast('❌ Estrutura inválida'); return; }
-            const confirmed = await showConfirm('⚠️ Substituir TODOS os dados?', 'Esta ação não pode ser desfeita.');
-            if (!confirmed) return;
-            this.transactions = Array.isArray(data.transactions) ? data.transactions : [];
-            this.categories = Array.isArray(data.categories) ? data.categories : this.categories;
-            this.accounts = Array.isArray(data.accounts) ? data.accounts : [];
-            this.cards = Array.isArray(data.cards) ? data.cards : [];
-            this.investments = Array.isArray(data.investments) ? data.investments : [];
-            if (typeof data.darkMode === 'boolean') this.darkMode = data.darkMode;
-            if (typeof data.privacyOn === 'boolean') this.privacyOn = data.privacyOn;
-            if (data.settings) this.settings = { ...this.settings, ...data.settings };
-            if (typeof data.language === 'string') localStorage.setItem('smartwallet_language', data.language);
-            if (typeof data.currency === 'string') localStorage.setItem('smartwallet_currency', data.currency);
-            this.pageSize = this.settings.pageSize || 20;
-            this.clearCache(); this.saveTransactions(); this.saveCategories();
-            this.saveAccounts(); this.saveCards(); this.saveInvestments();
-            this.saveSettings();
-            localStorage.setItem('smartwallet_dark', this.darkMode);
-            localStorage.setItem('smartwallet_privacy', this.privacyOn);
-            this.populateCategorySelects(); this.populatePaymentMethodSelects();
-            this.populateAccountSelects(); this.applyTheme(); this.applyPrivacy();
-            this.applyLanguage(); this.applyCurrency();
-            this.currentPage = 1;
-            this.render(); this.updateCharts(); this.updateAlertBadge();
-            this.checkNegativeBalance();
-            closeModal('importBackupModal');
-            this.showToast('✅ Backup restaurado!');
-            window._pendingBackupData = null;
-        } catch (e) {
-            this.showToast('⚠️ Erro: ' + e.message);
-        }
-    }
-
+     async importBackup() {
+         if (!window._pendingBackupData) { this.showToast('️ Selecione um arquivo'); return; }
+         try {
+             let cleanData = window._pendingBackupData;
+             if (cleanData.charCodeAt(0) === 0xFEFF) cleanData = cleanData.substring(1);
+             cleanData = cleanData.trim();
+             if (!cleanData) { this.showToast('⚠️ Arquivo vazio!'); return; }
+             const data = JSON.parse(cleanData);
+             if (!data || typeof data !== 'object') { this.showToast('❌ Estrutura inválida'); return; }
+             const confirmed = await showConfirm('️ Substituir TODOS os dados?', 'Esta ação não pode ser desfeita.');
+             if (!confirmed) return;
+             this.transactions = Array.isArray(data.transactions) ? data.transactions : [];
+             this.categories = Array.isArray(data.categories) ? data.categories : this.categories;
+             this.accounts = Array.isArray(data.accounts) ? data.accounts : [];
+             this.cards = Array.isArray(data.cards) ? data.cards : [];
+             this.investments = Array.isArray(data.investments) ? data.investments : [];
+             if (typeof data.darkMode === 'boolean') this.darkMode = data.darkMode;
+             if (typeof data.privacyOn === 'boolean') this.privacyOn = data.privacyOn;
+             if (data.settings) this.settings = { ...this.settings, ...data.settings };
+             if (typeof data.language === 'string') localStorage.setItem('smartwallet_language', data.language);
+             if (typeof data.currency === 'string') localStorage.setItem('smartwallet_currency', data.currency);
+             this.pageSize = this.settings.pageSize || 20;
+             this.clearCache(); this.saveTransactions(); this.saveCategories();
+             this.saveAccounts(); this.saveCards(); this.saveInvestments();
+             this.saveSettings();
+             localStorage.setItem('smartwallet_dark', this.darkMode);
+             localStorage.setItem('smartwallet_privacy', this.privacyOn);
+             this.populateCategorySelects(); this.populatePaymentMethodSelects();
+             this.populateAccountSelects(); this.applyTheme(); this.applyPrivacy();
+             this.applyLanguage(); this.applyCurrency();
+             this.currentPage = 1;
+             this.render(); this.updateCharts(); this.updateAlertBadge();
+             this.checkNegativeBalance();
+             closeModal('importBackupModal');
+             this.showToast('✅ Backup restaurado!');
+             window._pendingBackupData = null;
+         } catch (e) {
+             this.showToast('⚠️ Erro: ' + e.message);
+         }
+     }
+    
     importCSV() {
         if (!window._pendingCsvData) { this.showToast('Selecione um arquivo CSV'); return; }
         const replace = document.getElementById('csvReplaceData').checked;
@@ -2471,11 +2473,11 @@ class SmartWallet {
         return result;
     }
 
-    async clearAllData(skipConfirm = false) {
-        if (!skipConfirm) {
-            const confirmed = await showConfirm('Tem certeza?', 'Esta ação é IRREVERSÍVEL!');
-            if (!confirmed) return;
-        }
+     async clearAllData(skipConfirm = false) {
+         if (!skipConfirm) {
+             const confirmed = await showConfirm('Tem certeza?', 'Esta ação é IRREVERSÍVEL!');
+             if (!confirmed) return;
+         }
         this.transactions = [];
         this.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
         this.accounts = [];
@@ -2527,9 +2529,9 @@ class SmartWallet {
         this.showToast(id ? '✅ Conta atualizada!' : '✅ Conta cadastrada!');
     }
 
-    async deleteAccount(id) {
-        const confirmed = await showConfirm('Excluir conta?', 'Esta ação não pode ser desfeita.');
-        if (!confirmed) return;
+     async deleteAccount(id) {
+         const confirmed = await showConfirm('Excluir esta conta?', 'Esta ação não pode ser desfeita.');
+         if (!confirmed) return;
         this.accounts = this.accounts.filter(a => a.id !== id);
         this.clearCache(); this.saveAccounts();
         this.populateAccountSelects(); this.renderAccountsList(); this.render();
@@ -3050,17 +3052,17 @@ class SmartWallet {
         }
     }
 
-    async deleteTransactionSwipe(id) {
-        const confirmed = await showConfirm('Excluir transação?', 'Esta ação não pode ser desfeita.');
-        if (!confirmed) return;
-        const t = this.transactions.find(x => String(x.id) === String(id));
-        if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
-        this.transactions = this.transactions.filter(x => String(x.id) !== String(id));
-        this.clearCache(); this.saveTransactions();
-        this.render(); this.updateCharts(); this.updateAlertBadge();
-        this.checkNegativeBalance();
-        this.showToast('🗑️ Excluída!');
-    }
+     async deleteTransactionSwipe(id) {
+         const confirmed = await showConfirm('Excluir esta transação?', 'Esta ação não pode ser desfeita.');
+         if (!confirmed) return;
+         const t = this.transactions.find(x => String(x.id) === String(id));
+         if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+         this.transactions = this.transactions.filter(x => String(x.id) !== String(id));
+         this.clearCache(); this.saveTransactions();
+         this.render(); this.updateCharts(); this.updateAlertBadge();
+         this.checkNegativeBalance();
+         this.showToast('🗑️ Excluída!');
+     }
 
     // ===== IMPRESSÃO DO MANUAL =====
     printManual() {
