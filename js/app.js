@@ -633,6 +633,20 @@ class SmartWallet {
             });
         }
 
+        // Listener do checkbox do disclaimer
+const acceptCheckbox = document.getElementById('acceptTermsCheckbox');
+const acceptBtn = document.getElementById('acceptDisclaimerBtn');
+if (acceptCheckbox && acceptBtn) {
+    acceptCheckbox.addEventListener('change', () => {
+        acceptBtn.disabled = !acceptCheckbox.checked;
+        if (acceptCheckbox.checked) {
+            acceptBtn.classList.add('enabled');
+        } else {
+            acceptBtn.classList.remove('enabled');
+        }
+    });
+}
+
         document.querySelectorAll('[data-close-modal]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const modalId = btn.dataset.closeModal;
@@ -640,6 +654,14 @@ class SmartWallet {
             });
         });
 
+        const acceptCheckbox = document.getElementById('acceptTermsCheckbox');
+        const acceptBtn = document.getElementById('acceptDisclaimerBtn');
+        if (acceptCheckbox && acceptBtn) {
+            acceptCheckbox.addEventListener('change', () => {
+            acceptBtn.disabled = !acceptCheckbox.checked;
+            });
+        }
+        
         document.querySelectorAll('.info-item[data-action], .dropdown-item[data-action]').forEach(item => {
             item.addEventListener('click', () => {
                 const action = item.dataset.action;
@@ -4110,24 +4132,25 @@ window.copyPixKey = function() {
 
 // ===== DISCLAIMER & QUOTE =====
 function initDisclaimer() {
-    let countdown = 12;
-    const timerEl = document.getElementById('disclaimerTimer');
+    const checkbox = document.getElementById('acceptTermsCheckbox');
     const btnEl = document.getElementById('acceptDisclaimerBtn');
-    if (!timerEl || !btnEl) return;
-    btnEl.classList.remove('enabled');
+    
+    if (!checkbox || !btnEl) return;
+    
+    // Começa com o botão desabilitado
     btnEl.disabled = true;
-    timerEl.innerHTML = '⏱️ Aguarde <span id="countdown">' + countdown + '</span> segundos';
-    const interval = setInterval(() => {
-        countdown--;
-        const span = document.getElementById('countdown');
-        if (span) span.textContent = countdown;
-        if (countdown <= 0) {
-            clearInterval(interval);
-            btnEl.classList.add('enabled');
+    btnEl.classList.remove('enabled');
+    
+    // Listener do checkbox
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
             btnEl.disabled = false;
-            timerEl.innerHTML = '✅ Pode aceitar os termos';
+            btnEl.classList.add('enabled');
+        } else {
+            btnEl.disabled = true;
+            btnEl.classList.remove('enabled');
         }
-    }, 1000);
+    });
 }
 
 function showQuoteModal() {
