@@ -442,12 +442,11 @@ class SmartWallet {
     applyCurrency() { this.clearCache(); this.render(); this.updateCharts(); this.updateCurrencySelectorVisibility(); }
     updateCurrencySelectorVisibility() { const lang = this.getLanguage(); const currencyItem = document.getElementById('currencyMenuItem'); if (currencyItem) currencyItem.style.display = lang === 'en-US' ? 'flex' : 'none'; }
 
-    formatCurrency(value) {
-        const currency = this.getCurrency();
-      
-        const data = CURRENCIES[currency];
-        return new Intl.NumberFormat(data.locale, { style: 'currency', currency: data.code, minimumFractionDigits: 2, maximumFractionDigits: 2, notation: 'standard' }).format(value || 0);
-    }
+     formatCurrency(value) {
+         const currency = this.getCurrency();
+         const data = CURRENCIES[currency];
+         return new Intl.NumberFormat(data.locale, { style: 'currency', currency: data.code, minimumFractionDigits: 2, maximumFractionDigits: 2, notation: 'standard' }).format(value || 0);
+     }
       // ===== INICIALIZAÇÃO =====
     init() {
         console.log('✅ Smart Wallet v4.4.4 inicializado');
@@ -1015,7 +1014,7 @@ class SmartWallet {
                 paymentMethod: 'pix',
                 accountId: 'acc1'
             });
-            this.transactions.push({
+        this.transactions.push({
                 id: this.generateUniqueId() + '_alg_' + m,
                 date: new Date(month.getFullYear(), month.getMonth(), 10).toISOString().split('T')[0],
                 amount: -1500,
@@ -2478,7 +2477,7 @@ class SmartWallet {
              const confirmed = await showConfirm('Tem certeza?', 'Esta ação é IRREVERSÍVEL!');
              if (!confirmed) return;
          }
-        this.transactions = [];
+        ;
         this.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
         this.accounts = [];
         this.cards = [];
