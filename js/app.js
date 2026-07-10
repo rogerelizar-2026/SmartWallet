@@ -2839,33 +2839,71 @@ if (acceptCheckbox && acceptBtn) {
 
 // ===== SISTEMA DE BACKUP (Exportar & Importar) =====
 async exportBackup() {
+    if (this.isSaving) {
+        console.log('[SmartWallet] Backup já em andamento');
+        return;
+    }
+    
+    this.isSaving = true;
+    console.log('[SmartWallet] Iniciando exportação de backup...');
+    
     try {
-        this.isSaving = true;
-        const backupData = {
+        const backup = {
             version: '4.4.4',
             exportDate: new Date().toISOString(),
+            appName: 'Smart Wallet',
+            language: this.getLanguage(),
+            currency: this.getCurrency(),
             transactions: this.transactions,
             categories: this.categories,
             accounts: this.accounts,
             cards: this.cards,
             investments: this.investments,
+            darkMode: this.darkMode,
+            privacyOn: this.privacyOn,
             settings: this.settings
         };
 
-        const jsonStr = JSON.stringify(backupData, null, 2);
-        const blob = new Blob([jsonStr], { type: 'application/json' });
-        const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+        const jsonString = JSON.stringify(backup, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8;' });
+        
+        const now = new Date();
+        const dateStr = now.getFullYear() + 
+            String(now.getMonth() + 1).padStart(2, '0') + 
+            String(now.getDate()).padStart(2, '0') +
+            String(now.getHours()).padStart(2, '0') +
+            String(now.getMinutes()).padStart(2, '0') +
+            String(now.getSeconds()).padStart(2, '0');
+        
         const fileName = `SmartWallet-Backup-${dateStr}.json`;
+        
+        console.log('[SmartWallet] Arquivo:', fileName);
+        console.log('[SmartWallet] Tamanho:', jsonString.length, 'bytes');
 
-        const result = await saveFileWithPicker(blob, fileName, 'application/json');
-        if (result === 'saved' || result === 'downloaded') {
-            localStorage.setItem('smartwallet_last_backup', Date.now().toString());
-            this.showToast('✅ Backup exportado com sucesso!');
-            this.updateSettingsUI();
-        }
+        // Método universal que funciona em TODOS os navegadores e dispositivos
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.style.display = 'none';
+        
+        document.body.appendChild(a);
+        a.click();
+        
+        // Limpeza após download
+        setTimeout(() => {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            console.log('[SmartWallet] Download concluído');
+        }, 100);
+
+        localStorage.setItem('smartwallet_last_backup', Date.now().toString());
+        this.showToast('✅ Backup exportado com sucesso!');
+        this.updateSettingsUI();
+        
     } catch (error) {
-        console.error('Erro ao exportar backup:', error);
-        this.showToast('❌ Falha ao exportar: ' + error.message);
+        console.error('[SmartWallet] Erro ao exportar backup:', error);
+        this.showToast('❌ Erro ao exportar: ' + error.message);
     } finally {
         this.isSaving = false;
     }
