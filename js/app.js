@@ -526,7 +526,7 @@ class SmartWallet {
                 });
             }
         });
-
+    
         const recurringCheckbox = document.getElementById('recurring');
         if (recurringCheckbox) {
             recurringCheckbox.addEventListener('change', function() {
@@ -2368,7 +2368,7 @@ class SmartWallet {
              if (!cleanData) { this.showToast('⚠️ Arquivo vazio!'); return; }
              const data = JSON.parse(cleanData);
              if (!data || typeof data !== 'object') { this.showToast('❌ Estrutura inválida'); return; }
-             const confirmed = await showConfirm('⚠️ Substituir TODOS os dados?', 'Esta ação não pode ser desfeita.');
+             const confirmed = await showConfirm('️ Substituir TODOS os dados?', 'Esta ação não pode ser desfeita.');
              if (!confirmed) return;
              this.transactions = Array.isArray(data.transactions) ? data.transactions : [];
              this.categories = Array.isArray(data.categories) ? data.categories : this.categories;
