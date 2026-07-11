@@ -2880,7 +2880,7 @@ async exportBackup() {
         console.log('[SmartWallet] Arquivo:', fileName);
         console.log('[SmartWallet] Tamanho:', jsonString.length, 'bytes');
 
-        // Método universal que funciona em TODOS os navegadores e dispositivos
+        // Método universal
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -2889,6 +2889,22 @@ async exportBackup() {
         
         document.body.appendChild(a);
         a.click();
+
+        // 1. LIMPEZA: Remove o link do DOM e libera a memória da URL
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        console.log('[SmartWallet] Backup exportado com sucesso!');
+
+    } catch (error) {
+        // 2. TRATAMENTO DE ERRO: Caso algo dê errado na geração do JSON
+        console.error('[SmartWallet] Erro ao exportar backup:', error);
+        alert('Ocorreu um erro ao gerar o backup.');
+    } finally {
+        // 3. DESTRAVA O BOTÃO: Isso garante que o botão volte a funcionar, dando erro ou não
+        this.isSaving = false;
+    }
+}
         
         // Limpeza após download
         setTimeout(() => {
