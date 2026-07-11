@@ -2905,13 +2905,6 @@ async exportBackup() {
         this.isSaving = false;
     }
 }
-        
-        // Limpeza após download
-        setTimeout(() => {
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            console.log('[SmartWallet] Download concluído');
-        }, 100);
 
         localStorage.setItem('smartwallet_last_backup', Date.now().toString());
         this.showToast('✅ Backup exportado com sucesso!');
