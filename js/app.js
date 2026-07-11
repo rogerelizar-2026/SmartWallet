@@ -2907,7 +2907,7 @@ async exportBackup() {
 }
         
         // Limpeza após download
-        setTimeout(() => {
+        setTimeout() => {
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
             console.log('[SmartWallet] Download concluído');
