@@ -249,11 +249,15 @@ const CURRENCIES = {
 };
 
 // ===== CORREÇÃO v4.4.4: Função para ler datas corretamente (sem bug de fuso horário) =====
-   function parseDate(dateString) {
-       if (!dateString) return new Date();
-       const [year, month, day] = dateString.split('T')[0].split('-').map(Number);
-       return new Date(year, month - 1, day);
-   }
+function parseDate(dateString) {
+    if (!dateString) return new Date();
+    const parts = dateString.split('-');
+    if (parts.length !== 3) return new Date(dateString);
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    return new Date(year, month, day);
+}
 
 // ===== CORREÇÃO v4.4.4: Função robusta para download em todos os dispositivos =====
 async function saveFileWithPicker(blob, suggestedName, mimeType) {
@@ -479,11 +483,6 @@ class SmartWallet {
             this.initSwipeGestures();
             this.swipeInitialized = true;
         }
-                   // Ler atalhos do PWA (Manifest Shortcuts)
-           const urlParams = new URLSearchParams(window.location.search);
-           const action = urlParams.get('action');
-           if (action === 'expense') setTimeout(() => window.openExpenseModal(), 500);
-           else if (action === 'income') setTimeout(() => window.openIncomeModal(), 500);
     }
 
     applyDemoBadge() {
@@ -495,10 +494,10 @@ class SmartWallet {
         }
         if (infoDemoBtn && infoDemoText) {
             if (this.demoMode) {
-                infoDemoText.textContent = 'Encerrar Demonstração';
+                infoDemoText.textContent = '🔴 Encerrar Demonstração';
                 infoDemoBtn.classList.add('demo-active');
             } else {
-                infoDemoText.textContent = 'Modo Demonstração';
+                infoDemoText.textContent = '🎯 Modo Demonstração';
                 infoDemoBtn.classList.remove('demo-active');
             }
         }
@@ -633,27 +632,13 @@ class SmartWallet {
             });
         }
 
-        // Listener do checkbox do disclaimer
-        const acceptCheckbox = document.getElementById('acceptTermsCheckbox');
-const acceptBtn = document.getElementById('acceptDisclaimerBtn');
-if (acceptCheckbox && acceptBtn) {
-    acceptCheckbox.addEventListener('change', () => {
-        acceptBtn.disabled = !acceptCheckbox.checked;
-        if (acceptCheckbox.checked) {
-            acceptBtn.classList.add('enabled');
-        } else {
-            acceptBtn.classList.remove('enabled');
-        }
-    });
-}
-
         document.querySelectorAll('[data-close-modal]').forEach(btn => {
             btn.addEventListener('click', () => {
                 const modalId = btn.dataset.closeModal;
                 closeModal(modalId);
             });
         });
-        
+
         document.querySelectorAll('.info-item[data-action], .dropdown-item[data-action]').forEach(item => {
             item.addEventListener('click', () => {
                 const action = item.dataset.action;
@@ -993,7 +978,7 @@ if (acceptCheckbox && acceptBtn) {
     async toggleDemoMode() {
         if (this.demoMode) {
             const confirmed = await showConfirm(
-                'Encerrar Demonstração?',
+                '⚠️ Encerrar Demonstração?',
                 'Encerrar modo demonstração e limpar todos os dados?<br><br>Esta ação não pode ser desfeita.'
             );
             if (confirmed) {
@@ -1005,7 +990,7 @@ if (acceptCheckbox && acceptBtn) {
             }
         } else {
             const confirmed = await showConfirm(
-                'Carregar Demonstração?',
+                '🎯 Carregar Demonstração?',
                 'Carregar dados de exemplo?<br><br>Seus dados atuais serão substituídos pelos dados de demonstração.<br><br>Recomendamos fazer backup antes de continuar.'
             );
             if (confirmed) {
@@ -2206,7 +2191,7 @@ if (acceptCheckbox && acceptBtn) {
     async toggleDemoMode() {
         if (this.demoMode) {
             const confirmed = await showConfirm(
-                '️Encerrar Demonstração?',
+                '️ Encerrar Demonstração?',
                 'Encerrar modo demonstração e limpar todos os dados?<br><br>Esta ação não pode ser desfeita.'
             );
             if (confirmed) {
@@ -2837,146 +2822,83 @@ if (acceptCheckbox && acceptBtn) {
         setTimeout(() => { printWindow.focus(); printWindow.print(); }, 300);
     }
 
-// ===== SISTEMA DE BACKUP (Exportar & Importar) =====
-async exportBackup() {
-    if (this.isSaving) {
-        console.log('[SmartWallet] Backup já em andamento');
-        return;
+    exportBackup() {
+        if (this.isSaving) return;
+        this.isSaving = true;
+        try {
+            const backup = {
+                version: '4.4.4',
+                exportDate: new Date().toISOString(),
+                appName: 'Smart Wallet',
+                language: this.getLanguage(),
+                currency: this.getCurrency(),
+                transactions: this.transactions,
+                categories: this.categories,
+                accounts: this.accounts,
+                cards: this.cards,
+                investments: this.investments,
+                darkMode: this.darkMode,
+                privacyOn: this.privacyOn,
+                settings: this.settings
+            };
+            const jsonString = JSON.stringify(backup, null, 2);
+            const blob = new Blob(['\ufeff' + jsonString], { type: 'application/json;charset=utf-8;' });
+            const fileName = this.generateTimestamp() + '_backup.json';
+            saveFileWithPicker(blob, fileName, 'application/json').then(result => {
+                if (result === 'saved' || result === 'downloaded') {
+                    localStorage.setItem('smartwallet_last_backup', Date.now().toString());
+                    this.showToast('✅ ' + this.t('backupExported'));
+                    this.updateSettingsUI();
+                }
+            }).catch(e => this.showToast('❌ ' + e.message))
+            .finally(() => { this.isSaving = false; });
+        } catch (e) {
+            this.isSaving = false;
+            this.showToast('❌ Erro: ' + e.message);
+        }
     }
-    
-    this.isSaving = true;
-    console.log('[SmartWallet] Iniciando exportação de backup...');
-    
-    try {
-        const backup = {
-            version: '4.4.4',
-            exportDate: new Date().toISOString(),
-            appName: 'Smart Wallet',
-            language: this.getLanguage(),
-            currency: this.getCurrency(),
-            transactions: this.transactions,
-            categories: this.categories,
-            accounts: this.accounts,
-            cards: this.cards,
-            investments: this.investments,
-            darkMode: this.darkMode,
-            privacyOn: this.privacyOn,
-            settings: this.settings
-        };
 
-        const jsonString = JSON.stringify(backup, null, 2);
-        const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8;' });
-        
-        const now = new Date();
-        const dateStr = now.getFullYear() + 
-            String(now.getMonth() + 1).padStart(2, '0') + 
-            String(now.getDate()).padStart(2, '0') +
-            String(now.getHours()).padStart(2, '0') +
-            String(now.getMinutes()).padStart(2, '0') +
-            String(now.getSeconds()).padStart(2, '0');
-        
-        const fileName = `SmartWallet-Backup-${dateStr}.json`;
-        
-        console.log('[SmartWallet] Arquivo:', fileName);
-        console.log('[SmartWallet] Tamanho:', jsonString.length, 'bytes');
-
-        // Método universal
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        a.style.display = 'none';
-        
-        document.body.appendChild(a);
-        a.click();
-    
-        // 1. LIMPEZA: Remove o link do DOM e libera a memória da URL
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        console.log('[SmartWallet] Backup exportado com sucesso!');
-
-    } catch (error) {
-       
-// 1. LIMPEZA: Remove o link do DOM e libera a memória da URL
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        console.log('[SmartWallet] Backup exportado com sucesso!');
-        
-        // Mantendo as suas atualizações de interface originais no final do sucesso:
-        localStorage.setItem('smartwallet_last_backup', Date.now().toString());
-        this.showToast('✅ Backup exportado com sucesso!');
-        this.updateSettingsUI();
-
-    } catch (error) {
-        // 2. TRATAMENTO DE ERRO
-        console.error('[SmartWallet] Erro ao exportar backup:', error);
-        this.showToast('❌ Erro ao exportar: ' + error.message);
-    } finally {
-        // 3. DESTRAVA O BOTÃO
-        this.isSaving = false;
+    async importBackup() {
+        if (!window._pendingBackupData) { this.showToast('⚠️ Selecione um arquivo'); return; }
+        try {
+            let cleanData = window._pendingBackupData;
+            if (cleanData.charCodeAt(0) === 0xFEFF) cleanData = cleanData.substring(1);
+            cleanData = cleanData.trim();
+            if (!cleanData) { this.showToast('⚠️ Arquivo vazio!'); return; }
+            const data = JSON.parse(cleanData);
+            if (!data || typeof data !== 'object') { this.showToast('❌ Estrutura inválida'); return; }
+            const confirmed = await showConfirm('⚠️ Substituir TODOS os dados?', 'Esta ação não pode ser desfeita.');
+            if (!confirmed) return;
+            this.transactions = Array.isArray(data.transactions) ? data.transactions : [];
+            this.categories = Array.isArray(data.categories) ? data.categories : this.categories;
+            this.accounts = Array.isArray(data.accounts) ? data.accounts : [];
+            this.cards = Array.isArray(data.cards) ? data.cards : [];
+            this.investments = Array.isArray(data.investments) ? data.investments : [];
+            if (typeof data.darkMode === 'boolean') this.darkMode = data.darkMode;
+            if (typeof data.privacyOn === 'boolean') this.privacyOn = data.privacyOn;
+            if (data.settings) this.settings = { ...this.settings, ...data.settings };
+            if (typeof data.language === 'string') localStorage.setItem('smartwallet_language', data.language);
+            if (typeof data.currency === 'string') localStorage.setItem('smartwallet_currency', data.currency);
+            this.pageSize = this.settings.pageSize || 20;
+            this.clearCache(); this.saveTransactions(); this.saveCategories();
+            this.saveAccounts(); this.saveCards(); this.saveInvestments();
+            this.saveSettings();
+            localStorage.setItem('smartwallet_dark', this.darkMode);
+            localStorage.setItem('smartwallet_privacy', this.privacyOn);
+            this.populateCategorySelects(); this.populatePaymentMethodSelects();
+            this.populateAccountSelects(); this.applyTheme(); this.applyPrivacy();
+            this.applyLanguage(); this.applyCurrency();
+            this.currentPage = 1;
+            this.render(); this.updateCharts(); this.updateAlertBadge();
+            this.checkNegativeBalance();
+            closeModal('importBackupModal');
+            this.showToast('✅ Backup restaurado!');
+            window._pendingBackupData = null;
+        } catch (e) {
+            this.showToast('⚠️ Erro: ' + e.message);
+        }
     }
-}
 
-async importBackup() {
-    if (!window._pendingBackupData) {
-        this.showToast('⚠️ Selecione um arquivo de backup');
-        return;
-    }
-    try {
-        let cleanData = window._pendingBackupData;
-        if (cleanData.charCodeAt(0) === 0xFEFF) cleanData = cleanData.substring(1);
-        cleanData = cleanData.trim();
-        if (!cleanData) { this.showToast('⚠️ Arquivo vazio'); return; }
-
-        // CORREÇÃO: Remove espaços extras nas chaves JSON
-        cleanData = cleanData.replace(/"\s*:/g, '":').replace(/:\s*"/g, ':"');
-        
-        const data = JSON.parse(cleanData);
-        if (!data || typeof data !== 'object') { this.showToast('❌ Estrutura inválida'); return; }
-
-        const confirmed = await showConfirm('⚠️ Restaurar Backup?', 'Isso substituirá TODOS os seus dados atuais. Esta ação não pode ser desfeita.');
-        if (!confirmed) return;
-
-        this.transactions = Array.isArray(data.transactions) ? data.transactions : [];
-        this.categories = Array.isArray(data.categories) ? data.categories : this.categories;
-        this.accounts = Array.isArray(data.accounts) ? data.accounts : [];
-        this.cards = Array.isArray(data.cards) ? data.cards : [];
-        this.investments = Array.isArray(data.investments) ? data.investments : [];
-        if (data.settings) this.settings = { ...this.settings, ...data.settings };
-
-        // Salva no localStorage
-        this.saveTransactions();
-        this.saveCategories();
-        this.saveAccounts();
-        this.saveCards();
-        this.saveInvestments();
-        localStorage.setItem('smartwallet_settings', JSON.stringify(this.settings));
-
-        this.clearCache();
-        this.populateCategorySelects();
-        this.populatePaymentMethodSelects();
-        this.populateAccountSelects();
-        this.applyTheme();
-        this.applyPrivacy();
-        this.applyLanguage();
-        this.applyCurrency();
-        
-        this.currentPage = 1;
-        this.render();
-        this.updateCharts();
-        this.updateAlertBadge();
-        this.checkNegativeBalance();
-
-        closeModal('importBackupModal');
-        this.showToast('✅ Backup restaurado com sucesso!');
-        window._pendingBackupData = null;
-    } catch (error) {
-        console.error('Erro ao importar backup:', error);
-        this.showToast('⚠️ Erro ao importar: ' + error.message);
-    }
-}
     importCSV() {
         if (!window._pendingCsvData) { this.showToast('Selecione um arquivo CSV'); return; }
         const replace = document.getElementById('csvReplaceData').checked;
@@ -4187,25 +4109,24 @@ window.copyPixKey = function() {
 
 // ===== DISCLAIMER & QUOTE =====
 function initDisclaimer() {
-    const checkbox = document.getElementById('acceptTermsCheckbox');
+    let countdown = 12;
+    const timerEl = document.getElementById('disclaimerTimer');
     const btnEl = document.getElementById('acceptDisclaimerBtn');
-    
-    if (!checkbox || !btnEl) return;
-    
-    // Começa com o botão desabilitado
-    btnEl.disabled = true;
+    if (!timerEl || !btnEl) return;
     btnEl.classList.remove('enabled');
-    
-    // Listener do checkbox
-    checkbox.addEventListener('change', function() {
-        if (this.checked) {
-            btnEl.disabled = false;
+    btnEl.disabled = true;
+    timerEl.innerHTML = '⏱️ Aguarde <span id="countdown">' + countdown + '</span> segundos';
+    const interval = setInterval(() => {
+        countdown--;
+        const span = document.getElementById('countdown');
+        if (span) span.textContent = countdown;
+        if (countdown <= 0) {
+            clearInterval(interval);
             btnEl.classList.add('enabled');
-        } else {
-            btnEl.disabled = true;
-            btnEl.classList.remove('enabled');
+            btnEl.disabled = false;
+            timerEl.innerHTML = '✅ Pode aceitar os termos';
         }
-    });
+    }, 1000);
 }
 
 function showQuoteModal() {
@@ -4304,7 +4225,7 @@ document.addEventListener('click', (e) => {
         toggleFab();
     }
 });
-    
+
 document.addEventListener('keydown', (e) => {
     if (e.target.classList.contains('clickable') && (e.key === 'Enter' || e.key === ' ')) {
         e.preventDefault();
