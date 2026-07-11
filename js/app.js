@@ -2897,23 +2897,24 @@ async exportBackup() {
         console.log('[SmartWallet] Backup exportado com sucesso!');
 
     } catch (error) {
-        // 2. TRATAMENTO DE ERRO: Caso algo dê errado na geração do JSON
-        console.error('[SmartWallet] Erro ao exportar backup:', error);
-        alert('Ocorreu um erro ao gerar o backup.');
-    } finally {
-        // 3. DESTRAVA O BOTÃO: Isso garante que o botão volte a funcionar, dando erro ou não
-        this.isSaving = false;
-    }
-}
-
+       
+// 1. LIMPEZA: Remove o link do DOM e libera a memória da URL
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        console.log('[SmartWallet] Backup exportado com sucesso!');
+        
+        // Mantendo as suas atualizações de interface originais no final do sucesso:
         localStorage.setItem('smartwallet_last_backup', Date.now().toString());
         this.showToast('✅ Backup exportado com sucesso!');
         this.updateSettingsUI();
-        
+
     } catch (error) {
+        // 2. TRATAMENTO DE ERRO
         console.error('[SmartWallet] Erro ao exportar backup:', error);
         this.showToast('❌ Erro ao exportar: ' + error.message);
     } finally {
+        // 3. DESTRAVA O BOTÃO
         this.isSaving = false;
     }
 }
