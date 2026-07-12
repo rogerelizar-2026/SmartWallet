@@ -718,10 +718,8 @@ class SmartWallet {
         const importCsvBtn = document.getElementById('importCsvBtn');
         if (importCsvBtn) importCsvBtn.addEventListener('click', () => self.importCsv());
 
-        
-
         const importBackupBtn = document.getElementById('importBackupBtn');
-        if (importBackupBtn) importBackupBtn.addEventListener('click', () => self.importBackup());
+        if (importBackupBtn) importBackupBtn.addEventListener('click', () => openImportBackupModal());
 
         const newAccountBtn = document.getElementById('newAccountBtn');
         if (newAccountBtn) newAccountBtn.addEventListener('click', () => openNewAccountModal());
@@ -2901,57 +2899,40 @@ class SmartWallet {
         }
     }
 
-    importCsv() {
-        if (!window._pendingCsvData) { this.showToast('Selecione um arquivo Csv'); return; }
-        const replace = document.getElementById('csvReplaceData').checked;
-        const lines = window._pendingCsvData.split(/\r?\n/).filter(l => l.trim());
-        if (lines.length < 2) { this.showToast('Csv vazio ou inválido'); return; }
-        const header = lines[0].toLowerCase();
-        if (header.indexOf('data') === -1 || header.indexOf('valor') === -1) {
-            this.showToast('Formato Csv inválido'); return;
-        }
-        const self = this;
-        const transactionsToAdd = [];
-        let skipped = 0;
-        for (let i = 1; i < lines.length; i++) {
-            const cols = this.parseCsvLine(lines[i]);
-            if (cols.length < 6) { skipped++; continue; }
-            const [date, desc, catName, tipo, payment, status, valor] = cols;
-            if (!date || !valor) { skipped++; continue; }
-            const category = this.findCategoryByName(catName);
-            const amount = parseFloat(valor.replace(',', '.'));
-            if (isNaN(amount)) { skipped++; continue; }
-            const signedAmount = tipo.toLowerCase().indexOf('despesa') !== -1 ? -Math.abs(amount) : Math.abs(amount);
-            let paymentMethod = 'pix';
-            const payLower = (payment || '').toLowerCase();
-            if (payLower.indexOf('pix') !== -1) paymentMethod = 'pix';
-            else if (payLower.indexOf('debit') !== -1 || payLower.indexOf('débito') !== -1) paymentMethod = 'debit';
-            else if (payLower.indexOf('auto') !== -1) paymentMethod = 'auto';
-            else if (payLower.indexOf('transf') !== -1) paymentMethod = 'transfer';
-            transactionsToAdd.push({
-                id: this.generateUniqueId(), date, amount: signedAmount,
-                category: category ? category.id : '', description: desc,
-                statusOk: status.toLowerCase().indexOf('conclu') !== -1,
-                paymentMethod, accountId: ''
-            });
-        }
-        if (replace) {
-            const m = this.currentMonth.getMonth(), y = this.currentMonth.getFullYear();
-            this.transactions = this.transactions.filter(t => {
-                const d = new Date(t.date + 'T12:00:00');
-                return !(d.getMonth() === m && d.getFullYear() === y);
-            });
-        }
-        this.transactions = this.transactions.concat(transactionsToAdd);
-        this.clearCache(); this.saveTransactions();
-        this.currentPage = 1;
-        this.render();
-        this.updateCharts(); this.updateAlertBadge();
-        this.checkNegativeBalance();
-        closeModal('importCsvModal');
-        this.showToast(transactionsToAdd.length + ' transações importadas!' + (skipped > 0 ? ' (' + skipped + ' ignoradas)' : ''));
-        window._pendingCsvData = null;
+importCSV() {
+    if (!window._pendingCsvData) { this.showToast('Selecione um arquivo CSV'); return; }
+    const replace = document.getElementById('csvReplaceData').checked;
+    let lines = window._pendingCsvData.split(/\r?\n/).filter(l => l.trim());
+    if (lines.length < 2) { this.showToast('CSV vazio ou inválido'); return; }
+    
+    // Remove BOM (caractere invisível no início)
+    if (lines[0].charCodeAt(0) === 0xFEFF) {
+        lines[0] = lines[0].substring(1);
     }
+    
+    // Encontra a linha do header real (que contém "Data" e "Valor")
+    let headerIndex = -1;
+    for (let i = 0; i < Math.min(lines.length, 10); i++) {
+        const line = lines[i].toLowerCase();
+        if ((line.indexOf('data') !== -1 || line.indexOf('date') !== -1) && 
+            (line.indexOf('valor') !== -1 || line.indexOf('value') !== -1)) {
+            headerIndex = i;
+            break;
+        }
+    }
+    
+    if (headerIndex === -1) {
+        this.showToast('Formato CSV inválido: cabeçalho não encontrado');
+        return;
+    }
+    
+    const self = this;
+    const transactionsToAdd = [];
+    let skipped = 0;
+    for (let i = headerIndex + 1; i < lines.length; i++) {
+        const cols = this.parseCSVLine(lines[i]);
+    }
+}
 
     parseCsvLine(line) {
         const result = [];
