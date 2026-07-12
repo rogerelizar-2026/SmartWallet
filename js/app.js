@@ -718,6 +718,8 @@ class SmartWallet {
         const importCsvBtn = document.getElementById('importCsvBtn');
         if (importCsvBtn) importCsvBtn.addEventListener('click', () => self.importCsv());
 
+        
+
         const importBackupBtn = document.getElementById('importBackupBtn');
         if (importBackupBtn) importBackupBtn.addEventListener('click', () => self.importBackup());
 
@@ -4045,6 +4047,13 @@ window.handleCsvFileSelect = function(event) {
     document.getElementById('csvFileName').textContent = ' ' + file.name + ' (' + (file.size/1024).toFixed(1) + ' KB)';
     const reader = new FileReader();
     reader.onload = (e) => { window._pendingCsvData = e.target.result; };
+    reader.onload = function(e) {
+    // 1. Pega o conteúdo do arquivo e remove o caractere fantasma (BOM) do início
+    let text = e.target.result.replace(/^\uFEFF/, '');
+    
+    // 2. Continua com o seu código de quebrar as linhas...
+    const lines = text.split('\n');
+    const headers = lines[0].split(','); // ou ';' dependendo do seu código
     reader.onerror = () => { alert('❌ Erro ao ler arquivo'); event.target.value = ''; };
     reader.readAsText(file, 'UTF-8');
 };
