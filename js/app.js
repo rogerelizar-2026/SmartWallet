@@ -4266,3 +4266,4 @@ if ('serviceWorker' in navigator) {
    
 console.log('🎉 Smart Wallet v4.4.4 carregado com sucesso!');
 })();
+}
