@@ -4109,6 +4109,17 @@ window.copyPixKey = function() {
 
 // ===== DISCLAIMER & QUOTE =====
 function initDisclaimer() {
+    document.addEventListener('DOMContentLoaded', () => {
+    const checkbox = document.getElementById('acceptTermsCheckbox');
+    const acceptBtn = document.getElementById('acceptDisclaimerBtn');
+
+    if (checkbox && acceptBtn) {
+        checkbox.addEventListener('change', function() {
+            // Se a checkbox estiver marcada, remove o 'disabled', senão, recoloca.
+            acceptBtn.disabled = !this.checked;
+        });
+    }
+});
     let countdown = 12;
     const timerEl = document.getElementById('disclaimerTimer');
     const btnEl = document.getElementById('acceptDisclaimerBtn');
