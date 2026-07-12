@@ -4243,6 +4243,25 @@ if ('serviceWorker' in navigator) {
             .catch(err => console.log('[SmartWallet] SW falhou:', err));
     });
 }
-
+document.addEventListener('DOMContentLoaded', () => {
+    // Pega o novo botão pelo ID
+    const settingsRestoreBtn = document.getElementById('settingsRestoreBtn');
+    
+    if (settingsRestoreBtn) {
+        settingsRestoreBtn.addEventListener('click', () => {
+            // 1. Primeiro, fecha o modal de Configurações para não encavalar
+            if (typeof closeModal === 'function') {
+                closeModal('settingsModal');
+            } else {
+                document.getElementById('settingsModal').classList.remove('active'); // ou 'show', dependendo do seu CSS
+            }
+            
+            // 2. Depois, abre o modal de Importar Backup
+            if (typeof openModal === 'function') {
+                openModal('importBackupModal');
+            }
+        });
+    }
+    
 console.log('🎉 Smart Wallet v4.4.4 carregado com sucesso!');
 })();
