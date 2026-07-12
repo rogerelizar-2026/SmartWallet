@@ -710,13 +710,13 @@ class SmartWallet {
         if (deleteFromEditBtn) deleteFromEditBtn.addEventListener('click', () => self.deleteFromEdit());
 
         const exportCsvBtn = document.getElementById('exportCsvBtn');
-        if (exportCsvBtn) exportCsvBtn.addEventListener('click', () => self.exportCSV());
+        if (exportCsvBtn) exportCsvBtn.addEventListener('click', () => self.exportCsv());
 
         const printExtratoBtn = document.getElementById('printExtratoBtn');
         if (printExtratoBtn) printExtratoBtn.addEventListener('click', () => self.printExtratoPDF());
 
         const importCsvBtn = document.getElementById('importCsvBtn');
-        if (importCsvBtn) importCsvBtn.addEventListener('click', () => self.importCSV());
+        if (importCsvBtn) importCsvBtn.addEventListener('click', () => self.importCsv());
 
         const importBackupBtn = document.getElementById('importBackupBtn');
         if (importBackupBtn) importBackupBtn.addEventListener('click', () => self.importBackup());
@@ -2659,7 +2659,7 @@ class SmartWallet {
         html += '<div style="display:flex; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:10px;">';
         html += '<h3 style="font-size:1.1rem;">' + this.t('purchases') + ' (' + purchases.length + ')</h3>';
         html += '<div style="display:flex; gap:8px;">';
-        html += '<button class="btn btn-secondary btn-small" id="exportInvoiceCsvBtn">📥 CSV</button>';
+        html += '<button class="btn btn-secondary btn-small" id="exportInvoiceCsvBtn">📥 Csv</button>';
         html += '<button class="btn btn-secondary btn-small" id="printInvoicePdfBtn">🖨️ PDF</button></div></div>';
         html += '<div>';
         if (purchases.length === 0) {
@@ -2680,7 +2680,7 @@ class SmartWallet {
         html += '<button class="btn btn-secondary" data-close-modal="invoiceModal">' + this.t('close') + '</button></div>';
         document.getElementById('invoiceContent').innerHTML = html;
         openModal('invoiceModal');
-        document.getElementById('exportInvoiceCsvBtn').addEventListener('click', () => self.exportInvoiceCSV(cardId));
+        document.getElementById('exportInvoiceCsvBtn').addEventListener('click', () => self.exportInvoiceCsv(cardId));
         document.getElementById('printInvoicePdfBtn').addEventListener('click', () => self.printInvoicePDF(cardId));
         document.getElementById('payInvoiceBtn').addEventListener('click', () => self.payInvoice(cardId));
         document.querySelectorAll('.delete-invoice-item').forEach(btn => {
@@ -2715,7 +2715,7 @@ class SmartWallet {
         this.showToast('✅ ' + this.t('paymentRegistered'));
     }
 
-    exportInvoiceCSV(cardId) {
+    exportInvoiceCsv(cardId) {
         const card = this.getCardById(cardId);
         if (!card) return;
         const period = this.getInvoicePeriod(card);
@@ -2765,7 +2765,7 @@ class SmartWallet {
         setTimeout(() => { printWindow.focus(); printWindow.print(); }, 300);
     }
         // ===== EXPORTAÇÕES =====
-    exportCSV() {
+    exportCsv() {
         const mt = this.getMonthTransactions();
         if (!mt.length) { this.showToast('❌ ' + this.t('noTransactions')); return; }
         const self = this;
@@ -2899,20 +2899,20 @@ class SmartWallet {
         }
     }
 
-    importCSV() {
-        if (!window._pendingCsvData) { this.showToast('Selecione um arquivo CSV'); return; }
+    importCsv() {
+        if (!window._pendingCsvData) { this.showToast('Selecione um arquivo Csv'); return; }
         const replace = document.getElementById('csvReplaceData').checked;
         const lines = window._pendingCsvData.split(/\r?\n/).filter(l => l.trim());
-        if (lines.length < 2) { this.showToast('CSV vazio ou inválido'); return; }
+        if (lines.length < 2) { this.showToast('Csv vazio ou inválido'); return; }
         const header = lines[0].toLowerCase();
         if (header.indexOf('data') === -1 || header.indexOf('valor') === -1) {
-            this.showToast('Formato CSV inválido'); return;
+            this.showToast('Formato Csv inválido'); return;
         }
         const self = this;
         const transactionsToAdd = [];
         let skipped = 0;
         for (let i = 1; i < lines.length; i++) {
-            const cols = this.parseCSVLine(lines[i]);
+            const cols = this.parseCsvLine(lines[i]);
             if (cols.length < 6) { skipped++; continue; }
             const [date, desc, catName, tipo, payment, status, valor] = cols;
             if (!date || !valor) { skipped++; continue; }
@@ -2951,7 +2951,7 @@ class SmartWallet {
         window._pendingCsvData = null;
     }
 
-    parseCSVLine(line) {
+    parseCsvLine(line) {
         const result = [];
         let current = '';
         let inQuotes = false;
