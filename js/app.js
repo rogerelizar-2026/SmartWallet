@@ -4109,35 +4109,27 @@ window.copyPixKey = function() {
 
 // ===== DISCLAIMER & QUOTE =====
 function initDisclaimer() {
-    document.addEventListener('DOMContentLoaded', () => {
     const checkbox = document.getElementById('acceptTermsCheckbox');
-    const acceptBtn = document.getElementById('acceptDisclaimerBtn');
-
-    if (checkbox && acceptBtn) {
-        checkbox.addEventListener('change', function() {
-            // Se a checkbox estiver marcada, remove o 'disabled', senão, recoloca.
-            acceptBtn.disabled = !this.checked;
-        });
-    }
-});
-    let countdown = 12;
-    const timerEl = document.getElementById('disclaimerTimer');
     const btnEl = document.getElementById('acceptDisclaimerBtn');
-    if (!timerEl || !btnEl) return;
-    btnEl.classList.remove('enabled');
+    
+    // Se não encontrar a checkbox ou o botão, para por aqui
+    if (!checkbox || !btnEl) return;
+
+    // Reseta o estado toda vez que o modal for aberto
+    checkbox.checked = false;
     btnEl.disabled = true;
-    timerEl.innerHTML = '⏱️ Aguarde <span id="countdown">' + countdown + '</span> segundos';
-    const interval = setInterval(() => {
-        countdown--;
-        const span = document.getElementById('countdown');
-        if (span) span.textContent = countdown;
-        if (countdown <= 0) {
-            clearInterval(interval);
-            btnEl.classList.add('enabled');
+    btnEl.classList.remove('enabled');
+
+    // Usa onchange para evitar a duplicação de listeners se o modal for aberto várias vezes
+    checkbox.onchange = function() {
+        if (this.checked) {
             btnEl.disabled = false;
-            timerEl.innerHTML = '✅ Pode aceitar os termos';
+            btnEl.classList.add('enabled');
+        } else {
+            btnEl.disabled = true;
+            btnEl.classList.remove('enabled');
         }
-    }, 1000);
+    };
 }
 
 function showQuoteModal() {
