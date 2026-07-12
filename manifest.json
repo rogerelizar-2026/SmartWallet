@@ -1,38 +1,26 @@
 {
   "name": "Smart Wallet",
   "short_name": "SmartWallet",
-  "description": "Controle financeiro pessoal inteligente",
-  "start_url": "/",
+  "description": "Gerenciamento financeiro inteligente",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#0a0e1a",
   "theme_color": "#6366f1",
   "orientation": "portrait-primary",
-  "lang": "pt-BR",
-  "categories": ["finance", "productivity"],
   "icons": [
     {
-      "src": "favicon.svg",
+      "src": "logo.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"
-    }
-  ],
-  "shortcuts": [
-    {
-      "name": "Nova Despesa",
-      "short_name": "Despesa",
-      "description": "Adicionar nova despesa",
-      "url": "/?action=expense",
-      "icons": [{ "src": "favicon.svg", "sizes": "96x96" }]
     },
     {
-      "name": "Nova Receita",
-      "short_name": "Receita",
-      "description": "Adicionar nova receita",
-      "url": "/?action=income",
-      "icons": [{ "src": "favicon.svg", "sizes": "96x96" }]
+      "src": "favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
     }
   ],
-  "related_applications": [],
-  "prefer_related_applications": false
+  "categories": ["finance", "productivity"],
+  "lang": "pt-BR"
 }
