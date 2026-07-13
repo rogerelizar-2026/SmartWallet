@@ -167,6 +167,11 @@ body.modal-open { overflow: hidden; }
     color: white;
     padding: 40px;
     animation: fadeInUp 0.8s ease;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .splash-title {
@@ -182,7 +187,12 @@ body.modal-open { overflow: hidden; }
 .splash-subtitle { color: #a78bfa; font-weight: 600; margin-bottom: 4px; }
 .splash-email { color: #94a3b8; font-size: 0.9rem; margin-bottom: 32px; }
 
-.splash-icons { display: flex; justify-content: center; gap: 16px; margin-bottom: 40px; }
+.splash-icons { 
+    display: flex; 
+    justify-content: center; 
+    gap: 16px; 
+    margin-bottom: 40px; 
+}
 
 .splash-icon {
     width: 32px; height: 32px;
@@ -215,14 +225,23 @@ body.modal-open { overflow: hidden; }
     max-width: 400px;
     width: 90%;
     height: auto;
-    margin-bottom: 24px;
+    margin: 0 auto 24px auto;
     filter: drop-shadow(0 8px 24px rgba(99, 102, 241, 0.3));
     animation: fadeInScale 0.8s ease;
+    display: block;
 }
 
 @media (max-width: 640px) {
     .splash-logo {
         max-width: 300px;
+    }
+    
+    .splash-content {
+        padding: 20px;
+    }
+    
+    .splash-title {
+        font-size: 2rem;
     }
 }
 
