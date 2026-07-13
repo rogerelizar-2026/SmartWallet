@@ -80,12 +80,12 @@ const FINANCIAL_QUOTES = [
     { text: "Quem compra o que não precisa, rouba a si mesmo.", author: "Provérbio Popular" }
 ];
 
-const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Wallet Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 4.4.4 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Wallet!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v4.4.4</h2><ul><li><strong>Correções de Bugs:</strong> Backup, datas, confirmações e investimentos corrigidos</li><li><strong>Modal de Confirmação:</strong> Substituído confirm() nativo por modal customizado</li><li><strong>Investimentos:</strong> Salvamento e carregamento corrigidos</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! </h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
+const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Finance Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 4.4.4 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Finance!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v1.0.0</h2><ul><li><strong>Correções de Bugs:</strong> Backup, datas, confirmações e investimentos corrigidos</li><li><strong>Modal de Confirmação:</strong> Substituído confirm() nativo por modal customizado</li><li><strong>Investimentos:</strong> Salvamento e carregamento corrigidos</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! </h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
 
-// ===== TRADUÇÕES v4.4.4 =====
+// ===== TRADUÇÕES v1.0.0 =====
 const TRANSLATIONS = {
     'pt-BR': {
-        appTitle: 'Smart Wallet',
+        appTitle: 'Smart Finance',
         appSubtitle: 'Suas finanças sob seu domínio!',
         unifiedBalance: 'Saldo Unificado',
         income_singular: 'Receita',
@@ -173,11 +173,11 @@ const TRANSLATIONS = {
         notificationsEnabled: 'Notificações ativadas!',
         notificationsDenied: 'Notificações negadas pelo navegador',
         notificationsNotSupported: 'Seu navegador não suporta notificações',
-        notificationTitle: 'Smart Wallet - Contas a Vencer',
+        notificationTitle: 'Smart Finance - Contas a Vencer',
         notificationBody: 'Você tem {count} conta(s) vencendo em 3 dias'
     },
     'en-US': {
-        appTitle: 'Smart Wallet',
+        appTitle: 'Smart Finance',
         appSubtitle: 'Your finances under your control!',
         unifiedBalance: 'Unified Balance',
         income_singular: 'Income',
@@ -265,7 +265,7 @@ const TRANSLATIONS = {
         notificationsEnabled: 'Notifications enabled!',
         notificationsDenied: 'Notifications denied by browser',
         notificationsNotSupported: 'Your browser does not support notifications',
-        notificationTitle: 'Smart Wallet - Bills Due',
+        notificationTitle: 'Smart Finance - Bills Due',
         notificationBody: 'You have {count} bill(s) due in 3 days'
     }
 };
@@ -275,7 +275,7 @@ const CURRENCIES = {
     'USD': { symbol: '$', code: 'USD', locale: 'en-US', name: 'US Dollar' }
 };
 
-// ===== CORREÇÃO v4.4.4: Função para ler datas corretamente (sem bug de fuso horário) =====
+// ===== CORREÇÃO v1.0.0: Função para ler datas corretamente (sem bug de fuso horário) =====
 function parseDate(dateString) {
     if (!dateString) return new Date();
     const parts = dateString.split('-');
@@ -286,7 +286,7 @@ function parseDate(dateString) {
     return new Date(year, month, day);
 }
 
-// ===== CORREÇÃO v4.4.4: Função robusta para download em todos os dispositivos =====
+// ===== CORREÇÃO v1.0.0: Função robusta para download em todos os dispositivos =====
 async function saveFileWithPicker(blob, suggestedName, mimeType) {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const isDesktopChrome = !isMobile && window.showSaveFilePicker && navigator.userAgent.indexOf('Chrome') > -1;
@@ -311,7 +311,7 @@ async function saveFileWithPicker(blob, suggestedName, mimeType) {
             return 'saved';
         } catch (err) {
             if (err.name === 'AbortError') return 'cancelled';
-            console.warn('[SmartWallet] File System Access API falhou:', err);
+            console.warn('[SmartFinance] File System Access API falhou:', err);
         }
     }
     try {
@@ -333,12 +333,12 @@ async function saveFileWithPicker(blob, suggestedName, mimeType) {
                 if (a.parentNode) a.parentNode.removeChild(a);
                 URL.revokeObjectURL(url);
             } catch (cleanupErr) {
-                console.warn('[SmartWallet] Erro ao limpar URL:', cleanupErr);
+                console.warn('[SmartFinance] Erro ao limpar URL:', cleanupErr);
             }
         }, 1000);
         return 'downloaded';
     } catch (fallbackErr) {
-        console.error('[SmartWallet] Erro no fallback de download:', fallbackErr);
+        console.error('[SmartFinance] Erro no fallback de download:', fallbackErr);
         return 'error';
     }
 }
@@ -391,7 +391,7 @@ async function decryptBackupData(payload, password) {
     return new TextDecoder().decode(dec);
 }
 
-class SmartWallet {
+class SmartFinance {
     constructor() {
         this.currentMonth = new Date();
         this.currentMonth.setDate(1);
@@ -436,39 +436,39 @@ class SmartWallet {
     // ===== CARREGAMENTO E SALVAMENTO =====
     loadData() {
         try {
-            const t = localStorage.getItem('smartwallet_transactions');
+            const t = localStorage.getItem('smartfinance_transactions');
             if (t) this.transactions = JSON.parse(t);
-            const c = localStorage.getItem('smartwallet_categories');
+            const c = localStorage.getItem('smartfinance_categories');
             if (c) this.categories = JSON.parse(c);
             else this.categories = JSON.parse(JSON.stringify(DEFAULT_CATEGORIES));
-            const a = localStorage.getItem('smartwallet_accounts');
+            const a = localStorage.getItem('smartfinance_accounts');
             if (a) this.accounts = JSON.parse(a);
-            const cd = localStorage.getItem('smartwallet_cards');
+            const cd = localStorage.getItem('smartfinance_cards');
             if (cd) this.cards = JSON.parse(cd);
-            const inv = localStorage.getItem('smartwallet_investments');
+            const inv = localStorage.getItem('smartfinance_investments');
             if (inv) this.investments = JSON.parse(inv);
-            const dm = localStorage.getItem('smartwallet_dark');
+            const dm = localStorage.getItem('smartfinance_dark');
             if (dm !== null) this.darkMode = dm === 'true';
-            const pv = localStorage.getItem('smartwallet_privacy');
+            const pv = localStorage.getItem('smartfinance_privacy');
             if (pv !== null) this.privacyOn = pv === 'true';
-            const demo = localStorage.getItem('smartwallet_demo');
+            const demo = localStorage.getItem('smartfinance_demo');
             if (demo !== null) this.demoMode = demo === 'true';
         } catch (e) {
-            console.error('[SmartWallet] Erro ao carregar:', e);
+            console.error('[SmartFinance] Erro ao carregar:', e);
         }
     }
 
-    saveTransactions() { try { localStorage.setItem('smartwallet_transactions', JSON.stringify(this.transactions)); } catch(e) {} }
-    saveCategories() { try { localStorage.setItem('smartwallet_categories', JSON.stringify(this.categories)); } catch(e) {} }
-    saveAccounts() { try { localStorage.setItem('smartwallet_accounts', JSON.stringify(this.accounts)); } catch(e) {} }
-    saveCards() { try { localStorage.setItem('smartwallet_cards', JSON.stringify(this.cards)); } catch(e) {} }
-    saveInvestments() { try { localStorage.setItem('smartwallet_investments', JSON.stringify(this.investments)); } catch(e) {} } // CORREÇÃO: Função criada
+    saveTransactions() { try { localStorage.setItem('smartfinance_transactions', JSON.stringify(this.transactions)); } catch(e) {} }
+    saveCategories() { try { localStorage.setItem('smartfinance_categories', JSON.stringify(this.categories)); } catch(e) {} }
+    saveAccounts() { try { localStorage.setItem('smartfinance_accounts', JSON.stringify(this.accounts)); } catch(e) {} }
+    saveCards() { try { localStorage.setItem('smartfinance_cards', JSON.stringify(this.cards)); } catch(e) {} }
+    saveInvestments() { try { localStorage.setItem('smartfinance_investments', JSON.stringify(this.investments)); } catch(e) {} } // CORREÇÃO: Função criada
     clearCache() { this._cache = {}; }
 
     // ===== CONFIGURAÇÕES =====
     loadSettings() {
         try {
-            const saved = localStorage.getItem('smartwallet_settings');
+            const saved = localStorage.getItem('smartfinance_settings');
             if (saved) {
                 this.settings = { ...this.settings, ...JSON.parse(saved) };
                 this.pageSize = this.settings.pageSize || 20;
@@ -476,7 +476,7 @@ class SmartWallet {
         } catch (e) {}
     }
 
-    saveSettings() { try { localStorage.setItem('smartwallet_settings', JSON.stringify(this.settings)); } catch (e) {} }
+    saveSettings() { try { localStorage.setItem('smartfinance_settings', JSON.stringify(this.settings)); } catch (e) {} }
 
     // ===== MÉTODOS CENTRALIZADOS =====
     getMonths(type = 'full') {
@@ -511,8 +511,8 @@ class SmartWallet {
     }
 
     tCount(keyBase, count) { const suffix = count === 1 ? '_singular' : '_plural'; return this.t(keyBase + suffix); }
-    getLanguage() { return localStorage.getItem('smartwallet_language') || 'pt-BR'; }
-    setLanguage(lang) { localStorage.setItem('smartwallet_language', lang); document.documentElement.lang = lang; this.applyLanguage(); this.showToast(this.t('languageChanged')); }
+    getLanguage() { return localStorage.getItem('smartfinance_language') || 'pt-BR'; }
+    setLanguage(lang) { localStorage.setItem('smartfinance_language', lang); document.documentElement.lang = lang; this.applyLanguage(); this.showToast(this.t('languageChanged')); }
 
     applyLanguage() {
         const titleEl = document.querySelector('.header-title'); if (titleEl) titleEl.textContent = this.t('appTitle');
@@ -520,8 +520,8 @@ class SmartWallet {
         this.updateMonthDisplay(); this.populateCardFilter(); this.clearCache(); this.render(); this.updateCharts();
     }
 
-    getCurrency() { return localStorage.getItem('smartwallet_currency') || 'BRL'; }
-    setCurrency(currency) { if (!CURRENCIES[currency]) return; localStorage.setItem('smartwallet_currency', currency); this.applyCurrency(); this.showToast(this.t('currencyChanged')); }
+    getCurrency() { return localStorage.getItem('smartfinance_currency') || 'BRL'; }
+    setCurrency(currency) { if (!CURRENCIES[currency]) return; localStorage.setItem('smartfinance_currency', currency); this.applyCurrency(); this.showToast(this.t('currencyChanged')); }
     applyCurrency() { this.clearCache(); this.render(); this.updateCharts(); this.updateCurrencySelectorVisibility(); }
     updateCurrencySelectorVisibility() { const lang = this.getLanguage(); const currencyItem = document.getElementById('currencyMenuItem'); if (currencyItem) currencyItem.style.display = lang === 'en-US' ? 'flex' : 'none'; }
 
@@ -532,7 +532,7 @@ class SmartWallet {
     }
         // ===== INICIALIZAÇÃO =====
     init() {
-        console.log('✅ Smart Wallet v4.4.3 inicializado');
+        console.log('✅ Smart Finance v1.0.0 inicializado');
         this.applyTheme();
         this.applyPrivacy();
         this.applyDemoBadge();
@@ -935,12 +935,12 @@ class SmartWallet {
             card: document.getElementById('cardFilter')?.value || '',
             search: document.getElementById('searchFilter')?.value || ''
         };
-        try { localStorage.setItem('smartwallet_filters', JSON.stringify(filters)); } catch(e) {}
+        try { localStorage.setItem('smartfinance_filters', JSON.stringify(filters)); } catch(e) {}
     }
 
     restoreFilters() {
         try {
-            const filters = JSON.parse(localStorage.getItem('smartwallet_filters') || '{}');
+            const filters = JSON.parse(localStorage.getItem('smartfinance_filters') || '{}');
             if (filters.type) document.getElementById('typeFilter').value = filters.type;
             if (filters.status) document.getElementById('statusFilter').value = filters.status;
             if (filters.account) document.getElementById('accountFilter').value = filters.account;
@@ -986,7 +986,7 @@ class SmartWallet {
 
     generateTimestamp() {
         const now = new Date();
-        return 'SmartWallet-' + now.getFullYear() +
+        return 'SmartFinance-' + now.getFullYear() +
             String(now.getMonth() + 1).padStart(2, '0') +
             String(now.getDate()).padStart(2, '0') +
             String(now.getHours()).padStart(2, '0') +
@@ -1055,7 +1055,7 @@ class SmartWallet {
     // ===== BACKUP AUTOMÁTICO =====
     checkAutoBackup() {
         if (!this.settings.autoBackupEnabled) return;
-        const lastBackup = localStorage.getItem('smartwallet_last_backup');
+        const lastBackup = localStorage.getItem('smartfinance_last_backup');
         const now = Date.now();
         const weekMs = 7 * 24 * 60 * 60 * 1000;
         if (!lastBackup || (now - parseInt(lastBackup)) > weekMs) {
@@ -1077,7 +1077,7 @@ class SmartWallet {
             if (confirmed) {
                 this.clearAllData(true);
                 this.demoMode = false;
-                localStorage.setItem('smartwallet_demo', 'false');
+                localStorage.setItem('smartfinance_demo', 'false');
                 this.applyDemoBadge();
                 this.showToast(this.t('demoCleared'));
             }
@@ -1170,7 +1170,7 @@ class SmartWallet {
             });
         }
         this.demoMode = true;
-        localStorage.setItem('smartwallet_demo', 'true');
+        localStorage.setItem('smartfinance_demo', 'true');
         this.clearCache();
         this.saveTransactions();
         this.saveAccounts();
@@ -1199,7 +1199,7 @@ class SmartWallet {
                 this.saveSettings();
                 this.updateSettingsUI();
                 this.showToast(this.t('notificationsEnabled'));
-                new Notification('Smart Wallet', {
+                new Notification('Smart Finance', {
                     body: 'Notificações ativadas com sucesso!',
                     icon: 'favicon.svg'
                 });
@@ -1243,7 +1243,7 @@ class SmartWallet {
         }
         if (pageSize) pageSize.value = this.settings.pageSize.toString();
         if (lastBackupDate) {
-            const lastBackup = localStorage.getItem('smartwallet_last_backup');
+            const lastBackup = localStorage.getItem('smartfinance_last_backup');
             if (lastBackup) {
                 const date = new Date(parseInt(lastBackup));
                 lastBackupDate.textContent = this.t('lastBackup', { date: date.toLocaleString(this.getLanguage()) });
@@ -1341,7 +1341,7 @@ class SmartWallet {
                                 let label = context.dataset.label || '';
                                 if (label) label += ': ';
                                 const value = Math.abs(context.parsed.y);
-                                label += smartwallet.formatCurrency(value);
+                                label += smartfinance.formatCurrency(value);
                                 return label;
                             }
                         }
@@ -1368,7 +1368,7 @@ class SmartWallet {
             }
         });
     }
-        // ===== CORREÇÃO v4.4.4: Função para ler datas corretamente =====
+        // ===== CORREÇÃO v1.0.0: Função para ler datas corretamente =====
     parseDate(dateString) {
         if (!dateString) return new Date();
         const parts = dateString.split('-');
@@ -1736,7 +1736,7 @@ class SmartWallet {
         const tr = document.createElement('tr');
         tr.className = 'transaction-row';
         tr.dataset.id = t.id;
-        tr.onclick = function() { smartwallet.editTransaction(t.id); };
+        tr.onclick = function() { smartfinance.editTransaction(t.id); };
         let rowHtml = '';
         if (isMobile) {
             rowHtml += '<div class="swipe-actions"><div class="swipe-action complete">✓ Paga</div><div class="swipe-action delete">🗑️ Excluir</div></div>';
@@ -2095,7 +2095,7 @@ class SmartWallet {
                 : '<svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
         }
         if (Object.keys(this.charts).length > 0) {
-            try { this.updateChartsTheme(); } catch (e) { console.warn('[SmartWallet] Erro tema:', e); }
+            try { this.updateChartsTheme(); } catch (e) { console.warn('[SmartFinance] Erro tema:', e); }
         }
     }
 
@@ -2121,7 +2121,7 @@ class SmartWallet {
     }
 
     initCharts() {
-        if (typeof Chart === 'undefined') { console.error('[SmartWallet] Chart.js não carregado!'); return; }
+        if (typeof Chart === 'undefined') { console.error('[SmartFinance] Chart.js não carregado!'); return; }
         const colors = this.getChartColors();
         const lineOpts = {
             responsive: true, maintainAspectRatio: false,
@@ -2140,7 +2140,7 @@ class SmartWallet {
                 ]},
                 options: lineOpts
             });
-        } catch (e) { console.error('[SmartWallet] Erro line:', e); }
+        } catch (e) { console.error('[SmartFinance] Erro line:', e); }
         try {
             this.charts.pie = new Chart(document.getElementById('pieChart').getContext('2d'), {
                 type: 'bar',
@@ -2155,7 +2155,7 @@ class SmartWallet {
                     barPercentage: 0.3, categoryPercentage: 0.5
                 }
             });
-        } catch (e) { console.error('[SmartWallet] Erro pie:', e); }
+        } catch (e) { console.error('[SmartFinance] Erro pie:', e); }
         try {
             this.charts.cards = new Chart(document.getElementById('cardsChart').getContext('2d'), {
                 type: 'line',
@@ -2169,7 +2169,7 @@ class SmartWallet {
                     }
                 }
             });
-        } catch (e) { console.error('[SmartWallet] Erro cards:', e); }
+        } catch (e) { console.error('[SmartFinance] Erro cards:', e); }
         this.updateCharts();
     }
 
@@ -2186,7 +2186,7 @@ class SmartWallet {
                 if (chart.options.scales?.x?.grid) chart.options.scales.x.grid.color = colors.grid;
                 if (chart.options.plugins?.legend?.labels) chart.options.plugins.legend.labels.color = colors.text;
                 chart.update('none');
-            } catch (e) { console.warn('[SmartWallet] Erro tema gráfico:', e); }
+            } catch (e) { console.warn('[SmartFinance] Erro tema gráfico:', e); }
         });
     }
 
@@ -2288,7 +2288,7 @@ class SmartWallet {
             }
         }
         if (this.settings.notifyBills && bills.length > 0 && Notification.permission === 'granted') {
-            const notifKey = 'smartwallet_notif_' + today.toISOString().split('T')[0];
+            const notifKey = 'smartfinance_notif_' + today.toISOString().split('T')[0];
             if (!localStorage.getItem(notifKey)) {
                 new Notification(this.t('notificationTitle'), {
                     body: this.t('notificationBody', { count: bills.length }),
@@ -2321,7 +2321,7 @@ class SmartWallet {
 
     checkAutoBackup() {
         if (!this.settings.autoBackupEnabled) return;
-        const lastBackup = localStorage.getItem('smartwallet_last_backup');
+        const lastBackup = localStorage.getItem('smartfinance_last_backup');
         const now = Date.now();
         const weekMs = 7 * 24 * 60 * 60 * 1000;
         if (!lastBackup || (now - parseInt(lastBackup)) > weekMs) {
@@ -2342,7 +2342,7 @@ class SmartWallet {
             if (confirmed) {
                 this.clearAllData(true);
                 this.demoMode = false;
-                localStorage.setItem('smartwallet_demo', 'false');
+                localStorage.setItem('smartfinance_demo', 'false');
                 this.applyDemoBadge();
                 this.showToast(this.t('demoCleared'));
             }
@@ -2439,7 +2439,7 @@ class SmartWallet {
             { id: 'inv2', name: 'Tesouro IPCA+ 2029', type: 'tesouro', initial: 5000, current: 5800, date: '2025-03-10', rate: 6.5, accountId: 'acc3' }
         ];
         this.demoMode = true;
-        localStorage.setItem('smartwallet_demo', 'true');
+        localStorage.setItem('smartfinance_demo', 'true');
         this.clearCache();
         this.saveTransactions();
         this.saveAccounts();
@@ -2468,7 +2468,7 @@ class SmartWallet {
                 this.saveSettings();
                 this.updateSettingsUI();
                 this.showToast(this.t('notificationsEnabled'));
-                new Notification('Smart Wallet', {
+                new Notification('Smart Finance', {
                     body: 'Notificações ativadas com sucesso!',
                     icon: 'favicon.svg'
                 });
@@ -2510,7 +2510,7 @@ class SmartWallet {
         }
         if (pageSize) pageSize.value = this.settings.pageSize.toString();
         if (lastBackupDate) {
-            const lastBackup = localStorage.getItem('smartwallet_last_backup');
+            const lastBackup = localStorage.getItem('smartfinance_last_backup');
             if (lastBackup) {
                 const date = new Date(parseInt(lastBackup));
                 lastBackupDate.textContent = this.t('lastBackup', { date: date.toLocaleString(this.getLanguage()) });
@@ -2607,7 +2607,7 @@ class SmartWallet {
                                 let label = context.dataset.label || '';
                                 if (label) label += ': ';
                                 const value = Math.abs(context.parsed.y);
-                                label += smartwallet.formatCurrency(value);
+                                label += smartfinance.formatCurrency(value);
                                 return label;
                             }
                         }
@@ -2903,7 +2903,7 @@ class SmartWallet {
         printWindow.document.write('<p><strong>Vencimento:</strong> ' + this.formatDate(period.dueDate.toISOString().split('T')[0]) + '</p>');
         printWindow.document.write('<table><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th></tr></thead><tbody>' + rows + '</tbody>');
         printWindow.document.write('<tfoot><tr class="total"><td colspan="3" style="text-align:right;">' + this.t('total') + ':</td><td>' + this.formatCurrency(total) + '</td></tr></tfoot></table>');
-        printWindow.document.write('<div class="footer">Smart Wallet • Gerado em ' + new Date().toLocaleString(this.getLanguage()) + '<br>Idealizado por RogerElizar™</div>');
+        printWindow.document.write('<div class="footer">Smart Finance • Gerado em ' + new Date().toLocaleString(this.getLanguage()) + '<br>Idealizado por RogerElizar™</div>');
         printWindow.document.write('</body></html>');
         printWindow.document.close();
         printWindow.document.title = fileName;
@@ -2958,7 +2958,7 @@ class SmartWallet {
                    '<td style="color:' + (t.amount >= 0 ? '#10b981' : '#ef4444') + ';font-weight:600;text-align:right;">' + this.formatCurrency(t.amount) + '</td></tr>';
         }).join('');
         const fileName = this.generateTimestamp() + '_extrato_' + period.replace(/ /g,'_') + '.pdf';
-        const html = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page { size: A4; margin: 2cm; }body { font-family: Arial, sans-serif; color: #1e293b; padding: 20px; max-width: 900px; margin: 0 auto; }.header { text-align: center; border-bottom: 3px solid #6366f1; padding-bottom: 20px; margin-bottom: 30px; }.header h1 { color: #6366f1; font-size: 28pt; margin: 0 0 8px 0; }table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 9pt; }th { background: #6366f1; color: white; padding: 10px 8px; text-align: left; font-weight: 600; }td { padding: 8px; border-bottom: 1px solid #e5e7eb; }tr:nth-child(even) { background: #f8fafc; }.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }.summary-box { background: #f8fafc; border-radius: 8px; padding: 16px; text-align: center; border: 2px solid #e5e7eb; }.summary-box .label { font-size: 9pt; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }.summary-box .value { font-size: 16pt; font-weight: bold; }.summary-box.receitas .value { color: #10b981; }.summary-box.despesas .value { color: #ef4444; }.summary-box.saldo .value { color: #6366f1; }.footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #6366f1; text-align: center; font-size: 9pt; color: #64748b; }.no-print { text-align:center; margin-top:24px; }@media print { body { padding: 0; } .no-print { display: none; } }</style></head><body><div class="header"><h1>Smart Wallet</h1><p style="color:#64748b;">' + this.t('appSubtitle') + '</p><p style="color:#6366f1;font-size:14pt;font-weight:bold;margin:12px 0 0 0;">' + this.t('monthlyStatement') + ': ' + period + '</p></div><table><thead><tr><th>' + this.t('date') + '</th><th>' + this.t('description') + '</th><th>' + this.t('category') + '</th><th>' + this.t('account') + '</th><th>' + this.t('payment') + '</th><th>' + this.t('status') + '</th><th style="text-align:right;">' + this.t('value') + '</th></tr></thead><tbody>' + rowsHtml + '</tbody></table><div class="summary"><div class="summary-box receitas"><div class="label">' + this.t('income_plural') + '</div><div class="value">' + this.formatCurrency(totalReceitas) + '</div></div><div class="summary-box despesas"><div class="label">' + this.t('expense_plural') + '</div><div class="value">' + this.formatCurrency(totalDespesas) + '</div></div><div class="summary-box saldo"><div class="label">' + this.t('unifiedBalance') + '</div><div class="value">' + this.formatCurrency(saldo) + '</div></div></div><div class="footer"><p>Smart Wallet - ' + this.t('appSubtitle') + '</p><p style="font-weight:600;color:#6366f1;margin-top:6px;">Idealizado por RogerElizar™ | rogerelizar@gmail.com</p></div><div class="no-print"><button onclick="window.print()" style="background:#6366f1;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:11pt;cursor:pointer;">🖨️ ' + this.t('printPDF') + '</button></div></body></html>';
+        const html = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page { size: A4; margin: 2cm; }body { font-family: Arial, sans-serif; color: #1e293b; padding: 20px; max-width: 900px; margin: 0 auto; }.header { text-align: center; border-bottom: 3px solid #6366f1; padding-bottom: 20px; margin-bottom: 30px; }.header h1 { color: #6366f1; font-size: 28pt; margin: 0 0 8px 0; }table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 9pt; }th { background: #6366f1; color: white; padding: 10px 8px; text-align: left; font-weight: 600; }td { padding: 8px; border-bottom: 1px solid #e5e7eb; }tr:nth-child(even) { background: #f8fafc; }.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }.summary-box { background: #f8fafc; border-radius: 8px; padding: 16px; text-align: center; border: 2px solid #e5e7eb; }.summary-box .label { font-size: 9pt; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }.summary-box .value { font-size: 16pt; font-weight: bold; }.summary-box.receitas .value { color: #10b981; }.summary-box.despesas .value { color: #ef4444; }.summary-box.saldo .value { color: #6366f1; }.footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #6366f1; text-align: center; font-size: 9pt; color: #64748b; }.no-print { text-align:center; margin-top:24px; }@media print { body { padding: 0; } .no-print { display: none; } }</style></head><body><div class="header"><h1>Smart Finance</h1><p style="color:#64748b;">' + this.t('appSubtitle') + '</p><p style="color:#6366f1;font-size:14pt;font-weight:bold;margin:12px 0 0 0;">' + this.t('monthlyStatement') + ': ' + period + '</p></div><table><thead><tr><th>' + this.t('date') + '</th><th>' + this.t('description') + '</th><th>' + this.t('category') + '</th><th>' + this.t('account') + '</th><th>' + this.t('payment') + '</th><th>' + this.t('status') + '</th><th style="text-align:right;">' + this.t('value') + '</th></tr></thead><tbody>' + rowsHtml + '</tbody></table><div class="summary"><div class="summary-box receitas"><div class="label">' + this.t('income_plural') + '</div><div class="value">' + this.formatCurrency(totalReceitas) + '</div></div><div class="summary-box despesas"><div class="label">' + this.t('expense_plural') + '</div><div class="value">' + this.formatCurrency(totalDespesas) + '</div></div><div class="summary-box saldo"><div class="label">' + this.t('unifiedBalance') + '</div><div class="value">' + this.formatCurrency(saldo) + '</div></div></div><div class="footer"><p>Smart Finance - ' + this.t('appSubtitle') + '</p><p style="font-weight:600;color:#6366f1;margin-top:6px;">Idealizado por RogerElizar™ | rogerelizar@gmail.com</p></div><div class="no-print"><button onclick="window.print()" style="background:#6366f1;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:11pt;cursor:pointer;">🖨️ ' + this.t('printPDF') + '</button></div></body></html>';
         const printWindow = window.open('', '_blank');
         if (!printWindow) { alert('⚠️ ' + this.t('allowPopups')); return; }
         printWindow.document.write(html);
@@ -2986,7 +2986,7 @@ class SmartWallet {
             const backup = {
                 version: '4.4.4',
                 exportDate: new Date().toISOString(),
-                appName: 'Smart Wallet',
+                appName: 'Smart Finance',
                 language: this.getLanguage(),
                 currency: this.getCurrency(),
                 transactions: this.transactions,
@@ -3010,7 +3010,7 @@ class SmartWallet {
             }
             saveFileWithPicker(blob, fileName, 'application/json').then(result => {
                 if (result === 'saved' || result === 'downloaded') {
-                    localStorage.setItem('smartwallet_last_backup', Date.now().toString());
+                    localStorage.setItem('smartfinance_last_backup', Date.now().toString());
                     this.showToast(usePassword ? '✅ Backup criptografado exportado!' : '✅ ' + this.t('backupExported'));
                     this.updateSettingsUI();
                 }
@@ -3054,14 +3054,14 @@ class SmartWallet {
             if (typeof data.darkMode === 'boolean') this.darkMode = data.darkMode;
             if (typeof data.privacyOn === 'boolean') this.privacyOn = data.privacyOn;
             if (data.settings) this.settings = { ...this.settings, ...data.settings };
-            if (typeof data.language === 'string') localStorage.setItem('smartwallet_language', data.language);
-            if (typeof data.currency === 'string') localStorage.setItem('smartwallet_currency', data.currency);
+            if (typeof data.language === 'string') localStorage.setItem('smartfinance_language', data.language);
+            if (typeof data.currency === 'string') localStorage.setItem('smartfinance_currency', data.currency);
             this.pageSize = this.settings.pageSize || 20;
             this.clearCache(); this.saveTransactions(); this.saveCategories();
             this.saveAccounts(); this.saveCards(); this.saveInvestments();
             this.saveSettings();
-            localStorage.setItem('smartwallet_dark', this.darkMode);
-            localStorage.setItem('smartwallet_privacy', this.privacyOn);
+            localStorage.setItem('smartfinance_dark', this.darkMode);
+            localStorage.setItem('smartfinance_privacy', this.privacyOn);
             this.populateCategorySelects(); this.populatePaymentMethodSelects();
             this.populateAccountSelects(); this.applyTheme(); this.applyPrivacy();
             this.applyLanguage(); this.applyCurrency();
@@ -3093,7 +3093,7 @@ class SmartWallet {
             let motivo = 'nenhuma linha contém as colunas "Data" e "Valor"';
             if (hasData && !hasValor) motivo = 'encontrei a coluna "Data", mas não a coluna "Valor"';
             else if (!hasData && hasValor) motivo = 'encontrei a coluna "Valor", mas não a coluna "Data"';
-            this.showToast('❌ Formato Csv inválido: ' + motivo + '. Use um Csv exportado pelo próprio Smart Wallet.');
+            this.showToast('❌ Formato Csv inválido: ' + motivo + '. Use um Csv exportado pelo próprio Smart Finance.');
             return;
         }
         if (headerIndex + 1 >= lines.length) {
@@ -3176,7 +3176,7 @@ class SmartWallet {
         this.clearCache();
         this.saveTransactions(); this.saveCategories(); this.saveAccounts();
         this.saveCards(); this.saveInvestments();
-        localStorage.setItem('smartwallet_demo', 'false');
+        localStorage.setItem('smartfinance_demo', 'false');
         this.populateCategorySelects(); this.populatePaymentMethodSelects();
         this.populateAccountSelects(); this.populateCardFilter();
         this.currentPage = 1;
@@ -3773,7 +3773,7 @@ class SmartWallet {
     // ===== SISTEMA DE ATUALIZAÇÃO =====
     checkVersionUpdate() {
         const CURRENT_VERSION = '4.4.4';
-        const STORAGE_KEY = 'smartwallet_last_version';
+        const STORAGE_KEY = 'smartfinance_last_version';
         try {
             const lastVersion = localStorage.getItem(STORAGE_KEY);
             if (!lastVersion) {
@@ -3817,7 +3817,7 @@ class SmartWallet {
 }
 
 // ===== INSTÂNCIA GLOBAL =====
-window.smartwallet = new SmartWallet();
+window.smartfinance = new SmartFinance();
 
 // ===== HELPERS DE MODAIS (CENTRALIZADOS) =====
 function openModal(id) {
@@ -3827,7 +3827,7 @@ function openModal(id) {
     document.body.classList.add('modal-open');
     modal.classList.add('active');
     if (id === 'settingsModal') {
-        smartwallet.updateSettingsUI();
+        smartfinance.updateSettingsUI();
     }
     setTimeout(() => {
         const focusable = modal.querySelector('.modal-content');
@@ -3880,7 +3880,7 @@ function showConfirm(title, message) {
 
 window.showConfirm = showConfirm;
 
-// ===== NOVO v4.4.4: PERGUNTAR SE QUER CONTINUAR INSERINDO =====
+// ===== NOVO v1.0.0: PERGUNTAR SE QUER CONTINUAR INSERINDO =====
 function askContinueOrClose(modalId, successMessage, onContinue) {
     const useCustom = typeof showConfirm === 'function';
     if (useCustom) {
@@ -3913,24 +3913,24 @@ function closeAllDropdowns() {
 
 // ===== FUNÇÕES GLOBAIS (INTERFACE PÚBLICA) =====
 window.selectTransactionType = function(t) {
-    smartwallet.currentTransactionType = t;
+    smartfinance.currentTransactionType = t;
     document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-type') === t);
     });
-    smartwallet.filterCategoriesByType('category', t);
+    smartfinance.filterCategoriesByType('category', t);
 };
 
 window.toggleDemoMode = function() {
-    smartwallet.toggleDemoMode();
+    smartfinance.toggleDemoMode();
     closeAllDropdowns();
 };
 
 window.selectEditType = function(t) {
-    smartwallet.currentEditType = t;
+    smartfinance.currentEditType = t;
     document.querySelectorAll('#editForm .type-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-type') === t);
     });
-    smartwallet.filterCategoriesByType('editCategory', t);
+    smartfinance.filterCategoriesByType('editCategory', t);
 };
 
 window.dashboardAction = function(action) {
@@ -3950,8 +3950,8 @@ window.dashboardAction = function(action) {
             if (accountFilter) accountFilter.value = '';
             if (cardFilter) cardFilter.value = '';
             if (searchFilter) searchFilter.value = '';
-            smartwallet.currentPage = 1;
-            smartwallet.clearCache(); smartwallet.render(); smartwallet.saveFilters();
+            smartfinance.currentPage = 1;
+            smartfinance.clearCache(); smartfinance.render(); smartfinance.saveFilters();
             document.querySelectorAll('.card.clickable')[1].classList.add('active-filter');
             scrollToTransactions(); break;
         case 'expense':
@@ -3961,8 +3961,8 @@ window.dashboardAction = function(action) {
             if (accountFilter) accountFilter.value = '';
             if (cardFilter) cardFilter.value = '';
             if (searchFilter) searchFilter.value = '';
-            smartwallet.currentPage = 1;
-            smartwallet.clearCache(); smartwallet.render(); smartwallet.saveFilters();
+            smartfinance.currentPage = 1;
+            smartfinance.clearCache(); smartfinance.render(); smartfinance.saveFilters();
             document.querySelectorAll('.card.clickable')[2].classList.add('active-filter');
             scrollToTransactions(); break;
         case 'cards': openCreditCardsModal(); break;
@@ -3975,42 +3975,42 @@ function scrollToTransactions() {
 }
 
 window.sortTransactions = function(column) {
-    if (smartwallet.sortColumn === column) {
-        smartwallet.sortDirection = smartwallet.sortDirection === 'asc' ? 'desc' : 'asc';
+    if (smartfinance.sortColumn === column) {
+        smartfinance.sortDirection = smartfinance.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
-        smartwallet.sortColumn = column;
-        smartwallet.sortDirection = column === 'date' ? 'desc' : 'asc';
+        smartfinance.sortColumn = column;
+        smartfinance.sortDirection = column === 'date' ? 'desc' : 'asc';
     }
-    smartwallet.render();
+    smartfinance.render();
 };
 
 window.changeCardMonth = function(delta) {
-    smartwallet.cardModalMonth.setMonth(smartwallet.cardModalMonth.getMonth() + delta);
-    smartwallet.renderCreditCardsList();
+    smartfinance.cardModalMonth.setMonth(smartfinance.cardModalMonth.getMonth() + delta);
+    smartfinance.renderCreditCardsList();
 };
 
 window.changeCardMonthToToday = function() {
-    smartwallet.cardModalMonth = new Date();
-    smartwallet.cardModalMonth.setDate(1);
-    smartwallet.renderCreditCardsList();
+    smartfinance.cardModalMonth = new Date();
+    smartfinance.cardModalMonth.setDate(1);
+    smartfinance.renderCreditCardsList();
 };
 
 // ===== ABERTURA/FECHAMENTO DE MODAIS =====
 window.openNewTransactionModal = function() {
-    smartwallet.setDefaultDate();
-    smartwallet.currentTransactionType = 'expense';
-    smartwallet.categoryManuallySet = false;
+    smartfinance.setDefaultDate();
+    smartfinance.currentTransactionType = 'expense';
+    smartfinance.categoryManuallySet = false;
     document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-type') === 'expense');
     });
-    smartwallet.populateCategorySelects();
-    smartwallet.populatePaymentMethodSelects();
-    smartwallet.populateAccountSelects();
+    smartfinance.populateCategorySelects();
+    smartfinance.populatePaymentMethodSelects();
+    smartfinance.populateAccountSelects();
     openModal('newTransactionModal');
 };
 
-window.closeNewTransactionModal = function() { closeModal('newTransactionModal'); smartwallet.clearForm(); };
-window.closeEditModal = function() { closeModal('editModal'); smartwallet.currentEditId = null; };
+window.closeNewTransactionModal = function() { closeModal('newTransactionModal'); smartfinance.clearForm(); };
+window.closeEditModal = function() { closeModal('editModal'); smartfinance.currentEditId = null; };
 window.openExportModal = function() { openModal('exportModal'); };
 window.closeExportModal = function() { closeModal('exportModal'); };
 window.openGoalModal = function() { openModal('goalModal'); };
@@ -4053,7 +4053,7 @@ window.openClearDataModal = function() {
 };
 
 window.closeClearDataModal = function() { closeModal('clearDataModal'); };
-window.openAccountsModal = function() { smartwallet.renderAccountsList(); openModal('accountsModal'); closeAllDropdowns(); };
+window.openAccountsModal = function() { smartfinance.renderAccountsList(); openModal('accountsModal'); closeAllDropdowns(); };
 window.closeAccountsModal = function() { closeModal('accountsModal'); };
 
 window.openNewAccountModal = function() {
@@ -4065,7 +4065,7 @@ window.openNewAccountModal = function() {
 };
 
 window.closeNewAccountModal = function() { closeModal('newAccountModal'); };
-window.openCreditCardsModal = function() { smartwallet.cardModalMonth = new Date(smartwallet.currentMonth); smartwallet.renderCreditCardsList(); openModal('creditCardsModal'); closeAllDropdowns(); };
+window.openCreditCardsModal = function() { smartfinance.cardModalMonth = new Date(smartfinance.currentMonth); smartfinance.renderCreditCardsList(); openModal('creditCardsModal'); closeAllDropdowns(); };
 window.closeCreditCardsModal = function() { closeModal('creditCardsModal'); };
 
 window.openNewCardModal = function() {
@@ -4079,11 +4079,11 @@ window.openNewCardModal = function() {
 };
 
 window.closeNewCardModal = function() { closeModal('newCardModal'); };
-window.openInvoiceModal = function(cardId) { smartwallet.openInvoice(cardId); };
+window.openInvoiceModal = function(cardId) { smartfinance.openInvoice(cardId); };
 window.closeInvoiceModal = function() { closeModal('invoiceModal'); };
-window.openBillsModal = function() { smartwallet.renderBillsModal(); openModal('billsModal'); };
+window.openBillsModal = function() { smartfinance.renderBillsModal(); openModal('billsModal'); };
 window.closeBillsModal = function() { closeModal('billsModal'); };
-window.openInvestmentsModal = function() { smartwallet.renderInvestmentsModal(); openModal('investmentsModal'); closeAllDropdowns(); };
+window.openInvestmentsModal = function() { smartfinance.renderInvestmentsModal(); openModal('investmentsModal'); closeAllDropdowns(); };
 window.closeInvestmentsModal = function() { closeModal('investmentsModal'); };
 
 window.openNewInvestmentModal = function() {
@@ -4094,10 +4094,10 @@ window.openNewInvestmentModal = function() {
     const accountSelect = document.getElementById('investmentAccount');
     if (accountSelect) {
         accountSelect.innerHTML = '<option value="">-- Criar nova --</option>';
-        smartwallet.accounts.filter(a => a.type === 'investment').forEach(acc => {
+        smartfinance.accounts.filter(a => a.type === 'investment').forEach(acc => {
             const opt = document.createElement('option');
             opt.value = acc.id;
-            opt.textContent = acc.name + ' - ' + smartwallet.formatCurrency(acc.balance);
+            opt.textContent = acc.name + ' - ' + smartfinance.formatCurrency(acc.balance);
             accountSelect.appendChild(opt);
         });
     }
@@ -4108,15 +4108,15 @@ window.closeNewInvestmentModal = function() { closeModal('newInvestmentModal'); 
 window.closeUpdateInvestmentModal = function() { closeModal('updateInvestmentModal'); };
 window.openManualModal = function() { document.getElementById('manualContent').innerHTML = manualHTML; openModal('manualModal'); closeAllDropdowns(); };
 window.closeManualModal = function() { closeModal('manualModal'); };
-window.printManual = function() { smartwallet.printManual(); };
+window.printManual = function() { smartfinance.printManual(); };
 window.openTermsModal = function() { openModal('disclaimerModal'); initDisclaimer(); closeAllDropdowns(); };
 window.openThanksModal = function() { openModal('thanksModal'); closeAllDropdowns(); };
 window.closeThanksModal = function() { closeModal('thanksModal'); };
-window.openCategoryBudgetModal = function() { smartwallet.renderCategoryBudget(); openModal('categoryBudgetModal'); closeAllDropdowns(); };
+window.openCategoryBudgetModal = function() { smartfinance.renderCategoryBudget(); openModal('categoryBudgetModal'); closeAllDropdowns(); };
 window.closeCategoryBudgetModal = function() { closeModal('categoryBudgetModal'); };
 window.openSettingsModal = function() { openModal('settingsModal'); closeAllDropdowns(); };
 window.closeSettingsModal = function() { closeModal('settingsModal'); };
-window.enableNotifications = function() { smartwallet.requestNotifications(); closeAllDropdowns(); };
+window.enableNotifications = function() { smartfinance.requestNotifications(); closeAllDropdowns(); };
 
 // ===== FAB =====
 window.toggleFab = function() {
@@ -4136,33 +4136,33 @@ window.toggleFab = function() {
 
 window.openExpenseModal = function() {
     if (document.getElementById('fabBtn').classList.contains('active')) toggleFab();
-    smartwallet.setDefaultDate();
-    smartwallet.currentTransactionType = 'expense';
+    smartfinance.setDefaultDate();
+    smartfinance.currentTransactionType = 'expense';
     document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-type') === 'expense');
     });
-    smartwallet.populateCategorySelects();
-    smartwallet.populatePaymentMethodSelects();
-    smartwallet.populateAccountSelects();
+    smartfinance.populateCategorySelects();
+    smartfinance.populatePaymentMethodSelects();
+    smartfinance.populateAccountSelects();
     openModal('newTransactionModal');
 };
 
 window.openIncomeModal = function() {
     if (document.getElementById('fabBtn').classList.contains('active')) toggleFab();
-    smartwallet.setDefaultDate();
-    smartwallet.currentTransactionType = 'income';
+    smartfinance.setDefaultDate();
+    smartfinance.currentTransactionType = 'income';
     document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-type') === 'income');
     });
-    smartwallet.populateCategorySelects();
-    smartwallet.populatePaymentMethodSelects();
-    smartwallet.populateAccountSelects();
+    smartfinance.populateCategorySelects();
+    smartfinance.populatePaymentMethodSelects();
+    smartfinance.populateAccountSelects();
     openModal('newTransactionModal');
 };
 
 window.openTransferModal = function() {
     if (document.getElementById('fabBtn').classList.contains('active')) toggleFab();
-    smartwallet.populateAccountSelects();
+    smartfinance.populateAccountSelects();
     document.getElementById('transferForm').reset();
     document.getElementById('transferDate').value = new Date().toISOString().split('T')[0];
     openModal('transferModal');
@@ -4172,15 +4172,15 @@ window.closeTransferModal = function() { closeModal('transferModal'); };
 
 // ===== TOGGLES =====
 window.togglePrivacy = function() {
-    smartwallet.privacyOn = !smartwallet.privacyOn;
-    localStorage.setItem('smartwallet_privacy', smartwallet.privacyOn);
-    smartwallet.applyPrivacy();
+    smartfinance.privacyOn = !smartfinance.privacyOn;
+    localStorage.setItem('smartfinance_privacy', smartfinance.privacyOn);
+    smartfinance.applyPrivacy();
 };
 
 window.toggleTheme = function() {
-    smartwallet.darkMode = !smartwallet.darkMode;
-    localStorage.setItem('smartwallet_dark', smartwallet.darkMode);
-    smartwallet.applyTheme();
+    smartfinance.darkMode = !smartfinance.darkMode;
+    localStorage.setItem('smartfinance_dark', smartfinance.darkMode);
+    smartfinance.applyTheme();
 };
 
 // ===== MENUS DROPDOWN =====
@@ -4209,19 +4209,19 @@ window.toggleInfoMenu = function(e) {
 };
 
 window.toggleLanguage = function() {
-    const currentLang = smartwallet.getLanguage();
+    const currentLang = smartfinance.getLanguage();
     const newLang = currentLang === 'pt-BR' ? 'en-US' : 'pt-BR';
-    smartwallet.setLanguage(newLang);
+    smartfinance.setLanguage(newLang);
     const langText = document.getElementById('languageText');
     if (langText) langText.textContent = newLang === 'pt-BR' ? 'Idioma: Português' : 'Language: English';
-    smartwallet.updateCurrencySelectorVisibility();
+    smartfinance.updateCurrencySelectorVisibility();
     closeAllDropdowns();
 };
 
 window.toggleCurrency = function() {
-    const currentCurrency = smartwallet.getCurrency();
+    const currentCurrency = smartfinance.getCurrency();
     const newCurrency = currentCurrency === 'BRL' ? 'USD' : 'BRL';
-    smartwallet.setCurrency(newCurrency);
+    smartfinance.setCurrency(newCurrency);
     const currencyText = document.getElementById('currencyText');
     if (currencyText) currencyText.textContent = newCurrency === 'BRL' ? 'Moeda: R$' : 'Currency: $';
     closeAllDropdowns();
@@ -4281,9 +4281,9 @@ window.handleBackupFileSelect = function(event) {
             window._pendingBackupData = e.target.result;
             if (parsed && parsed.smartWalletEncrypted === true) {
                 if (pwWrap) pwWrap.style.display = 'block';
-                smartwallet.showToast('🔒 Backup protegido por senha detectado');
+                smartfinance.showToast('🔒 Backup protegido por senha detectado');
             } else {
-                smartwallet.showToast('✅ Arquivo carregado!');
+                smartfinance.showToast('✅ Arquivo carregado!');
             }
         } catch (error) {
             alert('❌ JSON inválido: ' + error.message);
@@ -4319,8 +4319,8 @@ window.checkClearConfirm = function() {
 window.copyPixKey = function() {
     const key = document.getElementById('pixKey').textContent;
     navigator.clipboard.writeText(key)
-        .then(() => smartwallet.showToast('✅ Chave PIX copiada!'))
-        .catch(() => smartwallet.showToast('❌ Copie: ' + key));
+        .then(() => smartfinance.showToast('✅ Chave PIX copiada!'))
+        .catch(() => smartfinance.showToast('❌ Copie: ' + key));
 };
 
 // ===== DISCLAIMER & QUOTE =====
@@ -4360,7 +4360,7 @@ function showQuoteModal() {
 window.acceptDisclaimer = function() {
     const btn = document.getElementById('acceptDisclaimerBtn');
     if (!btn || !btn.classList.contains('enabled')) return;
-    localStorage.setItem('smartwallet_disclaimer_accepted', 'true');
+    localStorage.setItem('smartfinance_disclaimer_accepted', 'true');
     const disclaimer = document.getElementById('disclaimerModal');
     const splash = document.getElementById('splashScreen');
     if (disclaimer) {
@@ -4391,14 +4391,14 @@ window.startApp = function() {
 };
 
 window.closeWhatsNewModal = function() { closeModal('whatsNewModal'); };
-window.printManualFromWhatsNew = function() { closeWhatsNewModal(); setTimeout(() => { smartwallet.printManual(); }, 300); };
+window.printManualFromWhatsNew = function() { closeWhatsNewModal(); setTimeout(() => { smartfinance.printManual(); }, 300); };
 window.openManualFromWhatsNew = function() { closeWhatsNewModal(); setTimeout(() => { openManualModal(); }, 300); };
 
 // ===== EVENT LISTENERS GLOBAIS =====
 window.addEventListener('load', () => {
     const dateEl = document.getElementById('printDate');
     if (dateEl) dateEl.textContent = 'Gerado em: ' + new Date().toLocaleString('pt-BR');
-    const accepted = localStorage.getItem('smartwallet_disclaimer_accepted') === 'true';
+    const accepted = localStorage.getItem('smartfinance_disclaimer_accepted') === 'true';
     const splash = document.getElementById('splashScreen');
     const disclaimer = document.getElementById('disclaimerModal');
     if (splash) {
@@ -4455,8 +4455,8 @@ document.addEventListener('keydown', (e) => {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('[SmartWallet] SW registrado:', reg.scope))
-            .catch(err => console.log('[SmartWallet] SW falhou:', err));
+            .then(reg => console.log('[SmartFinance] SW registrado:', reg.scope))
+            .catch(err => console.log('[SmartFinance] SW falhou:', err));
     });
 }
 document.addEventListener('DOMContentLoaded', () => {
@@ -4479,7 +4479,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    console.log('🎉 Smart Wallet v4.4.4 carregado com sucesso!');
+    console.log('🎉 Smart Finance v1.0.0 carregado com sucesso!');
 });
 
 })();
