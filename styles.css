@@ -342,7 +342,6 @@ body.modal-open { overflow: hidden; }
 #mainApp { display: block; }
 
 /* ===== HEADER ===== */
-/* ===== HEADER ===== */
 .app-header {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -386,7 +385,7 @@ body.modal-open { overflow: hidden; }
 
 .header-logo img {
   display: block;
-  height: 90px;
+  height: 100px;
   width: auto;
   border-radius: 16px;
 }
