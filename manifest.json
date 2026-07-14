@@ -20,12 +20,7 @@
       "type": "image/svg+xml",
       "purpose": "any"
     }
-    {
-      "src": "logomarca.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    }
+
 
   ],
   "categories": ["finance", "productivity"],
