@@ -287,7 +287,7 @@ a {
     justify-content: center;
     align-items: center;
     padding: 12px 20px;
-    background: rgba(30, 37, 56, 0.4);
+    background: rgba(30, 37, 56, 0.6);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);

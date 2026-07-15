@@ -3,9 +3,9 @@
 // ===== CONSTANTES =====
 const PAYMENT_METHODS = [
 { id: 'pix', name: 'PIX', icon: '' },
-{ id: 'debit', name: 'Cart.Débito', icon: '💳' },
-{ id: 'auto', name: 'Débito Automático', icon: '🔄' },
-{ id: 'scheduled', name: 'Agendamento', icon: '📅' },
+{ id: 'debit', name: 'Cart.Débito', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>' },
+{ id: 'auto', name: 'Débito Automático', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>' },
+{ id: 'scheduled', name: 'Agendamento', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' },
 { id: 'transfer', name: 'Transferência', icon: '↔️' }
 ];
 const DEFAULT_CATEGORIES = [
@@ -73,7 +73,7 @@ const FINANCIAL_QUOTES = [
 { text: "A paciência é a virtude dos investidores bem-sucedidos.", author: "Peter Lynch" },
 { text: "Quem compra o que não precisa, rouba a si mesmo.", author: "Provérbio Popular" }
 ];
-const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Finance Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 1.0.2 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Finance!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v1.0.2</h2><ul><li><strong>Correções de Bugs:</strong> Backup, datas, confirmações e investimentos corrigidos</li><li><strong>Traduções:</strong> Chaves de tradução corrigidas (PT-BR e EN-US)</li><li><strong>Pagamento de Fatura:</strong> Agora desconta corretamente da conta corrente</li><li><strong>Código Limpo:</strong> Métodos duplicados removidos</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso!</h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações, <br>RogerElizar®</div></div></div>';
+const manualHTML = '<div class="manual-cover"><h1><svg class="icon-inline" viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> Manual do Usuário</h1><h2>Smart Finance Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 1.0.2 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2><svg class="icon-inline" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg> Bem-vindo ao Smart Finance!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v1.0.2</h2><ul><li><strong>Correções de Bugs:</strong> Backup, datas, confirmações e investimentos corrigidos</li><li><strong>Traduções:</strong> Chaves de tradução corrigidas (PT-BR e EN-US)</li><li><strong>Pagamento de Fatura:</strong> Agora desconta corretamente da conta corrente</li><li><strong>Código Limpo:</strong> Métodos duplicados removidos</li></ul><h2><svg class="icon-inline" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg> Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3><svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> É Isso!</h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações, <br>RogerElizar®</div></div></div>';
 // ===== TRADUÇÕES v1.0.2 (CORRIGIDAS) =====
 const TRANSLATIONS = {
 'pt-BR': {
@@ -104,8 +104,8 @@ value: 'Valor',
 account: 'Conta',
 completed: 'Concluído',
 pending: 'Pendente',
-incomeGroup: '💰 Receitas',
-expenseGroup: '💸 Despesas',
+incomeGroup: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg> Receitas',
+expenseGroup: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/></svg> Despesas',
 allCards: 'Todos Cartões',
 allCategories: 'Todas as categorias',
 allAccounts: 'Todas as contas',
@@ -157,9 +157,9 @@ next: 'Próxima',
 itemsPerPage: 'Itens por página',
 allItems: 'Todos',
 negativeBalanceAlert: 'Atenção: {count} conta(s) com saldo negativo!',
-negativeBalanceBlocked: '❌ Saldo insuficiente! Transação bloqueada.',
+negativeBalanceBlocked: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Saldo insuficiente! Transação bloqueada.',
 settingsSaved: 'Configurações salvas!',
-autoBackupSuggested: '💾 Faça um backup dos seus dados!',
+autoBackupSuggested: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg> Faça um backup dos seus dados!',
 lastBackup: 'Último backup: {date}',
 neverBackedUp: 'Nunca realizado',
 notificationsEnabled: 'Notificações ativadas!',
@@ -196,8 +196,8 @@ value: 'Value',
 account: 'Account',
 completed: 'Completed',
 pending: 'Pending',
-incomeGroup: '💰 Income',
-expenseGroup: '💸 Expenses',
+incomeGroup: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg> Income',
+expenseGroup: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/></svg> Expenses',
 allCards: 'All Cards',
 allCategories: 'All categories',
 allAccounts: 'All accounts',
@@ -249,7 +249,7 @@ next: 'Next',
 itemsPerPage: 'Items per page',
 allItems: 'All',
 negativeBalanceAlert: 'Warning: {count} account(s) with negative balance!',
-negativeBalanceBlocked: '❌ Insufficient balance! Transaction blocked.',
+negativeBalanceBlocked: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Insufficient balance! Transaction blocked.',
 settingsSaved: 'Settings saved!',
 autoBackupSuggested: 'Backup your data!',
 lastBackup: 'Last backup: {date}',
@@ -461,12 +461,12 @@ for (const field of fields) {
 const element = document.getElementById(field.id);
 if (!element) continue;
 const value = element.value?.trim();
-if (field.required && !value) { this.showToast('❌ ' + field.label); element.focus(); return false; }
+if (field.required && !value) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + field.label); element.focus(); return false; }
 if (field.type === 'number' && value) {
 const num = parseFloat(value);
-if (isNaN(num)) { this.showToast('❌ ' + field.label + ' inválido'); element.focus(); return false; }
-if (field.min !== undefined && num < field.min) { this.showToast('❌ ' + field.label + ' muito baixo'); element.focus(); return false; }
-if (field.max !== undefined && num > field.max) { this.showToast('❌ ' + field.label + ' muito alto'); element.focus(); return false; }
+if (isNaN(num)) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + field.label + ' inválido'); element.focus(); return false; }
+if (field.min !== undefined && num < field.min) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + field.label + ' muito baixo'); element.focus(); return false; }
+if (field.max !== undefined && num > field.max) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + field.label + ' muito alto'); element.focus(); return false; }
 }
 }
 return true;
@@ -498,7 +498,7 @@ return new Intl.NumberFormat(data.locale, { style: 'currency', currency: data.co
 }
 // ===== INICIALIZAÇÃO =====
 init() {
-console.log('✅ Smart Finance v1.0.2 inicializado');
+console.log('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Smart Finance v1.0.2 inicializado');
 this.applyTheme();
 this.applyPrivacy();
 this.applyDemoBadge();
@@ -1130,11 +1130,11 @@ lastBackupDate.textContent = this.t('neverBackedUp');
 }
 if (notificationsStatus) {
 if (!('Notification' in window)) {
-notificationsStatus.textContent = '❌ Não suportado';
+notificationsStatus.textContent = '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Não suportado';
 } else if (Notification.permission === 'granted') {
-notificationsStatus.textContent = '✅ Ativado';
+notificationsStatus.textContent = '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Ativado';
 } else if (Notification.permission === 'denied') {
-notificationsStatus.textContent = '❌ Bloqueado';
+notificationsStatus.textContent = '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Bloqueado';
 } else {
 notificationsStatus.textContent = '⏳ Pendente';
 }
@@ -1230,11 +1230,11 @@ group.appendChild(opt);
 sel.appendChild(group);
 if (self.cards.length > 0) {
 const cardGroup = document.createElement('optgroup');
-cardGroup.label = '💳 Cartões de Crédito';
+cardGroup.label = '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Cartões de Crédito';
 self.cards.forEach(card => {
 const opt = document.createElement('option');
 opt.value = 'card:' + card.id;
-opt.textContent = '💳 ' + card.name + ' •••• ' + (card.last4 || '****');
+opt.textContent = '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> ' + card.name + ' •••• ' + (card.last4 || '****');
 cardGroup.appendChild(opt);
 });
 sel.appendChild(cardGroup);
@@ -1255,7 +1255,7 @@ sel.innerHTML = isFilter
 self.accounts.forEach(acc => {
 const opt = document.createElement('option');
 opt.value = acc.id;
-opt.textContent = (acc.type === 'checking' ? '💳 ' : '📈 ') + acc.name;
+opt.textContent = (acc.type === 'checking' ? '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> ' : '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg> ') + acc.name;
 sel.appendChild(opt);
 });
 sel.value = val;
@@ -1269,7 +1269,7 @@ sel.innerHTML = '<option value="">' + this.t('allCards') + '</option>';
 this.cards.forEach(card => {
 const opt = document.createElement('option');
 opt.value = 'card:' + card.id;
-opt.textContent = '💳 ' + card.name;
+opt.textContent = '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> ' + card.name;
 sel.appendChild(opt);
 });
 sel.value = val;
@@ -1321,7 +1321,7 @@ getPaymentMethodName(method) {
 if (!method) return '-';
 if (method.indexOf('card:') === 0) {
 const card = this.getCardById(method.replace('card:', ''));
-return card ? '💳 ' + card.name : 'Cartão removido';
+return card ? '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> ' + card.name : 'Cartão removido';
 }
 for (let i = 0; i < PAYMENT_METHODS.length; i++) {
 if (PAYMENT_METHODS[i].id === method) return PAYMENT_METHODS[i].icon + ' ' + PAYMENT_METHODS[i].name;
@@ -1361,7 +1361,7 @@ if (category && category.type === this.currentTransactionType) {
 const optionExists = Array.from(catField.options).some(o => o.value === catId);
 if (optionExists && catField.value !== catId) {
 catField.value = catId;
-this.showToast('💡 Categoria sugerida: ' + category.name);
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg> Categoria sugerida: ' + category.name);
 }
 return;
 }
@@ -1487,7 +1487,7 @@ tr.dataset.id = t.id;
 tr.onclick = function() { smartfinance.editTransaction(t.id); };
 let rowHtml = '';
 if (isMobile) {
-rowHtml += '<div class="swipe-actions"><div class="swipe-action complete">✓ Paga</div><div class="swipe-action delete">🗑️ Excluir</div></div>';
+rowHtml += '<div class="swipe-actions"><div class="swipe-action complete"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Paga</div><div class="swipe-action delete"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> Excluir</div></div>';
 }
 rowHtml += '<td data-label="Data">' + this.formatDate(t.date) + '</td>' +
 '<td data-label="Descrição">' + this.escapeHtml(t.description || '-') + '</td>' +
@@ -1600,7 +1600,7 @@ if (isRecurring) {
 const recurrenceType = document.getElementById('recurrenceType').value;
 const recurrenceCount = parseInt(document.getElementById('recurrenceCount').value);
 if (recurrenceCount < 2) {
-this.showToast('❌ ' + this.t('minInstallments'));
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + this.t('minInstallments'));
 return;
 }
 const startDate = this.parseDate(date);
@@ -1759,7 +1759,7 @@ let idx = -1;
 for (let i = 0; i < this.transactions.length; i++) {
 if (String(this.transactions[i].id) === String(id)) { idx = i; break; }
 }
-if (idx === -1) { this.showToast('❌ ' + this.t('transactionNotFound')); return; }
+if (idx === -1) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + this.t('transactionNotFound')); return; }
 const oldTransaction = this.transactions[idx];
 const oldAmount = oldTransaction.amount;
 const oldAccountId = oldTransaction.accountId;
@@ -1794,7 +1794,7 @@ this.updateAccountBalance(accountId, newAmount);
 this.clearCache(); this.saveTransactions(); this.render();
 this.updateCharts(); this.updateAlertBadge();
 closeModal('editModal');
-this.showToast('✅ ' + this.t('transactionUpdated'));
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + this.t('transactionUpdated'));
 this.checkNegativeBalance();
 }
 async deleteFromEdit() {
@@ -1807,7 +1807,7 @@ this.transactions = this.transactions.filter(x => x.id !== this.currentEditId);
 this.clearCache(); this.saveTransactions(); this.render();
 this.updateCharts(); this.updateAlertBadge();
 closeModal('editModal');
-this.showToast('✅ ' + this.t('transactionDeleted'));
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + this.t('transactionDeleted'));
 this.checkNegativeBalance();
 }
 async deleteTransaction(id) {
@@ -1818,7 +1818,7 @@ if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
 this.transactions = this.transactions.filter(x => x.id !== id);
 this.clearCache(); this.saveTransactions(); this.render();
 this.updateCharts(); this.updateAlertBadge();
-this.showToast('✅ ' + this.t('transactionDeleted'));
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + this.t('transactionDeleted'));
 this.checkNegativeBalance();
 }
 // ===== TEMA E PRIVACIDADE =====
@@ -2193,7 +2193,7 @@ const total = self.calculateInvoiceTotal(purchases);
 const available = card.limit - total;
 const usedPct = Math.min(100, (total / card.limit) * 100);
 html += '<div class="credit-card-visual" style="background:linear-gradient(135deg, ' + card.color + ' 0%, ' + self.adjustColor(card.color, -30) + ' 100%);" data-card-id="' + card.id + '">';
-html += '<div class="cc-actions"><button class="cc-action-btn edit-card-btn" data-card-id="' + card.id + '">✏️</button><button class="cc-action-btn delete-card-btn" data-card-id="' + card.id + '">🗑️</button></div>';
+html += '<div class="cc-actions"><button class="cc-action-btn edit-card-btn" data-card-id="' + card.id + '"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button><button class="cc-action-btn delete-card-btn" data-card-id="' + card.id + '"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button></div>';
 html += '<div class="cc-header"><div class="cc-brand">' + self.escapeHtml(card.brand) + '</div><div class="cc-chip"></div></div>';
 html += '<div class="cc-name">' + self.escapeHtml(card.name) + '</div>';
 html += '<div class="cc-number">•••• •••• •••• ' + self.escapeHtml(card.last4 || '****') + '</div>';
@@ -2256,14 +2256,14 @@ this.cards.push({ id: this.generateUniqueId(), name, brand, last4, closingDay, d
 }
 this.clearCache(); this.saveCards(); this.populatePaymentMethodSelects(); this.renderCreditCardsList();
 closeModal('newCardModal');
-this.showToast('✅ ' + (id ? this.t('cardUpdated') : this.t('cardCreated')));
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + (id ? this.t('cardUpdated') : this.t('cardCreated')));
 }
 async deleteCard(id) {
 const confirmed = await showConfirm('Excluir este cartão?', 'Esta ação não pode ser desfeita.');
 if (!confirmed) return;
 this.cards = this.cards.filter(c => c.id !== id);
 this.clearCache(); this.saveCards(); this.populatePaymentMethodSelects(); this.renderCreditCardsList();
-this.showToast('✅ ' + this.t('cardRemoved'));
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + this.t('cardRemoved'));
 }
 editCard(id) {
 const card = this.getCardById(id); if (!card) return;
@@ -2299,11 +2299,11 @@ let dueText = this.formatDate(period.dueDate.toISOString().split('T')[0]);
 if (daysUntilDue < 0) { dueClass = 'overdue'; dueText += ' (' + this.t('overdue') + ' ' + Math.abs(daysUntilDue) + ' ' + this.t('days') + ')'; }
 else if (daysUntilDue === 0) { dueClass = 'overdue'; dueText += ' (' + this.t('dueToday') + ')'; }
 else if (daysUntilDue <= 3) { dueText += ' (' + this.t('inDays', {days: daysUntilDue}) + ')'; }
-if (period.isClosed) dueText += ' ✓ ' + this.t('closed');
+if (period.isClosed) dueText += ' <svg class="icon-inline" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> ' + this.t('closed');
 let html = '<div class="invoice-period-display">';
 html += '<div class="invoice-period-info"><div class="invoice-period-label">' + this.t('invoicePeriod') + '</div>';
 html += '<div class="invoice-period-value">' + this.formatDate(period.startDate.toISOString().split('T')[0]) + ' até ' + this.formatDate(period.closingDate.toISOString().split('T')[0]) + '</div></div>';
-html += '<div class="invoice-due-info"><div class="invoice-due-label">💳 ' + this.t('dueDate') + '</div>';
+html += '<div class="invoice-due-info"><div class="invoice-due-label"><svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> ' + this.t('dueDate') + '</div>';
 html += '<div class="invoice-due-value ' + dueClass + '">' + dueText + '</div></div></div>';
 html += '<div style="background:var(--input-bg); border-radius:14px; padding:16px; margin-bottom:16px;">';
 html += '<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border-color);"><span style="color:var(--text-secondary);">' + this.t('limit') + '</span><span style="font-weight:600;">' + this.formatCurrency(card.limit) + '</span></div>';
@@ -2313,8 +2313,8 @@ html += '<div style="display:flex; justify-content:space-between; padding:12px 0
 html += '<div style="display:flex; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:10px;">';
 html += '<h3 style="font-size:1.1rem;">' + this.t('purchases') + ' (' + purchases.length + ')</h3>';
 html += '<div style="display:flex; gap:8px;">';
-html += '<button class="btn btn-secondary btn-small" id="exportInvoiceCsvBtn">📥 Csv</button>';
-html += '<button class="btn btn-secondary btn-small" id="printInvoicePdfBtn">🖨️ PDF</button></div></div>';
+html += '<button class="btn btn-secondary btn-small" id="exportInvoiceCsvBtn"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg> Csv</button>';
+html += '<button class="btn btn-secondary btn-small" id="printInvoicePdfBtn"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 12v4H8v-4h8zm2-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4h-2z"/></svg>️ PDF</button></div></div>';
 html += '<div>';
 if (purchases.length === 0) {
 html += '<p style="text-align:center; padding:20px; color:var(--text-secondary);">' + this.t('noPurchases') + '</p>';
@@ -2323,14 +2323,14 @@ purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(p => {
 const cat = self.getCategoryById(p.category);
 html += '<div style="background:var(--input-bg); border-radius:12px; padding:12px 16px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; gap:12px;">';
 html += '<div style="flex:1;"><div style="font-weight:600;">' + self.escapeHtml(p.description) + '</div>';
-html += '<div style="font-size:0.8rem; color:var(--text-secondary); display:flex; gap:10px;"><span>' + self.formatDate(p.date) + '</span><span style="color:' + cat.color + ';">● ' + self.escapeHtml(cat.name) + '</span></div></div>';
+html += '<div style="font-size:0.8rem; color:var(--text-secondary); display:flex; gap:10px;"><span>' + self.formatDate(p.date) + '</span><span style="color:' + cat.color + ';"><svg class="icon-inline" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> ' + self.escapeHtml(cat.name) + '</span></div></div>';
 html += '<div style="font-weight:700;">' + self.formatCurrency(Math.abs(p.amount)) + '</div>';
-html += '<button class="btn btn-danger btn-small delete-invoice-item" data-id="' + p.id + '">🗑️</button></div>';
+html += '<button class="btn btn-danger btn-small delete-invoice-item" data-id="' + p.id + '"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button></div>';
 });
 }
 html += '</div>';
 html += '<div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;">';
-html += '<button class="btn btn-success" id="payInvoiceBtn">💰 ' + this.t('payInvoice') + '</button>';
+html += '<button class="btn btn-success" id="payInvoiceBtn"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg> ' + this.t('payInvoice') + '</button>';
 html += '<button class="btn btn-secondary" data-close-modal="invoiceModal">' + this.t('close') + '</button></div>';
 document.getElementById('invoiceContent').innerHTML = html;
 openModal('invoiceModal');
@@ -2356,11 +2356,11 @@ if (!card) return;
 const period = this.getInvoicePeriod(card);
 const purchases = this.getCardTransactionsForPeriod(card.id, period.startDate, period.closingDate);
 const total = this.calculateInvoiceTotal(purchases);
-if (total <= 0) { this.showToast('❌ ' + this.t('emptyInvoice')); return; }
+if (total <= 0) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + this.t('emptyInvoice')); return; }
 
 const checkingAccount = this.accounts.find(a => a.type === 'checking');
 if (!checkingAccount) {
-this.showToast('❌ Cadastre uma conta corrente para pagar a fatura');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Cadastre uma conta corrente para pagar a fatura');
 return;
 }
 if (this.settings.blockNegativeBalance && (checkingAccount.balance - total) < 0) {
@@ -2391,7 +2391,7 @@ this.render();
 this.updateCharts();
 this.updateAlertBadge();
 this.checkNegativeBalance();
-this.showToast('✅ ' + this.t('paymentRegistered'));
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + this.t('paymentRegistered'));
 }
 exportInvoiceCsv(cardId) {
 const card = this.getCardById(cardId);
@@ -2412,8 +2412,8 @@ csv += '\n' + this.t('invoiceTotal') + ';;;' + total.toFixed(2) + '\n';
 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 const fileName = this.generateTimestamp() + '_fatura_' + card.name.replace(/\s+/g,'_') + '.csv';
 saveFileWithPicker(blob, fileName, 'text/csv').then(result => {
-if (result === 'saved' || result === 'downloaded') this.showToast('✅ ' + this.t('backupExported'));
-}).catch(e => this.showToast('❌ ' + e.message));
+if (result === 'saved' || result === 'downloaded') this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + this.t('backupExported'));
+}).catch(e => this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + e.message));
 }
 printInvoicePDF(cardId) {
 const card = this.getCardById(cardId);
@@ -2423,7 +2423,7 @@ const purchases = this.getCardTransactionsForPeriod(card.id, period.startDate, p
 const total = this.calculateInvoiceTotal(purchases);
 const self = this;
 const printWindow = window.open('', '_blank');
-if (!printWindow) { alert('⚠️ ' + this.t('allowPopups')); return; }
+if (!printWindow) { alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> ' + this.t('allowPopups')); return; }
 const rows = purchases.sort((a,b) => new Date(a.date) - new Date(b.date)).map(p => {
 const cat = self.getCategoryById(p.category);
 return '<tr><td>' + self.formatDate(p.date) + '</td><td>' + self.escapeHtml(p.description) + '</td><td>' + self.escapeHtml(cat.name) + '</td><td style="text-align:right;">' + self.formatCurrency(Math.abs(p.amount)) + '</td></tr>';
@@ -2444,7 +2444,7 @@ setTimeout(() => { printWindow.focus(); printWindow.print(); }, 300);
 // ===== EXPORTAÇÕES =====
 exportCsv() {
 const mt = this.getMonthTransactions();
-if (!mt.length) { this.showToast('❌ ' + this.t('noTransactions')); return; }
+if (!mt.length) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + this.t('noTransactions')); return; }
 const self = this;
 let csv = '\ufeff' + this.t('monthlyStatement') + '\n';
 csv += this.t('period') + ': ' + this.formatMonthYear(this.currentMonth) + '\n\n';
@@ -2463,13 +2463,13 @@ Math.abs(t.amount).toFixed(2) + '\n';
 const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 const fileName = this.generateTimestamp() + '_extrato_' + this.formatMonthYear(this.currentMonth) + '.csv';
 saveFileWithPicker(blob, fileName, 'text/csv').then(result => {
-if (result === 'saved' || result === 'downloaded') this.showToast('✅ ' + this.t('backupExported'));
-}).catch(e => this.showToast('❌ ' + e.message));
+if (result === 'saved' || result === 'downloaded') this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + this.t('backupExported'));
+}).catch(e => this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + e.message));
 closeModal('exportModal');
 }
 printExtratoPDF() {
 const filtered = this.getFilteredTransactions();
-if (!filtered.length) { this.showToast('❌ ' + this.t('noTransactions')); return; }
+if (!filtered.length) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + this.t('noTransactions')); return; }
 const months = this.getMonths();
 const period = months[this.currentMonth.getMonth()] + ' ' + this.currentMonth.getFullYear();
 let totalReceitas = 0, totalDespesas = 0;
@@ -2489,9 +2489,9 @@ return '<tr><td>' + this.formatDate(t.date) + '</td><td>' + this.escapeHtml(t.de
 '<td style="color:' + (t.amount >= 0 ? '#10b981' : '#ef4444') + ';font-weight:600;text-align:right;">' + this.formatCurrency(t.amount) + '</td></tr>';
 }).join('');
 const fileName = this.generateTimestamp() + '_extrato_' + period.replace(/ /g,'_') + '.pdf';
-const html = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page { size: A4; margin: 2cm; }body { font-family: Arial, sans-serif; color: #1e293b; padding: 20px; max-width: 900px; margin: 0 auto; }.header { text-align: center; border-bottom: 3px solid #6366f1; padding-bottom: 20px; margin-bottom: 30px; }.header h1 { color: #6366f1; font-size: 28pt; margin: 0 0 8px 0; }table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 9pt; }th { background: #6366f1; color: white; padding: 10px 8px; text-align: left; font-weight: 600; }td { padding: 8px; border-bottom: 1px solid #e5e7eb; }tr:nth-child(even) { background: #f8fafc; }.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }.summary-box { background: #f8fafc; border-radius: 8px; padding: 16px; text-align: center; border: 2px solid #e5e7eb; }.summary-box .label { font-size: 9pt; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }.summary-box .value { font-size: 16pt; font-weight: bold; }.summary-box.receitas .value { color: #10b981; }.summary-box.despesas .value { color: #ef4444; }.summary-box.saldo .value { color: #6366f1; }.footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #6366f1; text-align: center; font-size: 9pt; color: #64748b; }.no-print { text-align:center; margin-top:24px; }@media print { body { padding: 0; } .no-print { display: none; } }</style></head><body><div class="header"><h1>Smart Finance</h1><p style="color:#64748b;">' + this.t('appSubtitle') + '</p><p style="color:#6366f1;font-size:14pt;font-weight:bold;margin:12px 0 0 0;">' + this.t('monthlyStatement') + ': ' + period + '</p></div><table><thead><tr><th>' + this.t('date') + '</th><th>' + this.t('description') + '</th><th>' + this.t('category') + '</th><th>' + this.t('account') + '</th><th>' + this.t('payment') + '</th><th>' + this.t('status') + '</th><th style="text-align:right;">' + this.t('value') + '</th></tr></thead><tbody>' + rowsHtml + '</tbody></table><div class="summary"><div class="summary-box receitas"><div class="label">' + this.t('income_plural') + '</div><div class="value">' + this.formatCurrency(totalReceitas) + '</div></div><div class="summary-box despesas"><div class="label">' + this.t('expense_plural') + '</div><div class="value">' + this.formatCurrency(totalDespesas) + '</div></div><div class="summary-box saldo"><div class="label">' + this.t('unifiedBalance') + '</div><div class="value">' + this.formatCurrency(saldo) + '</div></div></div><div class="footer"><p>Smart Finance - ' + this.t('appSubtitle') + '</p><p style="font-weight:600;color:#6366f1;margin-top:6px;">Idealizado por RogerElizar™ | rogerelizar@gmail.com</p></div><div class="no-print"><button onclick="window.print()" style="background:#6366f1;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:11pt;cursor:pointer;">🖨️ ' + this.t('printPDF') + '</button></div></body></html>';
+const html = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page { size: A4; margin: 2cm; }body { font-family: Arial, sans-serif; color: #1e293b; padding: 20px; max-width: 900px; margin: 0 auto; }.header { text-align: center; border-bottom: 3px solid #6366f1; padding-bottom: 20px; margin-bottom: 30px; }.header h1 { color: #6366f1; font-size: 28pt; margin: 0 0 8px 0; }table { width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 9pt; }th { background: #6366f1; color: white; padding: 10px 8px; text-align: left; font-weight: 600; }td { padding: 8px; border-bottom: 1px solid #e5e7eb; }tr:nth-child(even) { background: #f8fafc; }.summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }.summary-box { background: #f8fafc; border-radius: 8px; padding: 16px; text-align: center; border: 2px solid #e5e7eb; }.summary-box .label { font-size: 9pt; color: #64748b; text-transform: uppercase; margin-bottom: 6px; }.summary-box .value { font-size: 16pt; font-weight: bold; }.summary-box.receitas .value { color: #10b981; }.summary-box.despesas .value { color: #ef4444; }.summary-box.saldo .value { color: #6366f1; }.footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #6366f1; text-align: center; font-size: 9pt; color: #64748b; }.no-print { text-align:center; margin-top:24px; }@media print { body { padding: 0; } .no-print { display: none; } }</style></head><body><div class="header"><h1>Smart Finance</h1><p style="color:#64748b;">' + this.t('appSubtitle') + '</p><p style="color:#6366f1;font-size:14pt;font-weight:bold;margin:12px 0 0 0;">' + this.t('monthlyStatement') + ': ' + period + '</p></div><table><thead><tr><th>' + this.t('date') + '</th><th>' + this.t('description') + '</th><th>' + this.t('category') + '</th><th>' + this.t('account') + '</th><th>' + this.t('payment') + '</th><th>' + this.t('status') + '</th><th style="text-align:right;">' + this.t('value') + '</th></tr></thead><tbody>' + rowsHtml + '</tbody></table><div class="summary"><div class="summary-box receitas"><div class="label">' + this.t('income_plural') + '</div><div class="value">' + this.formatCurrency(totalReceitas) + '</div></div><div class="summary-box despesas"><div class="label">' + this.t('expense_plural') + '</div><div class="value">' + this.formatCurrency(totalDespesas) + '</div></div><div class="summary-box saldo"><div class="label">' + this.t('unifiedBalance') + '</div><div class="value">' + this.formatCurrency(saldo) + '</div></div></div><div class="footer"><p>Smart Finance - ' + this.t('appSubtitle') + '</p><p style="font-weight:600;color:#6366f1;margin-top:6px;">Idealizado por RogerElizar™ | rogerelizar@gmail.com</p></div><div class="no-print"><button onclick="window.print()" style="background:#6366f1;color:white;border:none;padding:12px 24px;border-radius:8px;font-size:11pt;cursor:pointer;"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M19 8h-1V3H6v5H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zM8 5h8v3H8V5zm8 12v4H8v-4h8zm2-2v-2H6v2H4v-4c0-.55.45-1 1-1h14c.55 0 1 .45 1 1v4h-2z"/></svg>️ ' + this.t('printPDF') + '</button></div></body></html>';
 const printWindow = window.open('', '_blank');
-if (!printWindow) { alert('⚠️ ' + this.t('allowPopups')); return; }
+if (!printWindow) { alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> ' + this.t('allowPopups')); return; }
 printWindow.document.write(html);
 printWindow.document.close();
 printWindow.document.title = fileName;
@@ -2508,7 +2508,7 @@ if (usePassword) {
 const pwField = document.getElementById('backupPasswordField');
 password = pwField ? pwField.value : '';
 if (!password || password.length < 4) {
-this.showToast('⚠️ Digite uma senha com pelo menos 4 caracteres');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Digite uma senha com pelo menos 4 caracteres');
 this.isSaving = false;
 return;
 }
@@ -2541,39 +2541,39 @@ fileName = this.generateTimestamp() + '_backup.json';
 saveFileWithPicker(blob, fileName, 'application/json').then(result => {
 if (result === 'saved' || result === 'downloaded') {
 localStorage.setItem('smartfinance_last_backup', Date.now().toString());
-this.showToast(usePassword ? '✅ Backup criptografado exportado!' : '✅ ' + this.t('backupExported'));
+this.showToast(usePassword ? '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Backup criptografado exportado!' : '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + this.t('backupExported'));
 this.updateSettingsUI();
 }
-}).catch(e => this.showToast('❌ ' + e.message))
+}).catch(e => this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> ' + e.message))
 .finally(() => { this.isSaving = false; });
 } catch (e) {
 this.isSaving = false;
-this.showToast('❌ Erro: ' + e.message);
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Erro: ' + e.message);
 }
 }
 async importBackup() {
-if (!window._pendingBackupData) { this.showToast('⚠️ Selecione um arquivo'); return; }
+if (!window._pendingBackupData) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Selecione um arquivo'); return; }
 try {
 let cleanData = window._pendingBackupData;
 if (cleanData.charCodeAt(0) === 0xFEFF) cleanData = cleanData.substring(1);
 cleanData = cleanData.trim();
-if (!cleanData) { this.showToast('⚠️ Arquivo vazio!'); return; }
+if (!cleanData) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Arquivo vazio!'); return; }
 let parsed = JSON.parse(cleanData);
-if (!parsed || typeof parsed !== 'object') { this.showToast('❌ Estrutura inválida'); return; }
+if (!parsed || typeof parsed !== 'object') { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Estrutura inválida'); return; }
 let data = parsed;
 if (parsed.smartWalletEncrypted === true) {
 const pwField = document.getElementById('backupImportPassword');
 const password = pwField ? pwField.value : '';
-if (!password) { this.showToast('⚠️ Digite a senha do backup protegido'); return; }
+if (!password) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Digite a senha do backup protegido'); return; }
 try {
 const decryptedJson = await decryptBackupData(parsed, password);
 data = JSON.parse(decryptedJson);
 } catch (decErr) {
-this.showToast('❌ Senha incorreta ou arquivo corrompido');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Senha incorreta ou arquivo corrompido');
 return;
 }
 }
-const confirmed = await showConfirm('⚠️ Substituir TODOS os dados?', 'Esta ação não pode ser desfeita.');
+const confirmed = await showConfirm('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Substituir TODOS os dados?', 'Esta ação não pode ser desfeita.');
 if (!confirmed) return;
 this.transactions = Array.isArray(data.transactions) ? data.transactions : [];
 this.categories = Array.isArray(data.categories) ? data.categories : this.categories;
@@ -2598,17 +2598,17 @@ this.currentPage = 1;
 this.render(); this.updateCharts(); this.updateAlertBadge();
 this.checkNegativeBalance();
 closeModal('importBackupModal');
-this.showToast('✅ Backup restaurado!');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Backup restaurado!');
 window._pendingBackupData = null;
 } catch (e) {
-this.showToast('⚠️ Erro: ' + e.message);
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Erro: ' + e.message);
 }
 }
 importCsv() {
 if (!window._pendingCsvData) { this.showToast('Selecione um arquivo Csv'); return; }
 const replace = document.getElementById('csvReplaceData').checked;
 const lines = window._pendingCsvData.split(/\r?\n/).filter(l => l.trim());
-if (lines.length < 2) { this.showToast('❌ Csv vazio: encontrei apenas ' + lines.length + ' linha(s) com conteúdo'); return; }
+if (lines.length < 2) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Csv vazio: encontrei apenas ' + lines.length + ' linha(s) com conteúdo'); return; }
 let headerIndex = -1;
 for (let i = 0; i < lines.length; i++) {
 const l = lines[i].toLowerCase();
@@ -2620,11 +2620,11 @@ const hasValor = lines.some(l => l.toLowerCase().indexOf('valor') !== -1);
 let motivo = 'nenhuma linha contém as colunas "Data" e "Valor"';
 if (hasData && !hasValor) motivo = 'encontrei a coluna "Data", mas não a coluna "Valor"';
 else if (!hasData && hasValor) motivo = 'encontrei a coluna "Valor", mas não a coluna "Data"';
-this.showToast('❌ Formato Csv inválido: ' + motivo + '. Use um Csv exportado pelo próprio Smart Finance.');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Formato Csv inválido: ' + motivo + '. Use um Csv exportado pelo próprio Smart Finance.');
 return;
 }
 if (headerIndex + 1 >= lines.length) {
-this.showToast('⚠️ O Csv tem cabeçalho, mas nenhuma linha de dados após ele'); return;
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> O Csv tem cabeçalho, mas nenhuma linha de dados após ele'); return;
 }
 const self = this;
 const transactionsToAdd = [];
@@ -2711,7 +2711,7 @@ this.applyDemoBadge();
 const alert = document.getElementById('negativeBalanceAlert');
 if (alert) alert.style.display = 'none';
 closeModal('clearDataModal');
-this.showToast('🗑️ Dados apagados!');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> Dados apagados!');
 }
 // ===== CONTAS =====
 saveAccount() {
@@ -2739,7 +2739,7 @@ this.populateAccountSelects(); this.renderAccountsList(); this.render();
 this.updateDashboard();
 this.checkNegativeBalance();
 closeModal('newAccountModal');
-this.showToast(id ? '✅ Conta atualizada!' : '✅ Conta cadastrada!');
+this.showToast(id ? '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Conta atualizada!' : '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Conta cadastrada!');
 }
 async deleteAccount(id) {
 const confirmed = await showConfirm('Excluir conta?', 'Esta ação não pode ser desfeita.');
@@ -2749,7 +2749,7 @@ this.clearCache(); this.saveAccounts();
 this.populateAccountSelects(); this.renderAccountsList(); this.render();
 this.updateDashboard();
 this.checkNegativeBalance();
-this.showToast('✅ Conta removida!');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Conta removida!');
 }
 editAccount(id) {
 const acc = this.getAccountById(id);
@@ -2766,7 +2766,7 @@ renderAccountsList() {
 const container = document.getElementById('accountsList');
 if (!container) return;
 if (!this.accounts.length) {
-container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px; opacity:0.5;">🏦</div><h3>Nenhuma conta cadastrada</h3></div>';
+container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px; opacity:0.5;"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-17v7h3v-7h-3zm-4 5V4h-1v6h1z"/></svg></div><h3>Nenhuma conta cadastrada</h3></div>';
 return;
 }
 const self = this;
@@ -2788,7 +2788,7 @@ investmentsHtml += '</div>';
 if (acc.type === 'checking' && acc.balance < 0) {
 balanceClass = 'negative-balance';
 }
-return '<div class="account-card ' + balanceClass + '" style="background:linear-gradient(135deg, ' + acc.color + ' 0%, ' + self.adjustColor(acc.color, -30) + ' 100%);" data-account-id="' + acc.id + '"><div class="account-card-actions"><button class="cc-action-btn edit-account-btn" data-account-id="' + acc.id + '">✏️</button><button class="cc-action-btn delete-account-btn" data-account-id="' + acc.id + '">🗑️</button></div><div class="account-card-header"><div class="account-card-type">' + (acc.type === 'checking' ? '💳 Conta Corrente' : '📈 Investimento') + '</div></div><div class="account-card-name">' + self.escapeHtml(acc.name) + '</div><div class="account-card-balance">' + self.formatCurrency(acc.balance) + '</div>' + investmentsHtml + '</div>';
+return '<div class="account-card ' + balanceClass + '" style="background:linear-gradient(135deg, ' + acc.color + ' 0%, ' + self.adjustColor(acc.color, -30) + ' 100%);" data-account-id="' + acc.id + '"><div class="account-card-actions"><button class="cc-action-btn edit-account-btn" data-account-id="' + acc.id + '"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button><button class="cc-action-btn delete-account-btn" data-account-id="' + acc.id + '"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button></div><div class="account-card-header"><div class="account-card-type">' + (acc.type === 'checking' ? '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Conta Corrente' : '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg> Investimento') + '</div></div><div class="account-card-name">' + self.escapeHtml(acc.name) + '</div><div class="account-card-balance">' + self.formatCurrency(acc.balance) + '</div>' + investmentsHtml + '</div>';
 }).join('') + '</div>';
 container.querySelectorAll('.edit-account-btn').forEach(btn => {
 btn.addEventListener('click', (e) => {
@@ -2830,7 +2830,7 @@ message: 'O cartão ' + card.name + ' fecha amanhã!'
 }
 });
 if (bills.length === 0 && closingAlerts.length === 0) {
-container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px;">✅</div><h3>Nenhuma conta pendente!</h3></div>';
+container.innerHTML = '<div style="text-align:center; padding:40px 20px; color:var(--text-secondary);"><div style="font-size:3rem; margin-bottom:12px;"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div><h3>Nenhuma conta pendente!</h3></div>';
 return;
 }
 let total = 0;
@@ -2838,11 +2838,11 @@ bills.forEach(b => total += Math.abs(b.amount));
 let html = '';
 if (closingAlerts.length > 0) {
 html += '<div style="margin-bottom: 20px;">';
-html += '<h3 style="color: var(--accent-color); margin-bottom: 12px; font-size: 1.1rem;">🔔 Fechamento de Fatura</h3>';
+html += '<h3 style="color: var(--accent-color); margin-bottom: 12px; font-size: 1.1rem;"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg> Fechamento de Fatura</h3>';
 closingAlerts.forEach(alert => {
 html += '<div class="bill-item closing-alert">';
-html += '<div class="bill-info"><div class="bill-desc">💳 ' + self.escapeHtml(alert.message) + '</div>';
-html += '<div class="bill-meta"><span>📅 Fechamento: ' + self.formatDate(alert.closingDate.toISOString().split('T')[0]) + '</span></div></div>';
+html += '<div class="bill-info"><div class="bill-desc"><svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> ' + self.escapeHtml(alert.message) + '</div>';
+html += '<div class="bill-meta"><span><svg class="icon-inline" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Fechamento: ' + self.formatDate(alert.closingDate.toISOString().split('T')[0]) + '</span></div></div>';
 html += '<div style="display:flex; gap:4px;">';
 html += '<button class="btn btn-secondary btn-small view-card-btn">Ver Cartão</button></div></div>';
 });
@@ -2861,7 +2861,7 @@ if (diffDays < 0) { daysClass = 'overdue'; daysText = Math.abs(diffDays) + 'd at
 else if (diffDays === 0) { daysClass = 'urgent'; daysText = 'Vence hoje'; itemClass = 'urgent'; }
 else if (diffDays === 1) { daysClass = 'urgent'; daysText = 'Vence amanhã'; itemClass = 'urgent'; }
 else { daysText = 'Em ' + diffDays + ' dias'; }
-html += '<div class="bill-item ' + itemClass + '"><div class="bill-info"><div class="bill-desc">' + self.escapeHtml(bill.description) + '<span class="bill-days ' + daysClass + '">' + daysText + '</span></div><div class="bill-meta"><span>📅 ' + self.formatDate(bill.date) + '</span><span style="color:' + cat.color + ';">● ' + self.escapeHtml(cat.name) + '</span></div></div><div class="bill-amount">' + self.formatCurrency(Math.abs(bill.amount)) + '</div><div style="display:flex; gap:4px;"><button class="btn btn-success btn-small mark-paid-btn" data-id="' + bill.id + '">✓</button><button class="btn btn-secondary btn-small edit-bill-btn" data-id="' + bill.id + '">✏️</button></div></div>';
+html += '<div class="bill-item ' + itemClass + '"><div class="bill-info"><div class="bill-desc">' + self.escapeHtml(bill.description) + '<span class="bill-days ' + daysClass + '">' + daysText + '</span></div><div class="bill-meta"><span><svg class="icon-inline" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ' + self.formatDate(bill.date) + '</span><span style="color:' + cat.color + ';"><svg class="icon-inline" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg> ' + self.escapeHtml(cat.name) + '</span></div></div><div class="bill-amount">' + self.formatCurrency(Math.abs(bill.amount)) + '</div><div style="display:flex; gap:4px;"><button class="btn btn-success btn-small mark-paid-btn" data-id="' + bill.id + '"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></button><button class="btn btn-secondary btn-small edit-bill-btn" data-id="' + bill.id + '"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button></div></div>';
 });
 }
 container.innerHTML = html;
@@ -2887,7 +2887,7 @@ if (t) {
 t.statusOk = true;
 this.clearCache(); this.saveTransactions(); this.render();
 this.updateAlertBadge(); this.renderBillsModal();
-this.showToast('✅ Conta paga!');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Conta paga!');
 }
 }
 // ===== INVESTIMENTOS =====
@@ -2952,7 +2952,7 @@ let totalInitial = 0, totalCurrent = 0;
 this.investments.forEach(inv => { totalInitial += inv.initial; totalCurrent += inv.current; });
 const totalProfit = totalCurrent - totalInitial;
 const totalProfitPct = totalInitial > 0 ? (totalProfit / totalInitial * 100) : 0;
-summaryEl.innerHTML = '<div class="investment-summary"><h3>📊 Resumo</h3><div class="investment-summary-grid"><div class="investment-summary-item"><div class="investment-summary-label">Total Investido</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalInitial) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Valor Atual</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalCurrent) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Rendimento</div><div class="investment-summary-value privacy-value" style="color:' + (totalProfit >= 0 ? 'var(--success-color)' : 'var(--danger-color)') + ';">' + totalProfitPct.toFixed(2) + '% (' + this.formatCurrency(totalProfit) + ')</div></div></div></div>';
+summaryEl.innerHTML = '<div class="investment-summary"><h3><svg class="icon-inline" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg> Resumo</h3><div class="investment-summary-grid"><div class="investment-summary-item"><div class="investment-summary-label">Total Investido</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalInitial) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Valor Atual</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalCurrent) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Rendimento</div><div class="investment-summary-value privacy-value" style="color:' + (totalProfit >= 0 ? 'var(--success-color)' : 'var(--danger-color)') + ';">' + totalProfitPct.toFixed(2) + '% (' + this.formatCurrency(totalProfit) + ')</div></div></div></div>';
 }
 }
 saveInvestment() {
@@ -3000,7 +3000,7 @@ this.clearCache(); this.saveInvestments();
 this.renderInvestmentsModal(); this.updateInvestmentChart();
 this.renderAccountsList(); this.updateDashboard();
 closeModal('newInvestmentModal');
-this.showToast(id ? '✅ Aplicação atualizada!' : '✅ Aplicação cadastrada!');
+this.showToast(id ? '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Aplicação atualizada!' : '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Aplicação cadastrada!');
 }
 async deleteInvestment(id) {
 const confirmed = await showConfirm('Excluir aplicação?', 'Esta ação não pode ser desfeita.');
@@ -3008,7 +3008,7 @@ if (!confirmed) return;
 this.investments = this.investments.filter(i => i.id !== id);
 this.clearCache(); this.saveInvestments();
 this.renderInvestmentsModal(); this.updateInvestmentChart();
-this.showToast('✅ Aplicação excluída!');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Aplicação excluída!');
 }
 editInvestment(id) {
 const inv = this.investments.find(i => i.id === id);
@@ -3053,7 +3053,7 @@ this.clearCache(); this.saveInvestments();
 this.renderInvestmentsModal(); this.updateInvestmentChart();
 this.updateDashboard();
 closeModal('updateInvestmentModal');
-this.showToast('✅ Valor atualizado!');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Valor atualizado!');
 }
 renderInvestmentsModal() {
 const container = document.getElementById('investmentsContent');
@@ -3076,14 +3076,14 @@ if (inv.accountId) {
 const linkedAccount = self.getAccountById(inv.accountId);
 if (linkedAccount) accountInfo = ' • ' + self.escapeHtml(linkedAccount.name);
 }
-html += '<div class="investment-card"><div class="investment-card-header"><div><div class="investment-card-title">' + self.escapeHtml(inv.name) + '</div><div class="investment-card-type">' + (typeLabels[inv.type] || inv.type) + ' • ' + self.formatDate(inv.date) + accountInfo + '</div></div><div class="investment-card-actions"><button class="btn btn-secondary btn-small update-invest-btn" data-id="' + inv.id + '">💰</button><button class="btn btn-secondary btn-small edit-invest-btn" data-id="' + inv.id + '">✏️</button><button class="btn btn-danger btn-small delete-invest-btn" data-id="' + inv.id + '">🗑️</button></div></div><div class="investment-card-values"><div class="investment-value-item"><div class="investment-value-label">Inicial</div><div class="investment-value-amount privacy-value">' + self.formatCurrency(inv.initial) + '</div></div><div class="investment-value-item"><div class="investment-value-label">Atual</div><div class="investment-value-amount privacy-value">' + self.formatCurrency(inv.current) + '</div></div><div class="investment-value-item"><div class="investment-value-label">Rendimento</div><div class="investment-value-amount privacy-value ' + (profit >= 0 ? 'positive' : 'negative') + '">' + profitPct.toFixed(2) + '% (' + self.formatCurrency(profit) + ')</div></div></div>';
+html += '<div class="investment-card"><div class="investment-card-header"><div><div class="investment-card-title">' + self.escapeHtml(inv.name) + '</div><div class="investment-card-type">' + (typeLabels[inv.type] || inv.type) + ' • ' + self.formatDate(inv.date) + accountInfo + '</div></div><div class="investment-card-actions"><button class="btn btn-secondary btn-small update-invest-btn" data-id="' + inv.id + '"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg></button><button class="btn btn-secondary btn-small edit-invest-btn" data-id="' + inv.id + '"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg></button><button class="btn btn-danger btn-small delete-invest-btn" data-id="' + inv.id + '"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button></div></div><div class="investment-card-values"><div class="investment-value-item"><div class="investment-value-label">Inicial</div><div class="investment-value-amount privacy-value">' + self.formatCurrency(inv.initial) + '</div></div><div class="investment-value-item"><div class="investment-value-label">Atual</div><div class="investment-value-amount privacy-value">' + self.formatCurrency(inv.current) + '</div></div><div class="investment-value-item"><div class="investment-value-label">Rendimento</div><div class="investment-value-amount privacy-value ' + (profit >= 0 ? 'positive' : 'negative') + '">' + profitPct.toFixed(2) + '% (' + self.formatCurrency(profit) + ')</div></div></div>';
 if (inv.rate > 0) html += '<div style="font-size:0.85rem; color:var(--text-secondary);" class="privacy-value">Taxa: ' + inv.rate + '% ao ano</div>';
 html += '</div>';
 });
 html += '</div>';
 const totalProfit = totalCurrent - totalInitial;
 const totalProfitPct = totalInitial > 0 ? (totalProfit / totalInitial * 100) : 0;
-html += '<div class="investment-summary"><h3>📊 Resumo Geral</h3><div class="investment-summary-grid"><div class="investment-summary-item"><div class="investment-summary-label">Investido</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalInitial) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Atual</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalCurrent) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Rendimento</div><div class="investment-summary-value privacy-value" style="color:' + (totalProfit >= 0 ? 'var(--success-color)' : 'var(--danger-color)') + ';">' + totalProfitPct.toFixed(2) + '% (' + this.formatCurrency(totalProfit) + ')</div></div></div></div>';
+html += '<div class="investment-summary"><h3><svg class="icon-inline" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg> Resumo Geral</h3><div class="investment-summary-grid"><div class="investment-summary-item"><div class="investment-summary-label">Investido</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalInitial) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Atual</div><div class="investment-summary-value privacy-value">' + this.formatCurrency(totalCurrent) + '</div></div><div class="investment-summary-item"><div class="investment-summary-label">Rendimento</div><div class="investment-summary-value privacy-value" style="color:' + (totalProfit >= 0 ? 'var(--success-color)' : 'var(--danger-color)') + ';">' + totalProfitPct.toFixed(2) + '% (' + this.formatCurrency(totalProfit) + ')</div></div></div></div>';
 container.innerHTML = html;
 container.querySelectorAll('.update-invest-btn').forEach(btn => {
 btn.addEventListener('click', () => self.openUpdateInvestment(btn.dataset.id));
@@ -3125,7 +3125,7 @@ const values = categoryAverages[catId];
 const sum = values.reduce((a, b) => a + b, 0);
 categoryAverages[catId] = sum / values.length;
 });
-let html = '<div style="margin-bottom: 20px; padding: 16px; background: var(--glass-bg); border-radius: 14px;"><p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;">📊 Comparativo com a média dos últimos 3 meses</p></div>';
+let html = '<div style="margin-bottom: 20px; padding: 16px; background: var(--glass-bg); border-radius: 14px;"><p style="font-size: 0.9rem; color: var(--text-secondary); margin: 0;"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg> Comparativo com a média dos últimos 3 meses</p></div>';
 let html2 = '<div>';
 const sortedCategories = Object.keys(categoryTotals).sort((a, b) => categoryTotals[b] - categoryTotals[a]);
 sortedCategories.forEach(catId => {
@@ -3149,7 +3149,7 @@ html2 += '</div>';
 });
 html2 += '</div>';
 if (Object.keys(categoryTotals).length === 0) {
-html2 = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);"><div style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;">📊</div><h3>Nenhuma despesa este mês</h3></div>';
+html2 = '<div style="text-align: center; padding: 40px; color: var(--text-secondary);"><div style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"><svg class="icon-inline" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg></div><h3>Nenhuma despesa este mês</h3></div>';
 }
 container.innerHTML = html + html2;
 }
@@ -3167,10 +3167,10 @@ const toId = document.getElementById('transferTo').value;
 const amount = parseFloat(document.getElementById('transferAmount').value);
 const date = document.getElementById('transferDate').value;
 const description = document.getElementById('transferDescription').value || 'Transferência';
-if (fromId === toId) { this.showToast('❌ Contas devem ser diferentes'); return; }
+if (fromId === toId) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Contas devem ser diferentes'); return; }
 const fromAcc = this.getAccountById(fromId);
 const toAcc = this.getAccountById(toId);
-if (!fromAcc || !toAcc) { this.showToast('❌ Contas não encontradas'); return; }
+if (!fromAcc || !toAcc) { this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Contas não encontradas'); return; }
 if (this.settings.blockNegativeBalance && fromAcc.balance < amount) {
 this.showToast(this.t('negativeBalanceBlocked'));
 return;
@@ -3191,7 +3191,7 @@ this.clearCache(); this.saveTransactions(); this.saveAccounts();
 this.render(); this.renderAccountsList(); this.updateDashboard();
 this.checkNegativeBalance();
 closeModal('transferModal');
-this.showToast('✅ Transferência realizada!');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Transferência realizada!');
 }
 // ===== SWIPE GESTURES =====
 initSwipeGestures() {
@@ -3246,7 +3246,7 @@ if (t) {
 t.statusOk = true;
 this.clearCache(); this.saveTransactions();
 this.render(); this.updateAlertBadge();
-this.showToast('✅ Transação concluída!');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Transação concluída!');
 }
 }
 async deleteTransactionSwipe(id) {
@@ -3258,13 +3258,13 @@ this.transactions = this.transactions.filter(x => String(x.id) !== String(id));
 this.clearCache(); this.saveTransactions();
 this.render(); this.updateCharts(); this.updateAlertBadge();
 this.checkNegativeBalance();
-this.showToast('🗑️ Excluída!');
+this.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> Excluída!');
 }
 // ===== IMPRESSÃO DO MANUAL =====
 printManual() {
 try {
 const printWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
-if (!printWindow) { alert('⚠️ ' + this.t('allowPopups')); return; }
+if (!printWindow) { alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> ' + this.t('allowPopups')); return; }
 const fileName = this.generateTimestamp() + '_manual_smart_wallet.pdf';
 const content = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page{size:A4;margin:2cm;}body{font-family:Georgia,serif;color:#1e293b;line-height:1.6;font-size:11pt;padding:20px;max-width:800px;margin:0 auto;}h1{color:#6366f1;font-size:28pt;text-align:center;}h2{color:#6366f1;font-size:16pt;margin-top:30px;border-bottom:2px solid #6366f1;padding-bottom:8px;}h3{color:#06b6d4;font-size:13pt;margin-top:20px;}p{margin-bottom:12px;}ul,ol{margin-left:24px;margin-bottom:16px;}li{margin-bottom:8px;}.manual-cover{text-align:center;padding:40px 20px;border:3px solid #6366f1;border-radius:16px;margin-bottom:30px;}.manual-quote{margin:24px 0;padding:20px 30px;border-left:4px solid #6366f1;background:#f8fafc;border-radius:8px;font-style:italic;}.quote-author{font-size:9pt;font-weight:600;color:#6366f1;text-align:right;margin-top:12px;font-style:normal;}.manual-blessing{text-align:center;margin-top:40px;padding:30px;background:#f8fafc;border-radius:16px;}.manual-tip,.manual-success,.manual-warning{padding:12px 16px;margin:12px 0;border-radius:8px;border-left:4px solid;}.manual-tip{background:rgba(6,182,212,0.1);border-color:#06b6d4;}.manual-success{background:rgba(16,185,129,0.1);border-color:#10b981;}.manual-warning{background:rgba(245,158,11,0.1);border-color:#f59e0b;}@media print{.manual-cover{page-break-after:always;}}</style></head><body>' + manualHTML + '</body></html>';
 printWindow.document.write(content);
@@ -3272,7 +3272,7 @@ printWindow.document.close();
 printWindow.document.title = fileName;
 setTimeout(() => { printWindow.focus(); printWindow.print(); }, 500);
 } catch (e) {
-alert('❌ Erro: ' + e.message);
+alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Erro: ' + e.message);
 }
 }
 // ===== SISTEMA DE ATUALIZAÇÃO =====
@@ -3296,10 +3296,10 @@ const WHATS_NEW_DATA = {
 '1.0.2': {
 version: '1.0.2',
 features: [
-{ type: 'fixed', icon: '🌐', title: 'Traduções Corrigidas', description: 'Chaves de tradução quebradas foram corrigidas em PT-BR e EN-US.' },
-{ type: 'fixed', icon: '💳', title: 'Pagamento de Fatura', description: 'Agora desconta corretamente da conta corrente.' },
-{ type: 'fixed', icon: '🧹', title: 'Código Limpo', description: 'Métodos duplicados removidos da classe principal.' },
-{ type: 'improved', icon: '📊', title: 'Gráfico Waterfall', description: 'Corrigido uso de variável global, agora usa self corretamente.' }
+{ type: 'fixed', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>', title: 'Traduções Corrigidas', description: 'Chaves de tradução quebradas foram corrigidas em PT-BR e EN-US.' },
+{ type: 'fixed', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>', title: 'Pagamento de Fatura', description: 'Agora desconta corretamente da conta corrente.' },
+{ type: 'fixed', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M19.29 19.88L9.88 10.47l1.41-1.41 1.42 1.42 7.07-7.07c.39-.39.39-1.02 0-1.41s-1.02-.39-1.41 0l-7.07 7.07-1.42-1.42-1.41 1.41L.59 17.88c-.39.39-.39 1.02 0 1.41s1.02.39 1.41 0l8.49-8.49 9.41 9.41c.39.39 1.02.39 1.41 0s.39-1.02-.02-1.41z"/></svg>', title: 'Código Limpo', description: 'Métodos duplicados removidos da classe principal.' },
+{ type: 'improved', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>', title: 'Gráfico Waterfall', description: 'Corrigido uso de variável global, agora usa self corretamente.' }
 ]
 }
 };
@@ -3312,7 +3312,7 @@ if (featuresContainer) {
 let html = '';
 data.features.forEach(feature => {
 const badgeText = feature.type === 'new' ? 'NOVO' : feature.type === 'improved' ? 'MELHORADO' : 'CORRIGIDO';
-html += '<div class="feature-item ' + feature.type + '"><div class="feature-icon">' + (feature.icon || '✨') + '</div><div class="feature-content"><h4>' + this.escapeHtml(feature.title) + ' <span class="feature-badge ' + feature.type + '">' + badgeText + '</span></h4><p>' + this.escapeHtml(feature.description) + '</p></div></div>';
+html += '<div class="feature-item ' + feature.type + '"><div class="feature-icon">' + (feature.icon || '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2L9.19 8.63 2 11.38 9.19 14.14 12 20.77 14.81 14.14 22 11.38 14.81 8.63z"/></svg>') + '</div><div class="feature-content"><h4>' + this.escapeHtml(feature.title) + ' <span class="feature-badge ' + feature.type + '">' + badgeText + '</span></h4><p>' + this.escapeHtml(feature.description) + '</p></div></div>';
 });
 featuresContainer.innerHTML = html;
 }
@@ -3382,7 +3382,7 @@ function askContinueOrClose(modalId, successMessage, onContinue) {
 const useCustom = typeof showConfirm === 'function';
 if (useCustom) {
 showConfirm(
-'✅ ' + successMessage,
+'<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + successMessage,
 'Deseja adicionar outro registro?'
 ).then(confirmed => {
 if (confirmed && typeof onContinue === 'function') {
@@ -3698,38 +3698,38 @@ window.handleCsvFileSelect = function(event) {
 const file = event.target.files[0];
 if (!file) return;
 if (!file.name.toLowerCase().endsWith('.csv')) {
-alert('⚠️ Selecione um arquivo .csv');
+alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Selecione um arquivo .csv');
 event.target.value = '';
 return;
 }
 if (file.size > 10 * 1024 * 1024) {
-alert('⚠️ Arquivo muito grande (máx 10MB)');
+alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Arquivo muito grande (máx 10MB)');
 event.target.value = '';
 return;
 }
-document.getElementById('csvFileName').textContent = '📄 ' + file.name + ' (' + (file.size/1024).toFixed(1) + ' KB)';
+document.getElementById('csvFileName').textContent = '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> ' + file.name + ' (' + (file.size/1024).toFixed(1) + ' KB)';
 const reader = new FileReader();
 reader.onload = function(e) {
 let text = e.target.result.replace(/^\uFEFF/, '');
 window._pendingCsvData = text;
 };
-reader.onerror = () => { alert('❌ Erro ao ler arquivo'); event.target.value = ''; };
+reader.onerror = () => { alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Erro ao ler arquivo'); event.target.value = ''; };
 reader.readAsText(file, 'UTF-8');
 };
 window.handleBackupFileSelect = function(event) {
 const file = event.target.files[0];
 if (!file) return;
 if (!file.name.toLowerCase().endsWith('.json')) {
-alert('⚠️ Selecione um arquivo .json');
+alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Selecione um arquivo .json');
 event.target.value = '';
 return;
 }
 if (file.size > 10 * 1024 * 1024) {
-alert('⚠️ Arquivo muito grande (máx 10MB)');
+alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Arquivo muito grande (máx 10MB)');
 event.target.value = '';
 return;
 }
-document.getElementById('backupFileName').textContent = '💾 ' + file.name + ' (' + (file.size/1024).toFixed(1) + ' KB)';
+document.getElementById('backupFileName').textContent = '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg> ' + file.name + ' (' + (file.size/1024).toFixed(1) + ' KB)';
 const pwWrap = document.getElementById('backupImportPasswordWrap');
 const pwInput = document.getElementById('backupImportPassword');
 if (pwWrap) pwWrap.style.display = 'none';
@@ -3741,17 +3741,17 @@ const parsed = JSON.parse(e.target.result);
 window._pendingBackupData = e.target.result;
 if (parsed && parsed.smartWalletEncrypted === true) {
 if (pwWrap) pwWrap.style.display = 'block';
-smartfinance.showToast('🔒 Backup protegido por senha detectado');
+smartfinance.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg> Backup protegido por senha detectado');
 } else {
-smartfinance.showToast('✅ Arquivo carregado!');
+smartfinance.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Arquivo carregado!');
 }
 } catch (error) {
-alert('❌ JSON inválido: ' + error.message);
+alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> JSON inválido: ' + error.message);
 event.target.value = '';
 window._pendingBackupData = null;
 }
 };
-reader.onerror = () => { alert('❌ Erro ao ler arquivo'); event.target.value = ''; };
+reader.onerror = () => { alert('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Erro ao ler arquivo'); event.target.value = ''; };
 reader.readAsText(file, 'UTF-8');
 };
 window.showClearStep2 = function() {
@@ -3775,8 +3775,8 @@ btn.style.opacity = '0.5';
 window.copyPixKey = function() {
 const key = document.getElementById('pixKey').textContent;
 navigator.clipboard.writeText(key)
-.then(() => smartfinance.showToast('✅ Chave PIX copiada!'))
-.catch(() => smartfinance.showToast('❌ Copie: ' + key));
+.then(() => smartfinance.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Chave PIX copiada!'))
+.catch(() => smartfinance.showToast('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg> Copie: ' + key));
 };
 window.initDisclaimer = function initDisclaimer() {
 const checkbox = document.getElementById('acceptTermsCheckbox');
@@ -3951,7 +3951,7 @@ const stillOpen = document.querySelector('.modal.active, .modal-front.active');
 const taskbar = document.getElementById('bottomTaskbar');
 if (!stillOpen && taskbar) taskbar.style.display = 'flex';
 };
-console.log('🎉 Smart Finance v1.0.2 carregado com sucesso!');
+console.log('<svg class="icon-inline" viewBox="0 0 24 24"><path d="M2 12l2.5 9 9-2.5L20 3l-9 2.5L2 12zm10.5 5L5 19l2-7.5L14.5 9l-2 8z"/></svg> Smart Finance v1.0.2 carregado com sucesso!');
 })();
 (function setupKeyboardShortcuts() {
 document.addEventListener('keydown', (e) => {
