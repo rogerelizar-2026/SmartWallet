@@ -303,15 +303,14 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+    justify-content: center;
     width: 100%;
-    height: 100%;
 }
 
 .header-logo {
-    height: 100%; /* Ocupa 100% da altura da header (80px) */
-    width: auto;
-    max-width: 400px; /* Limite de largura para não esticar demais em telas grandes */
-    display: block;
+    width: 200px;
+    height: 80px;
+    filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.4));
 }
 
 /* Ajuste da Taskbar para manter consistência */
