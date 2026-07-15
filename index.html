@@ -1022,7 +1022,11 @@
         
         if (!accepted) {
             if (splash) splash.style.display = 'none';
-            if (disclaimer) disclaimer.style.display = 'flex';
+            if (disclaimer) {
+                disclaimer.style.display = 'flex';
+                // Inicializa o listener do checkbox para habilitar o botão OK
+                initDisclaimer();
+            }
         } else {
             if (disclaimer) {
                 disclaimer.classList.remove('active');

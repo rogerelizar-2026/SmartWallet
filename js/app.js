@@ -3760,7 +3760,7 @@ navigator.clipboard.writeText(key)
 .then(() => smartfinance.showToast('✅ Chave PIX copiada!'))
 .catch(() => smartfinance.showToast('❌ Copie: ' + key));
 };
-function initDisclaimer() {
+window.initDisclaimer = function initDisclaimer() {
 const checkbox = document.getElementById('acceptTermsCheckbox');
 const btnEl = document.getElementById('acceptDisclaimerBtn');
 if (!checkbox || !btnEl) return;
