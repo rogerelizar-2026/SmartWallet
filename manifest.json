@@ -1,28 +1,52 @@
 {
-  "name": "Smart Finance",
-  "short_name": "SmartFinance",
-  "description": "Gerenciamento financeiro inteligente",
-  "start_url": "/index.html",
-  "display": "standalone",
-  "background_color": "#0a0e1a",
-  "theme_color": "#6366f1",
-  "orientation": "portrait-primary",
-  "icons": [
-    {
-      "src": "logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "favicon.svg",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    }
-
-
-  ],
-  "categories": ["finance", "productivity"],
-  "lang": "pt-BR"
+    "name": "Smart Finance",
+    "short_name": "SmartFinance",
+    "description": "Controle financeiro pessoal inteligente - 100% offline",
+    "start_url": "./index.html",
+    "scope": "./",
+    "id": "smart-finance-pwa",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#0a0e1a",
+    "theme_color": "#6366f1",
+    "lang": "pt-BR",
+    "dir": "ltr",
+    "categories": ["finance", "productivity", "business"],
+    "icons": [
+        {
+            "src": "favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        },
+        {
+            "src": "logo.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        },
+        {
+            "src": "logomarca.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "screenshots": [],
+    "shortcuts": [
+        {
+            "name": "Nova Despesa",
+            "short_name": "Despesa",
+            "description": "Adicionar nova despesa",
+            "url": "./index.html?action=expense",
+            "icons": [{ "src": "favicon.svg", "sizes": "any" }]
+        },
+        {
+            "name": "Nova Receita",
+            "short_name": "Receita",
+            "description": "Adicionar nova receita",
+            "url": "./index.html?action=income",
+            "icons": [{ "src": "favicon.svg", "sizes": "any" }]
+        }
+    ]
 }
