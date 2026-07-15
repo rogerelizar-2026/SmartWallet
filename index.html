@@ -259,57 +259,21 @@
     </div>
 </div>
 
-<!-- ===== BOTTOM FLOATING BAR ===== -->
-<div id="bottomFloatingBar" class="bottom-floating-bar" style="display:none;">
-    <div class="floating-bar-content">
-        <button id="prevMonthBtnBar" class="floating-bar-btn" title="Mês anterior">
-            <svg class="icon-sm" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <span id="currentMonthBar" class="floating-bar-month">Julho 2026</span>
-        <button id="nextMonthBtnBar" class="floating-bar-btn" title="Próximo mês">
-            <svg class="icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-        <button id="todayMonthBtnBar" class="floating-bar-btn floating-bar-btn-primary" title="Hoje">
-            <svg class="icon-sm" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </button>
-        <button id="addBtnBar" class="floating-bar-btn floating-bar-btn-add" title="Adicionar">
-            <svg class="icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <button id="privacyBtnBar" class="floating-bar-btn" title="Privacidade">
-            <svg class="icon-sm" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-        <button id="themeBtnBar" class="floating-bar-btn" title="Tema">
-            <svg class="icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </button>
-        <button id="alertBtnBar" class="floating-bar-btn" title="Contas a vencer">
-            <svg class="icon-sm" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            <span id="alertBadgeBar" class="floating-bar-badge">0</span>
-        </button>
-        <div class="floating-bar-menu-wrapper">
-            <button id="menuBtnBar" class="floating-bar-btn" title="Menu">
-                <svg class="icon-sm" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
-        </div>
+<!-- ===== BOTTOM TASKBAR (MOBILE) ===== -->
+<div id="bottomTaskbar" class="bottom-taskbar" style="display:none;">
+    <button id="alertBtnTaskbar" class="taskbar-btn" title="Alertas">
+        🔔 <span id="alertBadgeTaskbar" class="alert-badge">0</span>
+    </button>
+    <button id="privacyBtnTaskbar" class="taskbar-btn" title="Privacidade">👁️</button>
+    <button id="themeBtnTaskbar" class="taskbar-btn" title="Tema">🌓</button>
+    <div class="taskbar-menu-wrapper">
+        <button id="menuBtnTaskbar" class="taskbar-btn" title="Menu">☰</button>
     </div>
-    
-    <!-- DROPDOWN MENU -->
-    <div id="barMenuDropdown" class="bar-menu-dropdown">
-        <button class="dropdown-item" data-action="openExportModal">📤 Exportar Extrato</button>
-        <button class="dropdown-item" data-action="openAccountsModal">🏦 Minhas Contas</button>
-        <button class="dropdown-item" data-action="openCreditCardsModal">💳 Meus Cartões</button>
-        <button class="dropdown-item" data-action="openInvestmentsModal">📈 Aplicações</button>
-        <button class="dropdown-item" data-action="openCategoryBudgetModal">📊 Orçamento por Categoria</button>
-        <button class="dropdown-item" data-action="openGoalModal">🎯 Meta de Reserva</button>
-        <button class="dropdown-item" data-action="openManualModal">📘 Manual do Usuário</button>
-        <button class="dropdown-item" data-action="openTermsModal">📜 Termos de Uso</button>
-        <button class="dropdown-item" data-action="openThanksModal">☕ Apoie o Projeto</button>
-        <button class="dropdown-item" data-action="toggleDemoMode">🎭 Modo Demonstração</button>
-        <button class="dropdown-item" data-action="openImportCsvModal">📥 Importar CSV</button>
-        <button class="dropdown-item" id="languageMenuItemBar" data-action="toggleLanguage">🌎 <span id="languageTextBar">Idioma: Português</span></button>
-        <button class="dropdown-item" id="currencyMenuItemBar" data-action="toggleCurrency" style="display:none;">💱 <span id="currencyTextBar">Moeda: R$</span></button>
-        <button class="dropdown-item" data-action="openSettingsModal">⚙️ Configurações</button>
-        <button class="dropdown-item" data-action="enableNotifications">🔔 Ativar Notificações</button>
-        <button class="dropdown-item" data-action="openClearDataModal">🗑️ Limpar Dados</button>
+    <button id="fabBtnTaskbar" class="taskbar-btn fab-taskbar" title="Adicionar">+</button>
+    <div id="fabPopup" class="fab-popup">
+        <button class="fab-popup-item" data-action="openExpenseModal">💸 Despesa</button>
+        <button class="fab-popup-item" data-action="openIncomeModal">💰 Receita</button>
+        <button class="fab-popup-item" data-action="openTransferModal">🔄 Transferir</button>
     </div>
 </div>
 
