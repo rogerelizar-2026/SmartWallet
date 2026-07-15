@@ -1,15 +1,4 @@
-```gitignore
-# Compiled and build artifacts
-*.pyc
-__pycache__/
-*.o
-*.obj
-*.class
-*.exe
-*.dll
-*.so
-*.a
-*.out
+(js/app.js and styles.css are source files, no build artifacts, dependencies, or temp files detected)
 
 # Dependencies
 node_modules/

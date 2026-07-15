@@ -577,8 +577,8 @@ body.privacy-on .privacy-value:hover {
     color: var(--accent-color);
 }
 
-.transactions-table th.sort-asc::after { content: ' ↑'; color: var(--accent-color); }
-.transactions-table th.sort-desc::after { content: ' ↓'; color: var(--accent-color); }
+.transactions-table th.sort-asc::after { content: ' \2191'; color: var(--accent-color); }
+.transactions-table th.sort-desc::after { content: ' \2193'; color: var(--accent-color); }
 
 .transactions-table td {
     padding: 12px 10px;

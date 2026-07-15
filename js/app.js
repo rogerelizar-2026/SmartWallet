@@ -6,7 +6,7 @@ const PAYMENT_METHODS = [
 { id: 'debit', name: 'Cart.Débito', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>' },
 { id: 'auto', name: 'Débito Automático', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>' },
 { id: 'scheduled', name: 'Agendamento', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' },
-{ id: 'transfer', name: 'Transferência', icon: '↔️' }
+{ id: 'transfer', name: 'Transferência', icon: '<svg class="icon-inline" viewBox="0 0 24 24"><line x1="4" y1="12" x2="20" y2="12"/><polyline points="8 8 4 12 8 16"/><polyline points="16 16 20 12 16 8"/></svg>' }
 ];
 const DEFAULT_CATEGORIES = [
 { id: 'casa', name: 'Casa', color: '#f59e0b', type: 'expense' },
