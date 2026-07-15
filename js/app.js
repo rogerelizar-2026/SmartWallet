@@ -3987,3 +3987,201 @@ smartfinance.changeMonth(1);
 }
 }, { passive: true });
 })();
+
+// ===== FLOATING ACTION BAR SETUP =====
+(function setupFloatingActionBar() {
+    const floatingBar = document.getElementById('floatingBar');
+    const floatMonthDisplay = document.getElementById('floatMonthDisplay');
+    const floatPrevMonth = document.getElementById('floatPrevMonth');
+    const floatNextMonth = document.getElementById('floatNextMonth');
+    const floatAddBtn = document.getElementById('floatAddBtn');
+    const floatPrivacyBtn = document.getElementById('floatPrivacyBtn');
+    const floatThemeBtn = document.getElementById('floatThemeBtn');
+    const floatAlertBtn = document.getElementById('floatAlertBtn');
+    const floatMenuBtn = document.getElementById('floatMenuBtn');
+    const floatAlertBadge = document.getElementById('floatAlertBadge');
+    const floatMenuDropdown = document.getElementById('floatMenuDropdown');
+    const themeIconLight = document.querySelector('.theme-icon-light');
+    const themeIconDark = document.querySelector('.theme-icon-dark');
+    
+    // Show floating bar when app starts
+    if (floatingBar) {
+        floatingBar.style.display = 'flex';
+    }
+    
+    // Update month display in floating bar
+    function updateFloatMonthDisplay() {
+        if (floatMonthDisplay && smartfinance.currentMonth) {
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                               'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const m = smartfinance.currentMonth.getMonth();
+            const y = smartfinance.currentMonth.getFullYear();
+            floatMonthDisplay.textContent = `${monthNames[m]} ${y}`;
+        }
+    }
+    
+    // Sync with main month display
+    if (smartfinance.updateMonthDisplay) {
+        const origUpdate = smartfinance.updateMonthDisplay;
+        smartfinance.updateMonthDisplay = function() {
+            origUpdate.call(this);
+            updateFloatMonthDisplay();
+        };
+    }
+    
+    // Navigation buttons
+    if (floatPrevMonth) {
+        floatPrevMonth.addEventListener('click', () => {
+            if (smartfinance.changeMonth) smartfinance.changeMonth(-1);
+        });
+    }
+    
+    if (floatNextMonth) {
+        floatNextMonth.addEventListener('click', () => {
+            if (smartfinance.changeMonth) smartfinance.changeMonth(1);
+        });
+    }
+    
+    // Add button - open FAB popup or modal
+    if (floatAddBtn) {
+        floatAddBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (typeof openTransactionModal === 'function') {
+                openTransactionModal();
+            }
+        });
+    }
+    
+    // Privacy button
+    if (floatPrivacyBtn) {
+        floatPrivacyBtn.addEventListener('click', () => {
+            if (typeof togglePrivacy === 'function') togglePrivacy();
+        });
+    }
+    
+    // Theme button
+    if (floatThemeBtn) {
+        floatThemeBtn.addEventListener('click', () => {
+            if (typeof toggleTheme === 'function') toggleTheme();
+            // Update icons
+            const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+            if (themeIconLight && themeIconDark) {
+                if (isDark) {
+                    themeIconLight.style.display = 'none';
+                    themeIconDark.style.display = 'block';
+                } else {
+                    themeIconLight.style.display = 'block';
+                    themeIconDark.style.display = 'none';
+                }
+            }
+        });
+    }
+    
+    // Alert button
+    if (floatAlertBtn) {
+        floatAlertBtn.addEventListener('click', () => {
+            if (typeof openBillsModal === 'function') openBillsModal();
+        });
+    }
+    
+    // Menu button
+    if (floatMenuBtn) {
+        floatMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (floatMenuDropdown) {
+                const isActive = floatMenuDropdown.classList.contains('show');
+                // Close header menu if open
+                const mainMenu = document.getElementById('mainMenu');
+                if (mainMenu) mainMenu.classList.remove('active');
+                // Toggle float menu
+                floatMenuDropdown.classList.toggle('show', !isActive);
+            }
+        });
+    }
+    
+    // Menu item actions
+    if (floatMenuDropdown) {
+        floatMenuDropdown.querySelectorAll('.menu-item').forEach(item => {
+            const action = item.dataset.action;
+            if (action) {
+                item.addEventListener('click', () => {
+                    // Close menu
+                    floatMenuDropdown.classList.remove('show');
+                    
+                    // Execute action
+                    switch(action) {
+                        case 'showDashboard':
+                            if (smartfinance.showSection) smartfinance.showSection('dashboard');
+                            break;
+                        case 'showTransactions':
+                            if (smartfinance.showSection) smartfinance.showSection('transactions');
+                            break;
+                        case 'showAccounts':
+                            if (smartfinance.showSection) smartfinance.showSection('accounts');
+                            break;
+                        case 'showCreditCards':
+                            if (smartfinance.showSection) smartfinance.showSection('creditCards');
+                            break;
+                        case 'showInvestments':
+                            if (smartfinance.showSection) smartfinance.showSection('investments');
+                            break;
+                        case 'showGoals':
+                            if (smartfinance.showSection) smartfinance.showSection('goals');
+                            break;
+                        case 'showBudget':
+                            if (smartfinance.showSection) smartfinance.showSection('budget');
+                            break;
+                        case 'showRecurring':
+                            if (smartfinance.showSection) smartfinance.showSection('recurring');
+                            break;
+                        case 'toggleDemoMode':
+                            if (typeof toggleDemoMode === 'function') toggleDemoMode();
+                            break;
+                        case 'exportData':
+                            if (typeof exportData === 'function') exportData();
+                            break;
+                        case 'importData':
+                            if (typeof importData === 'function') importData();
+                            break;
+                        case 'backupRestore':
+                            if (typeof backupRestore === 'function') backupRestore();
+                            break;
+                        case 'clearData':
+                            if (typeof clearData === 'function') clearData();
+                            break;
+                    }
+                });
+            }
+        });
+    }
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (floatMenuDropdown && !e.target.closest('#floatMenuDropdown') && !e.target.closest('#floatMenuBtn')) {
+            floatMenuDropdown.classList.remove('show');
+        }
+    });
+    
+    // Initialize month display
+    updateFloatMonthDisplay();
+    
+    // Update alert badge
+    function updateFloatAlertBadge(count) {
+        if (floatAlertBadge) {
+            floatAlertBadge.textContent = count || 0;
+            floatAlertBadge.style.display = count > 0 ? 'block' : 'none';
+        }
+    }
+    
+    // Hook into alert badge update
+    if (smartfinance.updateAlertBadge) {
+        const origAlertUpdate = smartfinance.updateAlertBadge;
+        smartfinance.updateAlertBadge = function() {
+            const result = origAlertUpdate.call(this);
+            const count = this.alerts.length || 0;
+            updateFloatAlertBadge(count);
+            return result;
+        };
+    }
+    
+})();
