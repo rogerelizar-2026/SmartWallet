@@ -870,8 +870,11 @@ this.updateCharts();
 updateMonthDisplay() {
 const months = this.getMonths();
 const el = document.getElementById('currentMonth');
-if (el && months) {
-el.textContent = months[this.currentMonth.getMonth()] + ' ' + this.currentMonth.getFullYear();
+const elTaskbar = document.getElementById('currentMonthTaskbar');
+if (months) {
+const monthText = months[this.currentMonth.getMonth()] + ' ' + this.currentMonth.getFullYear();
+if (el) el.textContent = monthText;
+if (elTaskbar) elTaskbar.textContent = monthText;
 }
 }
 formatMonthYear(date) {
@@ -3639,13 +3642,17 @@ smartfinance.applyTheme();
 window.toggleMenu = function(e) {
 if (e) e.stopPropagation();
 const main = document.getElementById('mainMenu');
+const mainTaskbar = document.getElementById('mainMenuTaskbar');
 const info = document.getElementById('infoMenu');
-const isActive = main.classList.contains('active');
+const isActive = main && main.classList.contains('active');
 if (info) info.classList.remove('active');
 document.querySelectorAll('.header-btn.info-btn').forEach(b => b.classList.remove('menu-active'));
-main.classList.toggle('active');
+if (main) main.classList.toggle('active', !isActive);
+if (mainTaskbar) mainTaskbar.classList.remove('active');
 const menuBtn = document.querySelector('.header-btn.menu-btn');
+const menuBtnTaskbar = document.getElementById('menuBtnTaskbar');
 if (menuBtn) menuBtn.classList.toggle('menu-active', !isActive);
+if (menuBtnTaskbar) menuBtnTaskbar.classList.remove('menu-active');
 };
 window.toggleInfoMenu = function(e) {
 if (e) e.stopPropagation();
@@ -3833,9 +3840,36 @@ const alertBtnTaskbar = document.getElementById('alertBtnTaskbar');
 const privacyBtnTaskbar = document.getElementById('privacyBtnTaskbar');
 const themeBtnTaskbar = document.getElementById('themeBtnTaskbar');
 const menuBtnTaskbar = document.getElementById('menuBtnTaskbar');
-const fabBtnTaskbar = document.getElementById('fabBtnTaskbar');
-const fabPopup = document.getElementById('fabPopup');
+const mainMenuTaskbar = document.getElementById('mainMenuTaskbar');
 const mainMenu = document.getElementById('mainMenu');
+
+// Sync month navigation buttons in taskbar
+const todayMonthBtnTaskbar = document.getElementById('todayMonthBtnTaskbar');
+const prevMonthBtnTaskbar = document.getElementById('prevMonthBtnTaskbar');
+const nextMonthBtnTaskbar = document.getElementById('nextMonthBtnTaskbar');
+const currentMonthTaskbar = document.getElementById('currentMonthTaskbar');
+
+if (todayMonthBtnTaskbar) {
+    todayMonthBtnTaskbar.addEventListener('click', () => {
+        const todayBtn = document.getElementById('todayMonthBtn');
+        if (todayBtn) todayBtn.click();
+    });
+}
+
+if (prevMonthBtnTaskbar) {
+    prevMonthBtnTaskbar.addEventListener('click', () => {
+        const prevBtn = document.getElementById('prevMonthBtn');
+        if (prevBtn) prevBtn.click();
+    });
+}
+
+if (nextMonthBtnTaskbar) {
+    nextMonthBtnTaskbar.addEventListener('click', () => {
+        const nextBtn = document.getElementById('nextMonthBtn');
+        if (nextBtn) nextBtn.click();
+    });
+}
+
 if (alertBtnTaskbar) {
 alertBtnTaskbar.addEventListener('click', () => {
 openBillsModal();
@@ -3850,40 +3884,13 @@ themeBtnTaskbar.addEventListener('click', () => toggleTheme());
 if (menuBtnTaskbar) {
 menuBtnTaskbar.addEventListener('click', (e) => {
 e.stopPropagation();
-const isActive = mainMenu.classList.contains('active');
-if (fabPopup) fabPopup.classList.remove('active');
-if (mainMenu) mainMenu.classList.toggle('active', !isActive);
+const isActive = mainMenuTaskbar && mainMenuTaskbar.classList.contains('active');
+if (mainMenu) mainMenu.classList.remove('active');
+if (menuBtn) menuBtn.classList.remove('menu-active');
+if (mainMenuTaskbar) mainMenuTaskbar.classList.toggle('active', !isActive);
 menuBtnTaskbar.classList.toggle('menu-active', !isActive);
 });
 }
-if (fabBtnTaskbar) {
-fabBtnTaskbar.addEventListener('click', (e) => {
-e.stopPropagation();
-const isActive = fabPopup.classList.contains('active');
-if (mainMenu) mainMenu.classList.remove('active');
-if (menuBtnTaskbar) menuBtnTaskbar.classList.remove('menu-active');
-fabPopup.classList.toggle('active', !isActive);
-fabBtnTaskbar.classList.toggle('menu-active', !isActive);
-});
-}
-document.querySelectorAll('.fab-popup-item').forEach(btn => {
-const action = btn.dataset.action;
-if (action && typeof window[action] === 'function') {
-btn.addEventListener('click', () => {
-window[action]();
-if (fabPopup) fabPopup.classList.remove('active');
-if (fabBtnTaskbar) fabBtnTaskbar.classList.remove('menu-active');
-});
-}
-});
-document.addEventListener('click', (e) => {
-if (!e.target.closest('.taskbar-btn') && !e.target.closest('.fab-popup') && !e.target.closest('.taskbar-menu-wrapper')) {
-if (fabPopup) fabPopup.classList.remove('active');
-if (mainMenu) mainMenu.classList.remove('active');
-if (fabBtnTaskbar) fabBtnTaskbar.classList.remove('menu-active');
-if (menuBtnTaskbar) menuBtnTaskbar.classList.remove('menu-active');
-}
-});
 });
 const _origUpdateAlertBadge = SmartFinance.prototype.updateAlertBadge;
 SmartFinance.prototype.updateAlertBadge = function() {
