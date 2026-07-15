@@ -282,23 +282,26 @@ a {
 }
 
 /* ===== HEADER ===== */
+/* Ajuste da Header: Menos opaca */
 .header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 20px;
-    background: var(--glass-bg);
+    background-color: rgba(15, 23, 42, 0.6); /* Aumentada transparência (0.6) */
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    margin-bottom: 20px;
-    box-shadow: var(--shadow-md);
-    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    height: 80px; /* Altura fixa para referência */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 0.3s ease;
 }
 
+/* Centralização e Tamanho da Logo */
 .header-center {
     display: flex;
+    justify-content: center;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -310,80 +313,57 @@ a {
     filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.4));
 }
 
-.header-btn {
-    padding: 8px 12px;
-    background: var(--input-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    color: var(--text-primary);
-    font-size: 0.9rem;
-    transition: var(--transition);
-    display: inline-flex;
+/* Ajuste da Taskbar para manter consistência */
+.taskbar {
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    height: 60px;
+    display: flex;
     align-items: center;
-    gap: 6px;
+    justify-content: space-between;
+    padding: 0 1rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* Estilo dos ícones SVG nos botões */
+.taskbar-btn svg, .header-btn svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    color: #e2e8f0;
+    transition: color 0.2s;
+}
+
+.taskbar-btn:hover svg, .header-btn:hover svg {
+    color: #8b5cf6;
+}
+
+/* Ajuste para o badge de notificação sobre o SVG */
+.taskbar-btn.relative {
     position: relative;
 }
 
-.header-btn:hover {
-    background: var(--accent-color);
-    border-color: var(--accent-color);
-    transform: translateY(-1px);
-}
-
-.header-btn.menu-active {
-    background: var(--accent-color);
-    border-color: var(--accent-color);
-}
-
-.header-btn.has-alerts {
-    animation: alertPulse 2s ease-in-out infinite;
-}
-
-@keyframes alertPulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
-    50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
-}
-
-.header-btn .icon {
-    width: 18px;
-    height: 18px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.current-month {
-    font-weight: 600;
-    font-size: 1rem;
-    padding: 8px 14px;
-    background: var(--input-bg);
-    border-radius: var(--radius-sm);
-    min-width: 140px;
-    text-align: center;
-}
-
-.alert-badge {
-    display: none;
-    background: var(--danger-color);
-    color: #fff;
+.badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #ef4444;
+    color: white;
     font-size: 0.7rem;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 10px;
+    font-weight: bold;
     min-width: 18px;
-    text-align: center;
-}
-
-.alert-badge.visible {
-    display: inline-block;
-    animation: badgeBounce 0.5s ease;
-}
-
-@keyframes badgeBounce {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.2); }
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(15, 23, 42, 0.6);
 }
 
 /* ===== DROPDOWN MENU ===== */

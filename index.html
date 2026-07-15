@@ -20,8 +20,7 @@
 <!-- ===== SPLASH SCREEN ===== -->
 <div id="splashScreen" class="splash-screen">
     <div class="splash-content">
-        <img src="logo.svg" alt="Smart Finance" class="splash-logo">
-        <h1>Smart Finance</h1>
+        <img src="logomarca.svg" alt="Smart Finance" class="splash-logo">
         <p>Controle Financeiro Pessoal Inteligente</p>
         <p class="splash-author">Idealizado por RogerElizar™</p>
     </div>
@@ -31,7 +30,7 @@
 <div id="disclaimerModal" class="modal modal-front active">
     <div class="modal-content">
         <div class="disclaimer-header">
-            <h2>⚠️ Termos de Uso e Aviso Legal</h2>
+            <h2>⚠️ Termos de Uso e Aviso Legal ⚠️</h2>
             <p>Por favor, leia atentamente antes de continuar</p>
         </div>
         <div class="disclaimer-body">
@@ -154,7 +153,8 @@
   <text x="145" y="142" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="62" font-weight="800" fill="url(#logoGradient)" letter-spacing="-1" filter="url(#textShadow)">Finance</text>
 </svg>
         </div>
-    </header>
+    </div>
+</nav>
 
     <!-- DASHBOARD -->
     <section class="dashboard">
@@ -282,53 +282,6 @@
             <button class="fab-action" data-action="openIncomeModal" title="Receita">💰</button>
             <button class="fab-action" data-action="openExpenseModal" title="Despesa">💸</button>
         </div>
-    </div>
-</div>
-
-<!-- ===== BOTTOM TASKBAR (MOBILE) ===== -->
-<div id="bottomTaskbar" class="bottom-taskbar" style="display:none;">
-    <div class="taskbar-left">
-        <img src="favicon.svg" alt="Logo" class="taskbar-logo">
-        <div class="taskbar-brand">
-            <span class="taskbar-title">Smart Finance</span>
-            <span class="taskbar-subtitle">Suas finanças sob seu domínio!</span>
-        </div>
-    </div>
-    <div class="taskbar-right">
-        <button id="todayMonthBtnTaskbar" class="taskbar-btn" title="Hoje">📅 Hoje</button>
-        <button id="prevMonthBtnTaskbar" class="taskbar-btn" title="Mês anterior">←</button>
-        <span id="currentMonthTaskbar" class="taskbar-month">Julho 2026</span>
-        <button id="nextMonthBtnTaskbar" class="taskbar-btn" title="Próximo mês">→</button>
-        <button id="alertBtnTaskbar" class="taskbar-btn" title="Contas a vencer">
-            🔔 <span id="alertBadgeTaskbar" class="alert-badge">0</span>
-        </button>
-        <button id="privacyBtnTaskbar" class="taskbar-btn" title="Privacidade">
-            <svg class="icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-        <button id="themeBtnTaskbar" class="taskbar-btn" title="Tema">
-            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/></svg>
-        </button>
-        <button id="menuBtnTaskbar" class="taskbar-btn menu-btn" title="Menu">☰</button>
-    </div>
-    
-    <!-- MAIN MENU DROPDOWN (same as header) -->
-    <div id="mainMenuTaskbar" class="dropdown-menu main-menu">
-        <button class="dropdown-item" data-action="openExportModal">📤 Exportar Extrato</button>
-        <button class="dropdown-item" data-action="openAccountsModal">🏦 Minhas Contas</button>
-        <button class="dropdown-item" data-action="openCreditCardsModal">💳 Meus Cartões</button>
-        <button class="dropdown-item" data-action="openInvestmentsModal">📈 Aplicações</button>
-        <button class="dropdown-item" data-action="openCategoryBudgetModal">📊 Orçamento por Categoria</button>
-        <button class="dropdown-item" data-action="openGoalModal">🎯 Meta de Reserva</button>
-        <button class="dropdown-item" data-action="openManualModal">📘 Manual do Usuário</button>
-        <button class="dropdown-item" data-action="openTermsModal">📜 Termos de Uso</button>
-        <button class="dropdown-item" data-action="openThanksModal">☕ Apoie o Projeto</button>
-        <button class="dropdown-item" data-action="toggleDemoMode">🎭 Modo Demonstração</button>
-        <button class="dropdown-item" data-action="openImportCsvModal">📥 Importar CSV</button>
-        <button class="dropdown-item" id="languageMenuItemTaskbar" data-action="toggleLanguage">🌎 <span id="languageTextTaskbar">Idioma: Português</span></button>
-        <button class="dropdown-item" id="currencyMenuItemTaskbar" data-action="toggleCurrency" style="display:none;">💱 <span id="currencyTextTaskbar">Moeda: R$</span></button>
-        <button class="dropdown-item" data-action="openSettingsModal">⚙️ Configurações</button>
-        <button class="dropdown-item" data-action="enableNotifications">🔔 Ativar Notificações</button>
-        <button class="dropdown-item" data-action="openClearDataModal">🗑️ Limpar Dados</button>
     </div>
 </div>
 
