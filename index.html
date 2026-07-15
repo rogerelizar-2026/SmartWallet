@@ -276,69 +276,119 @@ if ('serviceWorker' in navigator) {
         </div>
     </div>
 
-<!-- ===== BOTTOM FLOATING BAR ===== -->
-<div id="bottomFloatingBar" class="bottom-floating-bar" style="display:none;">
-    <div class="floating-bar-content">
-        <button id="prevMonthBtnBar" class="floating-bar-btn" title="Mês anterior">
-            <svg class="icon-sm" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <span id="currentMonthBar" class="floating-bar-month">Julho 2026</span>
-        <button id="nextMonthBtnBar" class="floating-bar-btn" title="Próximo mês">
-            <svg class="icon-sm" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-        <button id="todayMonthBtnBar" class="floating-bar-btn floating-bar-btn-primary" title="Hoje">
-            <svg class="icon-sm" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        </button>
-        <button id="addBtnBar" class="floating-bar-btn floating-bar-btn-add" title="Adicionar">
-            <svg class="icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </button>
-        <button id="privacyBtnBar" class="floating-bar-btn" title="Privacidade">
-            <svg class="icon-sm" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-        <button id="themeBtnBar" class="floating-bar-btn" title="Tema">
-            <svg class="icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </button>
-        <button id="alertBtnBar" class="floating-bar-btn" title="Contas a vencer">
-            <svg class="icon-sm" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            <span id="alertBadgeBar" class="floating-bar-badge">0</span>
-        </button>
-        <div class="floating-bar-menu-wrapper">
-            <button id="menuBtnBar" class="floating-bar-btn" title="Menu">
-                <svg class="icon-sm" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
-        </div>
-    </div>
+<!-- ===== FLOATING ACTION BAR ===== -->
+<div id="floatingBar" class="floating-bar" style="display:none;">
+    <!-- Navegação Mensal -->
+    <button id="floatPrevMonth" class="float-nav-btn" title="Mês anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
     
-    <!-- DROPDOWN MENU -->
-    <div id="barMenuDropdown" class="bar-menu-dropdown">
-        <button class="dropdown-item" data-action="openExportModal">📤 Exportar Extrato</button>
-        <button class="dropdown-item" data-action="openAccountsModal">🏦 Minhas Contas</button>
-        <button class="dropdown-item" data-action="openCreditCardsModal">💳 Meus Cartões</button>
-        <button class="dropdown-item" data-action="openInvestmentsModal">📈 Aplicações</button>
-        <button class="dropdown-item" data-action="openCategoryBudgetModal">📊 Orçamento por Categoria</button>
-        <button class="dropdown-item" data-action="openGoalModal">🎯 Meta de Reserva</button>
-        <button class="dropdown-item" data-action="openManualModal">📘 Manual do Usuário</button>
-        <button class="dropdown-item" data-action="openTermsModal">📜 Termos de Uso</button>
-        <button class="dropdown-item" data-action="openThanksModal">☕ Apoie o Projeto</button>
-        <button class="dropdown-item" data-action="toggleDemoMode">🎭 Modo Demonstração</button>
-        <button class="dropdown-item" data-action="openImportCsvModal">📥 Importar CSV</button>
-        <button class="dropdown-item" id="languageMenuItemBar" data-action="toggleLanguage">🌎 <span id="languageTextBar">Idioma: Português</span></button>
-        <button class="dropdown-item" id="currencyMenuItemBar" data-action="toggleCurrency" style="display:none;">💱 <span id="currencyTextBar">Moeda: R$</span></button>
-        <button class="dropdown-item" data-action="openSettingsModal">⚙️ Configurações</button>
-        <button class="dropdown-item" data-action="enableNotifications">🔔 Ativar Notificações</button>
-        <button class="dropdown-item" data-action="openClearDataModal">🗑️ Limpar Dados</button>
-    <!-- FAB Speed Dial -->
-    <div class="fab-wrapper" id="fabWrapper">
-        <button class="fab fab-main" id="fabBtn" aria-label="Adicionar nova transação">
-            <svg class="icon fab-icon-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            <svg class="icon fab-icon-close" viewBox="0 0 24 24" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <div class="fab-actions" id="fabActions">
-            <button class="fab-action fab-action-transfer" data-action="openTransferModal"><span>🔄</span><span class="fab-label">Transferir</span></button>
-            <button class="fab-action fab-action-income" data-action="openIncomeModal"><span>💰</span><span class="fab-label">Receita</span></button>
-            <button class="fab-action fab-action-expense" data-action="openExpenseModal"><span>💸</span><span class="fab-label">Despesa</span></button>
-        </div>
-    </div>
+    <span id="floatMonthDisplay" class="float-month-display">Julho 2026</span>
+    
+    <button id="floatNextMonth" class="float-nav-btn" title="Próximo mês">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+    
+    <div class="float-divider"></div>
+    
+    <!-- Botão Adicionar -->
+    <button id="floatAddBtn" class="float-btn add-btn" title="Adicionar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    
+    <div class="float-divider"></div>
+    
+    <!-- Privacidade -->
+    <button id="floatPrivacyBtn" class="float-btn" title="Privacidade">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+    </button>
+    
+    <!-- Tema -->
+    <button id="floatThemeBtn" class="float-btn" title="Tema">
+        <svg class="theme-icon-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="theme-icon-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+    
+    <!-- Notificações -->
+    <button id="floatAlertBtn" class="float-btn" title="Alertas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span id="floatAlertBadge" class="alert-badge" style="position:absolute;top:4px;right:4px;font-size:10px;padding:2px 5px;border-radius:10px;background:#ef4444;color:white;min-width:18px;text-align:center;">0</span>
+    </button>
+    
+    <!-- Menu -->
+    <button id="floatMenuBtn" class="float-btn" title="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+</div>
+
+<!-- Floating Menu Dropdown -->
+<div id="floatMenuDropdown" class="menu-dropdown">
+    <div class="menu-category">Visão Geral</div>
+    <button class="menu-item" data-action="showDashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+    </button>
+    <button class="menu-item" data-action="showTransactions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        Transações
+    </button>
+    
+    <div class="menu-category">Contas & Cartões</div>
+    <button class="menu-item" data-action="showAccounts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        Contas Bancárias
+    </button>
+    <button class="menu-item" data-action="showCreditCards">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Cartões de Crédito
+    </button>
+    
+    <div class="menu-category">Investimentos & Metas</div>
+    <button class="menu-item" data-action="showInvestments">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M12 8H4l8-7 8 7h-8"/><rect x="8" y="13" width="8" height="8" rx="1"/></svg>
+        Investimentos
+    </button>
+    <button class="menu-item" data-action="showGoals">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        Metas Financeiras
+    </button>
+    
+    <div class="menu-category">Planejamento</div>
+    <button class="menu-item" data-action="showBudget">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        Orçamento por Categoria
+    </button>
+    <button class="menu-item" data-action="showRecurring">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        Transações Recorrentes
+    </button>
+    
+    <div class="menu-category">Sistema & Dados</div>
+    <button class="menu-item" data-action="toggleDemoMode">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M2 12l5-5m-5 5l5 5"/></svg>
+        Modo Demonstração
+    </button>
+    <button class="menu-item" data-action="exportData">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Exportar Dados
+    </button>
+    <button class="menu-item" data-action="importData">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Importar Dados
+    </button>
+    <button class="menu-item" data-action="backupRestore">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Backup & Restauração
+    </button>
+    <button class="menu-item" data-action="clearData">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+        Limpar Dados
+    </button>
+</div>
+
+<!-- ===== BOTTOM TASKBAR (MOBILE - REMOVED) ===== -->
+
+<!-- ===== MODALS ===== -->
 
     <!-- Modal Nova Transação -->
     <div class="modal" id="newTransactionModal" role="dialog" aria-modal="true" tabindex="-1">

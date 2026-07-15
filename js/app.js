@@ -4394,117 +4394,19 @@ smartfinance.render();
 smartfinance.updateCharts();
 });
 }
-
-// Bottom Floating Bar - Month Navigation
-const todayBtnBar = document.getElementById('todayMonthBtnBar');
-if (todayBtnBar) {
-todayBtnBar.addEventListener('click', () => {
-smartfinance.currentMonth = new Date();
-smartfinance.currentMonth.setDate(1);
-smartfinance.currentMonth.setHours(0, 0, 0, 0);
-smartfinance.updateMonthDisplay();
-smartfinance.clearCache();
-smartfinance.currentPage = 1;
-smartfinance.render();
-smartfinance.updateCharts();
-});
-}
-
-const prevMonthBtnBar = document.getElementById('prevMonthBtnBar');
-if (prevMonthBtnBar) {
-prevMonthBtnBar.addEventListener('click', () => smartfinance.changeMonth(-1));
-}
-
-const nextMonthBtnBar = document.getElementById('nextMonthBtnBar');
-if (nextMonthBtnBar) {
-nextMonthBtnBar.addEventListener('click', () => smartfinance.changeMonth(1));
-}
-
-// Bottom Floating Bar - Action Buttons
-const addBtnBar = document.getElementById('addBtnBar');
-if (addBtnBar) {
-addBtnBar.addEventListener('click', () => {
-const modal = document.getElementById('newTransactionModal');
-if (modal) openModal('newTransactionModal');
-});
-}
-
-const privacyBtnBar = document.getElementById('privacyBtnBar');
-if (privacyBtnBar) {
-privacyBtnBar.addEventListener('click', () => togglePrivacy());
-}
-
-const themeBtnBar = document.getElementById('themeBtnBar');
-if (themeBtnBar) {
-themeBtnBar.addEventListener('click', () => toggleTheme());
-}
-
-const alertBtnBar = document.getElementById('alertBtnBar');
-if (alertBtnBar) {
-alertBtnBar.addEventListener('click', () => openBillsModal());
-}
-
-// Bottom Floating Bar - Menu
-const menuBtnBar = document.getElementById('menuBtnBar');
-const barMenuDropdown = document.getElementById('barMenuDropdown');
-const mainMenu = document.getElementById('mainMenu');
-
-if (menuBtnBar) {
-menuBtnBar.addEventListener('click', (e) => {
-e.stopPropagation();
-const isActive = barMenuDropdown.classList.contains('active');
-if (mainMenu) mainMenu.classList.remove('active');
-if (document.getElementById('menuBtn')) document.getElementById('menuBtn').classList.remove('menu-active');
-barMenuDropdown.classList.toggle('active', !isActive);
-document.querySelector('.floating-bar-menu-wrapper').classList.toggle('active', !isActive);
-menuBtnBar.classList.toggle('menu-active', !isActive);
-});
-}
-
-// Menu dropdown items for bottom bar
-if (barMenuDropdown) {
-barMenuDropdown.querySelectorAll('.dropdown-item').forEach(btn => {
-const action = btn.dataset.action;
-if (action && typeof window[action] === 'function') {
-btn.addEventListener('click', () => {
-window[action]();
-if (barMenuDropdown) barMenuDropdown.classList.remove('active');
-if (menuBtnBar) menuBtnBar.classList.remove('menu-active');
-if (document.querySelector('.floating-bar-menu-wrapper')) document.querySelector('.floating-bar-menu-wrapper').classList.remove('active');
-});
-}
-});
-}
-
-// Close dropdown when clicking outside
-document.addEventListener('click', (e) => {
-if (!e.target.closest('.floating-bar-btn') && !e.target.closest('.bar-menu-dropdown') && !e.target.closest('.floating-bar-menu-wrapper')) {
-if (barMenuDropdown) barMenuDropdown.classList.remove('active');
-if (menuBtnBar) menuBtnBar.classList.remove('menu-active');
-if (document.querySelector('.floating-bar-menu-wrapper')) document.querySelector('.floating-bar-menu-wrapper').classList.remove('active');
-}
-});
 });
 window.startApp = function() {
 const quote = document.getElementById('quoteModal');
 const splash = document.getElementById('splashScreen');
 const main = document.getElementById('mainApp');
-const bottomBar = document.getElementById('bottomFloatingBar');
+const taskbar = document.getElementById('bottomTaskbar');
 if (quote) { quote.classList.remove('active'); quote.style.display = 'none'; }
 if (splash) {
 splash.classList.add('fade-out');
 setTimeout(() => { splash.style.display = 'none'; }, 800);
 }
 if (main) main.style.display = 'block';
-if (bottomBar) bottomBar.style.display = 'flex';
-
-window.startApp = function() {
-    const quote = document.getElementById('quoteModal');
-    const main = document.getElementById('mainApp');
-    const fab = document.getElementById('fabBtn');
-    if (quote) { quote.classList.remove('active'); quote.style.display = 'none'; }
-    if (main) main.style.display = 'block';
-    if (fab) fab.style.display = 'flex';
+if (taskbar) taskbar.style.display = 'flex';
 };
 
 window.closeWhatsNewModal = function() { closeModal('whatsNewModal'); };
@@ -4550,9 +4452,7 @@ if (fabBtnTaskbar) fabBtnTaskbar.classList.remove('menu-active');
 if (menuBtnTaskbar) menuBtnTaskbar.classList.remove('menu-active');
 }
 });
-// Note: Old bottomTaskbar code removed - replaced with new bottomFloatingBar
-
-// Update alert badge for both header and bottom bar
+});
 const _origUpdateAlertBadge = SmartFinance.prototype.updateAlertBadge;
 SmartFinance.prototype.updateAlertBadge = function() {
 _origUpdateAlertBadge.call(this);
@@ -4573,8 +4473,7 @@ closingDate.setHours(0, 0, 0, 0);
 if (closingDate.getTime() === tomorrow.getTime()) closingAlertsCount++;
 });
 const totalAlerts = bills.length + closingAlertsCount;
-// Update header badge
-const badge = document.getElementById('alertBadge');
+const badge = document.getElementById('alertBadgeTaskbar');
 if (badge) {
 if (totalAlerts > 0) {
 badge.textContent = totalAlerts > 99 ? '99+' : totalAlerts;
@@ -4583,37 +4482,24 @@ badge.classList.add('visible');
 badge.classList.remove('visible');
 }
 }
-// Update bottom bar badge
-const badgeBar = document.getElementById('alertBadgeBar');
-if (badgeBar) {
-if (totalAlerts > 0) {
-badgeBar.textContent = totalAlerts > 99 ? '99+' : totalAlerts;
-badgeBar.classList.add('visible');
-} else {
-badgeBar.classList.remove('visible');
-}
-}
 };
-
-// Modal open/close handlers for bottom bar
 const _origOpenModal = window.openModal;
 window.openModal = function(id) {
 _origOpenModal(id);
-const bottomBar = document.getElementById('bottomFloatingBar');
-const barMenuDropdown = document.getElementById('barMenuDropdown');
+const taskbar = document.getElementById('bottomTaskbar');
+const fabPopup = document.getElementById('fabPopup');
 const mainMenu = document.getElementById('mainMenu');
-if (bottomBar) bottomBar.style.display = 'none';
-if (barMenuDropdown) barMenuDropdown.classList.remove('active');
+if (taskbar) taskbar.style.display = 'none';
+if (fabPopup) fabPopup.classList.remove('active');
 if (mainMenu) mainMenu.classList.remove('active');
 };
 const _origCloseModal = window.closeModal;
 window.closeModal = function(id) {
 _origCloseModal(id);
 const stillOpen = document.querySelector('.modal.active, .modal-front.active');
-const bottomBar = document.getElementById('bottomFloatingBar');
-if (!stillOpen && bottomBar) bottomBar.style.display = 'flex';
+const taskbar = document.getElementById('bottomTaskbar');
+if (!stillOpen && taskbar) taskbar.style.display = 'flex';
 };
-
 console.log('🎉 Smart Finance v1.0.2 carregado com sucesso!');
 })();
 (function setupKeyboardShortcuts() {
@@ -4745,4 +4631,202 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
 })();
 
+})();
+
+// ===== FLOATING ACTION BAR SETUP =====
+(function setupFloatingActionBar() {
+    const floatingBar = document.getElementById('floatingBar');
+    const floatMonthDisplay = document.getElementById('floatMonthDisplay');
+    const floatPrevMonth = document.getElementById('floatPrevMonth');
+    const floatNextMonth = document.getElementById('floatNextMonth');
+    const floatAddBtn = document.getElementById('floatAddBtn');
+    const floatPrivacyBtn = document.getElementById('floatPrivacyBtn');
+    const floatThemeBtn = document.getElementById('floatThemeBtn');
+    const floatAlertBtn = document.getElementById('floatAlertBtn');
+    const floatMenuBtn = document.getElementById('floatMenuBtn');
+    const floatAlertBadge = document.getElementById('floatAlertBadge');
+    const floatMenuDropdown = document.getElementById('floatMenuDropdown');
+    const themeIconLight = document.querySelector('.theme-icon-light');
+    const themeIconDark = document.querySelector('.theme-icon-dark');
+    
+    // Show floating bar when app starts
+    if (floatingBar) {
+        floatingBar.style.display = 'flex';
+    }
+    
+    // Update month display in floating bar
+    function updateFloatMonthDisplay() {
+        if (floatMonthDisplay && smartfinance.currentMonth) {
+            const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                               'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+            const m = smartfinance.currentMonth.getMonth();
+            const y = smartfinance.currentMonth.getFullYear();
+            floatMonthDisplay.textContent = `${monthNames[m]} ${y}`;
+        }
+    }
+    
+    // Sync with main month display
+    if (smartfinance.updateMonthDisplay) {
+        const origUpdate = smartfinance.updateMonthDisplay;
+        smartfinance.updateMonthDisplay = function() {
+            origUpdate.call(this);
+            updateFloatMonthDisplay();
+        };
+    }
+    
+    // Navigation buttons
+    if (floatPrevMonth) {
+        floatPrevMonth.addEventListener('click', () => {
+            if (smartfinance.changeMonth) smartfinance.changeMonth(-1);
+        });
+    }
+    
+    if (floatNextMonth) {
+        floatNextMonth.addEventListener('click', () => {
+            if (smartfinance.changeMonth) smartfinance.changeMonth(1);
+        });
+    }
+    
+    // Add button - open FAB popup or modal
+    if (floatAddBtn) {
+        floatAddBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (typeof openTransactionModal === 'function') {
+                openTransactionModal();
+            }
+        });
+    }
+    
+    // Privacy button
+    if (floatPrivacyBtn) {
+        floatPrivacyBtn.addEventListener('click', () => {
+            if (typeof togglePrivacy === 'function') togglePrivacy();
+        });
+    }
+    
+    // Theme button
+    if (floatThemeBtn) {
+        floatThemeBtn.addEventListener('click', () => {
+            if (typeof toggleTheme === 'function') toggleTheme();
+            // Update icons
+            const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+            if (themeIconLight && themeIconDark) {
+                if (isDark) {
+                    themeIconLight.style.display = 'none';
+                    themeIconDark.style.display = 'block';
+                } else {
+                    themeIconLight.style.display = 'block';
+                    themeIconDark.style.display = 'none';
+                }
+            }
+        });
+    }
+    
+    // Alert button
+    if (floatAlertBtn) {
+        floatAlertBtn.addEventListener('click', () => {
+            if (typeof openBillsModal === 'function') openBillsModal();
+        });
+    }
+    
+    // Menu button
+    if (floatMenuBtn) {
+        floatMenuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (floatMenuDropdown) {
+                const isActive = floatMenuDropdown.classList.contains('show');
+                // Close header menu if open
+                const mainMenu = document.getElementById('mainMenu');
+                if (mainMenu) mainMenu.classList.remove('active');
+                // Toggle float menu
+                floatMenuDropdown.classList.toggle('show', !isActive);
+            }
+        });
+    }
+    
+    // Menu item actions
+    if (floatMenuDropdown) {
+        floatMenuDropdown.querySelectorAll('.menu-item').forEach(item => {
+            const action = item.dataset.action;
+            if (action) {
+                item.addEventListener('click', () => {
+                    // Close menu
+                    floatMenuDropdown.classList.remove('show');
+                    
+                    // Execute action
+                    switch(action) {
+                        case 'showDashboard':
+                            if (smartfinance.showSection) smartfinance.showSection('dashboard');
+                            break;
+                        case 'showTransactions':
+                            if (smartfinance.showSection) smartfinance.showSection('transactions');
+                            break;
+                        case 'showAccounts':
+                            if (smartfinance.showSection) smartfinance.showSection('accounts');
+                            break;
+                        case 'showCreditCards':
+                            if (smartfinance.showSection) smartfinance.showSection('creditCards');
+                            break;
+                        case 'showInvestments':
+                            if (smartfinance.showSection) smartfinance.showSection('investments');
+                            break;
+                        case 'showGoals':
+                            if (smartfinance.showSection) smartfinance.showSection('goals');
+                            break;
+                        case 'showBudget':
+                            if (smartfinance.showSection) smartfinance.showSection('budget');
+                            break;
+                        case 'showRecurring':
+                            if (smartfinance.showSection) smartfinance.showSection('recurring');
+                            break;
+                        case 'toggleDemoMode':
+                            if (typeof toggleDemoMode === 'function') toggleDemoMode();
+                            break;
+                        case 'exportData':
+                            if (typeof exportData === 'function') exportData();
+                            break;
+                        case 'importData':
+                            if (typeof importData === 'function') importData();
+                            break;
+                        case 'backupRestore':
+                            if (typeof backupRestore === 'function') backupRestore();
+                            break;
+                        case 'clearData':
+                            if (typeof clearData === 'function') clearData();
+                            break;
+                    }
+                });
+            }
+        });
+    }
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (floatMenuDropdown && !e.target.closest('#floatMenuDropdown') && !e.target.closest('#floatMenuBtn')) {
+            floatMenuDropdown.classList.remove('show');
+        }
+    });
+    
+    // Initialize month display
+    updateFloatMonthDisplay();
+    
+    // Update alert badge
+    function updateFloatAlertBadge(count) {
+        if (floatAlertBadge) {
+            floatAlertBadge.textContent = count || 0;
+            floatAlertBadge.style.display = count > 0 ? 'block' : 'none';
+        }
+    }
+    
+    // Hook into alert badge update
+    if (smartfinance.updateAlertBadge) {
+        const origAlertUpdate = smartfinance.updateAlertBadge;
+        smartfinance.updateAlertBadge = function() {
+            const result = origAlertUpdate.call(this);
+            const count = this.alerts.length || 0;
+            updateFloatAlertBadge(count);
+            return result;
+        };
+    }
+    
 })();
