@@ -1,3 +1,6 @@
+```gitignore
+
+```
 (js/app.js and styles.css are source files, no build artifacts, dependencies, or temp files detected)
 
 # Dependencies

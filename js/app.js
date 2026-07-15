@@ -4380,6 +4380,123 @@ window.acceptDisclaimer = function() {
         }, 600);
     }
 };
+document.addEventListener('DOMContentLoaded', () => {
+const todayBtn = document.getElementById('todayMonthBtn');
+if (todayBtn) {
+todayBtn.addEventListener('click', () => {
+smartfinance.currentMonth = new Date();
+smartfinance.currentMonth.setDate(1);
+smartfinance.currentMonth.setHours(0, 0, 0, 0);
+smartfinance.updateMonthDisplay();
+smartfinance.clearCache();
+smartfinance.currentPage = 1;
+smartfinance.render();
+smartfinance.updateCharts();
+});
+}
+
+// Bottom Floating Bar - Month Navigation
+const todayBtnBar = document.getElementById('todayMonthBtnBar');
+if (todayBtnBar) {
+todayBtnBar.addEventListener('click', () => {
+smartfinance.currentMonth = new Date();
+smartfinance.currentMonth.setDate(1);
+smartfinance.currentMonth.setHours(0, 0, 0, 0);
+smartfinance.updateMonthDisplay();
+smartfinance.clearCache();
+smartfinance.currentPage = 1;
+smartfinance.render();
+smartfinance.updateCharts();
+});
+}
+
+const prevMonthBtnBar = document.getElementById('prevMonthBtnBar');
+if (prevMonthBtnBar) {
+prevMonthBtnBar.addEventListener('click', () => smartfinance.changeMonth(-1));
+}
+
+const nextMonthBtnBar = document.getElementById('nextMonthBtnBar');
+if (nextMonthBtnBar) {
+nextMonthBtnBar.addEventListener('click', () => smartfinance.changeMonth(1));
+}
+
+// Bottom Floating Bar - Action Buttons
+const addBtnBar = document.getElementById('addBtnBar');
+if (addBtnBar) {
+addBtnBar.addEventListener('click', () => {
+const modal = document.getElementById('newTransactionModal');
+if (modal) openModal('newTransactionModal');
+});
+}
+
+const privacyBtnBar = document.getElementById('privacyBtnBar');
+if (privacyBtnBar) {
+privacyBtnBar.addEventListener('click', () => togglePrivacy());
+}
+
+const themeBtnBar = document.getElementById('themeBtnBar');
+if (themeBtnBar) {
+themeBtnBar.addEventListener('click', () => toggleTheme());
+}
+
+const alertBtnBar = document.getElementById('alertBtnBar');
+if (alertBtnBar) {
+alertBtnBar.addEventListener('click', () => openBillsModal());
+}
+
+// Bottom Floating Bar - Menu
+const menuBtnBar = document.getElementById('menuBtnBar');
+const barMenuDropdown = document.getElementById('barMenuDropdown');
+const mainMenu = document.getElementById('mainMenu');
+
+if (menuBtnBar) {
+menuBtnBar.addEventListener('click', (e) => {
+e.stopPropagation();
+const isActive = barMenuDropdown.classList.contains('active');
+if (mainMenu) mainMenu.classList.remove('active');
+if (document.getElementById('menuBtn')) document.getElementById('menuBtn').classList.remove('menu-active');
+barMenuDropdown.classList.toggle('active', !isActive);
+document.querySelector('.floating-bar-menu-wrapper').classList.toggle('active', !isActive);
+menuBtnBar.classList.toggle('menu-active', !isActive);
+});
+}
+
+// Menu dropdown items for bottom bar
+if (barMenuDropdown) {
+barMenuDropdown.querySelectorAll('.dropdown-item').forEach(btn => {
+const action = btn.dataset.action;
+if (action && typeof window[action] === 'function') {
+btn.addEventListener('click', () => {
+window[action]();
+if (barMenuDropdown) barMenuDropdown.classList.remove('active');
+if (menuBtnBar) menuBtnBar.classList.remove('menu-active');
+if (document.querySelector('.floating-bar-menu-wrapper')) document.querySelector('.floating-bar-menu-wrapper').classList.remove('active');
+});
+}
+});
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+if (!e.target.closest('.floating-bar-btn') && !e.target.closest('.bar-menu-dropdown') && !e.target.closest('.floating-bar-menu-wrapper')) {
+if (barMenuDropdown) barMenuDropdown.classList.remove('active');
+if (menuBtnBar) menuBtnBar.classList.remove('menu-active');
+if (document.querySelector('.floating-bar-menu-wrapper')) document.querySelector('.floating-bar-menu-wrapper').classList.remove('active');
+}
+});
+});
+window.startApp = function() {
+const quote = document.getElementById('quoteModal');
+const splash = document.getElementById('splashScreen');
+const main = document.getElementById('mainApp');
+const bottomBar = document.getElementById('bottomFloatingBar');
+if (quote) { quote.classList.remove('active'); quote.style.display = 'none'; }
+if (splash) {
+splash.classList.add('fade-out');
+setTimeout(() => { splash.style.display = 'none'; }, 800);
+}
+if (main) main.style.display = 'block';
+if (bottomBar) bottomBar.style.display = 'flex';
 
 window.startApp = function() {
     const quote = document.getElementById('quoteModal');
@@ -4426,6 +4543,80 @@ window.addEventListener('load', () => {
 
 // Click fora fecha MENUS (não modais!)
 document.addEventListener('click', (e) => {
+if (!e.target.closest('.taskbar-btn') && !e.target.closest('.fab-popup') && !e.target.closest('.taskbar-menu-wrapper')) {
+if (fabPopup) fabPopup.classList.remove('active');
+if (mainMenu) mainMenu.classList.remove('active');
+if (fabBtnTaskbar) fabBtnTaskbar.classList.remove('menu-active');
+if (menuBtnTaskbar) menuBtnTaskbar.classList.remove('menu-active');
+}
+});
+// Note: Old bottomTaskbar code removed - replaced with new bottomFloatingBar
+
+// Update alert badge for both header and bottom bar
+const _origUpdateAlertBadge = SmartFinance.prototype.updateAlertBadge;
+SmartFinance.prototype.updateAlertBadge = function() {
+_origUpdateAlertBadge.call(this);
+const today = new Date(); today.setHours(0, 0, 0, 0);
+const in3Days = new Date(today); in3Days.setDate(in3Days.getDate() + 3);
+const tomorrow = new Date(today); tomorrow.setDate(tomorrow.getDate() + 1);
+const bills = this.transactions.filter(t => {
+if (t.statusOk || t.amount >= 0) return false;
+const tDate = this.parseDate(t.date);
+return tDate <= in3Days;
+});
+let closingAlertsCount = 0;
+this.cards.forEach(card => {
+const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+const closingDay = Math.min(card.closingDay, lastDayOfMonth);
+const closingDate = new Date(today.getFullYear(), today.getMonth(), closingDay);
+closingDate.setHours(0, 0, 0, 0);
+if (closingDate.getTime() === tomorrow.getTime()) closingAlertsCount++;
+});
+const totalAlerts = bills.length + closingAlertsCount;
+// Update header badge
+const badge = document.getElementById('alertBadge');
+if (badge) {
+if (totalAlerts > 0) {
+badge.textContent = totalAlerts > 99 ? '99+' : totalAlerts;
+badge.classList.add('visible');
+} else {
+badge.classList.remove('visible');
+}
+}
+// Update bottom bar badge
+const badgeBar = document.getElementById('alertBadgeBar');
+if (badgeBar) {
+if (totalAlerts > 0) {
+badgeBar.textContent = totalAlerts > 99 ? '99+' : totalAlerts;
+badgeBar.classList.add('visible');
+} else {
+badgeBar.classList.remove('visible');
+}
+}
+};
+
+// Modal open/close handlers for bottom bar
+const _origOpenModal = window.openModal;
+window.openModal = function(id) {
+_origOpenModal(id);
+const bottomBar = document.getElementById('bottomFloatingBar');
+const barMenuDropdown = document.getElementById('barMenuDropdown');
+const mainMenu = document.getElementById('mainMenu');
+if (bottomBar) bottomBar.style.display = 'none';
+if (barMenuDropdown) barMenuDropdown.classList.remove('active');
+if (mainMenu) mainMenu.classList.remove('active');
+};
+const _origCloseModal = window.closeModal;
+window.closeModal = function(id) {
+_origCloseModal(id);
+const stillOpen = document.querySelector('.modal.active, .modal-front.active');
+const bottomBar = document.getElementById('bottomFloatingBar');
+if (!stillOpen && bottomBar) bottomBar.style.display = 'flex';
+};
+
+console.log('🎉 Smart Finance v1.0.2 carregado com sucesso!');
+})();
+(function setupKeyboardShortcuts() {
     const menu = document.getElementById('mainMenu');
     const info = document.getElementById('infoMenu');
     const menuBtn = document.querySelector('.header-btn.menu-btn');
