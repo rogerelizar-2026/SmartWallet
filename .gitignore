@@ -1,327 +1,55 @@
-# Examples with artifacts requiring .gitignore rules:
-
-## Example 1 (Python project with build artifacts):
-Input:
-```
-### Added files:
-['__pycache__/main.cpython-39.pyc', 'build/lib/main.py', 'dist/app.exe', 'venv/bin/python', '.vscode/settings.json', '.env']
-
-### Deleted files:
-[]
-
-### Modified files:
-['src/main.py']
-
-### current .gitignore Content
-*.log
-```
-
-Output:
-```
-# Compiled and binary files
+```gitignore
+# Compiled and build artifacts
 *.pyc
 __pycache__/
+*.o
+*.obj
+*.class
 *.exe
 *.dll
 *.so
-*.o
-*.obj
+*.a
 *.out
 
-# Build artifacts
-build/
-dist/
-*.egg-info/
-
 # Dependencies
+node_modules/
 venv/
 .venv/
 .env
-node_modules/
+.env.local
+.env.*
 
-# Editor/IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*.tmp
-
-# Logs
-*.log
-
-# Coverage
-.coverage
-coverage/
-htmlcov/
-
-# Original rule preserved
-*.log
-```
-
-
-## Example 2 (JavaScript project with node_modules):
-Input:
-```
-### Added files:
-['node_modules/lodash/index.js', 'dist/bundle.js', '.nyc_output/test.nyc', 'package-lock.json']
-
-### Deleted files:
-[]
-
-### Modified files:
-['src/index.js']
-
-### current .gitignore Content
-(node is empty)
-```
-
-Output:
-```
-# Dependencies
-node_modules/
-
-# Build artifacts
+# Build outputs
 dist/
 build/
+target/
 *.min.js
+*.min.css
 *.bundle.js
 
-# Test coverage
-.nyc_output/
-coverage/
-
-# Package managers
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-```
-
-
-## Example 3 (Java project with Gradle):
-Input:
-```
-### Added files:
-['build/classes/java/main/MyClass.class', '.gradle/gradle.properties', 'target/myapp.jar', '.idea/workspace.xml', 'out/production/classes/MyClass.class']
-
-### Deleted files:
-[]
-
-### Modified files:
-['src/main/java/MyClass.java']
-
-### current .gitignore Content
+# Logs and temporary files
 *.log
-```
-
-Output:
-```
-# Compiled files
-*.class
-*.jar
-*.war
-*.ear
-
-# Build artifacts
-build/
-target/
-out/
-
-# Dependencies
-.gradle/
-.gradle/
-lib/
-
-# IDE files
-.idea/
-*.iml
-*.ipr
-*.iws
-
-# Logs
-*.log
-
-# Original rule preserved
-*.log
-```
-
-
-## Example 4 (C++ project with compiled objects):
-Input:
-```
-### Added files:
-['main.o', 'build/main.out', 'lib/libmylib.a', 'CMakeFiles/CMakeOutput.log', 'cmake-build-debug/CMakeCache.txt']
-
-### Deleted files:
-[]
-
-### Modified files:
-['main.cpp', 'include/myheader.h']
-
-### current .gitignore Content
-*.log
-```
-
-Output:
-```
-# Compiled files
-*.o
-*.obj
-*.out
-*.a
-*.so
-*.dylib
-*.dll
-*.exe
-
-# Build artifacts
-build/
-cmake-build-*/
-CMakeFiles/
-CMakeCache.txt
-Makefile
-*_build/
-build-*/
-
-# Logs
-*.log
-
-# Original rule preserved
-*.log
-```
-
-
-## Example 5 (Only source/config files - no artifacts):
-Input:
-```
-### Added files:
-['src/main.py', 'README.md', 'config.json', 'requirements.txt']
-
-### Deleted files:
-[]
-
-### Modified files:
-['utils.py']
-
-### current .gitignore Content
-(empty)
-```
-
-Output:
-```
-(empty - no output)
-```
-
-
-## Example 6 (Mixed with some artifacts):
-Input:
-```
-### Added files:
-['.vscode/settings.json', 'src/main.go', 'bin/app', '__pycache__/util.cpython-39.pyc', '.env']
-
-### Deleted files:
-[]
-
-### Modified files:
-['go.mod']
-
-### current .gitignore Content
-*.log
-```
-
-Output:
-```
-# Compiled files
-*.pyc
-__pycache__/
-*.exe
-*.dll
-*.so
-*.o
-*.obj
-*.out
-bin/
-
-# Dependencies
-.env
-node_modules/
-vendor/
-
-# Editor/IDE files
-.vscode/
-.idea/
+*.tmp
 *.swp
 *.swo
-*.tmp
 
-# Logs
-*.log
+# Coverage reports
+coverage/
+htmlcov/
+.coverage
 
-# Original rule preserved
-*.log
-```
+# Editors
+.vscode/
+.idea/
 
+# System files
+.DS_Store
+Thumbs.db
 
-## Example 7 (Image files should not be ignored):
-Input:
-```
-### Added files:
-['src/style.css', 'assets/logo.png', 'public/icon.jpg', 'images/screenshot.gif']
-
-### Deleted files:
-[]
-
-### Modified files:
-['index.html']
-
-### current .gitignore Content
-(empty)
-```
-
-Output:
-```
-(empty - no output)
-```
-
-
-## Example 8 (Compressed files should be ignored):
-Input:
-```
-### Added files:
-['backup/archive.zip', 'dist/app.tar.gz', 'data/file.tar.xz', 'src/main.py']
-
-### Deleted files:
-[]
-
-### Modified files:
-['README.md']
-
-### current .gitignore Content
-(empty)
-```
-
-Output:
-```
-# Compressed files
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
+# Caches
+.mypy_cache/
+.pytest_cache/
+.gradle/
+.julia/
+zig-cache/
 ```

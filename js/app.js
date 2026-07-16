@@ -631,8 +631,20 @@ class SmartFinance {
         if (prevMonthBtn) prevMonthBtn.addEventListener('click', () => self.changeMonth(-1));
         if (nextMonthBtn) nextMonthBtn.addEventListener('click', () => self.changeMonth(1));
 
+        // Barra flutuante - seletores de mês
+        const floatPrevMonthBtn = document.getElementById('floatPrevMonthBtn');
+        const floatNextMonthBtn = document.getElementById('floatNextMonthBtn');
+        if (floatPrevMonthBtn) floatPrevMonthBtn.addEventListener('click', () => self.changeMonth(-1));
+        if (floatNextMonthBtn) floatNextMonthBtn.addEventListener('click', () => self.changeMonth(1));
+
         const alertBtn = document.getElementById('alertBtn');
         if (alertBtn) alertBtn.addEventListener('click', () => openBillsModal());
+
+        // Barra flutuante - botão notificações
+        const floatNotificationsBtn = document.getElementById('floatNotificationsBtn');
+        if (floatNotificationsBtn) floatNotificationsBtn.addEventListener('click', () => {
+            enableNotifications();
+        });
 
         const goalBtn = document.getElementById('goalBtn');
         if (goalBtn) goalBtn.addEventListener('click', () => openGoalModal());
@@ -640,8 +652,16 @@ class SmartFinance {
         const privacyBtn = document.getElementById('privacyBtn');
         if (privacyBtn) privacyBtn.addEventListener('click', () => togglePrivacy());
 
+        // Barra flutuante - botão privacidade
+        const floatPrivacyBtn = document.getElementById('floatPrivacyBtn');
+        if (floatPrivacyBtn) floatPrivacyBtn.addEventListener('click', () => togglePrivacy());
+
         const themeBtn = document.getElementById('themeBtn');
         if (themeBtn) themeBtn.addEventListener('click', () => toggleTheme());
+
+        // Barra flutuante - botão tema
+        const floatThemeBtn = document.getElementById('floatThemeBtn');
+        if (floatThemeBtn) floatThemeBtn.addEventListener('click', () => toggleTheme());
 
         // (Observação: o antigo botão "infoBtn"/menu de informações foi removido do layout;
         // o restante do código relacionado é inofensivo (só age se o elemento existir),
@@ -649,6 +669,16 @@ class SmartFinance {
 
         const menuBtn = document.getElementById('menuBtn');
         if (menuBtn) menuBtn.addEventListener('click', (e) => toggleMenu(e));
+
+        // Barra flutuante - botão menu
+        const floatMenuBtn = document.getElementById('floatMenuBtn');
+        if (floatMenuBtn) floatMenuBtn.addEventListener('click', (e) => toggleMenu(e));
+
+        // Barra flutuante - botão adicionar (+)
+        const floatAddBtn = document.getElementById('floatAddBtn');
+        if (floatAddBtn) floatAddBtn.addEventListener('click', () => {
+            openModal('newTransactionModal');
+        });
 
         const fabBtn = document.getElementById('fabBtn');
         if (fabBtn) fabBtn.addEventListener('click', () => toggleFab());
@@ -974,8 +1004,11 @@ class SmartFinance {
     updateMonthDisplay() {
         const months = this.getMonths();
         const el = document.getElementById('currentMonth');
-        if (el && months) {
-            el.textContent = months[this.currentMonth.getMonth()] + ' ' + this.currentMonth.getFullYear();
+        const floatEl = document.getElementById('floatCurrentMonth');
+        if (months) {
+            const monthText = months[this.currentMonth.getMonth()] + ' ' + this.currentMonth.getFullYear();
+            if (el) el.textContent = monthText;
+            if (floatEl) floatEl.textContent = months[this.currentMonth.getMonth()].substring(0, 3) + ' ' + this.currentMonth.getFullYear();
         }
     }
 
@@ -2277,6 +2310,7 @@ class SmartFinance {
         const totalAlerts = bills.length + closingAlertsCount;
         const badge = document.getElementById('alertBadge');
         const btn = document.getElementById('alertBtn');
+        const floatBadge = document.getElementById('floatAlertBadge');
         if (badge && btn) {
             if (totalAlerts > 0) {
                 badge.textContent = totalAlerts;
@@ -2285,6 +2319,15 @@ class SmartFinance {
             } else {
                 badge.classList.remove('visible');
                 btn.classList.remove('has-alerts');
+            }
+        }
+        // Atualiza badge da barra flutuante
+        if (floatBadge) {
+            floatBadge.textContent = totalAlerts;
+            if (totalAlerts > 0) {
+                floatBadge.style.display = 'flex';
+            } else {
+                floatBadge.style.display = 'none';
             }
         }
         if (this.settings.notifyBills && bills.length > 0 && Notification.permission === 'granted') {
