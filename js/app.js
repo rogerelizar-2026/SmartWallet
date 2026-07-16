@@ -4823,6 +4823,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const count = this.alerts.length || 0;
             updateFloatAlertBadge(count);
             return result;
-        };
+            };
+        }
     }
 })();
