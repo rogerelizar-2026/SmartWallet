@@ -4452,7 +4452,6 @@ if (fabBtnTaskbar) fabBtnTaskbar.classList.remove('menu-active');
 if (menuBtnTaskbar) menuBtnTaskbar.classList.remove('menu-active');
 }
 });
-});
 const _origUpdateAlertBadge = SmartFinance.prototype.updateAlertBadge;
 SmartFinance.prototype.updateAlertBadge = function() {
 _origUpdateAlertBadge.call(this);
