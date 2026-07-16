@@ -4631,8 +4631,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
 })();
 
-})();
-
 // ===== FLOATING ACTION BAR SETUP =====
 (function setupFloatingActionBar() {
     const floatingBar = document.getElementById('floatingBar');
