@@ -277,8 +277,6 @@ body.modal-open { overflow: hidden; }
 .disclaimer-body::-webkit-scrollbar { width: 6px; }
 .disclaimer-body::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 3px; }
 
-.disclaimer-body h3 { color: var(--accent-color); font-size: 1.05rem; margin: 16px 0 8px 0; }
-.disclaimer-body h3:first-child { margin-top: 0; }
 .disclaimer-body p { color: var(--text-primary); margin-bottom: 12px; line-height: 1.6; }
 .disclaimer-body ul { margin-left: 20px; margin-bottom: 12px; }
 .disclaimer-body li { margin-bottom: 8px; line-height: 1.6; }
@@ -702,6 +700,9 @@ body.light .info-dropdown, body.light .dropdown-menu { background: rgba(255, 255
     box-shadow: var(--shadow);
 }
 
+.disclaimer-body h3 { color: var(--accent-color); font-size: 1.05rem; margin: 16px 0 8px 0; }
+.disclaimer-body h3:first-child { margin-top: 0; }
+
 .chart-card h3 {
     font-size: 1rem;
     margin-bottom: 16px;
@@ -823,7 +824,13 @@ td {
     font-size: 0.9rem;
 }
 
-.transaction-row { transition: background 0.2s ease; cursor: pointer; }
+/* ===== SWIPE GESTURES (Mobile) ===== */
+.transaction-row { 
+    transition: background 0.2s ease; 
+    cursor: pointer; 
+    position: relative; 
+    overflow: hidden; 
+}
 .transaction-row:hover { background: var(--input-bg); }
 
 .category-badge, .account-badge, .payment-badge, .status-badge, .recurrence-badge {
@@ -2238,9 +2245,6 @@ body.privacy-on canvas { filter: blur(6px); }
     margin: 16px 0;
 }
 
-/* ===== SWIPE GESTURES (Mobile) ===== */
-.transaction-row { position: relative; overflow: hidden; }
-
 .swipe-actions {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -2271,20 +2275,6 @@ body.privacy-on canvas { filter: blur(6px); }
 
 .transaction-row.swiping-right { background: rgba(16, 185, 129, 0.15); }
 .transaction-row.swiping-left { background: rgba(239, 68, 68, 0.15); }
-
-/* ===== FOCUS TRAP ===== */
-body.modal-open {
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
-    top: var(--scroll-y, 0);
-}
-
-body.modal-open .container,
-body.modal-open .fab-wrapper {
-    pointer-events: none;
-    user-select: none;
-}
 
 /* ===== RESPONSIVIDADE ===== */
 @media (max-width: 1024px) {
@@ -2562,10 +2552,6 @@ textarea:focus-visible {
   cursor: pointer;
   margin: 0;
 }
-/* Esconder badge DEMO */
-.demo-badge {
-  display: none !important;
-}
 
 /* ===== FLOATING ACTION BAR ===== */
 .floating-bar {
@@ -2607,7 +2593,6 @@ textarea:focus-visible {
 .float-btn {
     background: transparent;
     border: none;
-    color: inherit;
     cursor: pointer;
     padding: 8px;
     border-radius: 50%;
