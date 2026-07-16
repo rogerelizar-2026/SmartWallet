@@ -931,6 +931,54 @@ if ('serviceWorker' in navigator) {
     <div class="toast" id="toast"></div>
     <div class="modal-backdrop" id="modalBackdrop"></div>
 
+    <!-- Barra Flutuante Inferior -->
+    <div class="floating-bottom-bar" id="floatingBottomBar">
+        <div class="floating-bar-content">
+            <!-- Seletor de Mês/Ano -->
+            <div class="floating-month-selector">
+                <button type="button" class="floating-btn-icon" id="floatPrevMonthBtn" aria-label="Mês anterior">
+                    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <span class="floating-month-label" id="floatCurrentMonth">Jul 2026</span>
+                <button type="button" class="floating-btn-icon" id="floatNextMonthBtn" aria-label="Próximo mês">
+                    <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+                </button>
+            </div>
+
+            <!-- Espaçador -->
+            <div class="floating-spacer"></div>
+
+            <!-- Botão Notificações -->
+            <button type="button" class="floating-btn" id="floatNotificationsBtn" aria-label="Notificações">
+                <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span class="floating-badge" id="floatAlertBadge">0</span>
+            </button>
+
+            <!-- Botão Privacidade -->
+            <button type="button" class="floating-btn" id="floatPrivacyBtn" aria-label="Ocultar valores">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+
+            <!-- Botão Tema Claro/Escuro -->
+            <button type="button" class="floating-btn" id="floatThemeBtn" aria-label="Alternar tema">
+                <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+
+            <!-- Botão Menu -->
+            <button type="button" class="floating-btn" id="floatMenuBtn" aria-label="Menu principal">
+                <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+
+            <!-- Espaçador -->
+            <div class="floating-spacer"></div>
+
+            <!-- Botão Adicionar (+) -->
+            <button type="button" class="floating-btn floating-add-btn" id="floatAddBtn" aria-label="Adicionar transação">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+        </div>
+    </div>
+
     <script src="js/app.js"></script>
 </body>
 </html>
