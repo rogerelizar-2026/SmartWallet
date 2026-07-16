@@ -1,4 +1,4 @@
-(function() {
+function() {
 'use strict';
 
 // ===== CONSTANTES =====
@@ -274,7 +274,7 @@ const CURRENCIES = {
     'BRL': { symbol: 'R$', code: 'BRL', locale: 'pt-BR', name: 'Real Brasileiro' },
     'USD': { symbol: '$', code: 'USD', locale: 'en-US', name: 'US Dollar' }
 };
-
+}
 // ===== CORREÇÃO v1.0.0: Função para ler datas corretamente (sem bug de fuso horário) =====
 function parseDate(dateString) {
     if (!dateString) return new Date();
@@ -4501,7 +4501,7 @@ if (!stillOpen && taskbar) taskbar.style.display = 'flex';
 };
 console.log('🎉 Smart Finance v1.0.2 carregado com sucesso!');
 
-(function setupKeyboardShortcuts() {
+function setupKeyboardShortcuts() {
     const menu = document.getElementById('mainMenu');
     const info = document.getElementById('infoMenu');
     const menuBtn = document.querySelector('.header-btn.menu-btn');
@@ -4559,7 +4559,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ===== SOLUÇÃO 3: ATALHOS DE TECLADO PARA NAVEGAÇÃO DE MÊS =====
-(function setupKeyboardShortcuts() {
+function setupKeyboardShortcuts() {
     document.addEventListener('keydown', (e) => {
         // Ignora se estiver em input/select/textarea ou modal aberto
         const tag = document.activeElement?.tagName;
@@ -4592,7 +4592,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 // ===== SOLUÇÃO 3: SWIPE HORIZONTAL NA TABELA DE TRANSAÇÕES (MOBILE) =====
-(function setupSwipeMonthNavigation() {
+function setupSwipeMonthNavigation() {
     const transactionsSection = document.getElementById('transactionsSection');
     if (!transactionsSection) return;
 
@@ -4631,7 +4631,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 // ===== FLOATING ACTION BAR SETUP =====
-(function setupFloatingActionBar() {
+function setupFloatingActionBar() {
     const floatingBar = document.getElementById('floatingBar');
     const floatMonthDisplay = document.getElementById('floatMonthDisplay');
     const floatPrevMonth = document.getElementById('floatPrevMonth');
@@ -4825,4 +4825,4 @@ document.addEventListener('DOMContentLoaded', () => {
             return result;
             };
    }
-}
+}();
