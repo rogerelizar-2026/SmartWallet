@@ -4825,4 +4825,5 @@ function setupFloatingActionBar() {
             return result;
         };
     }
-}();
+    }
+})();
