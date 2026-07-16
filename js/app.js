@@ -4731,8 +4731,8 @@ function setupFloatingActionBar() {
     if (floatAddBtn) {
         floatAddBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (typeof openTransactionModal === 'function') {
-                openTransactionModal();
+            if (typeof openNewTransactionModal === 'function') {
+                openNewTransactionModal();
             }
         });
     }
@@ -4854,7 +4854,7 @@ function setupFloatingActionBar() {
     function updateFloatAlertBadge(count) {
         if (floatAlertBadge) {
             floatAlertBadge.textContent = count || 0;
-            floatAlertBadge.style.display = count > 0 ? 'block' : 'none';
+            floatAlertBadge.classList.toggle('visible', count > 0);
         }
     }
     
