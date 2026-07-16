@@ -4528,7 +4528,6 @@ badge.classList.remove('visible');
 const _origOpenModal = window.openModal;
 window.openModal = function(id) {
 _origOpenModal(id);
-const taskbar = document.getElementById('bottomTaskbar');
 const fabPopup = document.getElementById('fabPopup');
 const mainMenu = document.getElementById('mainMenu');
 if (taskbar) taskbar.style.display = 'none';
@@ -4539,7 +4538,6 @@ const _origCloseModal = window.closeModal;
 window.closeModal = function(id) {
 _origCloseModal(id);
 const stillOpen = document.querySelector('.modal.active, .modal-front.active');
-const taskbar = document.getElementById('bottomTaskbar');
 if (!stillOpen && taskbar) taskbar.style.display = 'flex';
 };
 console.log('🎉 Smart Finance v1.0.2 carregado com sucesso!');
