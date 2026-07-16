@@ -1,4 +1,4 @@
-function() {
+(function() {
 'use strict';
 
 // ===== CONSTANTES =====
@@ -274,7 +274,7 @@ const CURRENCIES = {
     'BRL': { symbol: 'R$', code: 'BRL', locale: 'pt-BR', name: 'Real Brasileiro' },
     'USD': { symbol: '$', code: 'USD', locale: 'en-US', name: 'US Dollar' }
 };
-}
+
 // ===== CORREÇÃO v1.0.0: Função para ler datas corretamente (sem bug de fuso horário) =====
 function parseDate(dateString) {
     if (!dateString) return new Date();
@@ -4501,7 +4501,7 @@ if (!stillOpen && taskbar) taskbar.style.display = 'flex';
 };
 console.log('🎉 Smart Finance v1.0.2 carregado com sucesso!');
 
-function setupKeyboardShortcuts() {
+document.addEventListener('click', (e) => {
     const menu = document.getElementById('mainMenu');
     const info = document.getElementById('infoMenu');
     const menuBtn = document.querySelector('.header-btn.menu-btn');
@@ -4589,7 +4589,7 @@ function setupKeyboardShortcuts() {
             smartfinance.updateCharts();
         }
     });
-})();
+}
 
 // ===== SOLUÇÃO 3: SWIPE HORIZONTAL NA TABELA DE TRANSAÇÕES (MOBILE) =====
 function setupSwipeMonthNavigation() {
@@ -4628,7 +4628,7 @@ function setupSwipeMonthNavigation() {
             }
         }
     }, { passive: true });
-})();
+}
 
 // ===== FLOATING ACTION BAR SETUP =====
 function setupFloatingActionBar() {
@@ -4823,6 +4823,6 @@ function setupFloatingActionBar() {
             const count = this.alerts.length || 0;
             updateFloatAlertBadge(count);
             return result;
-            };
-   }
+        };
+    }
 }();
