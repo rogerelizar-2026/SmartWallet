@@ -2323,6 +2323,7 @@ class SmartFinance {
                 bbBadge.classList.add('visible');
                 bbBtn.classList.add('has-alerts');
             } else {
+                bbBadge.textContent = '';
                 bbBadge.classList.remove('visible');
                 bbBtn.classList.remove('has-alerts');
             }
