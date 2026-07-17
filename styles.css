@@ -1532,6 +1532,126 @@ body.privacy-on canvas { filter: blur(6px); }
     min-width: 120px;
 }
 
+/* ===== BARRA FLUTUANTE INFERIOR ===== */
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    gap: 8px;
+    z-index: 1000;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.bottom-bar-btn {
+    background: var(--input-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.bottom-bar-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary-color);
+}
+
+.bottom-bar-btn:active { transform: scale(0.95); }
+.bottom-bar-btn.menu-active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.bottom-bar-btn .icon {
+    width: 20px; height: 20px;
+    stroke: currentColor; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+    fill: none;
+}
+
+.bottom-bar-btn-add {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.4);
+}
+
+.bottom-bar-btn-add:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+}
+
+.bottom-bar-month {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: center;
+    padding: 0 8px;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bottom-bar .alert-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: var(--danger-color);
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    border: 2px solid var(--bg-color);
+}
+
+.bottom-bar .dropdown-wrapper { position: relative; }
+
+.bottom-bar .dropdown-menu {
+    bottom: auto;
+    top: -10px;
+    right: 0;
+    transform: translateY(100%);
+}
+
+.bottom-bar .dropdown-menu.active {
+    transform: translateY(calc(-100% - 8px));
+}
+
+/* Ajuste para o FAB não sobrepor a barra inferior */
+.fab-wrapper {
+    bottom: 80px;
+}
+
+.fab {
+    bottom: 80px;
+}
+
 /* ===== FAB SPEED DIAL ===== */
 .fab-wrapper {
     position: fixed;

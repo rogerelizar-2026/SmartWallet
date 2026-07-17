@@ -124,73 +124,6 @@ if ('serviceWorker' in navigator) {
                 <img src="logomarca.svg" alt="Smart Finance" style="height: 100px; width: auto;">
                 </div>
                 <p class="header-subtitle">Suas finanças sob seu domínio!</p>
-                <div class="month-selector">
-                    <button type="button" id="prevMonthBtn" aria-label="Mês anterior">
-                        <svg class="icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-                    </button>
-                    <div class="current-month" id="currentMonth">Julho 2026</div>
-                    <button type="button" id="nextMonthBtn" aria-label="Próximo mês">
-                        <svg class="icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-                    </button>
-                </div>
-            </div>
-            <div class="header-right">
-                <div class="header-actions">
-                    <button class="header-btn alert-btn" id="alertBtn" aria-label="Contas a vencer">
-                        <svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                        <span class="alert-badge" id="alertBadge">0</span>
-                    </button>
-                    <button class="header-btn" id="privacyBtn" aria-label="Ocultar valores">
-                        <svg class="icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                    </button>
-                    <button class="header-btn" id="themeBtn" aria-label="Alternar tema">
-                        <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                    </button>        
-                    <div class="dropdown-wrapper">
-                        <button class="header-btn menu-btn" id="menuBtn" aria-label="Menu principal">
-                            <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                        </button>
-                        <div class="dropdown-menu" id="mainMenu" role="menu" tabindex="-1">
-                            <button class="dropdown-item" data-action="openExportModal"><svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Extrato do Mês</span></button>
-                            <div class="dropdown-divider"></div>
-                            <button class="dropdown-item" data-action="openAccountsModal"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span>Minhas Contas</span></button>
-                            <button class="dropdown-item" data-action="openCreditCardsModal"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span>Meus Cartões</span></button>
-                            <button class="dropdown-item" data-action="openInvestmentsModal"><svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg><span>Aplicações</span></button>
-                            <div class="dropdown-divider"></div>
-                            <button class="dropdown-item" data-action="openCategoryBudgetModal"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg><span>Orçamento por Categoria</span></button>
-                            <div class="dropdown-divider"></div>
-                            <button class="dropdown-item" id="goalBtn"> 
-    <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-    <span>Meta de Reserva</span>
-</button>
-<button class="dropdown-item" data-action="openManualModal">
-    <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-    <span>Manual do Usuário</span>
-</button>
-<button class="dropdown-item" data-action="openTermsModal">
-    <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-    <span>Termos de Uso</span>
-</button>
-<button class="dropdown-item" data-action="openThanksModal">
-    <svg class="icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-    <span>Apoie o Projeto</span>
-</button>
-<button class="dropdown-item" data-action="toggleDemoMode" id="infoDemoBtn">
-    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-    <span id="infoDemoText">Modo Demonstração</span>
-</button>
-                            <div class="dropdown-divider"></div>
-                            <button class="dropdown-item" data-action="openImportCsvModal"><svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Importar CSV</span></button>
-                            <div class="dropdown-divider"></div>
-                            <button class="dropdown-item" data-action="toggleLanguage"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span id="languageText">Idioma: Português</span></button>
-                            <button class="dropdown-item" data-action="toggleCurrency" id="currencyMenuItem" style="display:none;"><svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span id="currencyText">Currency: $</span></button>
-                            <button class="dropdown-item" data-action="openSettingsModal"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Configurações</span></button>
-                            <button class="dropdown-item" data-action="enableNotifications"><svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="1" y1="1" x2="23" y2="23"/></svg><span id="notificationsText">Ativar Notificações</span></button>
-                            <div class="dropdown-divider"></div>
-                            <button class="dropdown-item danger" data-action="openClearDataModal"><svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span>Limpar Dados</span></button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </header>
 
@@ -275,6 +208,74 @@ if ('serviceWorker' in navigator) {
             </div>
         </div>
     </div>
+
+    <!-- Barra Flutuante Inferior -->
+    <nav class="bottom-bar" role="navigation" aria-label="Navegação principal">
+        <button class="bottom-bar-btn" id="bbPrevMonthBtn" aria-label="Mês anterior">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="bottom-bar-month" id="bbCurrentMonth">Julho 2026</div>
+        <button class="bottom-bar-btn" id="bbNextMonthBtn" aria-label="Próximo mês">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <button class="bottom-bar-btn" id="bbAlertBtn" aria-label="Contas a vencer">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="alert-badge" id="bbAlertBadge">0</span>
+        </button>
+        <button class="bottom-bar-btn" id="bbPrivacyBtn" aria-label="Ocultar valores">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+        <button class="bottom-bar-btn" id="bbThemeBtn" aria-label="Alternar tema">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <div class="dropdown-wrapper">
+            <button class="bottom-bar-btn menu-btn" id="bbMenuBtn" aria-label="Menu principal">
+                <svg class="icon" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+            <div class="dropdown-menu" id="bbMainMenu" role="menu" tabindex="-1">
+                <button class="dropdown-item" data-action="openExportModal"><svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span>Extrato do Mês</span></button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" data-action="openAccountsModal"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span>Minhas Contas</span></button>
+                <button class="dropdown-item" data-action="openCreditCardsModal"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg><span>Meus Cartões</span></button>
+                <button class="dropdown-item" data-action="openInvestmentsModal"><svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg><span>Aplicações</span></button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" data-action="openCategoryBudgetModal"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg><span>Orçamento por Categoria</span></button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" id="bbGoalBtn"> 
+                    <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    <span>Meta de Reserva</span>
+                </button>
+                <button class="dropdown-item" data-action="openManualModal">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <span>Manual do Usuário</span>
+                </button>
+                <button class="dropdown-item" data-action="openTermsModal">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span>Termos de Uso</span>
+                </button>
+                <button class="dropdown-item" data-action="openThanksModal">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    <span>Apoie o Projeto</span>
+                </button>
+                <button class="dropdown-item" data-action="toggleDemoMode" id="bbInfoDemoBtn">
+                    <svg class="icon" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    <span id="bbInfoDemoText">Modo Demonstração</span>
+                </button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" data-action="openImportCsvModal"><svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Importar CSV</span></button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" data-action="toggleLanguage"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span id="bbLanguageText">Idioma: Português</span></button>
+                <button class="dropdown-item" data-action="toggleCurrency" id="bbCurrencyMenuItem" style="display:none;"><svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span id="bbCurrencyText">Currency: $</span></button>
+                <button class="dropdown-item" data-action="openSettingsModal"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Configurações</span></button>
+                <button class="dropdown-item" data-action="enableNotifications"><svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="1" y1="1" x2="23" y2="23"/></svg><span id="bbNotificationsText">Ativar Notificações</span></button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item danger" data-action="openClearDataModal"><svg class="icon" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span>Limpar Dados</span></button>
+            </div>
+        </div>
+        <button class="bottom-bar-btn bottom-bar-btn-add" id="bbAddBtn" aria-label="Adicionar transação">
+            <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+    </nav>
 
     <!-- FAB Speed Dial -->
     <div class="fab-wrapper" id="fabWrapper">

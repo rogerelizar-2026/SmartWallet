@@ -631,17 +631,35 @@ class SmartFinance {
         if (prevMonthBtn) prevMonthBtn.addEventListener('click', () => self.changeMonth(-1));
         if (nextMonthBtn) nextMonthBtn.addEventListener('click', () => self.changeMonth(1));
 
+        // Barra inferior - navegação de mês
+        const bbPrevMonthBtn = document.getElementById('bbPrevMonthBtn');
+        const bbNextMonthBtn = document.getElementById('bbNextMonthBtn');
+        if (bbPrevMonthBtn) bbPrevMonthBtn.addEventListener('click', () => self.changeMonth(-1));
+        if (bbNextMonthBtn) bbNextMonthBtn.addEventListener('click', () => self.changeMonth(1));
+
         const alertBtn = document.getElementById('alertBtn');
         if (alertBtn) alertBtn.addEventListener('click', () => openBillsModal());
+
+        const bbAlertBtn = document.getElementById('bbAlertBtn');
+        if (bbAlertBtn) bbAlertBtn.addEventListener('click', () => openBillsModal());
 
         const goalBtn = document.getElementById('goalBtn');
         if (goalBtn) goalBtn.addEventListener('click', () => openGoalModal());
 
+        const bbGoalBtn = document.getElementById('bbGoalBtn');
+        if (bbGoalBtn) bbGoalBtn.addEventListener('click', () => openGoalModal());
+
         const privacyBtn = document.getElementById('privacyBtn');
         if (privacyBtn) privacyBtn.addEventListener('click', () => togglePrivacy());
 
+        const bbPrivacyBtn = document.getElementById('bbPrivacyBtn');
+        if (bbPrivacyBtn) bbPrivacyBtn.addEventListener('click', () => togglePrivacy());
+
         const themeBtn = document.getElementById('themeBtn');
         if (themeBtn) themeBtn.addEventListener('click', () => toggleTheme());
+
+        const bbThemeBtn = document.getElementById('bbThemeBtn');
+        if (bbThemeBtn) bbThemeBtn.addEventListener('click', () => toggleTheme());
 
         // (Observação: o antigo botão "infoBtn"/menu de informações foi removido do layout;
         // o restante do código relacionado é inofensivo (só age se o elemento existir),
@@ -650,8 +668,14 @@ class SmartFinance {
         const menuBtn = document.getElementById('menuBtn');
         if (menuBtn) menuBtn.addEventListener('click', (e) => toggleMenu(e));
 
+        const bbMenuBtn = document.getElementById('bbMenuBtn');
+        if (bbMenuBtn) bbMenuBtn.addEventListener('click', (e) => toggleBbMenu(e));
+
         const fabBtn = document.getElementById('fabBtn');
         if (fabBtn) fabBtn.addEventListener('click', () => toggleFab());
+
+        const bbAddBtn = document.getElementById('bbAddBtn');
+        if (bbAddBtn) bbAddBtn.addEventListener('click', () => toggleFab());
 
         document.querySelectorAll('.fab-action').forEach(btn => {
             const action = btn.dataset.action;
@@ -974,8 +998,11 @@ class SmartFinance {
     updateMonthDisplay() {
         const months = this.getMonths();
         const el = document.getElementById('currentMonth');
-        if (el && months) {
-            el.textContent = months[this.currentMonth.getMonth()] + ' ' + this.currentMonth.getFullYear();
+        const bbEl = document.getElementById('bbCurrentMonth');
+        if (months) {
+            const monthText = months[this.currentMonth.getMonth()] + ' ' + this.currentMonth.getFullYear();
+            if (el) el.textContent = monthText;
+            if (bbEl) bbEl.textContent = monthText;
         }
     }
 
@@ -2275,6 +2302,8 @@ class SmartFinance {
             if (closingDate.getTime() === tomorrow.getTime()) closingAlertsCount++;
         });
         const totalAlerts = bills.length + closingAlertsCount;
+        
+        // Atualiza badge do header (se existir)
         const badge = document.getElementById('alertBadge');
         const btn = document.getElementById('alertBtn');
         if (badge && btn) {
@@ -2285,6 +2314,20 @@ class SmartFinance {
             } else {
                 badge.classList.remove('visible');
                 btn.classList.remove('has-alerts');
+            }
+        }
+        
+        // Atualiza badge da barra inferior
+        const bbBadge = document.getElementById('bbAlertBadge');
+        const bbBtn = document.getElementById('bbAlertBtn');
+        if (bbBadge && bbBtn) {
+            if (totalAlerts > 0) {
+                bbBadge.textContent = totalAlerts;
+                bbBadge.classList.add('visible');
+                bbBtn.classList.add('has-alerts');
+            } else {
+                bbBadge.classList.remove('visible');
+                bbBtn.classList.remove('has-alerts');
             }
         }
         if (this.settings.notifyBills && bills.length > 0 && Notification.permission === 'granted') {
@@ -3906,9 +3949,12 @@ function askContinueOrClose(modalId, successMessage, onContinue) {
 function closeAllDropdowns() {
     const info = document.getElementById('infoMenu');
     const main = document.getElementById('mainMenu');
+    const bbMain = document.getElementById('bbMainMenu');
     if (info) info.classList.remove('active');
     if (main) main.classList.remove('active');
+    if (bbMain) bbMain.classList.remove('active');
     document.querySelectorAll('.header-btn').forEach(b => b.classList.remove('menu-active'));
+    document.querySelectorAll('.bottom-bar-btn').forEach(b => b.classList.remove('menu-active'));
 }
 
 // ===== FUNÇÕES GLOBAIS (INTERFACE PÚBLICA) =====
@@ -4196,6 +4242,16 @@ window.toggleMenu = function(e) {
     if (menuBtn) menuBtn.classList.toggle('menu-active', !isActive);
 };
 
+// Menu da barra inferior
+window.toggleBbMenu = function(e) {
+    if (e) e.stopPropagation();
+    const bbMain = document.getElementById('bbMainMenu');
+    const isActive = bbMain.classList.contains('active');
+    bbMain.classList.toggle('active');
+    const bbMenuBtn = document.getElementById('bbMenuBtn');
+    if (bbMenuBtn) bbMenuBtn.classList.toggle('menu-active', !isActive);
+};
+
 window.toggleInfoMenu = function(e) {
     if (e) e.stopPropagation();
     const info = document.getElementById('infoMenu');
@@ -4428,8 +4484,10 @@ window.addEventListener('load', () => {
 document.addEventListener('click', (e) => {
     const menu = document.getElementById('mainMenu');
     const info = document.getElementById('infoMenu');
+    const bbMain = document.getElementById('bbMainMenu');
     const menuBtn = document.querySelector('.header-btn.menu-btn');
     const infoBtn = document.querySelector('.header-btn.info-btn');
+    const bbMenuBtn = document.getElementById('bbMenuBtn');
     if (menu && menu.classList.contains('active') && !e.target.closest('.dropdown-wrapper')) {
         menu.classList.remove('active');
         if (menuBtn) menuBtn.classList.remove('menu-active');
@@ -4437,6 +4495,10 @@ document.addEventListener('click', (e) => {
     if (info && info.classList.contains('active') && !e.target.closest('.dropdown-wrapper')) {
         info.classList.remove('active');
         if (infoBtn) infoBtn.classList.remove('menu-active');
+    }
+    if (bbMain && bbMain.classList.contains('active') && !e.target.closest('.bottom-bar .dropdown-wrapper')) {
+        bbMain.classList.remove('active');
+        if (bbMenuBtn) bbMenuBtn.classList.remove('menu-active');
     }
     const fabWrapper = document.getElementById('fabWrapper');
     const fab = document.getElementById('fabBtn');
