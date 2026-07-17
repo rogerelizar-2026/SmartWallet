@@ -4476,10 +4476,21 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof openModal === 'function') {
                 openModal('importBackupModal');
             }
+            
         });
     }
     
     console.log('🎉 Smart Finance v1.0.0 carregado com sucesso!');
+    console.log("Teste: O app.js carregou!");
+setTimeout(() => {
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+        console.log("Tentando esconder a splash...");
+        splash.style.display = 'none';
+    } else {
+        console.log("Elemento splash-screen não encontrado.");
+    }
+}, 2000);
 });
 
 // ===== SOLUÇÃO 3: ATALHOS DE TECLADO PARA NAVEGAÇÃO DE MÊS =====
