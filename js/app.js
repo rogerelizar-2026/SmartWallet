@@ -674,9 +674,6 @@ class SmartFinance {
         const bbAddBtn = document.getElementById('bbAddBtn');
         if (bbAddBtn) bbAddBtn.addEventListener('click', () => toggleFab());
 
-        const bbAddBtn = document.getElementById('bbAddBtn');
-        if (bbAddBtn) bbAddBtn.addEventListener('click', () => toggleFab());
-
         document.querySelectorAll('.fab-action').forEach(btn => {
             const action = btn.dataset.action;
             if (action) {
