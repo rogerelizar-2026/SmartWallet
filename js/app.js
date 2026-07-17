@@ -428,9 +428,33 @@ class SmartFinance {
             notifyBills: false,
             pageSize: 20
         };
+        // Cache de elementos DOM para evitar chamadas repetidas a getElementById
+        this.domCache = {};
+        this.cacheDOMElements();
         this.loadData();
         this.loadSettings();
         this.init();
+    }
+
+    // ===== CACHE DE ELEMENTOS DOM =====
+    cacheDOMElements() {
+        const elementIds = [
+            'negativeBalanceAlert', 'negativeBalanceMessage', 'waterfallChart',
+            'alertNegativeBalance', 'blockNegativeBalance', 'autoBackupEnabled',
+            'notifyBills', 'settingsPageSize', 'lastBackupDate', 'notificationsStatus'
+        ];
+        elementIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) this.domCache[id] = el;
+        });
+    }
+
+    // Helper para getElementById com cache
+    $(id) {
+        if (!this.domCache[id]) {
+            this.domCache[id] = document.getElementById(id);
+        }
+        return this.domCache[id];
     }
 
     // ===== CARREGAMENTO E SALVAMENTO =====
@@ -2340,342 +2364,6 @@ class SmartFinance {
                 localStorage.setItem(notifKey, 'true');
             }
         }
-    }
-
-    checkNegativeBalance() {
-        if (!this.settings.alertNegativeBalance) {
-            const alert = document.getElementById('negativeBalanceAlert');
-            if (alert) alert.style.display = 'none';
-            return;
-        }
-        const negativeAccounts = this.accounts.filter(a =>
-            a.type === 'checking' && (parseFloat(a.balance) || 0) < 0
-        );
-        const alert = document.getElementById('negativeBalanceAlert');
-        const message = document.getElementById('negativeBalanceMessage');
-        if (negativeAccounts.length > 0 && alert && message) {
-            const names = negativeAccounts.map(a => a.name).join(', ');
-            message.textContent = this.t('negativeBalanceAlert', { count: negativeAccounts.length }) + ' (' + names + ')';
-            alert.style.display = 'block';
-        } else if (alert) {
-            alert.style.display = 'none';
-        }
-    }
-
-    checkAutoBackup() {
-        if (!this.settings.autoBackupEnabled) return;
-        const lastBackup = localStorage.getItem('smartfinance_last_backup');
-        const now = Date.now();
-        const weekMs = 7 * 24 * 60 * 60 * 1000;
-        if (!lastBackup || (now - parseInt(lastBackup)) > weekMs) {
-            if (this.transactions.length > 10) {
-                setTimeout(() => {
-                    this.showToast(this.t('autoBackupSuggested'));
-                }, 3000);
-            }
-        }
-    }
-
-    async toggleDemoMode() {
-        if (this.demoMode) {
-            const confirmed = await showConfirm(
-                '️ Encerrar Demonstração?',
-                'Encerrar modo demonstração e limpar todos os dados?<br><br>Esta ação não pode ser desfeita.'
-            );
-            if (confirmed) {
-                this.clearAllData(true);
-                this.demoMode = false;
-                localStorage.setItem('smartfinance_demo', 'false');
-                this.applyDemoBadge();
-                this.showToast(this.t('demoCleared'));
-            }
-        } else {
-            const confirmed = await showConfirm(
-                'Carregar Demonstração?',
-                'Carregar dados de exemplo?<br><br>Seus dados atuais serão substituídos pelos dados de demonstração.<br><br>Recomendamos fazer backup antes de continuar.'
-            );
-            if (confirmed) {
-                this.loadDemoData();
-            }
-        }
-    }
-
-    loadDemoData() {
-        this.accounts = [
-            { id: 'acc1', name: 'Conta Corrente Principal', type: 'checking', balance: 3500, color: '#6366f1' },
-            { id: 'acc2', name: 'Poupança', type: 'checking', balance: 8200, color: '#10b981' },
-            { id: 'acc3', name: 'Investimentos', type: 'investment', balance: 39000, color: '#f59e0b' }
-        ];
-        this.cards = [
-            { id: 'card1', name: 'Nubank', brand: 'Mastercard', last4: '4532', closingDay: 15, dueDay: 22, limit: 5000, color: '#8b5cf6' },
-            { id: 'card2', name: 'Inter', brand: 'Visa', last4: '8821', closingDay: 20, dueDay: 27, limit: 3000, color: '#f97316' }
-        ];
-        this.transactions = [];
-        const today = new Date();
-        for (let m = 0; m < 6; m++) {
-            const month = new Date(today.getFullYear(), today.getMonth() - m, 1);
-            this.transactions.push({
-                id: this.generateUniqueId() + '_sal_' + m,
-                date: new Date(month.getFullYear(), month.getMonth(), 5).toISOString().split('T')[0],
-                amount: 5000,
-                category: 'salario',
-                description: 'Salário Mensal',
-                statusOk: true,
-                paymentMethod: 'pix',
-                accountId: 'acc1'
-            });
-            this.transactions.push({
-                id: this.generateUniqueId() + '_alg_' + m,
-                date: new Date(month.getFullYear(), month.getMonth(), 10).toISOString().split('T')[0],
-                amount: -1500,
-                category: 'casa',
-                description: 'Aluguel Apartamento',
-                statusOk: true,
-                paymentMethod: 'auto',
-                accountId: 'acc1'
-            });
-            for (let d = 0; d < 4; d++) {
-                this.transactions.push({
-                    id: this.generateUniqueId() + '_sup_' + m + '_' + d,
-                    date: new Date(month.getFullYear(), month.getMonth(), 3 + d * 7).toISOString().split('T')[0],
-                    amount: -(200 + Math.floor(Math.random() * 300)),
-                    category: 'despensa',
-                    description: 'Supermercado - Compra ' + (d + 1),
-                    statusOk: true,
-                    paymentMethod: 'card:card1',
-                    accountId: 'acc1'
-                });
-            }
-            this.transactions.push({
-                id: this.generateUniqueId() + '_trans_' + m,
-                date: new Date(month.getFullYear(), month.getMonth(), 15).toISOString().split('T')[0],
-                amount: -350,
-                category: 'transporte',
-                description: 'Combustível + Uber',
-                statusOk: true,
-                paymentMethod: 'debit',
-                accountId: 'acc1'
-            });
-            this.transactions.push({
-                id: this.generateUniqueId() + '_laz_' + m,
-                date: new Date(month.getFullYear(), month.getMonth(), 20).toISOString().split('T')[0],
-                amount: -400,
-                category: 'lazer',
-                description: 'Cinema + Restaurante',
-                statusOk: true,
-                paymentMethod: 'card:card2',
-                accountId: 'acc1'
-            });
-            this.transactions.push({
-                id: this.generateUniqueId() + '_inv_' + m,
-                date: new Date(month.getFullYear(), month.getMonth(), 25).toISOString().split('T')[0],
-                amount: -1000,
-                category: 'reserva_aplicacao',
-                description: 'Aporte mensal investimentos',
-                statusOk: true,
-                paymentMethod: 'transfer',
-                accountId: 'acc1'
-            });
-        }
-        this.investments = [
-            { id: 'inv1', name: 'CDB Banco XYZ', type: 'cdb', initial: 10000, current: 11200, date: '2025-01-15', rate: 12, accountId: 'acc3' },
-            { id: 'inv2', name: 'Tesouro IPCA+ 2029', type: 'tesouro', initial: 5000, current: 5800, date: '2025-03-10', rate: 6.5, accountId: 'acc3' }
-        ];
-        this.demoMode = true;
-        localStorage.setItem('smartfinance_demo', 'true');
-        this.clearCache();
-        this.saveTransactions();
-        this.saveAccounts();
-        this.saveCards();
-        this.saveInvestments();
-        this.applyDemoBadge();
-        this.populateCategorySelects();
-        this.populatePaymentMethodSelects();
-        this.populateAccountSelects();
-        this.populateCardFilter();
-        this.render();
-        this.updateCharts();
-        this.updateAlertBadge();
-        this.checkNegativeBalance();
-        this.showToast(this.t('demoLoaded'));
-    }
-
-    requestNotifications() {
-        if (!('Notification' in window)) {
-            this.showToast(this.t('notificationsNotSupported'));
-            return;
-        }
-        Notification.requestPermission().then(permission => {
-            if (permission === 'granted') {
-                this.settings.notifyBills = true;
-                this.saveSettings();
-                this.updateSettingsUI();
-                this.showToast(this.t('notificationsEnabled'));
-                new Notification('Smart Finance', {
-                    body: 'Notificações ativadas com sucesso!',
-                    icon: 'favicon.svg'
-                });
-            } else {
-                this.showToast(this.t('notificationsDenied'));
-            }
-        });
-    }
-
-    saveSettingsFromModal() {
-        this.settings.alertNegativeBalance = document.getElementById('alertNegativeBalance').checked;
-        this.settings.blockNegativeBalance = document.getElementById('blockNegativeBalance').checked;
-        this.settings.autoBackupEnabled = document.getElementById('autoBackupEnabled').checked;
-        this.settings.notifyBills = document.getElementById('notifyBills').checked;
-        this.settings.pageSize = parseInt(document.getElementById('settingsPageSize').value);
-        this.pageSize = this.settings.pageSize;
-        this.currentPage = 1;
-        this.saveSettings();
-        this.checkNegativeBalance();
-        this.render();
-        closeModal('settingsModal');
-        this.showToast(this.t('settingsSaved'));
-    }
-
-    updateSettingsUI() {
-        const alertNeg = document.getElementById('alertNegativeBalance');
-        const blockNeg = document.getElementById('blockNegativeBalance');
-        const autoBackup = document.getElementById('autoBackupEnabled');
-        const notifyBills = document.getElementById('notifyBills');
-        const pageSize = document.getElementById('settingsPageSize');
-        const lastBackupDate = document.getElementById('lastBackupDate');
-        const notificationsStatus = document.getElementById('notificationsStatus');
-        if (alertNeg) alertNeg.checked = this.settings.alertNegativeBalance;
-        if (blockNeg) blockNeg.checked = this.settings.blockNegativeBalance;
-        if (autoBackup) autoBackup.checked = this.settings.autoBackupEnabled;
-        if (notifyBills) {
-            notifyBills.checked = this.settings.notifyBills;
-            notifyBills.disabled = !('Notification' in window) || Notification.permission !== 'granted';
-        }
-        if (pageSize) pageSize.value = this.settings.pageSize.toString();
-        if (lastBackupDate) {
-            const lastBackup = localStorage.getItem('smartfinance_last_backup');
-            if (lastBackup) {
-                const date = new Date(parseInt(lastBackup));
-                lastBackupDate.textContent = this.t('lastBackup', { date: date.toLocaleString(this.getLanguage()) });
-            } else {
-                lastBackupDate.textContent = this.t('neverBackedUp');
-            }
-        }
-        if (notificationsStatus) {
-            if (!('Notification' in window)) {
-                notificationsStatus.textContent = '❌ Não suportado';
-            } else if (Notification.permission === 'granted') {
-                notificationsStatus.textContent = '✅ Ativado';
-            } else if (Notification.permission === 'denied') {
-                notificationsStatus.textContent = '❌ Bloqueado';
-            } else {
-                notificationsStatus.textContent = '⏳ Pendente';
-            }
-        }
-    }
-
-    renderWaterfallChart() {
-        const canvas = document.getElementById('waterfallChart');
-        if (!canvas) return;
-        const months = this.getMonths('short');
-        const labels = [];
-        const incomeData = [];
-        const expenseData = [];
-        const balanceData = [];
-        let runningBalance = 0;
-        for (let i = -5; i <= 0; i++) {
-            const d = new Date(this.currentMonth);
-            d.setMonth(d.getMonth() + i);
-            labels.push(months[d.getMonth()] + '/' + d.getFullYear());
-            const mt = this.getMonthTransactions(d);
-            let inc = 0, exp = 0;
-            mt.forEach(t => {
-                if (t.amount > 0) inc += t.amount;
-                else exp += Math.abs(t.amount);
-            });
-            incomeData.push(inc);
-            expenseData.push(exp);
-            runningBalance += (inc - exp);
-            balanceData.push(runningBalance);
-        }
-        const colors = this.getChartColors();
-        if (this.charts.waterfall) {
-            this.charts.waterfall.destroy();
-        }
-        this.charts.waterfall = new Chart(canvas.getContext('2d'), {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Receitas',
-                        data: incomeData,
-                        backgroundColor: 'rgba(16, 185, 129, 0.7)',
-                        borderColor: '#10b981',
-                        borderWidth: 1,
-                        stack: 'stack1'
-                    },
-                    {
-                        label: 'Despesas',
-                        data: expenseData.map(v => -v),
-                        backgroundColor: 'rgba(239, 68, 68, 0.7)',
-                        borderColor: '#ef4444',
-                        borderWidth: 1,
-                        stack: 'stack1'
-                    },
-                    {
-                        label: 'Saldo Acumulado',
-                        data: balanceData,
-                        type: 'line',
-                        borderColor: '#6366f1',
-                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        yAxisID: 'y1'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: { color: colors.text }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) label += ': ';
-                                const value = Math.abs(context.parsed.y);
-                                label += smartfinance.formatCurrency(value);
-                                return label;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        stacked: true,
-                        ticks: { color: colors.textSecondary },
-                        grid: { color: colors.grid }
-                    },
-                    y1: {
-                        position: 'right',
-                        ticks: { color: colors.textSecondary },
-                        grid: { display: false }
-                    },
-                    x: {
-                        stacked: true,
-                        ticks: { color: colors.textSecondary },
-                        grid: { color: colors.grid }
-                    }
-                }
-            }
-        });
     }
 
     // ===== FATURA DE CARTÃO =====
