@@ -671,8 +671,8 @@ class SmartFinance {
         const bbMenuBtn = document.getElementById('bbMenuBtn');
         if (bbMenuBtn) bbMenuBtn.addEventListener('click', (e) => toggleBbMenu(e));
 
-        const fabBtn = document.getElementById('fabBtn');
-        if (fabBtn) fabBtn.addEventListener('click', () => toggleFab());
+        const bbAddBtn = document.getElementById('bbAddBtn');
+        if (bbAddBtn) bbAddBtn.addEventListener('click', () => toggleFab());
 
         const bbAddBtn = document.getElementById('bbAddBtn');
         if (bbAddBtn) bbAddBtn.addEventListener('click', () => toggleFab());
@@ -4166,22 +4166,23 @@ window.enableNotifications = function() { smartfinance.requestNotifications(); c
 
 // ===== FAB =====
 window.toggleFab = function() {
-    const fab = document.getElementById('fabBtn');
-    const actions = document.getElementById('fabActions');
-    const plusIcon = fab.querySelector('.fab-icon-plus');
-    const closeIcon = fab.querySelector('.fab-icon-close');
-    fab.classList.toggle('active');
-    actions.classList.toggle('active');
-    const isExpanded = fab.classList.contains('active');
-    fab.setAttribute('aria-expanded', isExpanded);
-    if (plusIcon && closeIcon) {
-        plusIcon.style.display = isExpanded ? 'none' : 'block';
-        closeIcon.style.display = isExpanded ? 'block' : 'none';
+    const fabActionsBottom = document.getElementById('fabActionsBottom');
+    const bbAddBtn = document.getElementById('bbAddBtn');
+    
+    if (fabActionsBottom) {
+        const isExpanded = fabActionsBottom.style.display === 'flex';
+        if (isExpanded) {
+            fabActionsBottom.style.display = 'none';
+            bbAddBtn.classList.remove('active');
+        } else {
+            fabActionsBottom.style.display = 'flex';
+            bbAddBtn.classList.add('active');
+        }
     }
 };
 
 window.openExpenseModal = function() {
-    if (document.getElementById('fabBtn').classList.contains('active')) toggleFab();
+    if (document.getElementById('fabActionsBottom').style.display === 'flex') toggleFab();
     smartfinance.setDefaultDate();
     smartfinance.currentTransactionType = 'expense';
     document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
@@ -4194,7 +4195,7 @@ window.openExpenseModal = function() {
 };
 
 window.openIncomeModal = function() {
-    if (document.getElementById('fabBtn').classList.contains('active')) toggleFab();
+    if (document.getElementById('fabActionsBottom').style.display === 'flex') toggleFab();
     smartfinance.setDefaultDate();
     smartfinance.currentTransactionType = 'income';
     document.querySelectorAll('#transactionForm .type-btn').forEach(btn => {
@@ -4207,7 +4208,7 @@ window.openIncomeModal = function() {
 };
 
 window.openTransferModal = function() {
-    if (document.getElementById('fabBtn').classList.contains('active')) toggleFab();
+    if (document.getElementById('fabActionsBottom').style.display === 'flex') toggleFab();
     smartfinance.populateAccountSelects();
     document.getElementById('transferForm').reset();
     document.getElementById('transferDate').value = new Date().toISOString().split('T')[0];
@@ -4440,10 +4441,8 @@ window.acceptDisclaimer = function() {
 window.startApp = function() {
     const quote = document.getElementById('quoteModal');
     const main = document.getElementById('mainApp');
-    const fab = document.getElementById('fabBtn');
     if (quote) { quote.classList.remove('active'); quote.style.display = 'none'; }
     if (main) main.style.display = 'block';
-    if (fab) fab.style.display = 'flex';
 };
 
 window.closeWhatsNewModal = function() { closeModal('whatsNewModal'); };
@@ -4500,9 +4499,9 @@ document.addEventListener('click', (e) => {
         bbMain.classList.remove('active');
         if (bbMenuBtn) bbMenuBtn.classList.remove('menu-active');
     }
-    const fabWrapper = document.getElementById('fabWrapper');
-    const fab = document.getElementById('fabBtn');
-    if (fabWrapper && !fabWrapper.contains(e.target) && fab && fab.classList.contains('active')) {
+    const fabActionsBottom = document.getElementById('fabActionsBottom');
+    const bbAddBtn = document.getElementById('bbAddBtn');
+    if (fabActionsBottom && !fabActionsBottom.contains(e.target) && (!bbAddBtn || !bbAddBtn.contains(e.target)) && fabActionsBottom.style.display === 'flex') {
         toggleFab();
     }
 });

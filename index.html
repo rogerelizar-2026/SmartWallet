@@ -275,20 +275,14 @@ if ('serviceWorker' in navigator) {
         <button class="bottom-bar-btn bottom-bar-btn-add" id="bbAddBtn" aria-label="Adicionar transação">
             <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         </button>
-    </nav>
-
-    <!-- FAB Speed Dial -->
-    <div class="fab-wrapper" id="fabWrapper">
-        <button class="fab fab-main" id="fabBtn" aria-label="Adicionar nova transação">
-            <svg class="icon fab-icon-plus" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            <svg class="icon fab-icon-close" viewBox="0 0 24 24" style="display:none;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <div class="fab-actions" id="fabActions">
+        
+        <!-- FAB Actions (hidden by default, shown when bbAddBtn is clicked) -->
+        <div class="fab-actions-bottom" id="fabActionsBottom" style="display:none;">
             <button class="fab-action fab-action-transfer" data-action="openTransferModal"><span>🔄</span><span class="fab-label">Transferir</span></button>
             <button class="fab-action fab-action-income" data-action="openIncomeModal"><span>💰</span><span class="fab-label">Receita</span></button>
             <button class="fab-action fab-action-expense" data-action="openExpenseModal"><span>💸</span><span class="fab-label">Despesa</span></button>
         </div>
-    </div>
+    </nav>
 
     <!-- Modal Nova Transação -->
     <div class="modal" id="newTransactionModal" role="dialog" aria-modal="true" tabindex="-1">
