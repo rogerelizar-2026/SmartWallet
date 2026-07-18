@@ -15,7 +15,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="apple-touch-icon" href="logo.svg">
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@
 </head>
 <script>
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js')
+  navigator.serviceWorker.register('/sw.min.js')
     .then(() => console.log('Service Worker registrado'));
 }
 </script>
@@ -86,18 +86,18 @@ if ('serviceWorker' in navigator) {
       <p>O Smart Finance foi idealizado e desenvolvido por RogerElizar™. Uso gratuito para fins pessoais.</p>
 
       <h3>✅ Seu Compromisso</h3>
-      <p>Ao clicar em "Aceitar e Continuar", você declara que leu e aceitou os termos acima.</p>
+      <p>Ao marcar a checkbox abaixo, você declara que leu e aceitou os termos acima.</p>
 
-      <!-- Checkbox novo -->
-      <div class="disclaimer-checkbox-group">
-        <input type="checkbox" id="acceptTermsCheckbox">
-        <label for="acceptTermsCheckbox">Li e concordo com os Termos de Uso e Aviso Legal</label>
+      <!-- Checkbox -->
+      <div class="disclaimer-checkbox-group" style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="acceptTermsCheckbox">
+          <label for="acceptTermsCheckbox">Li e concordo com os Termos de Uso e Aviso Legal</label>
+        </div>
+        <button id="acceptDisclaimerBtn" class="disclaimer-accept-btn" disabled style="white-space: nowrap;">
+          OK
+        </button>
       </div>
-    </div>
-    <div class="disclaimer-footer">
-      <button id="acceptDisclaimerBtn" class="disclaimer-accept-btn" disabled>
-        ✅ Aceitar e Continuar
-      </button>
     </div>
   </div>
 </div>
@@ -833,6 +833,6 @@ if ('serviceWorker' in navigator) {
     <div class="toast" id="toast"></div>
     <div class="modal-backdrop" id="modalBackdrop"></div>
 
-    <script src="js/app.js"></script>
+    <script src="js/app.min.js"></script>
 </body>
 </html>
