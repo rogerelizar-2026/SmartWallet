@@ -1,5 +1,22 @@
 ```
-# Minified JavaScript and CSS files
+# Build artifacts
 *.min.js
 *.min.css
+*.html
+
+# Dependencies
+node_modules/
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Editors
+.vscode/
+.idea/
 ```

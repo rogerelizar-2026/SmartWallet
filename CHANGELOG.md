@@ -7,6 +7,44 @@ e este projeto aderem ao [Versionamento Semântico](https://semver.org/lang/pt-B
 
 ---
 
+## [2.0.2] - 2026
+
+### 📘 eBook Manual do Usuário
+
+#### Adicionado
+- **Novo eBook em HTML5:** Arquivo `ebook-manual.html` com manual completo formatado para leitura em tela e impressão A4
+  - Capa com logomarca e frase centralizada sobre nuvem transparente com símbolos "$"
+  - Fonte corpo do texto: tamanho 12pt (Georgia, serif)
+  - Títulos e subtítulos: tamanho 14pt e 18pt
+  - Cada tópico inclui citação breve de finanças
+  - Dicas de coach financeiro ao final de cada seção com transição para próximo tópico
+  - Conclusão com revisão integrada de todos os tópicos mostrando como se complementam
+
+#### Alterado
+- **Modal "Manual do Usuário":** 
+  - Botão "Imprimir" substituído por "eBook"
+  - Ao clicar, abre o eBook em nova janela (invisível até o clique)
+  
+- **Modal "Novidades":**
+  - Botão "Imprimir" substituído por "Baixar eBook"
+  - Texto atualizado para "Baixe o eBook completo em PDF!"
+
+#### Conteúdo do eBook
+- **Capa:** Logomarca + slogan sobre fundo com nuvem de "$"
+- **Seções detalhadas:**
+  1. Bem-vindo e instalação como WebApp
+  2. Gestão Completa de Contas (múltiplas contas, cartões, investimentos)
+  3. Visualizações Inteligentes (gráficos e análise de dados)
+  4. Produtividade e Alertas (contas a vencer, projeções, metas)
+  5. Segurança & Privacidade (offline, backup criptografado, modo privacidade)
+  6. Experiência do Usuário (temas, atalhos, multi-idioma)
+  7. Conclusão: Revisão integrada mostrando ecossistema completo para liberdade financeira
+
+### 📊 Resumo
+- **Foco:** Transformação do manual em eBook profissional com conteúdo educativo enriquecido
+
+---
+
 ## [2.0.1] - 2026
 
 ### 🎨 Melhorias de Interface e Experiência do Usuário

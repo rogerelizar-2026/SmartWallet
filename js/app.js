@@ -80,7 +80,7 @@ const FINANCIAL_QUOTES = [
     { text: "Quem compra o que não precisa, rouba a si mesmo.", author: "Provérbio Popular" }
 ];
 
-const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Finance Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 2.0.1 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Finance!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v2.0.1</h2><ul><li><strong>Melhorias de Interface:</strong> Botão do disclaimer atualizado para "OK" e reposicionado</li><li><strong>Performance:</strong> Assets minificados para produção (33% de redução)</li><li><strong>Correções de Bugs:</strong> Backup, datas, confirmações e investimentos corrigidos</li><li><strong>Modal de Confirmação:</strong> Substituído confirm() nativo por modal customizado</li><li><strong>Investimentos:</strong> Salvamento e carregamento corrigidos</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! </h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
+const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Finance Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 2.0.2 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Finance!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v2.0.2</h2><ul><li><strong>eBook Completo:</strong> Manual transformado em eBook profissional com conteúdo educativo enriquecido</li><li><strong>Formato A4:</strong> Otimizado para leitura em tela e impressão</li><li><strong>Dicas de Coach:</strong> Cada seção inclui citações financeiras e dicas práticas</li><li><strong>Conclusão Integrada:</strong> Revisão completa mostrando como as ferramentas se complementam</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! </h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
 
 // ===== TRADUÇÕES v1.0.0 =====
 const TRANSLATIONS = {
@@ -839,14 +839,14 @@ class SmartFinance {
         const newInvestmentBtn = document.getElementById('newInvestmentBtn');
         if (newInvestmentBtn) newInvestmentBtn.addEventListener('click', () => openNewInvestmentModal());
 
-        const printManualBtn = document.getElementById('printManualBtn');
-        if (printManualBtn) printManualBtn.addEventListener('click', () => self.printManual());
+        const openEbookBtn = document.getElementById('openEbookBtn');
+        if (openEbookBtn) openEbookBtn.addEventListener('click', () => self.openEbook());
 
         const copyPixKeyBtn = document.getElementById('copyPixKeyBtn');
         if (copyPixKeyBtn) copyPixKeyBtn.addEventListener('click', () => copyPixKey());
 
-        const printManualFromWhatsNewBtn = document.getElementById('printManualFromWhatsNewBtn');
-        if (printManualFromWhatsNewBtn) printManualFromWhatsNewBtn.addEventListener('click', () => printManualFromWhatsNew());
+        const openEbookFromWhatsNewBtn = document.getElementById('openEbookFromWhatsNewBtn');
+        if (openEbookFromWhatsNewBtn) openEbookFromWhatsNewBtn.addEventListener('click', () => openEbookFromWhatsNew());
 
         const openManualFromWhatsNewBtn = document.getElementById('openManualFromWhatsNewBtn');
         if (openManualFromWhatsNewBtn) openManualFromWhatsNewBtn.addEventListener('click', () => openManualFromWhatsNew());
@@ -3797,11 +3797,25 @@ class SmartFinance {
         this.showToast('🗑️ Excluída!');
     }
 
+    // ===== ABRIR EBOOK PDF =====
+    openEbook() {
+        try {
+            const ebookUrl = 'ebook-manual.html';
+            const printWindow = window.open(ebookUrl, '_blank', 'width=900,height=700,scrollbars=yes');
+            if (!printWindow) { 
+                alert('⚠️ Permita pop-ups para abrir o eBook.'); 
+                return; 
+            }
+        } catch (e) {
+            alert('❌ Erro ao abrir eBook: ' + e.message);
+        }
+    }
+
     // ===== IMPRESSÃO DO MANUAL =====
     printManual() {
         try {
             const printWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes');
-            if (!printWindow) { alert('️ ' + this.t('allowPopups')); return; }
+            if (!printWindow) { alert('⚠️ ' + this.t('allowPopups')); return; }
             const fileName = this.generateTimestamp() + '_manual_smart_wallet.pdf';
             const content = '<!DOCTYPE html><html lang="' + this.getLanguage() + '"><head><meta charset="UTF-8"><title>' + fileName + '</title><style>@page{size:A4;margin:2cm;}body{font-family:Georgia,serif;color:#1e293b;line-height:1.6;font-size:11pt;padding:20px;max-width:800px;margin:0 auto;}h1{color:#6366f1;font-size:28pt;text-align:center;}h2{color:#6366f1;font-size:16pt;margin-top:30px;border-bottom:2px solid #6366f1;padding-bottom:8px;}h3{color:#06b6d4;font-size:13pt;margin-top:20px;}p{margin-bottom:12px;}ul,ol{margin-left:24px;margin-bottom:16px;}li{margin-bottom:8px;}.manual-cover{text-align:center;padding:40px 20px;border:3px solid #6366f1;border-radius:16px;margin-bottom:30px;}.manual-quote{margin:24px 0;padding:20px 30px;border-left:4px solid #6366f1;background:#f8fafc;border-radius:8px;font-style:italic;}.quote-author{font-size:9pt;font-weight:600;color:#6366f1;text-align:right;margin-top:12px;font-style:normal;}.manual-blessing{text-align:center;margin-top:40px;padding:30px;background:#f8fafc;border-radius:16px;}.manual-tip,.manual-success,.manual-warning{padding:12px 16px;margin:12px 0;border-radius:8px;border-left:4px solid;}.manual-tip{background:rgba(6,182,212,0.1);border-color:#06b6d4;}.manual-success{background:rgba(16,185,129,0.1);border-color:#10b981;}.manual-warning{background:rgba(245,158,11,0.1);border-color:#f59e0b;}@media print{.manual-cover{page-break-after:always;}}</style></head><body>' + manualHTML + '</body></html>';
             printWindow.document.write(content);
@@ -3815,7 +3829,7 @@ class SmartFinance {
 
     // ===== SISTEMA DE ATUALIZAÇÃO =====
     checkVersionUpdate() {
-        const CURRENT_VERSION = '2.0.1';
+        const CURRENT_VERSION = '2.0.2';
         const STORAGE_KEY = 'smartfinance_last_version';
         try {
             const lastVersion = localStorage.getItem(STORAGE_KEY);
@@ -3832,6 +3846,15 @@ class SmartFinance {
 
     showWhatsNewModal(version) {
         const WHATS_NEW_DATA = {
+            '2.0.2': {
+                title: 'Novidades da v2.0.2',
+                features: [
+                    '📘 eBook Completo: Manual transformado em eBook profissional',
+                    '📄 Formato A4: Otimizado para leitura em tela e impressão',
+                    '💰 Dicas de Coach: Citações financeiras em cada seção',
+                    '✅ Conclusão Integrada: Revisão completa das funcionalidades'
+                ]
+            },
             '2.0.1': {
                 title: 'Novidades da v2.0.1',
                 features: [
@@ -4453,7 +4476,7 @@ window.startApp = function() {
 };
 
 window.closeWhatsNewModal = function() { closeModal('whatsNewModal'); };
-window.printManualFromWhatsNew = function() { closeWhatsNewModal(); setTimeout(() => { smartfinance.printManual(); }, 300); };
+window.openEbookFromWhatsNew = function() { closeWhatsNewModal(); setTimeout(() => { smartfinance.openEbook(); }, 300); };
 window.openManualFromWhatsNew = function() { closeWhatsNewModal(); setTimeout(() => { openManualModal(); }, 300); };
 
     // ===== EVENT LISTENERS GLOBAIS =====

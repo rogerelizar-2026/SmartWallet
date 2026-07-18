@@ -2,7 +2,7 @@
 
 > **Controle financeiro pessoal inteligente — 100% offline, seguro e gratuito.**
 
-![Versão](https://img.shields.io/badge/versão-2.0.1-6366f1?style=for-the-badge)
+![Versão](https://img.shields.io/badge/versão-2.0.2-6366f1?style=for-the-badge)
 ![PWA](https://img.shields.io/badge/PWA-Sim-10b981?style=for-the-badge)
 ![Offline](https://img.shields.io/badge/Offline-100%25-06b6d4?style=for-the-badge)
 ![Licença](https://img.shields.io/badge/licença-Gratuita-f59e0b?style=for-the-badge)
