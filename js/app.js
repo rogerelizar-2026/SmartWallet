@@ -80,7 +80,7 @@ const FINANCIAL_QUOTES = [
     { text: "Quem compra o que não precisa, rouba a si mesmo.", author: "Provérbio Popular" }
 ];
 
-const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Finance Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 4.4.4 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Finance!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v1.0.0</h2><ul><li><strong>Correções de Bugs:</strong> Backup, datas, confirmações e investimentos corrigidos</li><li><strong>Modal de Confirmação:</strong> Substituído confirm() nativo por modal customizado</li><li><strong>Investimentos:</strong> Salvamento e carregamento corrigidos</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! </h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
+const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Finance Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 2.0.0 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Finance!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v2.0.0</h2><ul><li><strong>Melhorias de Interface:</strong> Botão do disclaimer atualizado para "OK" e reposicionado</li><li><strong>Performance:</strong> Assets minificados para produção (33% de redução)</li><li><strong>Correções de Bugs:</strong> Backup, datas, confirmações e investimentos corrigidos</li><li><strong>Modal de Confirmação:</strong> Substituído confirm() nativo por modal customizado</li><li><strong>Investimentos:</strong> Salvamento e carregamento corrigidos</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! </h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
 
 // ===== TRADUÇÕES v1.0.0 =====
 const TRANSLATIONS = {
@@ -532,7 +532,7 @@ class SmartFinance {
     }
         // ===== INICIALIZAÇÃO =====
     init() {
-        console.log('✅ Smart Finance v1.0.0 inicializado');
+        console.log('✅ Smart Finance v2.0.0 inicializado');
         this.applyTheme();
         this.applyPrivacy();
         this.applyDemoBadge();
@@ -3025,7 +3025,7 @@ class SmartFinance {
                 }
             }
             const backup = {
-                version: '4.4.4',
+                version: '2.0.0',
                 exportDate: new Date().toISOString(),
                 appName: 'Smart Finance',
                 language: this.getLanguage(),
@@ -3813,7 +3813,7 @@ class SmartFinance {
 
     // ===== SISTEMA DE ATUALIZAÇÃO =====
     checkVersionUpdate() {
-        const CURRENT_VERSION = '4.4.4';
+        const CURRENT_VERSION = '2.0.0';
         const STORAGE_KEY = 'smartfinance_last_version';
         try {
             const lastVersion = localStorage.getItem(STORAGE_KEY);
@@ -3830,12 +3830,13 @@ class SmartFinance {
 
     showWhatsNewModal(version) {
         const WHATS_NEW_DATA = {
-            '4.4.4': {
-                version: '4.4.4',
+            '2.0.0': {
+                version: '2.0.0',
                 features: [
+                    { type: 'new', icon: '🎨', title: 'Botão Disclaimer Atualizado', description: 'Texto alterado para "OK" e reposicionado ao lado da checkbox.' },
+                    { type: 'improved', icon: '🚀', title: 'Performance Otimizada', description: 'Assets minificados com 33% de redução no tamanho total.' },
                     { type: 'new', icon: '✅', title: 'Continuar Inserindo', description: 'Após salvar uma transação, o app pergunta se você quer adicionar outra.' },
                     { type: 'fixed', icon: '📱', title: 'Backup Mobile', description: 'Corrigido bug que voltava para splash screen em dispositivos móveis.' },
-                    { type: 'improved', icon: '🚀', title: 'Splash Inteligente', description: 'Agora aparece apenas na primeira visita, melhorando a experiência.' },
                     { type: 'improved', icon: '📊', title: 'Contas de Investimento', description: 'Separadas do saldo unificado, com gráfico próprio de evolução.' }
                 ]
             }
@@ -4538,7 +4539,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    console.log('🎉 Smart Finance v1.0.0 carregado com sucesso!');
+    console.log('🎉 Smart Finance v2.0.0 carregado com sucesso!');
 });
 
 // ===== SOLUÇÃO 3: ATALHOS DE TECLADO PARA NAVEGAÇÃO DE MÊS =====
