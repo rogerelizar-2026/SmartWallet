@@ -86,18 +86,18 @@ if ('serviceWorker' in navigator) {
       <p>O Smart Finance foi idealizado e desenvolvido por RogerElizar™. Uso gratuito para fins pessoais.</p>
 
       <h3>✅ Seu Compromisso</h3>
-      <p>Ao clicar em "Aceitar e Continuar", você declara que leu e aceitou os termos acima.</p>
+      <p>Ao marcar a checkbox abaixo, você declara que leu e aceitou os termos acima.</p>
 
-      <!-- Checkbox novo -->
-      <div class="disclaimer-checkbox-group">
-        <input type="checkbox" id="acceptTermsCheckbox">
-        <label for="acceptTermsCheckbox">Li e concordo com os Termos de Uso e Aviso Legal</label>
+      <!-- Checkbox -->
+      <div class="disclaimer-checkbox-group" style="display: flex; align-items: center; justify-content: space-between; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <input type="checkbox" id="acceptTermsCheckbox">
+          <label for="acceptTermsCheckbox">Li e concordo com os Termos de Uso e Aviso Legal</label>
+        </div>
+        <button id="acceptDisclaimerBtn" class="disclaimer-accept-btn" disabled style="white-space: nowrap;">
+          OK
+        </button>
       </div>
-    </div>
-    <div class="disclaimer-footer">
-      <button id="acceptDisclaimerBtn" class="disclaimer-accept-btn" disabled>
-        ✅ Aceitar e Continuar
-      </button>
     </div>
   </div>
 </div>
