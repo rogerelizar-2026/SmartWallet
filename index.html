@@ -34,16 +34,15 @@ if ('serviceWorker' in navigator) {
         <div class="print-date" id="printDate"></div>
     </div>
     <div class="print-footer">
-        <div class="print-author">Idealizado por RogerElizar™</div>
+        <div class="print-author">Idealizado por RogerElizar</div>
         <div>Smart Finance © 2026 - rogerelizar@gmail.com</div>
     </div>
 
     <!-- Splash Screen -->
     <div class="splash-screen" id="splashScreen" role="banner">
         <div class="splash-content">
-            <h1 class="splash-title">Smart Finance</h1>
-            <p class="splash-subtitle">Idealizado por RogerElizar</p>
-            <p class="splash-email">rogerelizar@gmail.com</p>
+            <img src="logomarca.svg" alt="Smart Finance" style="height: 100px; width: auto;">
+            <p class="splash-subtitle">by RogerElizar</p>
             <div class="splash-icons" aria-hidden="true">
                 <svg class="splash-icon" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
                 <svg class="splash-icon" viewBox="0 0 24 24"><path d="M3 3v18h18M18 17V9M13 17V5M8 17v-3"/></svg>
@@ -61,8 +60,7 @@ if ('serviceWorker' in navigator) {
 <div id="disclaimerModal" class="disclaimer-modal fullscreen">
   <div class="disclaimer-content">
     <div class="disclaimer-header">
-      <div class="disclaimer-icon">⚠️</div>
-      <h2 class="disclaimer-title">Termos de Uso e Aviso Legal</h2>
+      <h2 class="disclaimer-title">⚠️ Termos de Uso e Aviso Legal ⚠️</h2>
       <p class="disclaimer-subtitle">Por favor, leia atentamente antes de continuar</p>
     </div>
     <div class="disclaimer-body">
@@ -631,7 +629,17 @@ if ('serviceWorker' in navigator) {
     <!-- Modal Manual -->
     <div class="modal" id="manualModal" role="dialog" aria-modal="true" tabindex="-1">
         <div class="modal-content wide" tabindex="0">
-            <div class="modal-header"><h2>📘 Manual do Usuário</h2><div class="flex-gap-8"><button class="btn btn-secondary btn-small" id="printManualBtn">🖨️ Imprimir</button><button class="modal-close" data-close-modal="manualModal"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div></div>
+            <div class="modal-header"><h2>📘 Manual do Usuário</h2>
+                <div class="flex-gap-8">
+                    <button class="btn btn-secondary btn-small" id="printManualBtn">🖨️ Imprimir</button>
+                    <button class="modal-close" data-close-modal="manualModal">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
             <div class="manual-content" id="manualContent"></div>
         </div>
     </div>
