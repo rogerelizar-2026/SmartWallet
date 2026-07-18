@@ -2,7 +2,7 @@
 
 > **Controle financeiro pessoal inteligente — 100% offline, seguro e gratuito.**
 
-![Versão](https://img.shields.io/badge/versão-1.0.0-6366f1?style=for-the-badge)
+![Versão](https://img.shields.io/badge/versão-2.0.0-6366f1?style=for-the-badge)
 ![PWA](https://img.shields.io/badge/PWA-Sim-10b981?style=for-the-badge)
 ![Offline](https://img.shields.io/badge/Offline-100%25-06b6d4?style=for-the-badge)
 ![Licença](https://img.shields.io/badge/licença-Gratuita-f59e0b?style=for-the-badge)
@@ -265,28 +265,35 @@ Se o Smart Finance tem sido útil para você, que tal um cafezinho?
   <strong>Feito com 💜 por RogerElizar™</strong><br>
   <em>Que Deus abençoe sua jornada financeira.</em>
 </p>
-## 🚀 Performance Optimization
+## 📄 Changelog
 
-This project includes optimized minified versions of all assets for production deployment:
+### v2.0.0 - 2026
+**🎨 Melhorias de Interface e Experiência do Usuário**
+- ✅ **Botão Disclaimer:** Texto alterado de "Aceitar e continuar" para "OK"
+- ✅ **Layout do Disclaimer:** Botão movido para o final do texto, ao lado direito da checkbox
+- ✅ **Minificação de Assets:** Performance otimizada com arquivos minificados
+  - `app.min.js`: 229KB → 142KB (38% redução)
+  - `styles.min.css`: 64KB → 48KB (25% redução)
+  - `sw.min.js`: 5.2KB → 2.4KB (54% redução)
+  - `index.min.html`: 59KB → 47KB (21% redução)
+- ✅ **Build Script:** `optimize.sh` para regenerar arquivos minificados
 
-### Minified Files
-- `styles.min.css` - Minified CSS (75% of original size)
-- `js/app.min.js` - Minified application JavaScript (61% of original size)
-- `sw.min.js` - Minified service worker (46% of original size)
-- `index.min.html` - Minified HTML (79% of original size)
+**Total de economia: ~120KB (33% de redução)**
 
-### Build Script
-Run the optimization script to regenerate minified files:
+---
 
-```bash
-./optimize.sh
-```
+### v1.0.0 - 2026
+**Lançamento Inicial**
+- ✅ Controle financeiro pessoal completo
+- ✅ Múltiplas contas e cartões de crédito
+- ✅ Aplicações financeiras
+- ✅ Gráficos interativos com Chart.js
+- ✅ Backup criptografado (AES-256)
+- ✅ Modo offline (PWA)
+- ✅ Internacionalização (pt-BR / en-US)
+- ✅ Temas claro e escuro
+- ✅ Modo privacidade
+- ✅ Notificações push
+- ✅ Importação/Exportação CSV e JSON
 
-**Total savings: ~120KB (33% reduction)**
-
-### Deployment
-For production, update `index.html` to reference the minified files:
-- `styles.css` → `styles.min.css`
-- `js/app.js` → `js/app.min.js`
-- `sw.js` → `sw.min.js`
-
+---
