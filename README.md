@@ -265,3 +265,28 @@ Se o Smart Finance tem sido útil para você, que tal um cafezinho?
   <strong>Feito com 💜 por RogerElizar™</strong><br>
   <em>Que Deus abençoe sua jornada financeira.</em>
 </p>
+## 🚀 Performance Optimization
+
+This project includes optimized minified versions of all assets for production deployment:
+
+### Minified Files
+- `styles.min.css` - Minified CSS (75% of original size)
+- `js/app.min.js` - Minified application JavaScript (61% of original size)
+- `sw.min.js` - Minified service worker (46% of original size)
+- `index.min.html` - Minified HTML (79% of original size)
+
+### Build Script
+Run the optimization script to regenerate minified files:
+
+```bash
+./optimize.sh
+```
+
+**Total savings: ~120KB (33% reduction)**
+
+### Deployment
+For production, update `index.html` to reference the minified files:
+- `styles.css` → `styles.min.css`
+- `js/app.js` → `js/app.min.js`
+- `sw.js` → `sw.min.js`
+
