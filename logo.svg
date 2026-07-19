@@ -61,7 +61,7 @@
     <line x1="18" y1="125" x2="68" y2="125" stroke="url(#logoGradient)" stroke-width="2.5" opacity="0.4" stroke-linecap="round"/>
     <line x1="18" y1="132" x2="52" y2="132" stroke="url(#logoGradient)" stroke-width="1.5" opacity="0.25" stroke-linecap="round"/>
   </g>
-  <!-- Texto "Smart Finance" em duas linhas -->
-  <text x="145" y="78" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="62" font-weight="800" fill="url(#logoGradient)" letter-spacing="-1" filter="url(#textShadow)">Smart</text>
-  <text x="145" y="142" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="62" font-weight="800" fill="url(#logoGradient)" letter-spacing="-1" filter="url(#textShadow)">Finance</text>
+  <!-- Texto "Smart Finance" em duas linhas - centralizado verticalmente -->
+  <text x="145" y="88" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="62" font-weight="800" fill="url(#logoGradient)" letter-spacing="-1" filter="url(#textShadow)">Smart</text>
+  <text x="145" y="138" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="62" font-weight="800" fill="url(#logoGradient)" letter-spacing="-1" filter="url(#textShadow)">Finance</text>
 </svg>
