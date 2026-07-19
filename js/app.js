@@ -802,6 +802,14 @@ class SmartFinance {
             });
         }
 
+        const goalForm = document.getElementById('goalForm');
+        if (goalForm) {
+            goalForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                self.saveGoal();
+            });
+        }
+
         const deleteFromEditBtn = document.getElementById('deleteFromEditBtn');
         if (deleteFromEditBtn) deleteFromEditBtn.addEventListener('click', () => self.deleteFromEdit());
 
