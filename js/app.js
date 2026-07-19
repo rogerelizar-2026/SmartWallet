@@ -80,7 +80,7 @@ const FINANCIAL_QUOTES = [
     { text: "Quem compra o que não precisa, rouba a si mesmo.", author: "Provérbio Popular" }
 ];
 
-const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Finance Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 2.0.2 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Finance!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v2.0.2</h2><ul><li><strong>eBook Completo:</strong> Manual transformado em eBook profissional com conteúdo educativo enriquecido</li><li><strong>Formato A4:</strong> Otimizado para leitura em tela e impressão</li><li><strong>Dicas de Coach:</strong> Cada seção inclui citações financeiras e dicas práticas</li><li><strong>Conclusão Integrada:</strong> Revisão completa mostrando como as ferramentas se complementam</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! </h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
+const manualHTML = '<div class="manual-cover"><h1>📘 Manual do Usuário</h1><h2>Smart Finance Brasil</h2><p>Controle Financeiro Pessoal Inteligente</p><p class="version">Versão 2.0.3 - 2026</p><p class="author">Idealizado por RogerElizar™</p></div><div class="manual-quote"><p>"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."</p><div class="quote-author">— Tiago 1:17</div></div><h2>🎯 Bem-vindo ao Smart Finance!</h2><p>Parabéns por dar o primeiro passo rumo à sua <strong>liberdade financeira</strong>!</p><h2>🆕 Novidades v2.0.3</h2><ul><li><strong>Correção Meta de Reserva:</strong> Lógica do modal recalculada para não reiniciar o app</li><li><strong>eBook Completo:</strong> Manual transformado em eBook profissional com conteúdo educativo enriquecido</li><li><strong>Formato A4:</strong> Otimizado para leitura em tela e impressão</li><li><strong>Dicas de Coach:</strong> Cada seção inclui citações financeiras e dicas práticas</li><li><strong>Conclusão Integrada:</strong> Revisão completa mostrando como as ferramentas se complementam</li></ul><h2>📱 Instalação como WebApp</h2><ol><li>Acesse o site pelo navegador</li><li>Procure o ícone de instalação</li><li>Confirme a instalação</li></ol><div class="manual-blessing"><h3>🙏 É Isso! </h3><div class="manual-quote"><p>Que Deus abençoe sua jornada financeira.</p><div class="quote-author">Com amor e orações,<br>RogerElizar®</div></div></div>';
 
 // ===== TRADUÇÕES v1.0.0 =====
 const TRANSLATIONS = {
@@ -3844,7 +3844,7 @@ class SmartFinance {
 
     // ===== SISTEMA DE ATUALIZAÇÃO =====
     checkVersionUpdate() {
-        const CURRENT_VERSION = '2.0.2';
+        const CURRENT_VERSION = '2.0.3';
         const STORAGE_KEY = 'smartfinance_last_version';
         try {
             const lastVersion = localStorage.getItem(STORAGE_KEY);
@@ -3861,6 +3861,16 @@ class SmartFinance {
 
     showWhatsNewModal(version) {
         const WHATS_NEW_DATA = {
+            '2.0.3': {
+                version: '2.0.3',
+                features: [
+                    { type: 'fixed', icon: '🎯', title: 'Correção Meta de Reserva', description: 'Lógica do modal recalculada para não reiniciar o app ao salvar.' },
+                    { type: 'new', icon: '📘', title: 'eBook Completo', description: 'Manual transformado em eBook profissional com conteúdo educativo enriquecido.' },
+                    { type: 'improved', icon: '📄', title: 'Formato A4', description: 'Otimizado para leitura em tela e impressão.' },
+                    { type: 'new', icon: '💰', title: 'Dicas de Coach', description: 'Citações financeiras em cada seção.' },
+                    { type: 'improved', icon: '✅', title: 'Conclusão Integrada', description: 'Revisão completa mostrando como as ferramentas se complementam.' }
+                ]
+            },
             '2.0.2': {
                 title: 'Novidades da v2.0.2',
                 features: [
