@@ -428,8 +428,13 @@ class SmartFinance {
             notifyBills: false,
             pageSize: 20
         };
+        this.goal = {
+            amount: 0,
+            monthlyContribution: 0
+        };
         this.loadData();
         this.loadSettings();
+        this.loadGoal();
         this.init();
     }
 
@@ -462,7 +467,9 @@ class SmartFinance {
     saveCategories() { try { localStorage.setItem('smartfinance_categories', JSON.stringify(this.categories)); } catch(e) {} }
     saveAccounts() { try { localStorage.setItem('smartfinance_accounts', JSON.stringify(this.accounts)); } catch(e) {} }
     saveCards() { try { localStorage.setItem('smartfinance_cards', JSON.stringify(this.cards)); } catch(e) {} }
-    saveInvestments() { try { localStorage.setItem('smartfinance_investments', JSON.stringify(this.investments)); } catch(e) {} } // CORREÇÃO: Função criada
+    saveInvestments() { try { localStorage.setItem('smartfinance_investments', JSON.stringify(this.investments)); } catch(e) {} }
+    saveGoalData() { try { localStorage.setItem('smartfinance_goal', JSON.stringify(this.goal)); } catch(e) {} }
+    loadGoal() { try { const g = localStorage.getItem('smartfinance_goal'); if (g) this.goal = JSON.parse(g); } catch(e) {} }
     clearCache() { this._cache = {}; }
 
     // ===== CONFIGURAÇÕES =====
@@ -806,7 +813,7 @@ class SmartFinance {
         if (goalForm) {
             goalForm.addEventListener('submit', (e) => {
                 e.preventDefault();
-                self.saveGoal();
+                self.calculateAndSaveGoal();
             });
         }
 
