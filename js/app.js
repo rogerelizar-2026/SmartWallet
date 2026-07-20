@@ -468,8 +468,103 @@ class SmartFinance {
     saveAccounts() { try { localStorage.setItem('smartfinance_accounts', JSON.stringify(this.accounts)); } catch(e) {} }
     saveCards() { try { localStorage.setItem('smartfinance_cards', JSON.stringify(this.cards)); } catch(e) {} }
     saveInvestments() { try { localStorage.setItem('smartfinance_investments', JSON.stringify(this.investments)); } catch(e) {} }
-    saveGoalData() { try { localStorage.setItem('smartfinance_goal', JSON.stringify(this.goal)); } catch(e) {} }
-    loadGoal() { try { const g = localStorage.getItem('smartfinance_goal'); if (g) this.goal = JSON.parse(g); } catch(e) {} }
+    saveGoalData() { 
+        try { 
+            localStorage.setItem('smartfinance_goal', JSON.stringify(this.goal)); 
+            this.updateGoalDisplay();
+        } catch(e) {} 
+    }
+    loadGoal() { 
+        try { 
+            const g = localStorage.getItem('smartfinance_goal'); 
+            if (g) this.goal = JSON.parse(g); 
+        } catch(e) {} 
+    }
+    
+    // ===== META DE RESERVA =====
+    calculateAndSaveGoal() {
+        const goalAmountInput = document.getElementById('goalAmount');
+        const monthlyContributionInput = document.getElementById('monthlyContribution');
+        const goalResult = document.getElementById('goalResult');
+        
+        if (!goalAmountInput || !monthlyContributionInput || !goalResult) return;
+        
+        const goalAmount = parseFloat(goalAmountInput.value) || 0;
+        const monthlyContribution = parseFloat(monthlyContributionInput.value) || 0;
+        
+        if (goalAmount <= 0) {
+            alert('Por favor, informe um valor válido para a meta.');
+            return;
+        }
+        
+        if (monthlyContribution <= 0) {
+            alert('Por favor, informe um valor válido para o aporte mensal.');
+            return;
+        }
+        
+        // Salvar os dados
+        this.goal.amount = goalAmount;
+        this.goal.monthlyContribution = monthlyContribution;
+        this.saveGoalData();
+        
+        // Calcular meses necessários
+        const monthsNeeded = Math.ceil(goalAmount / monthlyContribution);
+        const years = Math.floor(monthsNeeded / 12);
+        const remainingMonths = monthsNeeded % 12;
+        
+        let timeText = '';
+        if (years > 0) {
+            timeText += `${years} ano${years > 1 ? 's' : ''}`;
+            if (remainingMonths > 0) timeText += ` e ${remainingMonths} mese${remainingMonths > 1 ? 'ses' : 's'}`;
+        } else {
+            timeText += `${monthsNeeded} mese${monthsNeeded > 1 ? 'ses' : 's'}`;
+        }
+        
+        // Calcular progresso atual baseado nas transações na categoria reserva_aplicacao
+        const currentReserve = this.calculateCurrentReserve();
+        const percentage = Math.min((currentReserve / goalAmount) * 100, 100).toFixed(1);
+        
+        // Exibir resultado
+        goalResult.style.display = 'block';
+        goalResult.innerHTML = `
+            <div style="text-align:center;">
+                <h3 style="margin-bottom:12px;color:var(--success);">🎯 Meta Salva com Sucesso!</h3>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+                    <div style="background:rgba(99,102,241,0.1);padding:12px;border-radius:8px;">
+                        <div style="font-size:12px;color:var(--text-muted);">Meta Total</div>
+                        <div style="font-size:18px;font-weight:bold;color:var(--primary);">${this.formatCurrency(goalAmount)}</div>
+                    </div>
+                    <div style="background:rgba(16,185,129,0.1);padding:12px;border-radius:8px;">
+                        <div style="font-size:12px;color:var(--text-muted);">Aporte Mensal</div>
+                        <div style="font-size:18px;font-weight:bold;color:var(--success);">${this.formatCurrency(monthlyContribution)}</div>
+                    </div>
+                </div>
+                <div style="background:rgba(245,158,11,0.1);padding:12px;border-radius:8px;margin-bottom:16px;">
+                    <div style="font-size:12px;color:var(--text-muted);">Tempo Estimado</div>
+                    <div style="font-size:16px;font-weight:bold;color:var(--warning);">⏱️ ${timeText}</div>
+                </div>
+                <div style="background:rgba(6,182,212,0.1);padding:12px;border-radius:8px;">
+                    <div style="font-size:12px;color:var(--text-muted);">Reserva Atual</div>
+                    <div style="font-size:18px;font-weight:bold;color:var(--info);">${this.formatCurrency(currentReserve)}</div>
+                    <div style="font-size:14px;margin-top:8px;">${percentage}% da meta atingida</div>
+                    <div style="background:rgba(0,0,0,0.1);height:8px;border-radius:4px;margin-top:8px;overflow:hidden;">
+                        <div style="background:linear-gradient(90deg,var(--info),var(--success));height:100%;width:${percentage}%;transition:width 0.3s;"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    calculateCurrentReserve() {
+        // Soma todas as transações na categoria reserva_aplicacao
+        const reserveTransactions = this.transactions.filter(t => t.category === 'reserva_aplicacao');
+        return reserveTransactions.reduce((sum, t) => sum + t.amount, 0);
+    }
+    
+    updateGoalDisplay() {
+        // Atualiza o display do dashboard se necessário
+        // Pode ser expandido para mostrar progresso em tempo real
+    }
     clearCache() { this._cache = {}; }
 
     // ===== CONFIGURAÇÕES =====
@@ -4117,7 +4212,28 @@ window.closeNewTransactionModal = function() { closeModal('newTransactionModal')
 window.closeEditModal = function() { closeModal('editModal'); smartfinance.currentEditId = null; };
 window.openExportModal = function() { openModal('exportModal'); };
 window.closeExportModal = function() { closeModal('exportModal'); };
-window.openGoalModal = function() { openModal('goalModal'); };
+window.openGoalModal = function() { 
+    // Carregar valores salvos ao abrir o modal
+    const goalAmountInput = document.getElementById('goalAmount');
+    const monthlyContributionInput = document.getElementById('monthlyContribution');
+    const goalResult = document.getElementById('goalResult');
+    
+    if (goalAmountInput && smartfinance.goal.amount > 0) {
+        goalAmountInput.value = smartfinance.goal.amount;
+    }
+    if (monthlyContributionInput && smartfinance.goal.monthlyContribution > 0) {
+        monthlyContributionInput.value = smartfinance.goal.monthlyContribution;
+    }
+    
+    // Recalcular e mostrar resultado se já existir meta salva
+    if (smartfinance.goal.amount > 0 && smartfinance.goal.monthlyContribution > 0) {
+        smartfinance.calculateAndSaveGoal();
+    } else if (goalResult) {
+        goalResult.style.display = 'none';
+    }
+    
+    openModal('goalModal'); 
+};
 window.closeGoalModal = function() { closeModal('goalModal'); };
 
 window.openImportCsvModal = function() {
