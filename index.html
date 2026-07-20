@@ -132,7 +132,7 @@ if ('serviceWorker' in navigator) {
             <div class="card clickable" data-action="dashboard-expense"><div class="card-title">Despesas</div><div class="card-value negative privacy-value" id="totalExpenses">R$ 0,00</div></div>
             <div class="card clickable" data-action="dashboard-cards"><div class="card-title">Acumulado C.Crédito</div><div class="card-value privacy-value" id="goalProgress">R$ 0,00</div></div>
             <div class="card" title="Estimativa baseada na média dos últimos 3 meses"><div class="card-title">📈 Projeção Próx. Mês</div><div class="card-value privacy-value" id="projectionBalance">—</div></div>
-            <div class="card clickable" data-action="openGoalModal" title="Acompanhe sua reserva de emergência"><div class="card-title">🎯 Meta de Reserva</div><div class="card-value privacy-value" id="goalReserveDisplay">R$ 0,00</div></div>
+            <div class="card" title="Percentual que ainda falta para atingir a meta"><div class="card-title">🎯 Faltam para Meta</div><div class="card-value privacy-value" id="goalMissingPercent">0%</div></div>
         </div>
 
         <!-- Charts -->
@@ -242,7 +242,7 @@ if ('serviceWorker' in navigator) {
                 <div class="dropdown-divider"></div>
                 <button class="dropdown-item" id="bbGoalBtn"> 
                     <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    <span>Meta de Reserva</span>
+                    <span>Configurar Meta</span>
                 </button>
                 <button class="dropdown-item" data-action="openManualModal">
                     <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
@@ -400,6 +400,7 @@ if ('serviceWorker' in navigator) {
             <div class="modal-header"><h2>Meta de Reserva</h2><button class="modal-close" data-close-modal="goalModal"><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
             <form id="goalForm">
                 <div class="form-group"><label for="goalAmount">Meta (R$)</label><input type="number" id="goalAmount" step="0.01" min="0" required></div>
+                <div class="form-group"><label for="currentSaved">Já guardei (R$)</label><input type="number" id="currentSaved" step="0.01" min="0" value="0"></div>
                 <div class="form-group"><label for="monthlyContribution">Aporte Mensal (R$)</label><input type="number" id="monthlyContribution" step="0.01" min="0" required></div>
                 <div id="goalResult" style="background:var(--input-bg);padding:16px;border-radius:14px;margin:16px 0;display:none;"></div>
                 <div class="action-buttons">
