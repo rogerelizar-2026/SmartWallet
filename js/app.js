@@ -430,7 +430,8 @@ class SmartFinance {
         };
         this.goal = {
             amount: 0,
-            monthlyContribution: 0
+            monthlyContribution: 0,
+            currentSaved: 0
         };
         this.loadData();
         this.loadSettings();
@@ -484,12 +485,14 @@ class SmartFinance {
     // ===== META DE RESERVA =====
     calculateAndSaveGoal() {
         const goalAmountInput = document.getElementById('goalAmount');
+        const currentSavedInput = document.getElementById('currentSaved');
         const monthlyContributionInput = document.getElementById('monthlyContribution');
         const goalResult = document.getElementById('goalResult');
         
         if (!goalAmountInput || !monthlyContributionInput || !goalResult) return;
         
         const goalAmount = parseFloat(goalAmountInput.value) || 0;
+        const currentSaved = parseFloat(currentSavedInput.value) || 0;
         const monthlyContribution = parseFloat(monthlyContributionInput.value) || 0;
         
         if (goalAmount <= 0) {
@@ -504,25 +507,29 @@ class SmartFinance {
         
         // Salvar os dados
         this.goal.amount = goalAmount;
+        this.goal.currentSaved = currentSaved;
         this.goal.monthlyContribution = monthlyContribution;
         this.saveGoalData();
         
-        // Calcular meses necessários
-        const monthsNeeded = Math.ceil(goalAmount / monthlyContribution);
+        // Calcular meses necessários (considerando o que já tem guardado)
+        const remainingAmount = Math.max(0, goalAmount - currentSaved);
+        const monthsNeeded = remainingAmount > 0 ? Math.ceil(remainingAmount / monthlyContribution) : 0;
         const years = Math.floor(monthsNeeded / 12);
         const remainingMonths = monthsNeeded % 12;
         
         let timeText = '';
-        if (years > 0) {
+        if (monthsNeeded === 0) {
+            timeText = '✅ Meta atingida!';
+        } else if (years > 0) {
             timeText += `${years} ano${years > 1 ? 's' : ''}`;
             if (remainingMonths > 0) timeText += ` e ${remainingMonths} mese${remainingMonths > 1 ? 'ses' : 's'}`;
         } else {
             timeText += `${monthsNeeded} mese${monthsNeeded > 1 ? 'ses' : 's'}`;
         }
         
-        // Calcular progresso atual baseado nas transações na categoria reserva_aplicacao
-        const currentReserve = this.calculateCurrentReserve();
-        const percentage = Math.min((currentReserve / goalAmount) * 100, 100).toFixed(1);
+        // Calcular percentual já alcançado e o que falta
+        const percentageReached = Math.min((currentSaved / goalAmount) * 100, 100).toFixed(1);
+        const percentageMissing = Math.max(0, 100 - percentageReached).toFixed(1);
         
         // Exibir resultado
         goalResult.style.display = 'block';
@@ -534,21 +541,25 @@ class SmartFinance {
                         <div style="font-size:12px;color:var(--text-muted);">Meta Total</div>
                         <div style="font-size:18px;font-weight:bold;color:var(--primary);">${this.formatCurrency(goalAmount)}</div>
                     </div>
-                    <div style="background:rgba(16,185,129,0.1);padding:12px;border-radius:8px;">
-                        <div style="font-size:12px;color:var(--text-muted);">Aporte Mensal</div>
-                        <div style="font-size:18px;font-weight:bold;color:var(--success);">${this.formatCurrency(monthlyContribution)}</div>
+                    <div style="background:rgba(6,182,212,0.1);padding:12px;border-radius:8px;">
+                        <div style="font-size:12px;color:var(--text-muted);">Já Guardado</div>
+                        <div style="font-size:18px;font-weight:bold;color:var(--info);">${this.formatCurrency(currentSaved)}</div>
                     </div>
+                </div>
+                <div style="background:rgba(16,185,129,0.1);padding:12px;border-radius:8px;margin-bottom:16px;">
+                    <div style="font-size:12px;color:var(--text-muted);">Aporte Mensal</div>
+                    <div style="font-size:18px;font-weight:bold;color:var(--success);">${this.formatCurrency(monthlyContribution)}</div>
                 </div>
                 <div style="background:rgba(245,158,11,0.1);padding:12px;border-radius:8px;margin-bottom:16px;">
                     <div style="font-size:12px;color:var(--text-muted);">Tempo Estimado</div>
                     <div style="font-size:16px;font-weight:bold;color:var(--warning);">⏱️ ${timeText}</div>
                 </div>
-                <div style="background:rgba(6,182,212,0.1);padding:12px;border-radius:8px;">
-                    <div style="font-size:12px;color:var(--text-muted);">Reserva Atual</div>
-                    <div style="font-size:18px;font-weight:bold;color:var(--info);">${this.formatCurrency(currentReserve)}</div>
-                    <div style="font-size:14px;margin-top:8px;">${percentage}% da meta atingida</div>
+                <div style="background:rgba(239,68,68,0.1);padding:12px;border-radius:8px;">
+                    <div style="font-size:12px;color:var(--text-muted);">Falta Atingir</div>
+                    <div style="font-size:18px;font-weight:bold;color:var(--danger);">${percentageMissing}%</div>
+                    <div style="font-size:14px;margin-top:8px;">${this.formatCurrency(remainingAmount)} restantes</div>
                     <div style="background:rgba(0,0,0,0.1);height:8px;border-radius:4px;margin-top:8px;overflow:hidden;">
-                        <div style="background:linear-gradient(90deg,var(--info),var(--success));height:100%;width:${percentage}%;transition:width 0.3s;"></div>
+                        <div style="background:linear-gradient(90deg,var(--danger),var(--warning));height:100%;width:${percentageMissing}%;transition:width 0.3s;"></div>
                     </div>
                 </div>
             </div>
@@ -562,8 +573,30 @@ class SmartFinance {
     }
     
     updateGoalDisplay() {
-        // Atualiza o display do dashboard se necessário
-        // Pode ser expandido para mostrar progresso em tempo real
+        // Atualiza o card "Faltam para Meta" no dashboard
+        const missingPercentEl = document.getElementById('goalMissingPercent');
+        const goalReserveEl = document.getElementById('goalReserveDisplay');
+        
+        if (this.goal.amount > 0) {
+            const currentSaved = this.goal.currentSaved > 0 ? this.goal.currentSaved : this.calculateCurrentReserve();
+            const percentageReached = Math.min((currentSaved / this.goal.amount) * 100, 100);
+            const percentageMissing = Math.max(0, 100 - percentageReached).toFixed(1);
+            
+            if (missingPercentEl) {
+                missingPercentEl.textContent = percentageMissing + '%';
+            }
+            
+            if (goalReserveEl) {
+                goalReserveEl.textContent = this.formatCurrency(currentSaved);
+            }
+        } else {
+            if (missingPercentEl) {
+                missingPercentEl.textContent = '0%';
+            }
+            if (goalReserveEl) {
+                goalReserveEl.textContent = 'R$ 0,00';
+            }
+        }
     }
     clearCache() { this._cache = {}; }
 
@@ -793,6 +826,7 @@ class SmartFinance {
                     else if (action === 'dashboard-income') dashboardAction('income');
                     else if (action === 'dashboard-expense') dashboardAction('expense');
                     else if (action === 'dashboard-cards') dashboardAction('cards');
+                    else if (action === 'openGoalModal') openGoalModal();
                 });
             }
         });
@@ -1783,6 +1817,7 @@ class SmartFinance {
             goalEl.className = 'card-value privacy-value negative';
         }
         this.updateProjection();
+        this.updateGoalDisplay();
     }
 
     // Projeção simples: média do saldo líquido (receitas - despesas) dos últimos 3 meses com dados,
@@ -4215,11 +4250,15 @@ window.closeExportModal = function() { closeModal('exportModal'); };
 window.openGoalModal = function() { 
     // Carregar valores salvos ao abrir o modal
     const goalAmountInput = document.getElementById('goalAmount');
+    const currentSavedInput = document.getElementById('currentSaved');
     const monthlyContributionInput = document.getElementById('monthlyContribution');
     const goalResult = document.getElementById('goalResult');
     
     if (goalAmountInput && smartfinance.goal.amount > 0) {
         goalAmountInput.value = smartfinance.goal.amount;
+    }
+    if (currentSavedInput && smartfinance.goal.currentSaved >= 0) {
+        currentSavedInput.value = smartfinance.goal.currentSaved;
     }
     if (monthlyContributionInput && smartfinance.goal.monthlyContribution > 0) {
         monthlyContributionInput.value = smartfinance.goal.monthlyContribution;
