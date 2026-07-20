@@ -575,7 +575,6 @@ class SmartFinance {
     updateGoalDisplay() {
         // Atualiza o card "Faltam para Meta" no dashboard
         const missingPercentEl = document.getElementById('goalMissingPercent');
-        const goalReserveEl = document.getElementById('goalReserveDisplay');
         
         if (this.goal.amount > 0) {
             const currentSaved = this.goal.currentSaved > 0 ? this.goal.currentSaved : this.calculateCurrentReserve();
@@ -585,16 +584,9 @@ class SmartFinance {
             if (missingPercentEl) {
                 missingPercentEl.textContent = percentageMissing + '%';
             }
-            
-            if (goalReserveEl) {
-                goalReserveEl.textContent = this.formatCurrency(currentSaved);
-            }
         } else {
             if (missingPercentEl) {
                 missingPercentEl.textContent = '0%';
-            }
-            if (goalReserveEl) {
-                goalReserveEl.textContent = 'R$ 0,00';
             }
         }
     }
@@ -777,9 +769,6 @@ class SmartFinance {
 
         const bbAlertBtn = document.getElementById('bbAlertBtn');
         if (bbAlertBtn) bbAlertBtn.addEventListener('click', () => openBillsModal());
-
-        const goalBtn = document.getElementById('goalBtn');
-        if (goalBtn) goalBtn.addEventListener('click', () => openGoalModal());
 
         const bbGoalBtn = document.getElementById('bbGoalBtn');
         if (bbGoalBtn) bbGoalBtn.addEventListener('click', () => openGoalModal());

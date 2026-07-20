@@ -133,7 +133,6 @@ if ('serviceWorker' in navigator) {
             <div class="card clickable" data-action="dashboard-cards"><div class="card-title">Acumulado C.Crédito</div><div class="card-value privacy-value" id="goalProgress">R$ 0,00</div></div>
             <div class="card" title="Estimativa baseada na média dos últimos 3 meses"><div class="card-title">📈 Projeção Próx. Mês</div><div class="card-value privacy-value" id="projectionBalance">—</div></div>
             <div class="card" title="Percentual que ainda falta para atingir a meta"><div class="card-title">🎯 Faltam para Meta</div><div class="card-value privacy-value" id="goalMissingPercent">0%</div></div>
-            <div class="card clickable" data-action="openGoalModal" title="Acompanhe sua reserva de emergência"><div class="card-title">🎯 Meta de Reserva</div><div class="card-value privacy-value" id="goalReserveDisplay">R$ 0,00</div></div>
         </div>
 
         <!-- Charts -->
@@ -243,7 +242,7 @@ if ('serviceWorker' in navigator) {
                 <div class="dropdown-divider"></div>
                 <button class="dropdown-item" id="bbGoalBtn"> 
                     <svg class="icon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    <span>Meta de Reserva</span>
+                    <span>Configurar Meta</span>
                 </button>
                 <button class="dropdown-item" data-action="openManualModal">
                     <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
