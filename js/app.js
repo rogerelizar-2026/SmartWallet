@@ -1663,11 +1663,6 @@ class SmartFinance {
         if (incEl) incEl.textContent = this.formatCurrency(inc);
         const expEl = document.getElementById('totalExpenses');
         if (expEl) expEl.textContent = this.formatCurrency(Math.abs(exp));
-        const goalEl = document.getElementById('goalProgress');
-        if (goalEl) {
-            goalEl.textContent = this.formatCurrency(creditCardTotal);
-            goalEl.className = 'card-value privacy-value negative';
-        }
         this.updateProjection();
         this.updateGoalDisplay();
     }
