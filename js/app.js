@@ -686,6 +686,7 @@ class SmartFinance {
                     else if (action === 'dashboard-income') dashboardAction('income');
                     else if (action === 'dashboard-expense') dashboardAction('expense');
                     else if (action === 'dashboard-cards') dashboardAction('cards');
+                    else if (action === 'openGoalModal') openGoalModal();
                 });
             }
         });
@@ -1668,6 +1669,7 @@ class SmartFinance {
             goalEl.className = 'card-value privacy-value negative';
         }
         this.updateProjection();
+        this.updateGoalDisplay();
     }
 
     // Projeção simples: média do saldo líquido (receitas - despesas) dos últimos 3 meses com dados,
