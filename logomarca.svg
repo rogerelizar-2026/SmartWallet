@@ -21,46 +21,46 @@
     </filter>
   </defs>
   <!-- Ícone da Carteira Aprimorado -->
-  <g transform="translate(12, 15)" filter="url(#glow)">
+  <g transform="translate(8, 10)" filter="url(#glow)">
     <!-- Preenchimento sutil -->
-    <rect x="5" y="25" width="120" height="100" rx="12" fill="url(#walletFill)"/>
+    <rect x="5" y="25" width="130" height="110" rx="12" fill="url(#walletFill)"/>
     <!-- Corpo principal -->
-    <rect x="0" y="20" width="120" height="100" rx="12" fill="none" stroke="url(#logoGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="0" y="20" width="130" height="110" rx="12" fill="none" stroke="url(#logoGradient)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
     <!-- Aba superior com detalhe interno -->
-    <path d="M 0 45 Q 0 20 14 20 L 106 20 Q 120 20 120 45 L 120 60 L 0 60 Z" fill="none" stroke="url(#logoGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M 9 45 Q 9 28 18 28 L 101 28 Q 110 28 110 45" fill="none" stroke="url(#logoGradient)" stroke-width="2" opacity="0.5" stroke-linecap="round"/>
+    <path d="M 0 45 Q 0 20 14 20 L 116 20 Q 130 20 130 45 L 130 60 L 0 60 Z" fill="none" stroke="url(#logoGradient)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M 9 45 Q 9 28 18 28 L 111 28 Q 120 28 120 45" fill="none" stroke="url(#logoGradient)" stroke-width="2.5" opacity="0.5" stroke-linecap="round"/>
     <!-- Linha divisória -->
-    <line x1="5" y1="60" x2="115" y2="60" stroke="url(#logoGradient)" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+    <line x1="5" y1="60" x2="125" y2="60" stroke="url(#logoGradient)" stroke-width="2.5" opacity="0.4" stroke-linecap="round"/>
     <!-- Fecho/botão -->
-    <rect x="88" y="70" width="30" height="28" rx="14" fill="none" stroke="url(#logoGradient)" stroke-width="3.5" stroke-linecap="round"/>
-    <circle cx="103" cy="84" r="7" fill="url(#logoGradient)" opacity="0.9"/>
-    <circle cx="103" cy="84" r="3.5" fill="#0a0e1a" opacity="0.6"/>
+    <rect x="95" y="70" width="33" height="30" rx="15" fill="none" stroke="url(#logoGradient)" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="111.5" cy="85" r="8" fill="url(#logoGradient)" opacity="0.9"/>
+    <circle cx="111.5" cy="85" r="4" fill="#0a0e1a" opacity="0.6"/>
     <!-- Circuitos - Linha 1 -->
-    <path d="M 14 75 L 41 75 L 50 84 L 72 84" fill="none" stroke="url(#logoGradient2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="14" cy="75" r="3" fill="url(#logoGradient2)"/>
-    <circle cx="72" cy="84" r="3" fill="url(#logoGradient2)"/>
-    <circle cx="50" cy="84" r="2" fill="url(#logoGradient2)"/>
+    <path d="M 14 75 L 45 75 L 55 86 L 80 86" fill="none" stroke="url(#logoGradient2)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="14" cy="75" r="3.5" fill="url(#logoGradient2)"/>
+    <circle cx="80" cy="86" r="3.5" fill="url(#logoGradient2)"/>
+    <circle cx="55" cy="86" r="2.5" fill="url(#logoGradient2)"/>
     <!-- Circuitos - Linha 2 -->
-    <path d="M 14 93 L 56 93 L 65 102 L 87 102" fill="none" stroke="url(#logoGradient2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="14" cy="93" r="3" fill="url(#logoGradient2)"/>
-    <circle cx="87" cy="102" r="3" fill="url(#logoGradient2)"/>
-    <circle cx="65" cy="102" r="2" fill="url(#logoGradient2)"/>
+    <path d="M 14 95 L 62 95 L 73 107 L 95 107" fill="none" stroke="url(#logoGradient2)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="14" cy="95" r="3.5" fill="url(#logoGradient2)"/>
+    <circle cx="95" cy="107" r="3.5" fill="url(#logoGradient2)"/>
+    <circle cx="73" cy="107" r="2.5" fill="url(#logoGradient2)"/>
     <!-- Circuitos - Linha 3 -->
-    <path d="M 14 111 L 37 111 L 46 120" fill="none" stroke="url(#logoGradient2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    <circle cx="14" cy="111" r="3" fill="url(#logoGradient2)"/>
-    <circle cx="46" cy="120" r="3" fill="url(#logoGradient2)"/>
+    <path d="M 14 115 L 42 115 L 52 126" fill="none" stroke="url(#logoGradient2)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="14" cy="115" r="3.5" fill="url(#logoGradient2)"/>
+    <circle cx="52" cy="126" r="3.5" fill="url(#logoGradient2)"/>
     <!-- Chip central -->
-    <rect x="70" y="75" width="20" height="20" rx="3" fill="none" stroke="url(#logoGradient2)" stroke-width="2" stroke-linecap="round"/>
-    <line x1="80" y1="75" x2="80" y2="68" stroke="url(#logoGradient2)" stroke-width="2" stroke-linecap="round"/>
-    <line x1="80" y1="95" x2="80" y2="102" stroke="url(#logoGradient2)" stroke-width="2" stroke-linecap="round"/>
-    <line x1="70" y1="85" x2="63" y2="85" stroke="url(#logoGradient2)" stroke-width="2" stroke-linecap="round"/>
-    <line x1="90" y1="85" x2="97" y2="85" stroke="url(#logoGradient2)" stroke-width="2" stroke-linecap="round"/>
-    <circle cx="80" cy="85" r="3.5" fill="url(#logoGradient2)" opacity="0.4"/>
+    <rect x="75" y="75" width="23" height="23" rx="3" fill="none" stroke="url(#logoGradient2)" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="86.5" y1="75" x2="86.5" y2="67" stroke="url(#logoGradient2)" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="86.5" y1="98" x2="86.5" y2="106" stroke="url(#logoGradient2)" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="75" y1="86.5" x2="67" y2="86.5" stroke="url(#logoGradient2)" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="98" y1="86.5" x2="106" y2="86.5" stroke="url(#logoGradient2)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="86.5" cy="86.5" r="4" fill="url(#logoGradient2)" opacity="0.4"/>
     <!-- Linhas decorativas -->
-    <line x1="18" y1="125" x2="68" y2="125" stroke="url(#logoGradient)" stroke-width="2.5" opacity="0.4" stroke-linecap="round"/>
-    <line x1="18" y1="132" x2="52" y2="132" stroke="url(#logoGradient)" stroke-width="1.5" opacity="0.25" stroke-linecap="round"/>
+    <line x1="18" y1="135" x2="75" y2="135" stroke="url(#logoGradient)" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+    <line x1="18" y1="143" x2="58" y2="143" stroke="url(#logoGradient)" stroke-width="2" opacity="0.25" stroke-linecap="round"/>
   </g>
   <!-- Texto "Smart Finance" em duas linhas - centralizado verticalmente -->
-  <text x="135" y="83" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="58" font-weight="800" fill="url(#logoGradient)" letter-spacing="-1">Smart</text>
-  <text x="135" y="133" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="58" font-weight="800" fill="url(#logoGradient)" letter-spacing="-1">Finance</text>
+  <text x="145" y="92" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="68" font-weight="800" fill="url(#logoGradient)" letter-spacing="-1">Smart</text>
+  <text x="145" y="145" font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="68" font-weight="800" fill="url(#logoGradient)" letter-spacing="-1">Finance</text>
 </svg>

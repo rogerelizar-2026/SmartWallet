@@ -1,1 +1,1 @@
-# No changes needed - only SVG files were modified, which are source assets that should not be ignored
+Nothing should be ignored in this case, as the changes only include SVG image files which are source assets that should be tracked in version control.
