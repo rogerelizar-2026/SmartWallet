@@ -3102,6 +3102,7 @@ class SmartFinance {
             this.applyLanguage(); this.applyCurrency();
             this.currentPage = 1;
             this.render(); this.updateCharts(); this.updateAlertBadge();
+            this.renderAccountsList();
             this.checkNegativeBalance();
             closeModal('importBackupModal');
             this.showToast('✅ Backup restaurado!');
