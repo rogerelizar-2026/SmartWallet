@@ -196,23 +196,37 @@ Installments: ✓ (4x of $300.00)
 
 ## 🏷️ Default Categories
 
-### Income
-- Salary
-- Earnings
-- Sales
-- Gifts
-- Other
+Smart Finance comes pre-configured with intelligent categories to make your financial organization easier. You can customize or create new categories in **Settings**.
 
-### Expenses
-- Food
-- Housing
-- Transportation
-- Health
-- Education
-- Leisure
-- Clothing
-- Services
-- Other
+### 📥 Income
+| Category | Description |
+|----------|-------------|
+| 💰 Salary | Monthly remuneration for work |
+| 🍽️ Meal Allowance | Meal benefit provided by employer |
+| 🤝 Assistance | Various assistance (transportation, housing, etc.) |
+| 🎁 Benefits | Other benefits and bonuses |
+| 📄 Refund | Tax refunds or refunded values |
+| 💼 Freelance | Earnings from freelance/autonomous work |
+| 📈 Earnings | Interest, dividends, and investment returns |
+| 💵 Withdrawal (invest/savings) | Withdrawals from financial applications or savings |
+
+### 📤 Expenses
+| Category | Description |
+|----------|-------------|
+| 🏠 Home | Rent, condominium, property tax, electricity, water, gas, internet |
+| 🛒 Groceries | Market, supermarket, grocery store, produce, bakery, butcher |
+| 🚗 Transportation | Uber, 99, fuel, gasoline, alcohol, parking, tolls, bus, subway |
+| 🏥 Health | Pharmacy, medicines, doctor, consultation, health insurance, dentist, hospital |
+| 📚 Education | Tuition, courses, books, school supplies |
+| 💅 Personal Care | Hairdresser, barber, aesthetics, hygiene products |
+| 🔧 Services | Repairs, maintenance, general services |
+| 🎉 Leisure | Cinema, theater, shows, outings, trips |
+| 🐾 Pets | Pet food, veterinarian, grooming, pet accessories |
+| 🏦 Financial Institution | Bank fees, charges, IOF taxes |
+| 📋 Document/Legal | Documents, notary, lawyers, legal proceedings |
+| 💸 Loan | Loan and financing payments |
+| ❤️ Donation/Generosity | Donations, contributions, helping others |
+| 🎯 Savings/Application | Contributions to emergency fund or investments |
 
 *You can create custom categories in Settings.*
 

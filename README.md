@@ -196,23 +196,37 @@ Parcelado: ✓ (4x de R$ 300,00)
 
 ## 🏷️ Categorias Padrão
 
-### Receitas
-- Salário
-- Rendimentos
-- Vendas
-- Presentes
-- Outros
+O Smart Finance já vem pré-configurado com categorias inteligentes para facilitar sua organização financeira. Você pode personalizar ou criar novas categorias em **Configurações**.
 
-### Despesas
-- Alimentação
-- Moradia
-- Transporte
-- Saúde
-- Educação
-- Lazer
-- Vestuário
-- Serviços
-- Outros
+### 📥 Receitas
+| Categoria | Descrição |
+|-----------|-----------|
+| 💰 Salário | Remuneração mensal por trabalho |
+| 🍽️ Vale Alimentação | Benefício de alimentação fornecido pelo empregador |
+| 🤝 Auxílios | Auxílios diversos (transporte, moradia, etc.) |
+| 🎁 Benefícios | Outros benefícios e bonificações |
+| 📄 Restituição | Restituições de impostos ou valores pagos |
+| 💼 Freelance | Rendimentos por trabalhos autônomos |
+| 📈 Rendimentos | Juros, dividendos e rendimentos de investimentos |
+| 💵 Resgate (invest/reserva) | Resgates de aplicações financeiras ou reserva |
+
+### 📤 Despesas
+| Categoria | Descrição |
+|-----------|-----------|
+| 🏠 Casa | Aluguel, condomínio, IPTU, luz, energia, água, gás, internet |
+| 🛒 Despensa | Mercado, supermercado, feira, hortifruti, padaria, açougue |
+| 🚗 Transporte | Uber, 99, combustível, gasolina, álcool, estacionamento, pedágio, ônibus, metrô |
+| 🏥 Saúde | Farmácia, remédios, médico, consulta, plano de saúde, dentista, hospital |
+| 📚 Educação | Mensalidades, cursos, livros, material escolar |
+| 💅 Cuidados Pessoais | Cabeleireiro, barbeiro, estética, produtos de higiene |
+| 🔧 Serviços | Consertos, manutenção, serviços gerais |
+| 🎉 Lazer | Cinema, teatro, shows, passeios, viagens |
+| 🐾 Pets | Ração, veterinário, banho e tosa, acessórios para animais |
+| 🏦 Instituição Financeira | Tarifas bancárias, taxas, IOF |
+| 📋 Documento/Jurídico | Documentos, cartório, advogados, processos jurídicos |
+| 💸 Empréstimo | Pagamento de empréstimos e financiamentos |
+| ❤️ Doação/Generosidade | Doações, contribuições, ajuda a terceiros |
+| 🎯 Reserva/Aplicação | Aportes em reserva de emergência ou investimentos |
 
 *Você pode criar categorias personalizadas em Configurações.*
 
