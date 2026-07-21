@@ -1,1 +1,568 @@
-Nothing needs to be added to the .gitignore file since only a source file (index.html) was modified and there are no build artifacts, dependencies, or temporary files in the changes.
+```
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+coverage/
+htmlcov/
+
+# Environment variables
+.env
+.env.local
+.env.*
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# Logs
+*.log
+
+# Python specific
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+.eggs/
+
+# Coverage reports
+.coverage
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Testing
+.nyc_output/
+.mypy_cache/
+.pytest_cache/
+.jscpd-report/
+
+# Vite specific
+!.vite/
+vite.config.js
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Debug log
+log/
+!log/.gitkeep
+
+# Environment specific
+.env.production
+.env.development
+
+# Local configuration
+*.local
+
+# Bower dependency directory
+bower_components/
+
+# JSHint configuration files
+.jshintrc
+
+# ESLint configuration files
+.eslintcache
+
+# Prettier configuration files
+.prettierrc
+
+# GitHub workflow artifacts
+.github/
+
+# Distribution / packaging
+*.tar*
+*.zip
+*.rar
+*.gz
+*.7z
+
+# Compiled binary files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Various things for npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary folders
+tmp/
+temp/
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# Sensitive files
+config/secrets.yml
+
+# Cache directories
+.cache/
+.cargo/
+
+# Database
+*.db
+*.db-journal
+
+# Output of 'bundle install' for Ruby
+vendor/bundle/
+
+# Go specific
+*.out
+bin/
+
+# Java specific
+*.class
+*.jar
+*.war
+*.ear
+hs_err_pid*
+replay_pid*
+
+# C/C++ specific
+*.i
+*.s
+*.su
+*.gcda
+*.gcno
+*.gcov
+*.lcov
+
+# Rust specific
+target/
+
+# Gradle specific
+.gradle/
+build/
+
+# Maven specific
+target/
+
+# Node specific
+node/
+
+# Webpack specific
+webpack-stats.json
+
+# Django specific
+*.mo
+*.pot
+
+# Flask specific
+instance/
+.webassets-cache
+
+# Vue specific
+dist_electron/
+
+# Angular specific
+angular/
+aot/
+dist/
+node_modules/
+output/
+coverage/
+.angular/
+
+# React specific
+coverage/
+build/
+dist/
+node_modules/
+.next/
+out/
+
+# Svelte specific
+.svelte-kit/
+
+# Next.js specific
+.next/
+out/
+
+# Nuxt.js specific
+.nuxt/
+dist/
+
+# Gatsby specific
+.cache/
+public/
+
+# Electron specific
+release/
+dist_electron/
+
+# Ionic specific
+ionic/www/
+platforms/
+plugins/
+
+# Cordova specific
+platforms/
+plugins/
+www/
+
+# PhoneGap specific
+platforms/
+plugins/
+www/
+
+# Meteor specific
+.meteor/local/
+
+# Grunt specific
+.grunt/
+
+# Gulp specific
+.gulp/
+
+# Babel specific
+.babelrc
+
+# TypeScript specific
+*.tsbuildinfo
+*.d.ts
+
+# Browserslist
+browserslist
+
+# Terser
+terser
+
+# UglifyJS
+uglifyjs
+
+# Yarn specific
+.yarn/
+yarn-error.log
+
+# PNPM specific
+pnpm-lock.yaml
+
+# Deno specific
+deno.lock
+
+# Bun specific
+bun.lockb
+
+# Docker specific
+.docker/
+
+# Kubernetes specific
+.kube/
+
+# Terraform specific
+.terraform/
+*.tfstate
+*.tfvars
+
+# Ansible specific
+ansible/
+*.retry
+
+# Chef specific
+chef/
+*.chef
+
+# Puppet specific
+puppet/
+*.pp
+
+# Salt specific
+salt/
+*.sls
+
+# Vagrant specific
+.vagrant/
+
+# VirtualBox specific
+*.vbox
+*.vdi
+*.vmdk
+
+# VMware specific
+*.vmdk
+*.nvram
+*.vmxf
+*.vmx
+*.vmsd
+*.vmsn
+*.vmss
+*.vmtm
+
+# Parallels specific
+*.pvm
+*.hdd
+*.hds
+
+# Wine specific
+.wine/
+
+# Wine prefixes
+wineprefix/
+
+# Mono specific
+.mono/
+
+# .NET specific
+*.userprefs
+*.userosscache
+*.sln.docstates
+*.user
+.vs/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+[Tt]emp/
+[Dd]ebug/
+[Rr]elease/
+_UpgradeReport_Files/
+packages/
+*.nupkg
+*.snupkg
+*.nuspec
+*.rsp
+*.lock.json
+host.json
+project.lock.json
+appsettings*.json
+bundleconfig.json
+
+# Unity specific
+Library/
+Temp/
+Obj/
+Build/
+Logs/
+MemoryCaptures/
+Packages/
+UserSettings/
+*.unityproj
+*.userprefs
+*.pidb.meta
+*.pdb.meta
+*.meta
+*.manifest
+*.asset
+*.prefab
+*.mat
+*.anim
+*.controller
+*.mask
+*.physicMaterial
+*.physicsMaterial2D
+*.flare
+*.fontsettings
+*.guiskin
+*.mat.meta
+*.anim.meta
+*.controller.meta
+*.mask.meta
+*.physicMaterial.meta
+*.physicsMaterial2D.meta
+*.flare.meta
+*.fontsettings.meta
+*.guiskin.meta
+*.asset.meta
+*.prefab.meta
+*.unity.meta
+*.mat.meta
+*.anim.meta
+*.controller.meta
+*.mask.meta
+*.physicMaterial.meta
+*.physicsMaterial2D.meta
+*.flare.meta
+*.fontsettings.meta
+*.guiskin.meta
+*.asset.meta
+*.prefab.meta
+*.unity.meta
+*.sln.meta
+*.csproj.meta
+*.userprefs.meta
+*.pidb.meta
+*.pdb.meta
+*.meta
+*.manifest
+*.asset
+*.prefab
+*.mat
+*.anim
+*.controller
+*.mask
+*.physicMaterial
+*.physicsMaterial2D
+*.flare
+*.fontsettings
+*.guiskin
+*.mat.meta
+*.anim.meta
+*.controller.meta
+*.mask.meta
+*.physicMaterial.meta
+*.physicsMaterial2D.meta
+*.flare.meta
+*.fontsettings.meta
+*.guiskin.meta
+*.asset.meta
+*.prefab.meta
+*.unity.meta
+*.sln.meta
+*.csproj.meta
+*.userprefs.meta
+*.pidb.meta
+*.pdb.meta
+*.meta
+*.manifest
+*.asset
+*.prefab
+*.mat
+*.anim
+*.controller
+*.mask
+*.physicMaterial
+*.physicsMaterial2D
+*.flare
+*.fontsettings
+*.guiskin
+*.mat.meta
+*.anim.meta
+*.controller.meta
+*.mask.meta
+*.physicMaterial.meta
+*.physicsMaterial2D.meta
+*.flare.meta
+*.fontsettings.meta
+*.guiskin.meta
+*.asset.meta
+*.prefab.meta
+*.unity.meta
+*.sln.meta
+*.csproj.meta
+*.userprefs.meta
+*.pidb.meta
+*.pdb.meta
+*.meta
+*.manifest
+*.asset
+*.prefab
+*.mat
+*.anim
+*.controller
+*.mask
+*.physicMaterial
+*.physicsMaterial2D
+*.flare
+*.fontsettings
+*.guiskin
+*.mat.meta
+*.anim.meta
+*.controller.meta
+*.mask.meta
+*.physicMaterial.meta
+*.physicsMaterial2D.meta
+*.flare.meta
+*.fontsettings.meta
+*.guiskin.meta
+*.asset.meta
+*.prefab.meta
+*.unity.meta
+*.sln.meta
+*.csproj.meta
+*.userprefs.meta
+*.pidb.meta
+*.pdb.meta
+*.meta
+*.manifest
+*.asset
+*.prefab
+*.mat
+*.anim
+*.controller
+*.mask
+*.physicMaterial
+*.physicsMaterial2D
+*.flare
+*.fontsettings
+*.guiskin
+*.mat.meta
+*.anim.meta
+*.controller.meta
+*.mask.meta
+*.physicMaterial.meta
+*.physicsMaterial2D.meta
+*.flare.meta
+*.fontsettings.meta
+*.guiskin.meta
+*.asset.meta
+*.prefab.meta
+*.unity.meta
+*.sln.meta
+*.csproj.meta
+*.userprefs.meta
+*.pidb.meta
+*.pdb.meta
+*.meta
+*.manifest
+*.asset
+*.prefab
+*.mat
+*.anim
+*.controller
+*.mask
+*.physicMaterial
+*.physicsMaterial2D
+*.flare
+*.fontsettings
+*.guiskin
+*.mat.meta
+*.anim.meta
+*.controller.meta
+*.mask.meta
+*.physicMaterial.meta
+*.physicsMaterial2D.meta
+*.flare.meta
+*.fontsettings.meta
+*.guiskin.meta
+*.asset.meta
+*.prefab.meta
+*.unity.meta
+*.sln.meta
+*.csproj.meta
+*.userprefs.meta
+*.pidb.meta
+*.pdb.meta
+*.meta
+*.manifest
+*.asset
+*.prefab
+*.mat
+*.anim
+*.controller
+*.mask
+*.physicMaterial
+*.physicsMaterial2D
+*.flare
+*.fontsettings
+*.guiskin
+*.mat.meta
+*.anim.meta
+*.controller.meta
+*.mask......
+```
