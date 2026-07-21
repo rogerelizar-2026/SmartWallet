@@ -4509,7 +4509,8 @@ window.addEventListener('load', () => {
             splash.classList.add('fade-out');
             setTimeout(() => {
                 splash.style.display = 'none';
-                showQuoteModal();
+                initLoginSystem();
+                openLoginModal();
             }, 800);
         }
     }, 3000);
@@ -4650,5 +4651,323 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { passive: true });
 })();
+
+// ===== SISTEMA DE LOGIN E SENHA =====
+const DEFAULT_PASSWORD = '132435';
+const PASSWORD_STORAGE_KEY = 'smartfinance_access_password';
+const PASSWORD_CHANGED_KEY = 'smartfinance_password_changed';
+
+// Verifica se é primeiro acesso
+function isFirstAccess() {
+    const passwordChanged = localStorage.getItem(PASSWORD_CHANGED_KEY);
+    return passwordChanged !== 'true';
+}
+
+// Valida força da senha
+function validatePasswordStrength(password) {
+    let score = 0;
+    const errors = [];
+    
+    if (!password || password.length < 6) {
+        errors.push('Mínimo de 6 caracteres');
+        return { valid: false, strength: 'weak', errors };
+    }
+    
+    if (password.length >= 8) score++;
+    if (password.length >= 12) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    
+    let strength = 'weak';
+    if (score >= 5) strength = 'strong';
+    else if (score >= 3) strength = 'medium';
+    
+    return { 
+        valid: score >= 2, 
+        strength, 
+        score,
+        errors: score < 2 ? ['Senha muito fraca'] : []
+    };
+}
+
+// Atualiza indicador de força da senha
+function updatePasswordStrengthIndicator(password) {
+    const indicator = document.getElementById('passwordStrengthIndicator');
+    const strengthBar = document.getElementById('strengthBar');
+    const strengthText = document.getElementById('strengthText');
+    
+    if (!indicator || !strengthBar || !strengthText) return;
+    
+    if (!password) {
+        indicator.style.display = 'none';
+        return;
+    }
+    
+    const result = validatePasswordStrength(password);
+    indicator.style.display = 'block';
+    
+    const colors = {
+        weak: '#ef4444',
+        medium: '#f59e0b',
+        strong: '#10b981'
+    };
+    
+    const widths = {
+        weak: 33,
+        medium: 66,
+        strong: 100
+    };
+    
+    const labels = {
+        weak: 'Fraca',
+        medium: 'Média',
+        strong: 'Forte'
+    };
+    
+    strengthBar.style.width = widths[result.strength] + '%';
+    strengthBar.style.backgroundColor = colors[result.strength];
+    strengthText.textContent = `Força: ${labels[result.strength]}`;
+    strengthText.style.color = colors[result.strength];
+}
+
+// Verifica correspondência de senhas
+function checkPasswordMatch() {
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const matchMessage = document.getElementById('passwordMatchMessage');
+    const confirmBtn = document.getElementById('confirmChangePasswordBtn');
+    
+    if (!matchMessage || !confirmBtn) return;
+    
+    if (!confirmPassword) {
+        matchMessage.textContent = '';
+        matchMessage.style.color = '';
+        confirmBtn.disabled = true;
+        return;
+    }
+    
+    if (newPassword === confirmPassword) {
+        matchMessage.textContent = '✓ Senhas conferem';
+        matchMessage.style.color = '#10b981';
+        const strengthResult = validatePasswordStrength(newPassword);
+        confirmBtn.disabled = !strengthResult.valid;
+        confirmBtn.style.opacity = strengthResult.valid ? '1' : '0.5';
+    } else {
+        matchMessage.textContent = '✗ Senhas não conferem';
+        matchMessage.style.color = '#ef4444';
+        confirmBtn.disabled = true;
+        confirmBtn.style.opacity = '0.5';
+    }
+}
+
+// Abre modal de login
+function openLoginModal() {
+    const loginModal = document.getElementById('loginModal');
+    const firstAccessWarning = document.getElementById('firstAccessWarning');
+    const loginForm = document.getElementById('loginForm');
+    const changePasswordForm = document.getElementById('changePasswordForm');
+    const submitLoginBtn = document.getElementById('submitLoginBtn');
+    const confirmChangePasswordBtn = document.getElementById('confirmChangePasswordBtn');
+    const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+    const currentPasswordInput = document.getElementById('currentPassword');
+    
+    if (!loginModal) return;
+    
+    const firstAccess = isFirstAccess();
+    
+    if (firstAccess) {
+        // Primeiro acesso - mostra aviso e formulário de troca
+        if (firstAccessWarning) firstAccessWarning.style.display = 'block';
+        if (loginForm) loginForm.style.display = 'none';
+        if (changePasswordForm) changePasswordForm.style.display = 'block';
+        if (submitLoginBtn) submitLoginBtn.style.display = 'none';
+        if (confirmChangePasswordBtn) confirmChangePasswordBtn.style.display = 'inline-block';
+        if (cancelLoginBtn) cancelLoginBtn.style.display = 'none';
+        
+        // Limpa campos
+        if (document.getElementById('newPassword')) document.getElementById('newPassword').value = '';
+        if (document.getElementById('confirmPassword')) document.getElementById('confirmPassword').value = '';
+        if (document.getElementById('passwordMatchMessage')) document.getElementById('passwordMatchMessage').textContent = '';
+        if (document.getElementById('confirmChangePasswordBtn')) {
+            document.getElementById('confirmChangePasswordBtn').disabled = true;
+        }
+    } else {
+        // Acesso normal - mostra apenas campo de senha atual
+        if (firstAccessWarning) firstAccessWarning.style.display = 'none';
+        if (loginForm) loginForm.style.display = 'block';
+        if (changePasswordForm) changePasswordForm.style.display = 'none';
+        if (submitLoginBtn) submitLoginBtn.style.display = 'inline-block';
+        if (confirmChangePasswordBtn) confirmChangePasswordBtn.style.display = 'none';
+        if (cancelLoginBtn) cancelLoginBtn.style.display = 'inline-block';
+        
+        // Limpa campo
+        if (currentPasswordInput) currentPasswordInput.value = '';
+    }
+    
+    loginModal.classList.add('active');
+    loginModal.style.display = 'flex';
+}
+
+// Fecha modal de login
+function closeLoginModal() {
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+        loginModal.classList.remove('active');
+        setTimeout(() => {
+            loginModal.style.display = 'none';
+        }, 300);
+    }
+}
+
+// Processa login
+function processLogin() {
+    const currentPasswordInput = document.getElementById('currentPassword');
+    const enteredPassword = currentPasswordInput?.value || '';
+    const storedPassword = localStorage.getItem(PASSWORD_STORAGE_KEY);
+    
+    if (enteredPassword === storedPassword) {
+        closeLoginModal();
+        showQuoteModal();
+        smartfinance.showToast('✅ Login realizado com sucesso!');
+    } else {
+        smartfinance.showToast('❌ Senha incorreta!');
+        if (currentPasswordInput) {
+            currentPasswordInput.value = '';
+            currentPasswordInput.focus();
+        }
+    }
+}
+
+// Processa troca de senha no primeiro acesso
+function processPasswordChange() {
+    const currentPasswordInput = document.getElementById('currentPassword');
+    const newPasswordInput = document.getElementById('newPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    
+    const currentPassword = currentPasswordInput?.value || '';
+    const newPassword = newPasswordInput?.value || '';
+    const confirmPassword = confirmPasswordInput?.value || '';
+    
+    // Verifica senha atual (deve ser a padrão no primeiro acesso)
+    const storedPassword = localStorage.getItem(PASSWORD_STORAGE_KEY) || DEFAULT_PASSWORD;
+    
+    if (currentPassword !== storedPassword) {
+        smartfinance.showToast('❌ Senha atual incorreta!');
+        if (currentPasswordInput) {
+            currentPasswordInput.value = '';
+            currentPasswordInput.focus();
+        }
+        return;
+    }
+    
+    // Valida nova senha
+    const strengthResult = validatePasswordStrength(newPassword);
+    if (!strengthResult.valid) {
+        smartfinance.showToast('❌ ' + strengthResult.errors.join('. '));
+        if (newPasswordInput) newPasswordInput.focus();
+        return;
+    }
+    
+    // Verifica confirmação
+    if (newPassword !== confirmPassword) {
+        smartfinance.showToast('❌ As senhas não conferem!');
+        if (confirmPasswordInput) {
+            confirmPasswordInput.value = '';
+            confirmPasswordInput.focus();
+        }
+        return;
+    }
+    
+    // Salva nova senha
+    localStorage.setItem(PASSWORD_STORAGE_KEY, newPassword);
+    localStorage.setItem(PASSWORD_CHANGED_KEY, 'true');
+    
+    closeLoginModal();
+    showQuoteModal();
+    smartfinance.showToast('✅ Senha alterada com sucesso! Lembre-se de memorizá-la.');
+}
+
+// Inicializa sistema de login
+function initLoginSystem() {
+    const submitLoginBtn = document.getElementById('submitLoginBtn');
+    const confirmChangePasswordBtn = document.getElementById('confirmChangePasswordBtn');
+    const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+    const newPasswordInput = document.getElementById('newPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    
+    // Event listeners
+    if (submitLoginBtn) {
+        submitLoginBtn.addEventListener('click', processLogin);
+    }
+    
+    if (confirmChangePasswordBtn) {
+        confirmChangePasswordBtn.addEventListener('click', processPasswordChange);
+    }
+    
+    if (cancelLoginBtn) {
+        cancelLoginBtn.addEventListener('click', closeLoginModal);
+    }
+    
+    if (newPasswordInput) {
+        newPasswordInput.addEventListener('input', () => {
+            updatePasswordStrengthIndicator(newPasswordInput.value);
+            checkPasswordMatch();
+        });
+    }
+    
+    if (confirmPasswordInput) {
+        confirmPasswordInput.addEventListener('input', checkPasswordMatch);
+    }
+    
+    // Enter key handler
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const loginModal = document.getElementById('loginModal');
+            if (!loginModal?.classList.contains('active')) return;
+            
+            const firstAccess = isFirstAccess();
+            if (firstAccess) {
+                const confirmBtn = document.getElementById('confirmChangePasswordBtn');
+                if (confirmBtn && !confirmBtn.disabled) {
+                    processPasswordChange();
+                }
+            } else {
+                processLogin();
+            }
+        }
+    });
+}
+
+// Verifica e gerencia fluxo de login
+function checkLoginFlow() {
+    const accepted = localStorage.getItem('smartfinance_disclaimer_accepted') === 'true';
+    if (!accepted) return;
+    
+    // Após aceitar disclaimer e antes de mostrar quote, verifica login
+    const splash = document.getElementById('splashScreen');
+    if (!splash || splash.classList.contains('fade-out')) {
+        openLoginModal();
+    }
+}
+
+// Sobrescreve startApp para verificar login primeiro
+const originalStartApp = window.startApp;
+window.startApp = function() {
+    const quote = document.getElementById('quoteModal');
+    const main = document.getElementById('mainApp');
+    if (quote) { quote.classList.remove('active'); quote.style.display = 'none'; }
+    if (main) main.style.display = 'block';
+};
+
+// Modifica showQuoteModal para abrir login primeiro
+const originalShowQuoteModal = window.showQuoteModal;
+window.showQuoteModal = function() {
+    const accepted = localStorage.getItem('smartfinance_disclaimer_accepted') === 'true';
+    if (accepted) {
+        openLoginModal();
+    }
+};
 
 })();

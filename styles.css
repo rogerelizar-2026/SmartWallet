@@ -2698,3 +2698,49 @@ textarea:focus-visible {
         content: '← deslize →';
     }
 }
+
+/* ===== LOGIN MODAL STYLES ===== */
+#loginModal .modal-content {
+    max-width: 500px;
+}
+
+#firstAccessWarning {
+    animation: slideDown 0.3s ease;
+}
+
+#passwordStrengthIndicator {
+    transition: all 0.3s ease;
+}
+
+#strengthBar {
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+#passwordMatchMessage {
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+#loginModal input[type="password"] {
+    font-size: 1rem;
+}
+
+#loginModal .btn-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+}
+
+#loginModal .btn-success:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+#loginModal .btn-success:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#loginModal code {
+    font-family: 'Courier New', monospace;
+    font-weight: 700;
+}

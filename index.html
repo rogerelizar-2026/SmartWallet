@@ -114,6 +114,78 @@ if ('serviceWorker' in navigator) {
         </div>
     </div>
 
+    <!-- Login/Password Setup Modal -->
+    <div class="modal fullscreen" id="loginModal" role="dialog" aria-modal="true" tabindex="-1">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2 id="loginModalTitle">🔐 Configurar Senha de Acesso</h2>
+            </div>
+            <div class="modal-body">
+                <div id="firstAccessWarning" style="display: none; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="color: #92400e; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                        ⚠️ PRIMEIRO ACESSO - ATENÇÃO
+                    </h3>
+                    <p style="color: #78350f; margin-bottom: 12px; line-height: 1.6;">
+                        Esta é a configuração inicial da sua senha de acesso. Por favor, leia cuidadosamente:
+                    </p>
+                    <ul style="color: #78350f; margin-bottom: 12px; padding-left: 20px; line-height: 1.8;">
+                        <li><strong>A senha padrão é: <code style="background: #fffbeb; padding: 2px 8px; border-radius: 4px;">132435</code></strong></li>
+                        <li>Você DEVE alterar esta senha agora por segurança.</li>
+                        <li>A nova senha precisa ser confirmada.</li>
+                    </ul>
+                    <div style="background: #fee2e2; border: 2px solid #ef4444; padding: 15px; border-radius: 6px; margin-top: 15px;">
+                        <p style="color: #b91c1c; margin: 0; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                            🚨 IMPORTANTE: NÃO HÁ RECUPERAÇÃO DE SENHA
+                        </p>
+                        <p style="color: #991b1b; margin: 8px 0 0 0; font-size: 0.9em;">
+                            • Você deve MEMORIZAR esta senha<br>
+                            • Você deve ARMAZENAR esta senha em local seguro<br>
+                            • Não existe outra forma de recuperar o acesso em caso de perda<br>
+                            • Se esquecer a senha, perderá todos os dados armazenados
+                        </p>
+                    </div>
+                </div>
+
+                <div id="loginForm">
+                    <div class="form-group">
+                        <label for="currentPassword">Senha Atual</label>
+                        <input type="password" id="currentPassword" placeholder="Digite sua senha atual" autocomplete="current-password">
+                    </div>
+                </div>
+
+                <div id="changePasswordForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="newPassword">Nova Senha</label>
+                        <input type="password" id="newPassword" placeholder="Digite sua nova senha" autocomplete="new-password">
+                        <div id="passwordStrengthIndicator" style="margin-top: 8px; display: none;">
+                            <div style="height: 4px; background: #e5e7eb; border-radius: 2px; overflow: hidden;">
+                                <div id="strengthBar" style="height: 100%; width: 0%; transition: all 0.3s;"></div>
+                            </div>
+                            <p id="strengthText" style="font-size: 0.85em; margin-top: 4px;"></p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmar Nova Senha</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirme sua nova senha" autocomplete="new-password">
+                        <p id="passwordMatchMessage" style="font-size: 0.85em; margin-top: 4px;"></p>
+                    </div>
+
+                    <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 12px; border-radius: 6px; margin-top: 15px;">
+                        <p style="color: #92400e; margin: 0; font-size: 0.9em; display: flex; align-items: center; gap: 8px;">
+                            ⚠️ Lembre-se: Não há recuperação de senha. Memorize e armazene com segurança!
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelLoginBtn" style="display: none;">Cancelar</button>
+                <button class="btn btn-primary" id="submitLoginBtn">Entrar</button>
+                <button class="btn btn-success" id="confirmChangePasswordBtn" style="display: none;">Confirmar Alteração</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Container Principal -->
     <div class="container" id="mainApp" role="main">
         <header class="app-header">
