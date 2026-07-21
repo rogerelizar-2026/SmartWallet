@@ -169,15 +169,15 @@ O Smart Finance já vem com **22 categorias pré-configuradas** para organizar s
 
 | Categoria | Descrição | Cor |
 |-----------|-----------|-----|
-| 🏠 Casa | Aluguel, condomínio, IPTU, luz, água, gás | Laranja |
+| 🏠 Casa | Móveis, utensilios, ferramentas, eletrodomesticos,  | Laranja |
 | 🛒 Despensa | Mercado, feira, padaria, açougue | Verde água |
 | 🚗 Transporte | Uber, combustível, estacionamento, pedágio | Laranja avermelhado |
 | 🏥 Saúde | Farmácia, médico, dentista, plano de saúde | Vermelho |
-| 📚 Educação | Curso, faculdade, escola, livros | Azul |
-| 💇 Cuidados Pessoais | Salão, barbearia, academia, estética | Rosa |
-| 📱 Serviços | Assinaturas, streaming, celular | Roxo claro |
-| 🎉 Lazer | Cinema, viagem, show, restaurante, iFood | Rosa avermelhado |
-| 🐾 Pets | Veterinário, ração, petshop | Roxo |
+| 📚 Educação | Curso, faculdade, escola, livros, jornais | Azul |
+| 💇 Cuidados Pessoais | Barbearia, cosmeticos, academia, roupas | Rosa |
+| 📱 Serviços | Água, luz, internet, gás, celular | Roxo claro |
+| 🎉 Lazer | Cinema, viagem, show, restaurante, streaming | Rosa avermelhado |
+| 🐾 Pets | Veterinário, ração, higienicos | Roxo |
 | 🏦 Instituição Financeira | Tarifas bancárias, taxas, IOF | Índigo |
 | 📄 Documento/Jurídico | Cartório, advogado, multas | Cinza azulado |
 | 💸 Empréstimo | Empréstimos e financiamentos | Magenta |
