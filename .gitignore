@@ -1,1 +1,31 @@
-(js/modules/README.md, js/modules/constants.js, js/modules/crypto.js, js/modules/index.js, js/modules/smartfinance.js, js/modules/utils.js)
+```
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Environment
+.env
+.env.local
+.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# Dependencies
+.venv/
+venv/
+__pycache__/
+node_modules/
+
+# Build artifacts
+dist/
+build/
+target/
+*.pyc
+
+# System files
+.DS_Store
+Thumbs.db
+```

@@ -1,318 +1,353 @@
-# 💰 Smart Finance
+# 📘 Smart Finance - Controle Financeiro Pessoal Inteligente
 
-> **Controle financeiro pessoal inteligente — 100% offline, seguro e gratuito.**
+[![Version](https://img.shields.io/badge/version-2.0.2-blue.svg)](https://github.com/RogerElizar/smart-finance/releases)
+[![License](https://img.shields.io/badge/license-CC0-lightgrey.svg)](LICENSE)
+[![PT-BR](https://img.shields.io/badge/lang-pt--BR-green.svg)](README.md)
+[![EN-US](https://img.shields.io/badge/lang-en--US-red.svg)](README-EN.md)
 
-![Versão](https://img.shields.io/badge/versão-2.0.2-6366f1?style=for-the-badge)
-![PWA](https://img.shields.io/badge/PWA-Sim-10b981?style=for-the-badge)
-![Offline](https://img.shields.io/badge/Offline-100%25-06b6d4?style=for-the-badge)
-![Licença](https://img.shields.io/badge/licença-Gratuita-f59e0b?style=for-the-badge)
-
-<p align="center">
-  <img src="logomarca.svg" alt="Smart Finance" width="320">
-</p>
-
-<p align="center">
-  <em>"Suas finanças sob seu domínio!"</em>
-</p>
+**Smart Finance** é um aplicativo web progressivo (PWA) desenvolvido para ajudar você a organizar suas finanças pessoais de forma simples, segura e inteligente. **100% offline**, sem necessidade de cadastro ou instalação de servidores.
 
 ---
 
-## 🎯 Sobre o Projeto
+## 🌟 Principais Funcionalidades
 
-O **Smart Finance** é uma aplicação web progressiva (PWA) desenvolvida para ajudar você a organizar suas finanças pessoais de forma simples, visual e inteligente. Funciona **100% offline** — todos os dados ficam no seu dispositivo, sem necessidade de cadastro, servidor ou rastreamento.
-
-✨ Idealizado e desenvolvido por **RogerElizar™**
-
----
-
-## 🚀 Principais Funcionalidades
-
-### 💼 Gestão Completa
-- ✅ **Múltiplas contas** (corrente, poupança, investimento)
-- ✅ **Cartões de crédito** com controle de fatura, fechamento e vencimento
-- ✅ **Aplicações financeiras** (CDB, Tesouro, LCI/LCA, FIIs, Ações, etc.)
-- ✅ **Transferências** entre contas
-- ✅ **Transações recorrentes** e parceladas
+### 💰 Gestão Completa de Contas
+- **Múltiplas contas correntes**: Banco Itaú, Nubank, Caixa, etc.
+- **Contas de investimento**: Reserve e acompanhe seus investimentos
+- **Cartões de crédito**: Cadastre múltiplos cartões com datas de fechamento e vencimento personalizadas
+- **Transferências**: Movimente dinheiro entre suas contas facilmente
 
 ### 📊 Visualizações Inteligentes
-- 📈 Gráfico de **Entradas e Saídas** (6 meses)
-- 🥧 Gráfico de **Despesas por Categoria**
-- 💳 Gráfico de **Uso dos Cartões**
-- 💰 Gráfico **Waterfall** (Fluxo de Caixa acumulado)
-- 📊 Evolução dos **Investimentos** com rendimento %
+- **Dashboard completo**: Saldo unificado, receitas, despesas e acumulado de cartão de crédito
+- **Gráficos interativos**: Pizza, barras e linhas com Chart.js
+- **Projeção financeira**: Previsão do próximo mês baseada em despesas recorrentes e parcelas
+- **Orçamento por categoria**: Defina limites de gastos e acompanhe seu progresso
 
-### 🔔 Produtividade
-- 🔔 **Alertas de contas a vencer** (até 3 dias)
-- 🔔 **Notificações push** do navegador
-- 📅 **Projeção do próximo mês** (média móvel)
-- 📊 **Orçamento por categoria** com comparativo à média
-- 🎯 **Meta de reserva** com cálculo de aporte
+### 🎯 Planejamento Financeiro
+- **Metas de reserva**: Calcule quanto tempo levará para atingir sua reserva de emergência
+- **Despesas parceladas**: Registre compras em até 48x e acompanhe automaticamente
+- **Despesas recorrentes**: Automatize lançamentos mensais fixos
+- **Contas a vencer**: Alertas visuais para pagamentos próximos
 
-### 🛡️ Segurança & Privacidade
-- 🔒 **100% offline** — dados nunca saem do dispositivo
-- 🚫 **Sem cadastro**, sem e-mail, sem cookies de analytics
-- 🔐 **Backup criptografado** (AES-256-GCM + PBKDF2)
-- 👁️ **Modo privacidade** (ofusca valores com blur)
-- 🗑️ **Apagar todos os dados** com confirmação em duas etapas
+### 🔒 Segurança e Privacidade
+- **100% Offline**: Todos os dados são armazenados localmente no seu dispositivo
+- **Sem cadastro**: Não é necessário criar conta ou fornecer e-mail
+- **Sem rastreamento**: Não utilizamos cookies de analytics ou rastreamento
+- **Backup criptografado**: Exporte e importe seus dados com segurança
+- **Modo privacidade**: Oculte valores sensíveis quando necessário
 
-### 📱 Experiência
-- 📲 **Instalável como app** (PWA)
-- 🌓 **Tema claro e escuro**
-- 🌎 **Português (BR) e Inglês (US)**
-- 💵 Moeda em **Real (R$) e Dólar ($)**
-- 👆 **Swipe gestures** no mobile (deslize para pagar/excluir)
-- ⌨️ **Atalhos de teclado** (← → para navegar meses)
-- 📄 **Paginação** configurável (10/20/50/100 itens)
-
-### 📥 Importação & Exportação
-- 📥 Importar/Exportar **CSV** (extrato mensal)
-- 💾 Backup/Restauração **JSON** (com ou sem senha)
-- 🖨️ Impressão de **extrato em PDF**
-- 🖨️ Impressão de **fatura do cartão em PDF**
-- 📘 **Manual do usuário** integrado
+### 📱 Experiência do Usuário
+- **PWA (Progressive Web App)**: Instale como aplicativo nativo no seu dispositivo
+- **Design responsivo**: Funciona perfeitamente em desktop, tablet e mobile
+- **Temas personalizáveis**: Claro, escuro e nas cores da bandeira do seu cartão
+- **Multi-idioma**: Português (BR) e Inglês (US)
+- **Atalhos de teclado**: Produtividade máxima com comandos rápidos
+- **Gestos mobile**: Swipe para editar e excluir lançamentos
 
 ---
 
-## 🛠️ Tecnologias
+## 🚀 Tecnologias Utilizadas
 
-| Tecnologia | Uso |
-|------------|-----|
-| **HTML5 + CSS3** | Estrutura e design glassmorphism |
-| **JavaScript (ES6+)** | Lógica principal (classe `SmartFinance`) |
-| **Chart.js 4.4** | Gráficos interativos |
-| **LocalStorage** | Persistência dos dados |
-| **Web Crypto API** | Criptografia AES-256 dos backups |
-| **Service Worker** | Cache offline (PWA) |
-| **File System Access API** | Download moderno no desktop |
+- **HTML5** - Estrutura semântica e acessível
+- **CSS3** - Estilização moderna com variáveis CSS e Flexbox/Grid
+- **JavaScript (ES6+)** - Lógica de negócio e manipulação do DOM
+- **Chart.js 4.4.0** - Gráficos interativos e responsivos
+- **LocalStorage** - Armazenamento local de dados
+- **Service Worker** - Funcionamento offline e cache
+- **Web App Manifest** - Instalação como PWA
+- **Google Fonts (Inter)** - Tipografia moderna e legível
 
 ---
 
-## 📂 Estrutura do Projeto
+## 📁 Estrutura do Projeto
 
 ```
 smart-finance/
-├── index.html          # Estrutura HTML + modais
-├── styles.css          # Estilos (glassmorphism, responsivo)
+├── index.html              # Aplicação principal
+├── index.min.html          # Versão otimizada
+├── styles.css              # Folha de estilos completa
+├── styles.min.css          # Versão minificada
 ├── js/
-│   └── app.js          # Lógica principal (classe SmartFinance)
-├── sw.js               # Service Worker (cache offline)
-├── manifest.json       # Configuração PWA
-├── logomarca.svg       # Logo completa (ícone + texto)
-├── logo.svg            # Ícone do app
-├── favicon.svg         # Favicon
-└── README.md           # Este arquivo
+│   ├── app.js              # Lógica principal da aplicação
+│   └── app.min.js          # Versão minificada
+├── sw.js                   # Service Worker (offline)
+├── sw.min.js               # Service Worker minificado
+├── manifest.json           # Configuração PWA
+├── favicon.svg             # Ícone do aplicativo
+├── logo.svg                # Logomarca
+├── logomarca.svg           # Logomarca alternativa
+├── README.md               # Este arquivo (Português)
+├── README-EN.md            # README em Inglês
+├── CHANGELOG.md            # Histórico de versões
+├── LICENSE                 # Licença CC0 1.0
+└── ManualDoUsuário-SmartFinance.md  # Manual completo
 ```
 
 ---
 
-## 📥 Instalação
+## 📦 Instalação
 
 ### Opção 1: Uso Local (Recomendado)
+1. **Baixe os arquivos** deste repositório
+2. **Extraia** para uma pasta no seu computador
+3. **Abra** o arquivo `index.html` em seu navegador preferido
+4. **Instale como PWA** (opcional):
+   - No Chrome/Edge: Clique no ícone de instalação na barra de endereços
+   - No Safari (iOS): Toque em "Compartilhar" → "Adicionar à Tela de Início"
 
-1. **Clone ou baixe** o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/smart-finance.git
-   cd smart-finance
-   ```
+### Opção 2: Hospedagem Gratuita
+Você pode hospedar gratuitamente em:
+- **GitHub Pages**: Ative nas configurações do repositório
+- **Netlify**: Arraste a pasta para [netlify.com](https://netlify.com)
+- **Vercel**: Importe o repositório em [vercel.com](https://vercel.com)
 
-2. **Sirva via HTTP** (Service Worker exige protocolo seguro):
-   ```bash
-   # Com Python
-   python -m http.server 8000
-
-   # Com Node.js (npx)
-   npx serve .
-
-   # Com PHP
-   php -S localhost:8000
-   ```
-
-3. Acesse `http://localhost:8000` no navegador.
-
-4. **Instale como app**: clique no ícone de instalação na barra de endereço.
-
-### Opção 2: Hospedagem
-
-Faça upload dos arquivos para qualquer hospedagem estática:
-- **GitHub Pages** (gratuito)
-- **Netlify** / **Vercel** (gratuito)
-- **Cloudflare Pages** (gratuito)
-
-> ⚠️ **Importante:** Service Workers exigem HTTPS ou `localhost`.
+### Requisitos do Sistema
+- **Navegadores suportados**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+- **Armazenamento**: Mínimo de 5MB livres no navegador
+- **Conexão**: Apenas para carregamento inicial (funciona offline após)
 
 ---
 
-## 🎮 Como Usar
+## 🎯 Primeiros Passos
 
-### 🚀 Primeiros Passos
+### 1️⃣ Configurando Suas Contas
+Antes de registrar transações, cadastre suas contas:
 
-1. **Leia e aceite** os Termos de Uso na primeira abertura.
-2. **Cadastre suas contas** (Menu → Minhas Contas).
-3. **Cadastre seus cartões** (Menu → Meus Cartões) — opcional.
-4. **Adicione transações** usando o botão flutuante `+`.
-5. **Acompanhe** tudo no Dashboard e nos gráficos!
+1. Clique em **"Minhas Contas"** no menu inferior
+2. Toque em **"➕ Nova Conta"**
+3. Preencha:
+   - **Nome**: Ex: "Banco Itaú", "Nubank", "Carteira"
+   - **Tipo**: Conta Corrente ou Investimento
+   - **Saldo Inicial**: Valor atual na conta
+4. Clique em **"💾 Salvar"**
 
-### 💡 Dica: Modo Demonstração
+### 2️⃣ Cadastrando Cartões de Crédito
+1. Acesse **"Meus Cartões"** no menu
+2. Clique em **"➕ Novo Cartão"**
+3. Informe:
+   - **Nome**: Ex: "Inter Black"
+   - **Bandeira**: Visa, Mastercard, etc.
+   - **Dia de Fechamento**: Quando a fatura fecha
+   - **Dia de Vencimento**: Quando você paga a fatura
+   - **Limite**: Limite total do cartão
+4. Salve as configurações
 
-Quer testar sem cadastrar nada? No menu **ⓘ Informações → Modo Demonstração**, o app carrega dados fictícios de 6 meses para você explorar todas as funcionalidades.
+### 3️⃣ Registrando Sua Primeira Transação
+No topo da página, use os botões coloridos:
 
-### ⌨️ Atalhos de Teclado
+- **💰 Receita**: Salários, rendimentos, vendas
+- **💸 Despesa**: Compras, contas, lazer
+- **🔄 Transferência**: Movimentação entre contas
 
-| Tecla | Ação |
-|-------|------|
-| `←` | Mês anterior |
-| `→` | Próximo mês |
-| `Home` | Volta ao mês atual |
-| `Esc` | Fecha modal ativo |
-
-### 📱 Gestos no Mobile
-
-- **Deslize para a direita** em uma transação → Marcar como paga
-- **Deslize para a esquerda** → Excluir transação
-- **Deslize horizontalmente** na tabela → Navegar entre meses
-
----
-
-## 🔐 Backup & Segurança
-
-### Fazer Backup
-1. Vá em **⚙️ Configurações → 💾 Backup Automático**
-2. Ative "Fazer Agora" ou aguarde o lembrete semanal
-3. Opcionalmente, marque **"Proteger com senha"** (AES-256)
-4. Guarde o arquivo `.json` em local seguro
-
-### Restaurar Backup
-1. Menu → **Restaurar Backup**
-2. Selecione o arquivo `.json`
-3. Se protegido, digite a senha
-4. Confirme a substituição dos dados
-
-> ⚠️ **Atenção:** A restauração **substitui todos os dados atuais**. Faça backup antes!
+**Exemplo de despesa no cartão:**
+```
+Tipo: 💸 Despesa
+Valor: R$ 1.200,00 (valor total)
+Descrição: Geladeira
+Cartão: Inter
+Parcelado: ✓ (4x de R$ 300,00)
+```
 
 ---
 
-## 🧩 Categorias Padrão
+## ⌨️ Atalhos de Teclado (Desktop)
 
-O app já vem com **23 categorias** pré-configuradas:
-
-**Despesas:** Casa, Despensa, Transporte, Saúde, Educação, Cuidados Pessoais, Serviços, Lazer, Pets, Instituição Financeira, Documento/Jurídico, Empréstimo, Doação/Generosidade, Reserva/Aplicação
-
-**Receitas:** Salário, Vale Alimentação, Auxílios, Benefícios, Restituição, Freelance, Rendimentos, Resgate
-
-💡 Você pode **criar categorias personalizadas** e o app **sugere automaticamente** com base na descrição (ex.: digitar "uber" sugere "Transporte").
-
----
-
-## 🌍 Internacionalização
-
-| Idioma | Moeda | Código |
-|--------|-------|--------|
-| Português (BR) | Real (R$) | `pt-BR` / `BRL` |
-| English (US) | Dollar ($) | `en-US` / `USD` |
-
-Troque no menu **ⓘ Informações → Idioma / Moeda**.
+| Atalho | Ação |
+|--------|------|
+| `Ctrl + N` | Nova receita |
+| `Ctrl + D` | Nova despesa |
+| `Ctrl + T` | Nova transferência |
+| `Ctrl + S` | Salvar formulário |
+| `Ctrl + F` | Buscar transações |
+| `Esc` | Fechar modal |
+| `F1` | Abrir ajuda |
 
 ---
 
-## 📱 Compatibilidade
+## 📱 Gestos Mobile
 
-| Navegador | Suporte |
-|-----------|---------|
-| Chrome / Edge 90+ | ✅ Completo |
-| Firefox 90+ | ✅ Completo |
-| Safari 15+ | ✅ Completo |
-| Samsung Internet | ✅ Completo |
-| iOS Safari | ✅ Funcional (PWA limitado) |
+- **Swipe para esquerda**: Excluir lançamento
+- **Swipe para direita**: Editar lançamento
+- **Toque longo**: Selecionar múltiplos itens
+- **Pull to refresh**: Atualizar dashboard
+
+---
+
+## 🗂️ Backup e Segurança
+
+### Exportar Dados
+1. Acesse **Configurações** ⚙️
+2. Clique em **"Exportar Dados"**
+3. Baixe o arquivo `.json` criptografado
+4. Guarde em local seguro (nuvem, HD externo)
+
+### Importar Dados
+1. Em **Configurações** ⚙️
+2. Selecione **"Importar Dados"**
+3. Escolha o arquivo `.json` de backup
+4. Confirme a importação
+
+### ⚠️ Importante
+- **Backup regular**: Exporte seus dados semanalmente
+- **Responsabilidade**: Os dados são armazenados apenas no seu dispositivo
+- **Limpeza do navegador**: Pode apagar todos os dados se não houver backup
+
+---
+
+## 🏷️ Categorias Padrão
+
+### Receitas
+- Salário
+- Rendimentos
+- Vendas
+- Presentes
+- Outros
+
+### Despesas
+- Alimentação
+- Moradia
+- Transporte
+- Saúde
+- Educação
+- Lazer
+- Vestuário
+- Serviços
+- Outros
+
+*Você pode criar categorias personalizadas em Configurações.*
+
+---
+
+## 🌐 Internacionalização (i18n)
+
+O Smart Finance está disponível em:
+
+- **🇧🇷 Português (Brasil)** - Idioma padrão
+- **🇺🇸 English (United States)** - [Switch to English](README-EN.md)
+
+Para alterar o idioma:
+1. Acesse **Configurações** ⚙️
+2. Em **Idioma**, selecione sua preferência
+3. A interface será atualizada automaticamente
+
+---
+
+## 🔧 Compatibilidade com Navegadores
+
+| Navegador | Versão Mínima | Status |
+|-----------|---------------|--------|
+| Google Chrome | 90+ | ✅ Completo |
+| Mozilla Firefox | 88+ | ✅ Completo |
+| Microsoft Edge | 90+ | ✅ Completo |
+| Apple Safari | 14+ | ✅ Completo |
+| Opera | 76+ | ✅ Completo |
+| Samsung Internet | 14+ | ✅ Completo |
 
 ---
 
 ## 🤝 Contribuindo
 
-Contribuições são bem-vindas! Sinta-se à vontade para:
-- 🐛 Reportar bugs
-- 💡 Sugerir novas funcionalidades
-- 🔧 Enviar pull requests
-- 🌐 Traduzir para outros idiomas
+Contribuições são bem-vindas! Para contribuir:
+
+1. Faça um **fork** do projeto
+2. Crie uma **branch** para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Faça o **commit** das mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Faça o **push** para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um **Pull Request**
+
+### Diretrizes de Desenvolvimento
+- Mantenha o código limpo e comentado
+- Siga o padrão ES6+ do JavaScript
+- Teste em múltiplos navegadores
+- Documente novas funcionalidades
+- Respeite a licença CC0 1.0
 
 ---
 
 ## 📄 Licença
 
-Este projeto é **gratuito para uso pessoal**.
+Este projeto está sob a licença **Creative Commons CC0 1.0 Universal**.
 
-© 2026 **RogerElizar™** — Todos os direitos reservados.
+Isso significa que você pode:
+- ✅ Usar para qualquer finalidade (pessoal ou comercial)
+- ✅ Modificar e distribuir
+- ✅ Usar sem atribuição (embora apreciemos créditos)
 
-> *"Toda boa dádiva e todo dom perfeito vêm do alto, descendo do Pai das luzes."* — Tiago 1:17
-
----
-
-## ☕ Apoie o Projeto
-
-Se o Smart Finance tem sido útil para você, que tal um cafezinho?
-
-💚 **Chave PIX:** `rogerelizar@gmail.com`
+Para mais detalhes, consulte o arquivo [LICENSE](LICENSE).
 
 ---
 
-## 📧 Contato
+## 👨‍💻 Autor e Contato
 
-- 📧 **E-mail:** [rogerelizar@gmail.com](mailto:rogerelizar@gmail.com)
-- 💡 **Feedback:** Envie sugestões, críticas ou ideias!
+**Smart Finance** foi idealizado e desenvolvido por **RogerElizar™**
 
----
-
-<p align="center">
-  <strong>Feito com 💜 por RogerElizar™</strong><br>
-  <em>Que Deus abençoe sua jornada financeira.</em>
-</p>
-## 📄 Changelog
-
-### v2.0.1 - 2026
-**🎨 Melhorias de Interface e Experiência do Usuário**
-
-**Adicionado:**
-- ✅ **Sequência de Inicialização Otimizada:**
-  1. Splash Screen exibida por 3 segundos
-  2. Disclaimer aparece e desaparece ao clicar em "OK"
-  3. Citação motivacional exibida por 3 segundos
-  4. Dashboard é carregada
-
-**Alterado:**
-- ✅ **Barra Flutuante:** Adicionada linha azul clara fina no contorno superior para destaque
-
-**Corrigido:**
-- ✅ **Botão "OK":** Diminuído para tamanho mais compacto (80px max-width)
-- ✅ **Indicador Numérico do Sino:** Agora aparece apenas quando há contas a vencer; caso contrário, apenas o sino fica visível
+- **E-mail**: rogerelizar@gmail.com
+- **GitHub**: [@RogerElizar](https://github.com/RogerElizar)
 
 ---
 
-### v2.0.0 - 2026
-**🎨 Melhorias de Interface e Experiência do Usuário**
-- ✅ **Botão Disclaimer:** Texto alterado de "Aceitar e continuar" para "OK"
-- ✅ **Layout do Disclaimer:** Botão movido para o final do texto, ao lado direito da checkbox
-- ✅ **Minificação de Assets:** Performance otimizada com arquivos minificados
-  - `app.min.js`: 229KB → 142KB (38% redução)
-  - `styles.min.css`: 64KB → 48KB (25% redução)
-  - `sw.min.js`: 5.2KB → 2.4KB (54% redução)
-  - `index.min.html`: 59KB → 47KB (21% redução)
-- ✅ **Build Script:** `optimize.sh` para regenerar arquivos minificados
+## 🆘 Suporte e Dúvidas
 
-**Total de economia: ~120KB (33% de redução)**
+### Precisa de Ajuda?
+1. Consulte o [Manual do Usuário](ManualDoUsuário-SmartFinance.md)
+2. Verifique o [CHANGELOG](CHANGELOG.md) para novidades
+3. Entre em contato por e-mail: rogerelizar@gmail.com
+
+### Problemas Técnicos?
+- Limpe o cache do navegador
+- Verifique se o JavaScript está habilitado
+- Tente abrir em modo anônimo/incógnito
+- Atualize para a versão mais recente
+
+---
+
+## 📈 Roadmap (Próximas Versões)
+
+- [ ] Relatórios personalizados em PDF
+- [ ] Integração com APIs bancárias (Open Banking)
+- [ ] Notificações push para contas a vencer
+- [ ] Modo multi-usuário (família)
+- [ ] Exportação para planilhas Excel/CSV
+- [ ] Gráficos de evolução patrimonial
+- [ ] Sugestões de economia baseadas em IA
 
 ---
 
-### v1.0.0 - 2026
-**Lançamento Inicial**
-- ✅ Controle financeiro pessoal completo
-- ✅ Múltiplas contas e cartões de crédito
-- ✅ Aplicações financeiras
-- ✅ Gráficos interativos com Chart.js
-- ✅ Backup criptografado (AES-256)
-- ✅ Modo offline (PWA)
-- ✅ Internacionalização (pt-BR / en-US)
-- ✅ Temas claro e escuro
-- ✅ Modo privacidade
-- ✅ Notificações push
-- ✅ Importação/Exportação CSV e JSON
+## 🙏 Agradecimentos
+
+- **Chart.js** - Biblioteca de gráficos open-source
+- **Google Fonts** - Tipografia Inter
+- **Comunidade Dev** - Por todo suporte e inspiração
 
 ---
+
+## ⚠️ Aviso Legal
+
+**Smart Finance** é uma ferramenta de apoio ao controle financeiro pessoal e **não substitui consultoria financeira profissional**.
+
+- Todas as decisões financeiras são de responsabilidade exclusiva do usuário
+- O desenvolvedor não se responsabiliza por perdas ou danos decorrentes do uso da aplicação
+- É responsabilidade do usuário manter backups regulares de seus dados
+- A aplicação não possui vínculo com instituições financeiras mencionadas
+
+---
+
+## 📝 Changelog
+
+Para visualizar todas as alterações entre versões, consulte o arquivo [CHANGELOG.md](CHANGELOG.md).
+
+**Versão Atual**: 2.0.2
+- ✨ eBook Manual do Usuário em HTML5
+- 🎨 Melhorias de interface e experiência
+- 📊 Novos gráficos e visualizações
+- 🔒 Aprimoramentos de segurança
+
+---
+
+<div align="center">
+
+**Smart Finance © 2026** - Desenvolvido com ❤️ por RogerElizar™
+
+[⬆️ Voltar ao topo](#-smart-finance---controle-financeiro-pessoal-inteligente)
+
+</div>
