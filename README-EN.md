@@ -1,61 +1,46 @@
-# 📘 Smart Finance - Intelligent Personal Finance Manager
+# 💰 Smart Finance
 
-[![Version](https://img.shields.io/badge/version-2.0.2-blue.svg)](https://github.com/RogerElizar/smart-finance/releases)
-[![License](https://img.shields.io/badge/license-CC0-lightgrey.svg)](LICENSE)
-[![PT-BR](https://img.shields.io/badge/lang-pt--BR-green.svg)](README.md)
-[![EN-US](https://img.shields.io/badge/lang-en--US-red.svg)](README-EN.md)
+[![Version](https://img.shields.io/badge/version-2.0.3-blue)](CHANGELOG.md)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Languages](https://img.shields.io/badge/languages-pt--BR%7Cen--US-yellow)](README.md)
+[![PWA](https://img.shields.io/badge/PWA-ready-orange)]()
 
-**Smart Finance** is a Progressive Web App (PWA) designed to help you organize your personal finances in a simple, secure, and intelligent way. **100% offline**, no registration or server installation required.
-
----
-
-## 🌟 Key Features
-
-### 💰 Complete Account Management
-- **Multiple checking accounts**: Bank of America, Chase, Wells Fargo, etc.
-- **Investment accounts**: Reserve and track your investments
-- **Credit cards**: Register multiple cards with custom closing and due dates
-- **Transfers**: Move money between your accounts easily
-
-### 📊 Smart Visualizations
-- **Complete dashboard**: Unified balance, income, expenses, and credit card totals
-- **Interactive charts**: Pie, bar, and line charts with Chart.js
-- **Financial projection**: Next month forecast based on recurring expenses and installments
-- **Budget by category**: Set spending limits and track your progress
-
-### 🎯 Financial Planning
-- **Savings goals**: Calculate how long it will take to reach your emergency fund
-- **Installment expenses**: Record purchases up to 48x and track automatically
-- **Recurring expenses**: Automate fixed monthly entries
-- **Due date alerts**: Visual warnings for upcoming payments
-
-### 🔒 Security and Privacy
-- **100% Offline**: All data is stored locally on your device
-- **No registration**: No need to create an account or provide email
-- **No tracking**: We don't use analytics cookies or tracking
-- **Encrypted backup**: Export and import your data securely
-- **Privacy mode**: Hide sensitive values when needed
-
-### 📱 User Experience
-- **PWA (Progressive Web App)**: Install as a native app on your device
-- **Responsive design**: Works perfectly on desktop, tablet, and mobile
-- **Customizable themes**: Light, dark, and colors matching your card brand
-- **Multi-language**: Portuguese (BR) and English (US)
-- **Keyboard shortcuts**: Maximum productivity with quick commands
-- **Mobile gestures**: Swipe to edit and delete entries
+> **Your personal finance assistant - Simple, secure, and offline**
 
 ---
 
-## 🚀 Technologies Used
+## 📖 About the Project
 
-- **HTML5** - Semantic and accessible structure
-- **CSS3** - Modern styling with CSS variables and Flexbox/Grid
-- **JavaScript (ES6+)** - Business logic and DOM manipulation
-- **Chart.js 4.4.0** - Interactive and responsive charts
-- **LocalStorage** - Local data storage
-- **Service Worker** - Offline functionality and caching
-- **Web App Manifest** - PWA installation
-- **Google Fonts (Inter)** - Modern and readable typography
+**Smart Finance** is a Progressive Web App (PWA) designed to help you manage your personal finances in a simple, secure, and efficient way. It works completely offline, protects your data with encryption, and offers a modern experience on any device.
+
+### ✨ Key Features
+
+- 📊 **Complete Account Management** - Register checking accounts, investments, and credit cards
+- 💹 **Income & Expense Tracking** - Record all your financial transactions
+- 📈 **Interactive Charts** - Visualize your spending and income with Chart.js
+- 🔐 **Advanced Security** - 256-bit AES-GCM encryption to protect your data
+- 📱 **100% Offline** - Works without internet using IndexedDB and Service Workers
+- 🌙 **Dark Mode** - Modern interface with light/dark theme
+- 🔄 **Automatic Backup** - Easily export and import your data
+- 📅 **Recurring Transactions** - Automate periodic entries
+- 💳 **Smart Installments** - Track credit card installment purchases
+- 🔍 **Advanced Search** - Filter transactions by description, category, amount, and date
+- 🌐 **Multi-language** - Portuguese (BR), English (US), and Spanish (ES)
+
+---
+
+## 🛠️ Technologies Used
+
+| Technology | Purpose |
+|------------|---------|
+| HTML5 | Semantic structure |
+| CSS3 | Styling and responsiveness |
+| JavaScript (ES6+) | Application logic |
+| Chart.js 4.x | Interactive charts |
+| IndexedDB | Local storage |
+| Service Worker | Offline functionality |
+| Web Crypto API | Data encryption |
+| Manifest.json | PWA installation |
 
 ---
 
@@ -63,199 +48,236 @@
 
 ```
 smart-finance/
-├── index.html              # Main application
-├── index.min.html          # Optimized version
-├── styles.css              # Complete stylesheet
-├── styles.min.css          # Minified version
-├── js/
-│   ├── app.js              # Main application logic
-│   └── app.min.js          # Minified version
-├── sw.js                   # Service Worker (offline)
-├── sw.min.js               # Minified Service Worker
+├── index.html              # Main page
 ├── manifest.json           # PWA configuration
-├── favicon.svg             # App icon
-├── logo.svg                # Logo
-├── logomarca.svg           # Alternative logo
-├── README.md               # README in Portuguese
-├── README-EN.md            # This file (English)
-├── CHANGELOG.md            # Version history
-├── LICENSE                 # CC0 1.0 License
-└── ManualDoUsuário-SmartFinance.md  # Complete manual
+├── sw.js                   # Service Worker
+├── css/
+│   └── style.css          # Stylesheets
+├── js/
+│   ├── app.js             # Main application
+│   └── modules/
+│       ├── constants.js   # Constants and categories
+│       ├── crypto.js      # Encryption module
+│       ├── smartfinance.js # Financial logic
+│       └── utils.js       # Utility functions
+├── README.md              # Portuguese version
+├── README-EN.md           # This file (EN-US)
+├── CHANGELOG.md           # Version history
+├── LICENSE                # MIT License
+└── USER_MANUAL.md         # Complete user guide
 ```
 
 ---
 
-## 📦 Installation
+## 🚀 Installation
 
 ### Option 1: Local Use (Recommended)
-1. **Download the files** from this repository
-2. **Extract** to a folder on your computer
-3. **Open** the `index.html` file in your preferred browser
-4. **Install as PWA** (optional):
-   - On Chrome/Edge: Click the install icon in the address bar
-   - On Safari (iOS): Tap "Share" → "Add to Home Screen"
+
+1. **Clone or download the repository**
+   ```bash
+   git clone https://github.com/your-username/smart-finance.git
+   cd smart-finance
+   ```
+
+2. **Open directly in browser**
+   - Simply open the `index.html` file in any modern browser
+   - The app will work immediately, even without a web server
+
+3. **Install as PWA (Optional)**
+   - Chrome/Edge: Click the install icon in the address bar
+   - Safari (iOS): Tap "Share" → "Add to Home Screen"
+   - Firefox: Menu → "App" → "Install"
 
 ### Option 2: Free Hosting
-You can host for free on:
-- **GitHub Pages**: Enable in repository settings
-- **Netlify**: Drag the folder to [netlify.com](https://netlify.com)
-- **Vercel**: Import the repository at [vercel.com](https://vercel.com)
 
-### System Requirements
-- **Supported browsers**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- **Storage**: Minimum 5MB free space in browser
-- **Connection**: Only for initial loading (works offline afterwards)
+Smart Finance can be hosted for free on:
 
----
+- **[GitHub Pages](https://pages.github.com/)**
+  ```bash
+  # Enable GitHub Pages in repository settings
+  ```
 
-## 🎯 Getting Started
+- **[Vercel](https://vercel.com/)**
+  ```bash
+  npm install -g vercel
+  vercel deploy
+  ```
 
-### 1️⃣ Setting Up Your Accounts
-Before registering transactions, set up your accounts:
+- **[Netlify](https://netlify.com/)**
+  - Drag the project folder to the Netlify dashboard
 
-1. Click **"My Accounts"** in the bottom menu
-2. Tap **"➕ New Account"**
-3. Fill in:
-   - **Name**: Ex: "Bank of America", "Chase", "Wallet"
-   - **Type**: Checking or Investment
-   - **Initial Balance**: Current amount in the account
-4. Click **"💾 Save"**
-
-### 2️⃣ Registering Credit Cards
-1. Go to **"My Cards"** in the menu
-2. Click **"➕ New Card"**
-3. Provide:
-   - **Name**: Ex: "Chase Sapphire"
-   - **Brand**: Visa, Mastercard, etc.
-   - **Closing Day**: When the statement closes
-   - **Due Day**: When you pay the bill
-   - **Limit**: Total card limit
-4. Save the settings
-
-### 3️⃣ Recording Your First Transaction
-At the top of the page, use the colored buttons:
-
-- **💰 Income**: Salaries, earnings, sales
-- **💸 Expense**: Purchases, bills, leisure
-- **🔄 Transfer**: Movement between accounts
-
-**Example of credit card expense:**
-```
-Type: 💸 Expense
-Amount: $1,200.00 (total value)
-Description: Refrigerator
-Card: Chase
-Installments: ✓ (4x of $300.00)
-```
+- **[Firebase Hosting](https://firebase.google.com/docs/hosting)**
+  ```bash
+  npm install -g firebase-tools
+  firebase login
+  firebase init hosting
+  firebase deploy
+  ```
 
 ---
 
-## ⌨️ Keyboard Shortcuts (Desktop)
+## 📖 Getting Started
+
+### 1️⃣ Initial Setup
+
+When opening the app for the first time:
+
+1. **Set your currency** (default: USD - US Dollar)
+2. **Register your accounts**:
+   - Checking Account (initial balance)
+   - Investments (if any)
+   - Credit Cards (with limit and closing date)
+
+### 2️⃣ Add Transactions
+
+- Click **"+ New Transaction"**
+- Fill in:
+  - **Description**: Ex: "Grocery Store", "Salary"
+  - **Amount**: $500.00
+  - **Category**: Select from the list (see below)
+  - **Account**: Where the transaction occurred
+  - **Date**: Transaction date
+  - **Payment Method**: PIX, Debit, Credit, etc.
+
+### 3️⃣ Track Your Results
+
+- **Dashboard**: Monthly overview
+- **Charts**: Distribution by category
+- **Statements**: Complete transaction list
+- **Reports**: Balance by period
+
+---
+
+## 📋 Default Categories
+
+Smart Finance comes with **22 pre-configured categories** to organize your finances:
+
+### 🟢 Income (8 categories)
+
+| Category | Description | Color |
+|----------|-------------|-------|
+| 💼 Salary | Formal employment income | Green |
+| 🎫 Meal Allowance | Meal vouchers, benefits | Yellow |
+| 🤝 Assistance | Grants and scholarships | Turquoise |
+| 🎁 Benefits | Bonuses, rewards | Light Blue |
+| 💰 Refunds | Tax refunds, returns | Pink |
+| 💻 Freelance | Freelance work | Orange |
+| 📈 Earnings | Interest, dividends | Purple |
+| 🏦 Withdrawals | Investment/reserve withdrawals | Indigo |
+
+### 🔴 Expenses (14 categories)
+
+| Category | Description | Color |
+|----------|-------------|-------|
+| 🏠 Housing | Rent, HOA, property tax, electricity, water, gas | Orange |
+| 🛒 Groceries | Supermarket, farmers market, bakery, butcher | Teal |
+| 🚗 Transportation | Uber, fuel, parking, tolls | Reddish Orange |
+| 🏥 Healthcare | Pharmacy, doctor, dentist, health insurance | Red |
+| 📚 Education | Courses, college, school, books | Blue |
+| 💇 Personal Care | Salon, barbershop, gym, spa | Pink |
+| 📱 Services | Subscriptions, streaming, phone | Light Purple |
+| 🎉 Leisure | Movies, travel, shows, restaurants, food delivery | Rose |
+| 🐾 Pets | Vet, pet food, pet shop | Purple |
+| 🏦 Financial Institution | Bank fees, charges, IOF | Indigo |
+| 📄 Document/Legal | Notary, lawyer, fines | Blue Gray |
+| 💸 Loans | Loans and financing | Magenta |
+| ❤️ Donation/Generosity | Donations, tithes, offerings | Lime Green |
+| 💎 Savings/Investment | Investments, savings, CDs, treasury | Cyan |
+
+> **Tip:** The system uses keywords for automatic categorization. For example, "Uber" will automatically be classified as **Transportation**.
+
+---
+
+## ⌨️ Keyboard Shortcuts
 
 | Shortcut | Action |
 |----------|--------|
-| `Ctrl + N` | New income |
-| `Ctrl + D` | New expense |
-| `Ctrl + T` | New transfer |
-| `Ctrl + S` | Save form |
+| `Ctrl + N` | New transaction |
+| `Ctrl + S` | Save transaction |
 | `Ctrl + F` | Search transactions |
+| `Ctrl + D` | Toggle dark mode |
 | `Esc` | Close modal |
-| `F1` | Open help |
+| `Enter` | Confirm action |
 
 ---
 
-## 📱 Mobile Gestures
+## 📱 Mobile Gestures (Touch)
 
-- **Swipe left**: Delete entry
-- **Swipe right**: Edit entry
-- **Long press**: Select multiple items
-- **Pull to refresh**: Update dashboard
-
----
-
-## 🗂️ Backup and Security
-
-### Export Data
-1. Go to **Settings** ⚙️
-2. Click **"Export Data"**
-3. Download the encrypted `.json` file
-4. Store in a safe location (cloud, external drive)
-
-### Import Data
-1. In **Settings** ⚙️
-2. Select **"Import Data"**
-3. Choose the backup `.json` file
-4. Confirm the import
-
-### ⚠️ Important
-- **Regular backup**: Export your data weekly
-- **Responsibility**: Data is stored only on your device
-- **Browser cleanup**: May erase all data if there's no backup
+| Gesture | Action |
+|---------|--------|
+| 👆 Single tap | Select item |
+| 👆👆 Double tap | Edit item |
+| ➡️ Swipe right | Mark as paid/received |
+| ⬅️ Swipe left | Delete item |
+| ⬇️ Pull down | Refresh list |
 
 ---
 
-## 🏷️ Default Categories
+## 🔐 Backup & Security
 
-Smart Finance comes pre-configured with intelligent categories to make your financial organization easier. You can customize or create new categories in **Settings**.
+### Data Encryption
 
-### 📥 Income
-| Category | Description |
-|----------|-------------|
-| 💰 Salary | Monthly remuneration for work |
-| 🍽️ Meal Allowance | Meal benefit provided by employer |
-| 🤝 Assistance | Various assistance (transportation, housing, etc.) |
-| 🎁 Benefits | Other benefits and bonuses |
-| 📄 Refund | Tax refunds or refunded values |
-| 💼 Freelance | Earnings from freelance/autonomous work |
-| 📈 Earnings | Interest, dividends, and investment returns |
-| 💵 Withdrawal (invest/savings) | Withdrawals from financial applications or savings |
+- Your data is encrypted locally using **256-bit AES-GCM**
+- The encryption key is derived from your password using **PBKDF2**
+- No data is sent to external servers
 
-### 📤 Expenses
-| Category | Description |
-|----------|-------------|
-| 🏠 Home | Rent, condominium, property tax, electricity, water, gas, internet |
-| 🛒 Groceries | Market, supermarket, grocery store, produce, bakery, butcher |
-| 🚗 Transportation | Uber, 99, fuel, gasoline, alcohol, parking, tolls, bus, subway |
-| 🏥 Health | Pharmacy, medicines, doctor, consultation, health insurance, dentist, hospital |
-| 📚 Education | Tuition, courses, books, school supplies |
-| 💅 Personal Care | Hairdresser, barber, aesthetics, hygiene products |
-| 🔧 Services | Repairs, maintenance, general services |
-| 🎉 Leisure | Cinema, theater, shows, outings, trips |
-| 🐾 Pets | Pet food, veterinarian, grooming, pet accessories |
-| 🏦 Financial Institution | Bank fees, charges, IOF taxes |
-| 📋 Document/Legal | Documents, notary, lawyers, legal proceedings |
-| 💸 Loan | Loan and financing payments |
-| ❤️ Donation/Generosity | Donations, contributions, helping others |
-| 🎯 Savings/Application | Contributions to emergency fund or investments |
+### Data Backup
 
-*You can create custom categories in Settings.*
+1. **Export Backup**:
+   - Go to **Settings** → **Backup**
+   - Click **"Export Data"**
+   - Save the `.json` file in a secure location
+
+2. **Import Backup**:
+   - Go to **Settings** → **Backup**
+   - Click **"Import Data"**
+   - Select the `.json` backup file
+
+> **Important:** Make regular backups and store them in secure locations (cloud, external drive, etc.)
+
+### Access Password
+
+- Set a strong password on first use
+- Use a combination of letters, numbers, and symbols
+- Never share your password
 
 ---
 
 ## 🌐 Internationalization (i18n)
 
-Smart Finance is available in:
+Smart Finance supports multiple languages:
 
-- **🇧🇷 Português (Brasil)** - Default language
-- **🇺🇸 English (United States)** - [Mudar para Português](README.md)
+| Language | Code | Status |
+|----------|------|--------|
+| Portuguese (Brazil) | pt-BR | ✅ Complete |
+| English (US) | en-US | ✅ Complete |
+| Spanish (Spain) | es-ES | ✅ Complete |
 
 To change the language:
-1. Go to **Settings** ⚙️
-2. Under **Language**, select your preference
-3. The interface will update automatically
+1. Go to **Settings**
+2. Select **Language**
+3. Choose your preferred language
+4. The interface will update automatically
 
 ---
 
-## 🔧 Browser Compatibility
+## 🖥️ Browser Compatibility
 
 | Browser | Minimum Version | Status |
 |---------|-----------------|--------|
-| Google Chrome | 90+ | ✅ Full |
-| Mozilla Firefox | 88+ | ✅ Full |
-| Microsoft Edge | 90+ | ✅ Full |
-| Apple Safari | 14+ | ✅ Full |
-| Opera | 76+ | ✅ Full |
-| Samsung Internet | 14+ | ✅ Full |
+| Google Chrome | 80+ | ✅ Full |
+| Mozilla Firefox | 75+ | ✅ Full |
+| Microsoft Edge | 80+ | ✅ Full |
+| Safari | 14+ | ✅ Full |
+| Opera | 70+ | ✅ Full |
+| Samsung Internet | 13+ | ✅ Full |
+
+### Technical Requirements
+
+- **ES6+** support (modern JavaScript)
+- **IndexedDB** for storage
+- **Service Workers** for offline functionality
+- **Web Crypto API** for encryption
 
 ---
 
@@ -263,105 +285,93 @@ To change the language:
 
 Contributions are welcome! To contribute:
 
-1. **Fork** the project
-2. Create a **branch** for your feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+1. **Fork** the repository
+2. Create a branch for your feature (`git checkout -b feature/new-feature`)
+3. Commit your changes (`git commit -am 'Add new feature'`)
+4. Push to the branch (`git push origin feature/new-feature`)
 5. Open a **Pull Request**
 
-### Development Guidelines
-- Keep code clean and commented
-- Follow ES6+ JavaScript standards
+### Contribution Guidelines
+
+- Keep code clean and documented
+- Follow the existing code standard
 - Test on multiple browsers
-- Document new features
-- Respect the CC0 1.0 license
+- Update documentation if needed
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **Creative Commons CC0 1.0 Universal**.
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
-This means you can:
-- ✅ Use for any purpose (personal or commercial)
-- ✅ Modify and distribute
-- ✅ Use without attribution (though we appreciate credits)
+You can:
+- ✅ Use for personal purposes
+- ✅ Use for commercial purposes
+- ✅ Modify the code
+- ✅ Distribute copies
 
-For more details, see the [LICENSE](LICENSE) file.
-
----
-
-## 👨‍💻 Author and Contact
-
-**Smart Finance** was conceived and developed by **RogerElizar™**
-
-- **Email**: rogerelizar@gmail.com
-- **GitHub**: [@RogerElizar](https://github.com/RogerElizar)
+As long as you maintain the original copyright notice.
 
 ---
 
-## 🆘 Support and Questions
+## 📞 Contact & Support
 
-### Need Help?
-1. Check the [User Manual](ManualDoUsuário-SmartFinance.md)
-2. Review the [CHANGELOG](CHANGELOG.md) for updates
-3. Contact via email: rogerelizar@gmail.com
+- **📧 Email**: support@smartfinance.app (example)
+- **💬 Issues**: [GitHub Issues](https://github.com/your-username/smart-finance/issues)
+- **📖 Documentation**: See the [User Manual](USER_MANUAL.md)
 
-### Technical Issues?
-- Clear browser cache
-- Make sure JavaScript is enabled
-- Try opening in incognito/private mode
-- Update to the latest version
+### Help Resources
+
+- [Complete User Manual](USER_MANUAL.md)
+- [Change History](CHANGELOG.md)
+- [Frequently Asked Questions (FAQ)](FAQ.md)
 
 ---
 
-## 📈 Roadmap (Upcoming Versions)
+## 🗺️ Roadmap
 
-- [ ] Custom PDF reports
-- [ ] Integration with banking APIs (Open Banking)
-- [ ] Push notifications for due bills
-- [ ] Multi-user mode (family)
-- [ ] Export to Excel/CSV spreadsheets
-- [ ] Wealth evolution charts
-- [ ] AI-based savings suggestions
+### ✅ Version 2.0 (Current)
+- Data encryption
+- Multi-language support
+- Smart categories
+- Dark mode
+- Complete PWA
+
+### 🚧 Upcoming Versions
+- [ ] PDF reports
+- [ ] Open Finance integration (read-only)
+- [ ] Financial goals
+- [ ] Budget by category
+- [ ] Push notifications
+- [ ] Cloud sync (optional)
 
 ---
 
 ## 🙏 Acknowledgments
 
-- **Chart.js** - Open-source chart library
-- **Google Fonts** - Inter typography
-- **Dev Community** - For all support and inspiration
+- [Chart.js](https://www.chartjs.org/) - Chart library
+- [Font Awesome](https://fontawesome.com/) - Icons
+- Open-source developer community
 
 ---
 
-## ⚠️ Legal Disclaimer
+## ⚠️ Disclaimer
 
-**Smart Finance** is a personal financial control support tool and **does not replace professional financial advice**.
+Smart Finance is provided "as is", without warranties of any kind. While we implement robust security measures, we recommend:
 
-- All financial decisions are the sole responsibility of the user
-- The developer is not liable for losses or damages resulting from the use of the application
-- It is the user's responsibility to maintain regular backups of their data
-- The application has no affiliation with mentioned financial institutions
+- Making regular backups of your data
+- Using strong, unique passwords
+- Keeping your browser up to date
+- Not sharing your access password
 
----
-
-## 📝 Changelog
-
-To view all changes between versions, see the [CHANGELOG.md](CHANGELOG.md) file.
-
-**Current Version**: 2.0.2
-- ✨ HTML5 User Manual eBook
-- 🎨 Interface and experience improvements
-- 📊 New charts and visualizations
-- 🔒 Security enhancements
+This app does not connect to financial institutions and does not perform real banking transactions. It is a personal financial management tool.
 
 ---
 
 <div align="center">
 
-**Smart Finance © 2026** - Developed with ❤️ by RogerElizar™
+**Like the project?** ⭐ Leave a star on the repository!
 
-[⬆️ Back to top](#-smart-finance---intelligent-personal-finance-manager)
+[Back to top](#-smart-finance)
 
 </div>

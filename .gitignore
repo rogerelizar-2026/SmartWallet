@@ -1,1 +1,3 @@
-Nothing needs to be added to .gitignore since only markdown files (README-EN.md, README.md) were modified, which are source/config files and not build artifacts, dependencies, or temporary files.
+Nothing should be ignored in this case, as the changes only include documentation files (.md) which are source content and not build artifacts, dependencies, or temporary files.
+
+Output: (empty)
