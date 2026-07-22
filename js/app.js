@@ -3131,13 +3131,25 @@ class SmartFinance {
     importCsv() {
         if (!window._pendingCsvData) { this.showToast('Selecione um arquivo Csv'); return; }
         const replace = document.getElementById('csvReplaceData').checked;
-        const lines = window._pendingCsvData.split(/\r?\n/).filter(l => l.trim());
+        
+        // Normaliza as quebras de linha antes de dividir
+        const normalizedText = window._pendingCsvData.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        const lines = normalizedText.split('\n').filter(l => l.trim());
+        
         if (lines.length < 2) { this.showToast('❌ Csv vazio: encontrei apenas ' + lines.length + ' linha(s) com conteúdo'); return; }
+        
+        console.log('Total de linhas no CSV:', lines.length);
+        console.log('Primeiras 3 linhas:', lines.slice(0, 3));
+        
         // Procura a linha de cabeçalho real (o arquivo exportado tem título e período antes dela)
         let headerIndex = -1;
         for (let i = 0; i < lines.length; i++) {
             const l = lines[i].toLowerCase();
-            if (l.indexOf('data') !== -1 && l.indexOf('valor') !== -1) { headerIndex = i; break; }
+            if (l.indexOf('data') !== -1 && l.indexOf('valor') !== -1) { 
+                headerIndex = i; 
+                console.log('Cabeçalho encontrado na linha', i, ':', lines[i]);
+                break; 
+            }
         }
         if (headerIndex === -1) {
             const hasData = lines.some(l => l.toLowerCase().indexOf('data') !== -1);
@@ -3156,6 +3168,7 @@ class SmartFinance {
         let skipped = 0;
         for (let i = headerIndex + 1; i < lines.length; i++) {
             const cols = this.parseCsvLine(lines[i]);
+            console.log('Linha', i, 'parseada:', cols);
             if (cols.length < 2) { skipped++; continue; }
             
             // Extrai os campos com valores padrão caso estejam ausentes
@@ -3168,11 +3181,20 @@ class SmartFinance {
             const valor = cols[6] || cols[1] || '';
             
             // Validação mínima: precisa ter data e valor
-            if (!date || !valor) { skipped++; continue; }
+            if (!date || !valor) { 
+                console.log('Linha ignorada - falta data ou valor:', cols);
+                skipped++; 
+                continue; 
+            }
             
             const category = this.findCategoryByName(catName);
-            const amount = parseFloat(String(valor).replace(',', '.'));
-            if (isNaN(amount)) { skipped++; continue; }
+            const amountStr = String(valor).replace(/\./g, '').replace(',', '.'); // Remove pontos de milhar e converte decimal
+            const amount = parseFloat(amountStr);
+            if (isNaN(amount)) { 
+                console.log('Linha ignorada - valor inválido:', valor, '->', amountStr);
+                skipped++; 
+                continue; 
+            }
             const signedAmount = tipo.toLowerCase().indexOf('despesa') !== -1 ? -Math.abs(amount) : Math.abs(amount);
             let paymentMethod = 'pix';
             const payLower = (payment || '').toLowerCase();
@@ -3209,12 +3231,32 @@ class SmartFinance {
         const result = [];
         let current = '';
         let inQuotes = false;
+        
+        // Detecta o separador: verifica se a linha contém ';' fora de aspas
+        let separator = ';';
+        let hasSemicolon = false;
+        let hasComma = false;
+        for (let i = 0; i < line.length; i++) {
+            const c = line[i];
+            if (c === '"') {
+                inQuotes = !inQuotes;
+            } else if (!inQuotes) {
+                if (c === ';') hasSemicolon = true;
+                if (c === ',') hasComma = true;
+            }
+        }
+        // Se não tem ponto-e-vírgula mas tem vírgula, usa vírgula como separador
+        if (!hasSemicolon && hasComma) {
+            separator = ',';
+        }
+        
+        inQuotes = false;
         for (let i = 0; i < line.length; i++) {
             const c = line[i];
             if (c === '"') {
                 if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
                 else { inQuotes = !inQuotes; }
-            } else if (c === ';' && !inQuotes) {
+            } else if (c === separator && !inQuotes) {
                 result.push(current.trim());
                 current = '';
             } else {
@@ -4365,10 +4407,36 @@ window.handleCsvFileSelect = function(event) {
         // 1. Pega o conteúdo do arquivo e remove o caractere fantasma (BOM) do início
         let text = e.target.result.replace(/^\uFEFF/, '');
         
-        // 2. Continua com o seu código de quebrar as linhas...
-        const lines = text.split('\n');
-        const headers = lines[0].split(','); // ou ';' dependendo do seu código
+        // 2. Normaliza as quebras de linha para \n
+        text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+        
         window._pendingCsvData = text;
+        
+        // 3. Validação preliminar: verifica se há cabeçalho válido
+        const lines = text.split('\n').filter(l => l.trim());
+        if (lines.length < 2) {
+            smartfinance.showToast('❌ CSV vazio ou inválido');
+            event.target.value = '';
+            return;
+        }
+        
+        // Procura a linha de cabeçalho
+        let headerFound = false;
+        for (let i = 0; i < Math.min(lines.length, 10); i++) {
+            const l = lines[i].toLowerCase();
+            if (l.indexOf('data') !== -1 && l.indexOf('valor') !== -1) {
+                headerFound = true;
+                break;
+            }
+        }
+        
+        if (!headerFound) {
+            smartfinance.showToast('⚠️ CSV não contém cabeçalho esperado (Data e Valor)');
+            event.target.value = '';
+            return;
+        }
+        
+        smartfinance.showToast('✅ Arquivo carregado! Clique em Importar para processar.');
     };
     reader.onerror = () => { alert('❌ Erro ao ler arquivo'); event.target.value = ''; };
     reader.readAsText(file, 'UTF-8');
