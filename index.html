@@ -123,25 +123,31 @@ if ('serviceWorker' in navigator) {
             <div class="modal-body">
                 <div id="firstAccessWarning" style="display: none; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
                     <h3 style="color: #92400e; margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-                        ⚠️ PRIMEIRO ACESSO - ATENÇÃO
+                        👤 PRIMEIRO ACESSO - CRIE SUA CONTA
                     </h3>
                     <p style="color: #78350f; margin-bottom: 12px; line-height: 1.6;">
-                        Esta é a configuração inicial da sua senha de acesso. Por favor, leia cuidadosamente:
+                        Bem-vindo ao Smart Finance! Para proteger seus dados financeiros, você precisa criar uma conta de acesso segura:
                     </p>
                     <ul style="color: #78350f; margin-bottom: 12px; padding-left: 20px; line-height: 1.8;">
-                        <li><strong>A senha padrão é: <code style="background: #fffbeb; padding: 2px 8px; border-radius: 4px;">132435</code></strong></li>
-                        <li>Você DEVE alterar esta senha agora por segurança.</li>
-                        <li>A nova senha precisa ser confirmada.</li>
+                        <li><strong>Nome de Usuário:</strong> Escolha um nome para identificar sua conta (mínimo 3 caracteres).</li>
+                        <li><strong>Senha Forte:</strong> Crie uma senha com pelo menos 6 caracteres, combinando letras, números e símbolos.</li>
+                        <li><strong>Dupla Verificação:</strong> Você precisará confirmar a senha digitando-a duas vezes.</li>
                     </ul>
-                    <div style="background: #fee2e2; border: 2px solid #ef4444; padding: 15px; border-radius: 6px; margin-top: 15px;">
-                        <p style="color: #b91c1c; margin: 0; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-                            🚨 IMPORTANTE: NÃO HÁ RECUPERAÇÃO DE SENHA
+                    <div style="background: #dbeafe; border: 2px solid #3b82f6; padding: 15px; border-radius: 6px; margin-top: 15px;">
+                        <p style="color: #1e40af; margin: 0; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                            🔒 POR QUE UMA SENHA FORTE É ESSENCIAL?
                         </p>
-                        <p style="color: #991b1b; margin: 8px 0 0 0; font-size: 0.9em;">
-                            • Você deve MEMORIZAR esta senha<br>
-                            • Você deve ARMAZENAR esta senha em local seguro<br>
-                            • Não existe outra forma de recuperar o acesso em caso de perda<br>
-                            • Se esquecer a senha, perderá todos os dados armazenados
+                        <p style="color: #1e3a8a; margin: 12px 0 0 0; font-size: 0.9em; line-height: 1.6;">
+                            Seus dados financeiros são extremamente sensíveis e pessoais. Uma senha forte garante que:
+                        </p>
+                        <ul style="color: #1e3a8a; margin: 8px 0 0 0; padding-left: 20px; font-size: 0.9em; line-height: 1.6;">
+                            <li><strong>Apenas VOCÊ tenha acesso</strong> às suas informações bancárias, saldos e transações.</li>
+                            <li><strong>Protege contra acessos não autorizados</strong> por familiares, amigos ou pessoas mal-intencionadas que possam usar seu dispositivo.</li>
+                            <li><strong>Mantém sua privacidade financeira</strong>, impedindo que outros vejam seus hábitos de gastos, dívidas ou investimentos.</li>
+                            <li><strong>Previne fraudes e manipulações</strong> dos seus registros financeiros.</li>
+                        </ul>
+                        <p style="color: #dc2626; margin: 12px 0 0 0; font-weight: 700; font-size: 0.95em;">
+                            ⚠️ LEMBRE-SE: Não há recuperação de senha! Se esquecer, perderá todos os dados. Memorize e armazene em local seguro.
                         </p>
                     </div>
                 </div>
@@ -154,6 +160,11 @@ if ('serviceWorker' in navigator) {
                 </div>
 
                 <div id="changePasswordForm" style="display: none;">
+                    <div class="form-group">
+                        <label for="username">Nome de Usuário</label>
+                        <input type="text" id="username" placeholder="Escolha um nome de usuário" autocomplete="username" style="display: block;">
+                    </div>
+                    
                     <div class="form-group">
                         <label for="newPassword">Nova Senha</label>
                         <input type="password" id="newPassword" placeholder="Digite sua nova senha" autocomplete="new-password">

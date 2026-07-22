@@ -4653,14 +4653,15 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 // ===== SISTEMA DE LOGIN E SENHA =====
-const DEFAULT_PASSWORD = '132435';
 const PASSWORD_STORAGE_KEY = 'smartfinance_access_password';
+const USERNAME_STORAGE_KEY = 'smartfinance_username';
 const PASSWORD_CHANGED_KEY = 'smartfinance_password_changed';
 
 // Verifica se é primeiro acesso
 function isFirstAccess() {
     const passwordChanged = localStorage.getItem(PASSWORD_CHANGED_KEY);
-    return passwordChanged !== 'true';
+    const username = localStorage.getItem(USERNAME_STORAGE_KEY);
+    return passwordChanged !== 'true' || !username;
 }
 
 // Valida força da senha
@@ -4732,8 +4733,9 @@ function updatePasswordStrengthIndicator(password) {
     strengthText.style.color = colors[result.strength];
 }
 
-// Verifica correspondência de senhas
+// Verifica correspondência de senhas e nome de usuário
 function checkPasswordMatch() {
+    const username = document.getElementById('username')?.value.trim() || '';
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     const matchMessage = document.getElementById('passwordMatchMessage');
@@ -4741,9 +4743,14 @@ function checkPasswordMatch() {
     
     if (!matchMessage || !confirmBtn) return;
     
-    if (!confirmPassword) {
-        matchMessage.textContent = '';
-        matchMessage.style.color = '';
+    // Verifica se nome de usuário é válido
+    const usernameValid = username.length >= 3;
+    
+    if (!confirmPassword || !usernameValid) {
+        if (!confirmPassword) {
+            matchMessage.textContent = '';
+            matchMessage.style.color = '';
+        }
         confirmBtn.disabled = true;
         return;
     }
@@ -4772,19 +4779,28 @@ function openLoginModal() {
     const confirmChangePasswordBtn = document.getElementById('confirmChangePasswordBtn');
     const cancelLoginBtn = document.getElementById('cancelLoginBtn');
     const currentPasswordInput = document.getElementById('currentPassword');
+    const usernameInput = document.getElementById('username');
+    const loginModalTitle = document.getElementById('loginModalTitle');
     
     if (!loginModal) return;
     
     const firstAccess = isFirstAccess();
     
     if (firstAccess) {
-        // Primeiro acesso - mostra aviso e formulário de troca
+        // Primeiro acesso - mostra aviso e formulário de cadastro com nome de usuário e senha dupla verificação
+        if (loginModalTitle) loginModalTitle.textContent = '👤 Criar Conta de Acesso';
         if (firstAccessWarning) firstAccessWarning.style.display = 'block';
         if (loginForm) loginForm.style.display = 'none';
         if (changePasswordForm) changePasswordForm.style.display = 'block';
         if (submitLoginBtn) submitLoginBtn.style.display = 'none';
         if (confirmChangePasswordBtn) confirmChangePasswordBtn.style.display = 'inline-block';
         if (cancelLoginBtn) cancelLoginBtn.style.display = 'none';
+        
+        // Mostra campo de nome de usuário
+        if (usernameInput) {
+            usernameInput.parentElement.style.display = 'block';
+            usernameInput.value = '';
+        }
         
         // Limpa campos
         if (document.getElementById('newPassword')) document.getElementById('newPassword').value = '';
@@ -4793,14 +4809,21 @@ function openLoginModal() {
         if (document.getElementById('confirmChangePasswordBtn')) {
             document.getElementById('confirmChangePasswordBtn').disabled = true;
         }
+        if (currentPasswordInput) currentPasswordInput.value = '';
     } else {
         // Acesso normal - mostra apenas campo de senha atual
+        if (loginModalTitle) loginModalTitle.textContent = '🔐 Senha de Acesso';
         if (firstAccessWarning) firstAccessWarning.style.display = 'none';
         if (loginForm) loginForm.style.display = 'block';
         if (changePasswordForm) changePasswordForm.style.display = 'none';
         if (submitLoginBtn) submitLoginBtn.style.display = 'inline-block';
         if (confirmChangePasswordBtn) confirmChangePasswordBtn.style.display = 'none';
         if (cancelLoginBtn) cancelLoginBtn.style.display = 'inline-block';
+        
+        // Esconde campo de nome de usuário
+        if (usernameInput) {
+            usernameInput.parentElement.style.display = 'none';
+        }
         
         // Limpa campo
         if (currentPasswordInput) currentPasswordInput.value = '';
@@ -4840,25 +4863,20 @@ function processLogin() {
     }
 }
 
-// Processa troca de senha no primeiro acesso
+// Processa troca de senha no primeiro acesso (agora cadastro de usuário e senha)
 function processPasswordChange() {
-    const currentPasswordInput = document.getElementById('currentPassword');
+    const usernameInput = document.getElementById('username');
     const newPasswordInput = document.getElementById('newPassword');
     const confirmPasswordInput = document.getElementById('confirmPassword');
     
-    const currentPassword = currentPasswordInput?.value || '';
+    const username = usernameInput?.value.trim() || '';
     const newPassword = newPasswordInput?.value || '';
     const confirmPassword = confirmPasswordInput?.value || '';
     
-    // Verifica senha atual (deve ser a padrão no primeiro acesso)
-    const storedPassword = localStorage.getItem(PASSWORD_STORAGE_KEY) || DEFAULT_PASSWORD;
-    
-    if (currentPassword !== storedPassword) {
-        smartfinance.showToast('❌ Senha atual incorreta!');
-        if (currentPasswordInput) {
-            currentPasswordInput.value = '';
-            currentPasswordInput.focus();
-        }
+    // Valida nome de usuário
+    if (!username || username.length < 3) {
+        smartfinance.showToast('❌ Nome de usuário deve ter pelo menos 3 caracteres!');
+        if (usernameInput) usernameInput.focus();
         return;
     }
     
@@ -4880,13 +4898,14 @@ function processPasswordChange() {
         return;
     }
     
-    // Salva nova senha
+    // Salva nome de usuário e nova senha
+    localStorage.setItem(USERNAME_STORAGE_KEY, username);
     localStorage.setItem(PASSWORD_STORAGE_KEY, newPassword);
     localStorage.setItem(PASSWORD_CHANGED_KEY, 'true');
     
     closeLoginModal();
     showQuoteModal();
-    smartfinance.showToast('✅ Senha alterada com sucesso! Lembre-se de memorizá-la.');
+    smartfinance.showToast(`✅ Conta criada para "${username}"! Lembre-se de memorizar sua senha.`);
 }
 
 // Inicializa sistema de login
@@ -4894,6 +4913,7 @@ function initLoginSystem() {
     const submitLoginBtn = document.getElementById('submitLoginBtn');
     const confirmChangePasswordBtn = document.getElementById('confirmChangePasswordBtn');
     const cancelLoginBtn = document.getElementById('cancelLoginBtn');
+    const usernameInput = document.getElementById('username');
     const newPasswordInput = document.getElementById('newPassword');
     const confirmPasswordInput = document.getElementById('confirmPassword');
     
@@ -4908,6 +4928,12 @@ function initLoginSystem() {
     
     if (cancelLoginBtn) {
         cancelLoginBtn.addEventListener('click', closeLoginModal);
+    }
+    
+    if (usernameInput) {
+        usernameInput.addEventListener('input', () => {
+            checkPasswordMatch();
+        });
     }
     
     if (newPasswordInput) {
