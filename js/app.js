@@ -1654,6 +1654,15 @@ class SmartFinance {
             const cardTrans = self.getCardTransactions(card.id);
             cardTrans.forEach(t => { creditCardTotal += Math.abs(t.amount); });
         });
+        
+        // Calcular soma das faturas para o próximo mês
+        let nextMonthFeesTotal = 0;
+        const nextMonthDate = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 1);
+        this.cards.forEach(card => {
+            const cardTrans = self.getCardTransactions(card.id, nextMonthDate);
+            cardTrans.forEach(t => { nextMonthFeesTotal += Math.abs(t.amount); });
+        });
+        
         const balEl = document.getElementById('totalBalance');
         if (balEl) {
             balEl.textContent = this.formatCurrency(unifiedBalance);
@@ -1663,6 +1672,14 @@ class SmartFinance {
         if (incEl) incEl.textContent = this.formatCurrency(inc);
         const expEl = document.getElementById('totalExpenses');
         if (expEl) expEl.textContent = this.formatCurrency(Math.abs(exp));
+        
+        // Atualizar card de Próx.Faturas
+        const nextMonthEl = document.getElementById('nextMonthFees');
+        if (nextMonthEl) {
+            nextMonthEl.textContent = this.formatCurrency(nextMonthFeesTotal);
+            nextMonthEl.className = 'card-value privacy-value negative';
+        }
+        
         this.updateProjection();
     }
 
