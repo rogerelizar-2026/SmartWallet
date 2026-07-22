@@ -3178,7 +3178,7 @@ class SmartFinance {
             const tipo = cols[3] || 'receita';
             const payment = cols[4] || '';
             const status = cols[5] || 'concluído';
-            const valor = cols[6] || cols[1] || '';
+            const valor = cols[6] || '';
             
             // Validação mínima: precisa ter data e valor
             if (!date || !valor) { 
@@ -3188,7 +3188,8 @@ class SmartFinance {
             }
             
             const category = this.findCategoryByName(catName);
-            const amountStr = String(valor).replace(/\./g, '').replace(',', '.'); // Remove pontos de milhar e converte decimal
+            // Remove pontos de milhar, converte vírgula decimal para ponto e remove qualquer caractere não numérico exceto . e -
+            const amountStr = String(valor).replace(/\./g, '').replace(',', '.').replace(/[^0-9.\-]/g, '');
             const amount = parseFloat(amountStr);
             if (isNaN(amount)) { 
                 console.log('Linha ignorada - valor inválido:', valor, '->', amountStr);
