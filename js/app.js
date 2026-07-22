@@ -4590,8 +4590,9 @@ window.acceptDisclaimer = function() {
         setTimeout(() => {
             disclaimer.classList.remove('active', 'disintegrating');
             disclaimer.style.display = 'none';
-            // 3. Após aceitar disclaimer, mostra citação por 3 segundos
-            showQuoteModal();
+            // 3. Após aceitar disclaimer, vai direto para tela de login/cadastro
+            initLoginSystem();
+            openLoginModal();
         }, 600);
     }
 };
@@ -4622,14 +4623,14 @@ window.addEventListener('load', () => {
     }
     
     setTimeout(() => {
-        // 2. Após 3s, mostra o Disclaimer (se não aceito) ou vai direto para citação
+        // 2. Após 3s, mostra o Disclaimer (se não aceito) ou vai direto para login/cadastro
         // A splash screen permanece visível no fundo até o usuário clicar em "Gerenciar Minhas Finanças"
         if (!accepted && disclaimer) {
             disclaimer.classList.add('active');
             disclaimer.style.display = 'flex';
             initDisclaimer();
         } else {
-            // Já aceitou, vai direto para citação
+            // Já aceitou o disclaimer, verifica se é primeiro acesso para cadastro ou login
             initLoginSystem();
             openLoginModal();
         }
