@@ -3140,11 +3140,22 @@ class SmartFinance {
         let skipped = 0;
         for (let i = headerIndex + 1; i < lines.length; i++) {
             const cols = this.parseCsvLine(lines[i]);
-            if (cols.length < 6) { skipped++; continue; }
-            const [date, desc, catName, tipo, payment, status, valor] = cols;
+            if (cols.length < 2) { skipped++; continue; }
+            
+            // Extrai os campos com valores padrão caso estejam ausentes
+            const date = cols[0] || '';
+            const desc = cols[1] || '';
+            const catName = cols[2] || '';
+            const tipo = cols[3] || 'receita';
+            const payment = cols[4] || '';
+            const status = cols[5] || 'concluído';
+            const valor = cols[6] || cols[1] || '';
+            
+            // Validação mínima: precisa ter data e valor
             if (!date || !valor) { skipped++; continue; }
+            
             const category = this.findCategoryByName(catName);
-            const amount = parseFloat(valor.replace(',', '.'));
+            const amount = parseFloat(String(valor).replace(',', '.'));
             if (isNaN(amount)) { skipped++; continue; }
             const signedAmount = tipo.toLowerCase().indexOf('despesa') !== -1 ? -Math.abs(amount) : Math.abs(amount);
             let paymentMethod = 'pix';
@@ -3156,7 +3167,7 @@ class SmartFinance {
             transactionsToAdd.push({
                 id: this.generateUniqueId(), date, amount: signedAmount,
                 category: category ? category.id : '', description: desc,
-                statusOk: status.toLowerCase().indexOf('conclu') !== -1,
+                statusOk: status.toLowerCase().indexOf('conclu') !== -1 || status.toLowerCase().indexOf('pend') === -1,
                 paymentMethod, accountId: ''
             });
         }
