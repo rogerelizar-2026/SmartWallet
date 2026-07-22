@@ -296,7 +296,17 @@
                 <button class="btn btn-primary" onclick="processLogin()">Entrar</button>
             </div>
 
-            <!-- Formulário de Troca de Senha (Primeiro Acesso) -->
+            <!-- Passo 1: Validar Senha Padrão (Primeiro Acesso) -->
+            <div id="defaultPasswordStep" class="hidden">
+                <div class="form-group password-toggle">
+                    <label for="defaultPassword">Senha Padrão</label>
+                    <input type="password" id="defaultPassword" placeholder="Digite a senha padrão (132435)" autocomplete="current-password">
+                    <span class="toggle-icon" onclick="togglePassword('defaultPassword')">👁️</span>
+                </div>
+                <button class="btn btn-primary" onclick="validateDefaultPassword()">Validar Senha</button>
+            </div>
+
+            <!-- Passo 2: Formulário de Troca de Senha (Primeiro Acesso) -->
             <div id="changePasswordForm" class="hidden">
                 <div class="form-group password-toggle">
                     <label for="newPassword">Nova Senha</label>
@@ -343,15 +353,18 @@
             const firstAccess = isFirstAccess();
             const firstAccessWarning = document.getElementById('firstAccessWarning');
             const loginForm = document.getElementById('loginForm');
+            const defaultPasswordStep = document.getElementById('defaultPasswordStep');
             const changePasswordForm = document.getElementById('changePasswordForm');
 
             if (firstAccess) {
                 firstAccessWarning.style.display = 'block';
                 loginForm.classList.add('hidden');
-                changePasswordForm.classList.remove('hidden');
+                defaultPasswordStep.classList.remove('hidden');
+                changePasswordForm.classList.add('hidden');
             } else {
                 firstAccessWarning.style.display = 'none';
                 loginForm.classList.remove('hidden');
+                defaultPasswordStep.classList.add('hidden');
                 changePasswordForm.classList.add('hidden');
             }
         }
@@ -458,6 +471,25 @@
                 showMessage('error', '❌ Senha incorreta! Tente novamente.');
                 currentPasswordInput.value = '';
                 currentPasswordInput.focus();
+            }
+        }
+
+        // Valida senha padrão no primeiro acesso
+        function validateDefaultPassword() {
+            const defaultPasswordInput = document.getElementById('defaultPassword');
+            const enteredPassword = defaultPasswordInput.value;
+
+            if (enteredPassword === DEFAULT_PASSWORD) {
+                // Senha padrão correta, mostra formulário de troca de senha
+                const defaultPasswordStep = document.getElementById('defaultPasswordStep');
+                const changePasswordForm = document.getElementById('changePasswordForm');
+                
+                defaultPasswordStep.classList.add('hidden');
+                changePasswordForm.classList.remove('hidden');
+            } else {
+                showMessage('error', '❌ Senha padrão incorreta! Digite a senha padrão: 132435');
+                defaultPasswordInput.value = '';
+                defaultPasswordInput.focus();
             }
         }
 
