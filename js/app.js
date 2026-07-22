@@ -4447,10 +4447,7 @@ function showQuoteModal() {
     if (quoteAuthor) quoteAuthor.textContent = '— ' + quote.author;
     const quoteModal = document.getElementById('quoteModal');
     quoteModal.classList.add('active');
-    // 4. Citação fica por 3 segundos e depois entra a dashboard
-    setTimeout(() => {
-        startApp();
-    }, 3000);
+    // A splash screen permanece no fundo até o usuário clicar no botão
 }
 
 window.acceptDisclaimer = function() {
@@ -4496,22 +4493,15 @@ window.addEventListener('load', () => {
     
     setTimeout(() => {
         // 2. Após 3s, mostra o Disclaimer (se não aceito) ou vai direto para citação
+        // A splash screen permanece visível no fundo até o usuário clicar em "Gerenciar Minhas Finanças"
         if (!accepted && disclaimer) {
-            splash.classList.add('fade-out');
-            setTimeout(() => {
-                splash.style.display = 'none';
-                disclaimer.classList.add('active');
-                disclaimer.style.display = 'flex';
-                initDisclaimer();
-            }, 800);
+            disclaimer.classList.add('active');
+            disclaimer.style.display = 'flex';
+            initDisclaimer();
         } else {
             // Já aceitou, vai direto para citação
-            splash.classList.add('fade-out');
-            setTimeout(() => {
-                splash.style.display = 'none';
-                initLoginSystem();
-                openLoginModal();
-            }, 800);
+            initLoginSystem();
+            openLoginModal();
         }
     }, 3000);
 });
@@ -4952,12 +4942,14 @@ function checkLoginFlow() {
     }
 }
 
-// Sobrescreve startApp para verificar login primeiro
+// Sobrescreve startApp para verificar login primeiro e esconder splash screen
 const originalStartApp = window.startApp;
 window.startApp = function() {
     const quote = document.getElementById('quoteModal');
     const main = document.getElementById('mainApp');
+    const splash = document.getElementById('splashScreen');
     if (quote) { quote.classList.remove('active'); quote.style.display = 'none'; }
+    if (splash) { splash.classList.add('fade-out'); setTimeout(() => { splash.style.display = 'none'; }, 800); }
     if (main) main.style.display = 'block';
 };
 
