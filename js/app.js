@@ -1664,7 +1664,6 @@ class SmartFinance {
         const expEl = document.getElementById('totalExpenses');
         if (expEl) expEl.textContent = this.formatCurrency(Math.abs(exp));
         this.updateProjection();
-        this.updateGoalDisplay();
     }
 
     // Projeção simples: média do saldo líquido (receitas - despesas) dos últimos 3 meses com dados,
