@@ -1,1 +1,1 @@
-Nothing needs to be added to .gitignore since the changes only include a markdown file (.md) and a shell script (.sh), which are source/config files and not build artifacts, dependencies, or temporary files.
+(login.html is a source file, so no files in the change list match the ignore patterns)
