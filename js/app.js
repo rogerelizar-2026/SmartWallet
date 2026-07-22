@@ -3188,15 +3188,49 @@ class SmartFinance {
             }
             
             const category = this.findCategoryByName(catName);
-            // Remove pontos de milhar, converte vírgula decimal para ponto e remove qualquer caractere não numérico exceto . e -
-            const amountStr = String(valor).replace(/\./g, '').replace(',', '.').replace(/[^0-9.\-]/g, '');
+            // Detectar formato do número: brasileiro (1.000,50) ou americano/inglês (-345.98)
+            let amountStr = String(valor).trim();
+            
+            // Verifica se tem vírgula como separador decimal (formato brasileiro)
+            if (amountStr.includes(',')) {
+                // Formato brasileiro: remove pontos de milhar, converte vírgula para ponto
+                amountStr = amountStr.replace(/\./g, '').replace(',', '.');
+            } else if (amountStr.includes('.') && amountStr.indexOf('.') !== 0) {
+                // Formato americano/inglês: mantém o ponto decimal, só remove caracteres inválidos
+                // Verifica se há múltiplos pontos (seria formato brasileiro sem vírgula)
+                const dotCount = (amountStr.match(/\./g) || []).length;
+                if (dotCount === 1) {
+                    // Único ponto = separador decimal (formato americano)
+                    // Não remove o ponto, apenas outros caracteres inválidos
+                } else {
+                    // Múltiplos pontos = separador de milhar (formato brasileiro incompleto)
+                    amountStr = amountStr.replace(/\./g, '');
+                }
+            }
+            
+            // Remove qualquer caractere que não seja dígito, ponto ou sinal negativo
+            amountStr = amountStr.replace(/[^0-9.\-]/g, '');
+            
             const amount = parseFloat(amountStr);
             if (isNaN(amount)) { 
                 console.log('Linha ignorada - valor inválido:', valor, '->', amountStr);
                 skipped++; 
                 continue; 
             }
-            const signedAmount = tipo.toLowerCase().indexOf('despesa') !== -1 ? -Math.abs(amount) : Math.abs(amount);
+            
+            // Se o valor já é negativo no CSV, mantém o sinal negativo
+            // Caso contrário, usa o campo "tipo" para determinar se é receita ou despesa
+            let signedAmount = amount;
+            if (valor.trim().startsWith('-')) {
+                // Valor já vem negativo no CSV
+                signedAmount = -Math.abs(amount);
+            } else if (tipo.toLowerCase().indexOf('despesa') !== -1) {
+                // Tipo indica despesa
+                signedAmount = -Math.abs(amount);
+            } else {
+                // Receita
+                signedAmount = Math.abs(amount);
+            }
             let paymentMethod = 'pix';
             const payLower = (payment || '').toLowerCase();
             if (payLower.indexOf('pix') !== -1) paymentMethod = 'pix';
