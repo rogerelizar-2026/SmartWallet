@@ -713,9 +713,6 @@ class SmartFinance {
             });
         }
 
-        const loadDemoFromEmptyBtn = document.getElementById('loadDemoFromEmptyBtn');
-        if (loadDemoFromEmptyBtn) loadDemoFromEmptyBtn.addEventListener('click', () => self.loadDemoData());
-
         const closeNegativeAlertBtn = document.getElementById('closeNegativeAlertBtn');
         if (closeNegativeAlertBtn) {
             closeNegativeAlertBtn.addEventListener('click', () => {
