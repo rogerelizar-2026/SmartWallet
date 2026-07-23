@@ -4259,7 +4259,16 @@ window.openClearDataModal = function() {
 };
 
 window.closeClearDataModal = function() { closeModal('clearDataModal'); };
-window.openAccountsModal = function() { smartfinance.renderAccountsList(); openModal('accountsModal'); closeAllDropdowns(); };
+window.openAccountsModal = function() { 
+    smartfinance.renderAccountsList(); 
+    // Se não houver nenhuma conta cadastrada, abre diretamente o modal de Nova Conta
+    if (!smartfinance.accounts || smartfinance.accounts.length === 0) {
+        openNewAccountModal();
+    } else {
+        openModal('accountsModal'); 
+    }
+    closeAllDropdowns(); 
+};
 window.closeAccountsModal = function() { closeModal('accountsModal'); };
 
 window.openNewAccountModal = function() {
