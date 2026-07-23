@@ -2030,9 +2030,19 @@ class SmartFinance {
             document.getElementById('editRecurringOptions').style.display = 'block';
             document.getElementById('editRecurrenceType').value = t.recurrence.type;
             document.getElementById('editRecurrenceCount').value = t.recurrence.total;
+            // Mostrar checkbox para alterar todos se for parte de uma série recorrente
+            const editAllCheckbox = document.getElementById('editAllRecurring');
+            if (editAllCheckbox) {
+                editAllCheckbox.parentElement.parentElement.style.display = 'block';
+                editAllCheckbox.checked = false;
+            }
         } else {
             document.getElementById('editRecurring').checked = false;
             document.getElementById('editRecurringOptions').style.display = 'none';
+            const editAllCheckbox = document.getElementById('editAllRecurring');
+            if (editAllCheckbox) {
+                editAllCheckbox.parentElement.parentElement.style.display = 'none';
+            }
         }
         document.querySelectorAll('#editForm .type-btn').forEach(b => {
             b.classList.toggle('active', b.getAttribute('data-type') === this.currentEditType);
@@ -2077,6 +2087,18 @@ class SmartFinance {
         const oldAmount = oldTransaction.amount;
         const oldAccountId = oldTransaction.accountId;
         const newAmount = this.currentEditType === 'expense' ? -Math.abs(amount) : Math.abs(amount);
+        
+        // Verificar se é transação recorrente e se deve alterar todas
+        const isRecurring = document.getElementById('editRecurring').checked;
+        const editAllRecurring = document.getElementById('editAllRecurring').checked;
+        
+        // Se for recorrente e usuário escolheu alterar todos
+        if (isRecurring && oldTransaction.recurrence && editAllRecurring) {
+            this.updateAllRecurringTransactions(oldTransaction, date, newAmount, category, paymentMethod, accountId);
+            return;
+        }
+        
+        // Edição única (comportamento original)
         if (oldAccountId) this.updateAccountBalance(oldAccountId, -oldAmount);
         if (this.settings.blockNegativeBalance && newAmount < 0) {
             const acc = this.getAccountById(accountId);
@@ -2089,7 +2111,6 @@ class SmartFinance {
                 }
             }
         }
-        const isRecurring = document.getElementById('editRecurring').checked;
         let recurrenceData = null;
         if (isRecurring) {
             const recurrenceType = document.getElementById('editRecurrenceType').value;
@@ -2108,6 +2129,112 @@ class SmartFinance {
         this.updateCharts(); this.updateAlertBadge();
         closeModal('editModal');
         this.showToast('✅ ' + this.t('transactionUpdated'));
+        this.checkNegativeBalance();
+    }
+    
+    updateAllRecurringTransactions(oldTransaction, newDate, newAmount, newCategory, newPaymentMethod, newAccountId) {
+        const groupId = oldTransaction.recurrence.groupId;
+        const recurrenceType = document.getElementById('editRecurrenceType').value;
+        const recurrenceCount = parseInt(document.getElementById('editRecurrenceCount').value);
+        const description = document.getElementById('editDescription').value;
+        const statusOk = document.getElementById('editStatusOk').checked;
+        
+        // Validar saldo negativo se necessário
+        if (this.settings.blockNegativeBalance && newAmount < 0) {
+            const acc = this.getAccountById(newAccountId);
+            if (acc) {
+                // Calcular impacto total nas contas
+                const recurringTrans = this.transactions.filter(t => 
+                    t.recurrence && t.recurrence.groupId === groupId
+                );
+                let totalImpact = 0;
+                recurringTrans.forEach(t => {
+                    if (t.accountId) totalImpact += newAmount;
+                });
+                const newBalance = (parseFloat(acc.balance) || 0) + totalImpact;
+                if (newBalance < 0) {
+                    this.showToast(this.t('negativeBalanceBlocked'));
+                    return;
+                }
+            }
+        }
+        
+        // Remover todas as transações antigas deste grupo e ajustar saldos
+        const oldRecurringTrans = this.transactions.filter(t => 
+            t.recurrence && t.recurrence.groupId === groupId
+        );
+        oldRecurringTrans.forEach(t => {
+            if (t.accountId) {
+                this.updateAccountBalance(t.accountId, -t.amount);
+            }
+        });
+        this.transactions = this.transactions.filter(t => 
+            !(t.recurrence && t.recurrence.groupId === groupId)
+        );
+        
+        // Criar novas transações com os dados atualizados
+        const startDate = this.parseDate(newDate);
+        const signedAmount = newAmount;
+        
+        for (let i = 0; i < recurrenceCount; i++) {
+            const transDate = new Date(startDate);
+            if (recurrenceType === 'monthly' || recurrenceType === 'installment') {
+                transDate.setMonth(startDate.getMonth() + i);
+                const lastDay = new Date(transDate.getFullYear(), transDate.getMonth() + 1, 0).getDate();
+                transDate.setDate(startDate.getDate() > lastDay ? lastDay : startDate.getDate());
+            } else if (recurrenceType === 'yearly') {
+                transDate.setFullYear(startDate.getFullYear() + i);
+                const lastDay = new Date(transDate.getFullYear(), transDate.getMonth() + 1, 0).getDate();
+                transDate.setDate(startDate.getDate() > lastDay ? lastDay : startDate.getDate());
+            }
+            
+            let transDescription = description;
+            if (recurrenceType === 'installment') {
+                transDescription = description + ' - Parcela ' + (i + 1) + '/' + recurrenceCount;
+            }
+            
+            const uniqueId = this.generateUniqueId() + '_' + i;
+            this.transactions.push({
+                id: uniqueId,
+                date: transDate.toISOString().split('T')[0],
+                amount: signedAmount,
+                category: newCategory,
+                description: transDescription,
+                statusOk: statusOk,
+                paymentMethod: newPaymentMethod,
+                accountId: newAccountId,
+                recurrence: {
+                    groupId: groupId,
+                    type: recurrenceType,
+                    total: recurrenceCount,
+                    current: i + 1
+                }
+            });
+        }
+        
+        // Atualizar saldo da conta com as transações do mês atual
+        const currentMonth = this.currentMonth.getMonth();
+        const currentYear = this.currentMonth.getFullYear();
+        const monthTrans = this.transactions.filter(t => {
+            if (t.accountId !== newAccountId) return false;
+            if (!t.recurrence || t.recurrence.groupId !== groupId) return false;
+            const d = this.parseDate(t.date);
+            return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+        });
+        
+        if (monthTrans.length > 0) {
+            let monthTotal = 0;
+            monthTrans.forEach(t => monthTotal += t.amount);
+            if (newAccountId) this.updateAccountBalance(newAccountId, monthTotal);
+        }
+        
+        this.clearCache();
+        this.saveTransactions();
+        this.render();
+        this.updateCharts();
+        this.updateAlertBadge();
+        closeModal('editModal');
+        this.showToast('✅ Todos os lançamentos recorrentes foram atualizados!');
         this.checkNegativeBalance();
     }
 
