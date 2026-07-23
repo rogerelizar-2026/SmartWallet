@@ -2030,9 +2030,19 @@ class SmartFinance {
             document.getElementById('editRecurringOptions').style.display = 'block';
             document.getElementById('editRecurrenceType').value = t.recurrence.type;
             document.getElementById('editRecurrenceCount').value = t.recurrence.total;
+            // Mostrar checkbox para alterar todos se for parte de uma série recorrente
+            const editAllCheckbox = document.getElementById('editAllRecurring');
+            if (editAllCheckbox) {
+                editAllCheckbox.parentElement.parentElement.style.display = 'block';
+                editAllCheckbox.checked = false;
+            }
         } else {
             document.getElementById('editRecurring').checked = false;
             document.getElementById('editRecurringOptions').style.display = 'none';
+            const editAllCheckbox = document.getElementById('editAllRecurring');
+            if (editAllCheckbox) {
+                editAllCheckbox.parentElement.parentElement.style.display = 'none';
+            }
         }
         document.querySelectorAll('#editForm .type-btn').forEach(b => {
             b.classList.toggle('active', b.getAttribute('data-type') === this.currentEditType);
