@@ -2088,15 +2088,44 @@ class SmartFinance {
         const oldAccountId = oldTransaction.accountId;
         const newAmount = this.currentEditType === 'expense' ? -Math.abs(amount) : Math.abs(amount);
         
-        // Verificar se é transação recorrente e se deve alterar todas
+        // Verificar se é transação recorrente
         const isRecurring = document.getElementById('editRecurring').checked;
-        const editAllRecurring = document.getElementById('editAllRecurring').checked;
         
-        // Se for recorrente e usuário escolheu alterar todos
-        if (isRecurring && oldTransaction.recurrence && editAllRecurring) {
-            this.updateAllRecurringTransactions(oldTransaction, date, newAmount, category, paymentMethod, accountId);
+        // Se for recorrente, perguntar se deseja alterar todos
+        if (isRecurring && oldTransaction.recurrence) {
+            this.pendingUpdate = {
+                oldTransaction, date, newAmount, category, paymentMethod, accountId, idx, oldAmount, oldAccountId
+            };
+            showConfirm(
+                'Editar lançamentos recorrentes',
+                'Deseja alterar TODOS os lançamentos desta série recorrente? Clique em "Sim" para alterar todos (inclusive adicionando/removendo parcelas) ou "Não" para alterar apenas este lançamento.',
+                () => {
+                    // Usuário escolheu SIM - alterar todos
+                    this.updateAllRecurringTransactions(
+                        this.pendingUpdate.oldTransaction,
+                        this.pendingUpdate.date,
+                        this.pendingUpdate.newAmount,
+                        this.pendingUpdate.category,
+                        this.pendingUpdate.paymentMethod,
+                        this.pendingUpdate.accountId
+                    );
+                    this.pendingUpdate = null;
+                },
+                () => {
+                    // Usuário escolheu NÃO - alterar apenas um
+                    this.saveSingleTransaction(this.pendingUpdate);
+                    this.pendingUpdate = null;
+                }
+            );
             return;
         }
+        
+        // Não é recorrente - salvar diretamente
+        this.saveSingleTransaction({ oldTransaction, date, newAmount, category, paymentMethod, accountId, idx, oldAmount, oldAccountId });
+    }
+    
+    saveSingleTransaction(data) {
+        const { oldTransaction, date, newAmount, category, paymentMethod, accountId, idx, oldAmount, oldAccountId } = data;
         
         // Edição única (comportamento original)
         if (oldAccountId) this.updateAccountBalance(oldAccountId, -oldAmount);
@@ -2112,6 +2141,7 @@ class SmartFinance {
             }
         }
         let recurrenceData = null;
+        const isRecurring = document.getElementById('editRecurring').checked;
         if (isRecurring) {
             const recurrenceType = document.getElementById('editRecurrenceType').value;
             const recurrenceCount = parseInt(document.getElementById('editRecurrenceCount').value);
@@ -2240,9 +2270,60 @@ class SmartFinance {
 
     async deleteFromEdit() {
         if (!this.currentEditId) return;
+        const t = this.transactions.find(x => x.id === this.currentEditId);
+        
+        // Verificar se é transação recorrente
+        if (t && t.recurrence) {
+            const confirmedAll = await showConfirm(
+                'Excluir lançamentos recorrentes',
+                'Deseja excluir TODOS os lançamentos desta série recorrente? Clique em "Sim" para excluir todos ou "Não" para excluir apenas este lançamento.',
+                () => true,  // Usuário escolheu SIM
+                () => false  // Usuário escolheu NÃO
+            );
+            
+            if (confirmedAll === null) return;  // Usuário cancelou
+            
+            if (confirmedAll) {
+                // Excluir todos os lançamentos recorrentes
+                const groupId = t.recurrence.groupId;
+                const recurringTrans = this.transactions.filter(trans => 
+                    trans.recurrence && trans.recurrence.groupId === groupId
+                );
+                
+                // Ajustar saldos antes de remover
+                recurringTrans.forEach(trans => {
+                    if (trans.accountId) {
+                        this.updateAccountBalance(trans.accountId, -trans.amount);
+                    }
+                });
+                
+                // Remover todas as transações do grupo
+                this.transactions = this.transactions.filter(trans => 
+                    !(trans.recurrence && trans.recurrence.groupId === groupId)
+                );
+                
+                this.clearCache(); this.saveTransactions(); this.render();
+                this.updateCharts(); this.updateAlertBadge();
+                closeModal('editModal');
+                this.showToast('✅ Todos os lançamentos recorrentes foram excluídos!');
+                this.checkNegativeBalance();
+                return;
+            } else {
+                // Excluir apenas um lançamento
+                if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+                this.transactions = this.transactions.filter(x => x.id !== this.currentEditId);
+                this.clearCache(); this.saveTransactions(); this.render();
+                this.updateCharts(); this.updateAlertBadge();
+                closeModal('editModal');
+                this.showToast('✅ ' + this.t('transactionDeleted'));
+                this.checkNegativeBalance();
+                return;
+            }
+        }
+        
+        // Não é recorrente - comportamento original
         const confirmed = await showConfirm('Excluir esta transação?', 'Esta ação não pode ser desfeita.');
         if (!confirmed) return;
-        const t = this.transactions.find(x => x.id === this.currentEditId);
         if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
         this.transactions = this.transactions.filter(x => x.id !== this.currentEditId);
         this.clearCache(); this.saveTransactions(); this.render();
@@ -4180,7 +4261,7 @@ function closeModal(id) {
 }
 
 // ===== MODAL DE CONFIRMAÇÃO =====
-function showConfirm(title, message) {
+function showConfirm(title, message, onYes, onNo) {
     return new Promise((resolve) => {
         const modal = document.getElementById('confirmModal');
         const titleEl = document.getElementById('confirmTitle');
@@ -4199,10 +4280,12 @@ function showConfirm(title, message) {
         noBtn.parentNode.replaceChild(newNoBtn, noBtn);
         newYesBtn.addEventListener('click', () => {
             closeModal('confirmModal');
+            if (onYes) onYes();
             resolve(true);
         });
         newNoBtn.addEventListener('click', () => {
             closeModal('confirmModal');
+            if (onNo) onNo();
             resolve(false);
         });
         openModal('confirmModal');
