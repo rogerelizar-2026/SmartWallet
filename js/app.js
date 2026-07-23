@@ -1907,9 +1907,16 @@ class SmartFinance {
             for (let i = 0; i < recurrenceCount; i++) {
                 const transDate = new Date(startDate);
                 if (recurrenceType === 'monthly' || recurrenceType === 'installment') {
-                    transDate.setMonth(startDate.getMonth() + i);
-                    const lastDay = new Date(transDate.getFullYear(), transDate.getMonth() + 1, 0).getDate();
-                    transDate.setDate(startDate.getDate() > lastDay ? lastDay : startDate.getDate());
+                    // Calcular mês e ano corretamente para evitar problemas com dias que não existem em todos os meses
+                    const targetMonth = startDate.getMonth() + i;
+                    const finalMonth = targetMonth % 12;
+                    const finalYear = startDate.getFullYear() + Math.floor(targetMonth / 12);
+                    
+                    // Criar data com dia 1 primeiro, depois ajustar para o dia correto
+                    transDate.setFullYear(finalYear, finalMonth, 1);
+                    const lastDay = new Date(finalYear, finalMonth + 1, 0).getDate();
+                    const targetDay = Math.min(startDate.getDate(), lastDay);
+                    transDate.setDate(targetDay);
                 } else if (recurrenceType === 'yearly') {
                     transDate.setFullYear(startDate.getFullYear() + i);
                     const lastDay = new Date(transDate.getFullYear(), transDate.getMonth() + 1, 0).getDate();
