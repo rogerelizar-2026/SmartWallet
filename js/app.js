@@ -1952,8 +1952,13 @@ class SmartFinance {
             });
             if (monthTrans.length > 0) {
                 let monthTotal = 0;
-                monthTrans.forEach(t => monthTotal += t.amount);
-                this.updateAccountBalance(accountId, monthTotal);
+                // Só soma as transações que estão com status "Concluído"
+                monthTrans.forEach(t => {
+                    if (t.statusOk) monthTotal += t.amount;
+                });
+                if (monthTotal !== 0) {
+                    this.updateAccountBalance(accountId, monthTotal);
+                }
             }
             this.clearCache();
             this.saveTransactions();
@@ -1982,10 +1987,13 @@ class SmartFinance {
             accountId: accountId
         };
         this.transactions.push(transaction);
-        const success = this.updateAccountBalance(accountId, signedAmount);
-        if (!success) {
-            this.transactions.pop();
-            return;
+        // Só atualiza o saldo se o status for "Concluído"
+        if (statusOk) {
+            const success = this.updateAccountBalance(accountId, signedAmount);
+            if (!success) {
+                this.transactions.pop();
+                return;
+            }
         }
         this.clearCache();
         this.saveTransactions();
@@ -2058,7 +2066,18 @@ class SmartFinance {
     toggleTransactionStatus(id) {
         const t = this.transactions.find(x => x.id === id);
         if (!t) return;
+        const oldStatusOk = t.statusOk;
         t.statusOk = !t.statusOk;
+        // Atualiza o saldo da conta ao mudar o status
+        if (t.accountId && t.amount !== 0) {
+            if (oldStatusOk && !t.statusOk) {
+                // De Concluído para Pendente: desfaz o lançamento no saldo
+                this.updateAccountBalance(t.accountId, -t.amount);
+            } else if (!oldStatusOk && t.statusOk) {
+                // De Pendente para Concluído: aplica o lançamento no saldo
+                this.updateAccountBalance(t.accountId, t.amount);
+            }
+        }
         this.clearCache();
         this.saveTransactions();
         this.render();
@@ -2132,13 +2151,19 @@ class SmartFinance {
         const { oldTransaction, date, newAmount, category, paymentMethod, accountId, idx, oldAmount, oldAccountId } = data;
         
         // Edição única (comportamento original)
-        if (oldAccountId) this.updateAccountBalance(oldAccountId, -oldAmount);
+        // Só desfaz o saldo anterior se a transação antiga estava "Concluída"
+        if (oldAccountId && oldTransaction.statusOk) {
+            this.updateAccountBalance(oldAccountId, -oldAmount);
+        }
         if (this.settings.blockNegativeBalance && newAmount < 0) {
             const acc = this.getAccountById(accountId);
             if (acc) {
                 const newBalance = (parseFloat(acc.balance) || 0) + newAmount;
                 if (newBalance < 0) {
-                    if (oldAccountId) this.updateAccountBalance(oldAccountId, oldAmount);
+                    // Restaura saldo anterior se necessário
+                    if (oldAccountId && oldTransaction.statusOk) {
+                        this.updateAccountBalance(oldAccountId, oldAmount);
+                    }
                     this.showToast(this.t('negativeBalanceBlocked'));
                     return;
                 }
@@ -2151,14 +2176,18 @@ class SmartFinance {
             const recurrenceCount = parseInt(document.getElementById('editRecurrenceCount').value);
             recurrenceData = { type: recurrenceType, total: recurrenceCount, current: oldTransaction.recurrence ? oldTransaction.recurrence.current : 1 };
         }
+        const newStatusOk = document.getElementById('editStatusOk').checked;
         this.transactions[idx] = {
             id: oldTransaction.id, date: date, amount: newAmount,
             category: category, description: document.getElementById('editDescription').value,
-            statusOk: document.getElementById('editStatusOk').checked,
+            statusOk: newStatusOk,
             paymentMethod: paymentMethod, accountId: accountId,
             recurrence: recurrenceData
         };
-        this.updateAccountBalance(accountId, newAmount);
+        // Só atualiza o saldo se o novo status for "Concluído"
+        if (newStatusOk) {
+            this.updateAccountBalance(accountId, newAmount);
+        }
         this.clearCache(); this.saveTransactions(); this.render();
         this.updateCharts(); this.updateAlertBadge();
         closeModal('editModal');
@@ -2198,7 +2227,8 @@ class SmartFinance {
             t.recurrence && t.recurrence.groupId === groupId
         );
         oldRecurringTrans.forEach(t => {
-            if (t.accountId) {
+            // Só desfaz o saldo se a transação antiga estava "Concluída"
+            if (t.accountId && t.statusOk) {
                 this.updateAccountBalance(t.accountId, -t.amount);
             }
         });
@@ -2258,8 +2288,13 @@ class SmartFinance {
         
         if (monthTrans.length > 0) {
             let monthTotal = 0;
-            monthTrans.forEach(t => monthTotal += t.amount);
-            if (newAccountId) this.updateAccountBalance(newAccountId, monthTotal);
+            // Só soma as transações que estão com status "Concluído"
+            monthTrans.forEach(t => {
+                if (t.statusOk) monthTotal += t.amount;
+            });
+            if (newAccountId && monthTotal !== 0) {
+                this.updateAccountBalance(newAccountId, monthTotal);
+            }
         }
         
         this.clearCache();
@@ -2294,9 +2329,9 @@ class SmartFinance {
                     trans.recurrence && trans.recurrence.groupId === groupId
                 );
                 
-                // Ajustar saldos antes de remover
+                // Ajustar saldos antes de remover (só se estiverem "Concluído")
                 recurringTrans.forEach(trans => {
-                    if (trans.accountId) {
+                    if (trans.accountId && trans.statusOk) {
                         this.updateAccountBalance(trans.accountId, -trans.amount);
                     }
                 });
@@ -2313,8 +2348,10 @@ class SmartFinance {
                 this.checkNegativeBalance();
                 return;
             } else {
-                // Excluir apenas um lançamento
-                if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+                // Excluir apenas um lançamento (só se estiver "Concluído")
+                if (t && t.accountId && t.statusOk) {
+                    this.updateAccountBalance(t.accountId, -t.amount);
+                }
                 this.transactions = this.transactions.filter(x => x.id !== this.currentEditId);
                 this.clearCache(); this.saveTransactions(); this.render();
                 this.updateCharts(); this.updateAlertBadge();
@@ -2325,10 +2362,12 @@ class SmartFinance {
             }
         }
         
-        // Não é recorrente - comportamento original
+        // Não é recorrente - comportamento original (só desfaz saldo se estiver "Concluído")
         const confirmed = await showConfirm('Excluir esta transação?', 'Esta ação não pode ser desfeita.');
         if (!confirmed) return;
-        if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+        if (t && t.accountId && t.statusOk) {
+            this.updateAccountBalance(t.accountId, -t.amount);
+        }
         this.transactions = this.transactions.filter(x => x.id !== this.currentEditId);
         this.clearCache(); this.saveTransactions(); this.render();
         this.updateCharts(); this.updateAlertBadge();
@@ -2341,7 +2380,10 @@ class SmartFinance {
         const confirmed = await showConfirm('Excluir esta transação?', 'Esta ação não pode ser desfeita.');
         if (!confirmed) return;
         const t = this.transactions.find(x => x.id === id);
-        if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+        // Só desfaz o saldo se a transação estava "Concluída"
+        if (t && t.accountId && t.statusOk) {
+            this.updateAccountBalance(t.accountId, -t.amount);
+        }
         this.transactions = this.transactions.filter(x => x.id !== id);
         this.clearCache(); this.saveTransactions(); this.render();
         this.updateCharts(); this.updateAlertBadge();
@@ -4120,7 +4162,10 @@ class SmartFinance {
         const confirmed = await showConfirm('Excluir transação?', 'Esta ação não pode ser desfeita.');
         if (!confirmed) return;
         const t = this.transactions.find(x => String(x.id) === String(id));
-        if (t && t.accountId) this.updateAccountBalance(t.accountId, -t.amount);
+        // Só desfaz o saldo se a transação estava "Concluída"
+        if (t && t.accountId && t.statusOk) {
+            this.updateAccountBalance(t.accountId, -t.amount);
+        }
         this.transactions = this.transactions.filter(x => String(x.id) !== String(id));
         this.clearCache(); this.saveTransactions();
         this.render(); this.updateCharts(); this.updateAlertBadge();
